@@ -10,8 +10,8 @@ Apex Finance's Members:
   
   -Alex Mitchell  (DBA)
   
-  -Juan Sulse     (Communication Coordinator
-  
+  -Juan Sulse     (Communication Coordinator)
+
   -Adam Berglund  (UI/UX)
   
   -Josiah Cassada (Quality Assurance)
