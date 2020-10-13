@@ -38,6 +38,12 @@ class _TabScreenState extends State<TabScreen> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: Theme.of(context).primaryColor,
+        onPressed: null,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: _pages[_selectedPageIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
