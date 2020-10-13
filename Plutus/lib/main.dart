@@ -7,6 +7,8 @@ import './screens/budget_screen.dart';
 import './screens/transaction_screen.dart';
 import './screens/goal_screen.dart';
 
+// TEST FOR PUSH
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
