@@ -8,6 +8,7 @@ import './screens/transaction_screen.dart';
 import './screens/goal_screen.dart';
 
 // TEST FOR PUSH COMMIT
+// TESTING FOR BRANCH MERGING
 
 void main() => runApp(MyApp());
 
