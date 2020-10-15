@@ -9,7 +9,7 @@ class TransactionScreen extends StatelessWidget {
       child: Text(
         'Transaction Screen',
         style: Theme.of(context).textTheme.bodyText1,
-      ), //TextTheme().bodyText1,
+      ),
     );
   }
 }

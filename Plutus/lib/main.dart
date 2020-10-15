@@ -24,6 +24,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.amber,
         primaryColor: Colors.amber,
+        primaryColorLight: Colors.amberAccent,
         accentColor: Colors.white,
         canvasColor: Colors.black,
         textTheme: GoogleFonts.latoTextTheme(TextTheme(
