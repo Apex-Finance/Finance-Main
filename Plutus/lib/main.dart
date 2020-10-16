@@ -24,11 +24,13 @@ class _MyAppState extends State<MyApp> {
         primaryColor: Colors.amber,
         accentColor: Colors.white,
         canvasColor: Colors.black,
-        textTheme: GoogleFonts.latoTextTheme(TextTheme(
-          bodyText1: TextStyle(
-            color: Colors.amber,
+        textTheme: GoogleFonts.latoTextTheme(
+          TextTheme(
+            bodyText1: TextStyle(
+              color: Colors.amber,
+            ),
           ),
-        )),
+        ),
       ),
       initialRoute: '/',
       routes: {
