@@ -1,6 +1,6 @@
 import '../models/transaction.dart';
 
-const List<Transaction> DUMMY_TRANSACTIONS = const [
+List<Transaction> dummyTransactions = [
   Transaction(
     id: 't1',
     title: 'Coffee',
