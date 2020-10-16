@@ -16,6 +16,7 @@ class _TabScreenState extends State<TabScreen> {
   final List<Widget> _pages = [
     DashboardScreen(),
     BudgetScreen(),
+    null,
     TransactionScreen(),
     GoalScreen(),
   ];
