@@ -40,7 +40,9 @@ class _MyAppState extends State<MyApp> {
         '/': (context) => TabScreen(),
         DashboardScreen.routeName: (context) => DashboardScreen(),
         BudgetScreen.routeName: (context) => BudgetScreen(),
-        TransactionScreen.routeName: (context) => TransactionScreen(),
+        TransactionScreen.routeName: (context) => TransactionScreen(
+              transactions: [],
+            ),
         GoalScreen.routeName: (context) => GoalScreen(),
       },
     );

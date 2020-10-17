@@ -20,7 +20,7 @@ class _TransactionFormState extends State<TransactionForm> {
   );
 
   void _setDate(DateTime value) {
-    if (_date == null) return; // if user cancels datepicker
+    if (value == null) return; // if user cancels datepicker
     setState(() {
       _date = value;
       _transaction.date =
@@ -33,7 +33,9 @@ class _TransactionFormState extends State<TransactionForm> {
       _formKey.currentState.save();
       print(
           '${_transaction.amount}${_transaction.category}${_transaction.title}${_transaction.date}${_transaction.id}');
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(
+        _transaction,
+      );
     }
   }
 
@@ -94,12 +96,14 @@ class _TransactionFormState extends State<TransactionForm> {
                     keyboardType: TextInputType.number,
                     maxLength: null,
                     onEditingComplete: () => FocusScope.of(context).unfocus(),
-                    onSaved: (val) =>
-                        _transaction.amount = double.parse(val).roundToDouble(),
+                    onSaved: (val) => _transaction.amount = double.parse(val),
                     validator: (val) {
                       if (val.isEmpty) return 'Please enter an amount.';
                       if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
-                        // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
+                        if (double.parse(
+                                double.parse(val).toStringAsFixed(2)) <=
+                            0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
+                          return 'Please enter an amount greater than 0.'; // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
                         return null;
                       } else {
                         return 'Please enter a number.';
