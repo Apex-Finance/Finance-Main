@@ -24,20 +24,25 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.amber,
         primaryColor: Colors.amber,
+        primaryColorLight: Colors.amberAccent,
         accentColor: Colors.white,
         canvasColor: Colors.black,
-        textTheme: GoogleFonts.latoTextTheme(TextTheme(
-          bodyText1: TextStyle(
-            color: Colors.amber,
+        textTheme: GoogleFonts.latoTextTheme(
+          TextTheme(
+            bodyText1: TextStyle(
+              color: Colors.amber,
+            ),
           ),
-        )),
+        ),
       ),
       initialRoute: '/',
       routes: {
         '/': (context) => TabScreen(),
         DashboardScreen.routeName: (context) => DashboardScreen(),
         BudgetScreen.routeName: (context) => BudgetScreen(),
-        TransactionScreen.routeName: (context) => TransactionScreen(),
+        TransactionScreen.routeName: (context) => TransactionScreen(
+              transactions: [],
+            ),
         GoalScreen.routeName: (context) => GoalScreen(),
       },
     );
