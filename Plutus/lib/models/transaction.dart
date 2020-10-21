@@ -1,16 +1,16 @@
 import 'package:flutter/foundation.dart';
 
 class Transaction {
-  String id;
-  String title;
-  String category;
+  final String id;
+  final String title;
+  final String category;
   /* this will be treated like an id to 
      compare to the actual category id and
      a budget with the same category id */
-  double amount;
-  DateTime date;
+  final double amount;
+  final DateTime date;
 
-  Transaction({
+  const Transaction({
     @required this.id,
     @required this.title,
     @required this.amount,
