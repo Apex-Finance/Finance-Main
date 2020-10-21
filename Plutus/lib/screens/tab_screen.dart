@@ -15,6 +15,7 @@ class TabScreen extends StatefulWidget {
 
 class _TabScreenState extends State<TabScreen> {
   List<Transaction> transactions = [];
+
   List<Widget> _pages = [];
 
   void addTransaction(Transaction transaction) {
