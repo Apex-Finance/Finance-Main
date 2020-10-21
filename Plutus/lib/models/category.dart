@@ -1,11 +1,14 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 class Category {
-  final String id;
-  final String title;
+  String id;
+  String title;
+  IconData icon;
 
-  const Category({
+  Category({
     @required this.id,
     @required this.title,
+    @required this.icon,
   });
 }
