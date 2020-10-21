@@ -84,7 +84,7 @@ List<Category.Category> mainCategory = [
     id: 'c14',
     title: 'Pets',
     icon: Icons.pets,
-    // paw icon
+    //paw icon
   ),
   Category.Category(
     id: 'c15',
@@ -99,7 +99,7 @@ List<Category.Category> mainCategory = [
     // business building icon
   ),
 
-  //Custom Category
+  // Custom Category
   Category.Category(
     id: 'c17',
     title: 'Custom',
