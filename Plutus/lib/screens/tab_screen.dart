@@ -5,6 +5,7 @@ import './transaction_screen.dart';
 import './dashboard_screen.dart';
 import './goal_screen.dart';
 import '../widgets/transaction_form.dart';
+import '../models/transaction.dart';
 
 //Move from tabscreen to parent widget to make it persist
 class TabScreen extends StatefulWidget {
@@ -13,12 +14,16 @@ class TabScreen extends StatefulWidget {
 }
 
 class _TabScreenState extends State<TabScreen> {
-  final List<Widget> _pages = [
-    DashboardScreen(),
-    BudgetScreen(),
-    TransactionScreen(),
-    GoalScreen(),
-  ];
+  List<Transaction> transactions = [];
+
+  List<Widget> _pages = [];
+
+  void addTransaction(Transaction transaction) {
+    setState(() {
+      transactions.add(transaction);
+    });
+  }
+
   int _selectedPageIndex = 0;
 
   void _selectPage(int index) {
@@ -33,11 +38,22 @@ class _TabScreenState extends State<TabScreen> {
       isScrollControlled: true,
       context: context,
       builder: (_) => TransactionForm(),
-    );
+    ).then((newTransaction) {
+      if (newTransaction == null) return;
+      addTransaction(newTransaction);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    _pages = [
+      DashboardScreen(),
+      BudgetScreen(),
+      null,
+      TransactionScreen(transactions: transactions),
+      GoalScreen(),
+    ];
+
     return Scaffold(
       appBar: AppBar(),
       drawer: Drawer(
