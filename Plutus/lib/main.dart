@@ -132,7 +132,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               Text("Insert Login Page", style: bodyStyle),
             ],
           ),
-          image: _buildImage('img1'),
+          image: _buildImage('financial-goals-icons-600w-1118707967'),
           decoration: pageDecoration,
         ),
       ],
