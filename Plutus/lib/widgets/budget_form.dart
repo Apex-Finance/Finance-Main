@@ -14,6 +14,7 @@ class _BudgetFormState extends State<BudgetForm> {
     title: null,
     category: null,
     amount: null,
+    transactions: null,
   );
 
   void _submitBudgetForm() {

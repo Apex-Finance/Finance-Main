@@ -1,109 +1,135 @@
-import 'package:flutter/material.dart';
+enum home {
+  furnishings,
+  homeImprovement,
+  homeInsurance,
+  homeServices,
+  homeSupplies,
+  lawnAndGarden,
+  rent,
+  mortgage,
+  smartHomeDevices,
+}
 
-import '../models/category.dart' as Category;
+enum food_and_drinks {
+  barAndCafe,
+  groceries,
+  restaurant,
+  fastFood,
+}
 
-List<Category.Category> mainCategory = [
-  Category.Category(
-    id: 'c1',
-    title: 'Home',
-    icon: Icons.home,
-    // house icon
-  ),
-  Category.Category(
-    id: 'c2',
-    title: 'Food & Drinks',
-    icon: Icons.local_dining,
-    // spoon and fork icon
-  ),
-  Category.Category(
-    id: 'c3',
-    title: 'Bills & Utilities',
-    icon: Icons.payment,
-    // credit card icon
-  ),
-  Category.Category(
-    id: 'c4',
-    title: 'Education',
-    icon: Icons.school,
-    // graduation cap icon
-  ),
-  Category.Category(
-    id: 'c5',
-    title: 'Shopping',
-    icon: Icons.shopping_cart,
-    // shopping cart icon
-  ),
-  Category.Category(
-    id: 'c6',
-    title: 'Travel',
-    icon: Icons.airplanemode_on,
-    // airplane icon
-  ),
-  Category.Category(
-    id: 'c7',
-    title: 'Transportation',
-    icon: Icons.directions_car,
-    // car icon
-  ),
-  Category.Category(
-    id: 'c8',
-    title: 'Life & Entertainment',
-    icon: Icons.tv,
-    // tv icon
-  ),
-  Category.Category(
-    id: 'c9',
-    title: 'Health & Fitness',
-    icon: Icons.fitness_center,
-    // Barbell icon
-  ),
-  Category.Category(
-    id: 'c10',
-    title: 'Investments',
-    icon: Icons.attach_money,
-    // dollar sign icon
-  ),
-  Category.Category(
-    id: 'c11',
-    title: 'Fees & Charges',
-    icon: Icons.home, // can't find icon for this one
-  ),
-  Category.Category(
-    id: 'c12',
-    title: 'Gifts & Donations',
-    icon: Icons.wallet_giftcard,
-    // giftcard icon
-  ),
-  Category.Category(
-    id: 'c13',
-    title: 'Kids',
-    icon: Icons.child_friendly,
-    // stroller icon
-  ),
-  Category.Category(
-    id: 'c14',
-    title: 'Pets',
-    icon: Icons.pets,
-    //paw icon
-  ),
-  Category.Category(
-    id: 'c15',
-    title: 'Uncategorized',
-    icon: Icons.build_circle,
-    // Wrench icon SHOULD CHANGE LATER
-  ),
-  Category.Category(
-    id: 'c16',
-    title: 'Business',
-    icon: Icons.business,
-    // business building icon
-  ),
+enum bills_and_utilities {
+  phone,
+  water,
+  electricity,
+  gas,
+  internet,
+  television,
+}
 
-  // Custom Category
-  Category.Category(
-    id: 'c17',
-    title: 'Custom',
-    icon: Icons.add_box,
-    // plus sign inside box icon
-  ),
-];
+enum education {
+  books_and_supplies,
+  tuition,
+  educational_software,
+  student_loan
+}
+
+enum shopping {
+  clothing,
+  footwear,
+  jewelry,
+  hobbies,
+}
+
+enum travel {
+  hotel,
+  rental_car,
+  vacation,
+}
+
+enum transportation {
+  car_insurance,
+  toll,
+  gas,
+  parking,
+  service_and_parts,
+  taxi,
+  bux,
+}
+
+enum life_and_entertainment {
+  movies,
+  games,
+  music,
+  electronics_and_software,
+  newspapers,
+  magazines,
+}
+
+enum health_and_fitness {
+  sports,
+  doctor,
+  medicine,
+  health_insurance,
+  dentist,
+  eyecare,
+  gym,
+  pharmacy,
+  life_insurance,
+}
+
+enum investments {
+  stock,
+  etf,
+  mutual_fund,
+  rothIRA,
+  savings,
+  // 401(k)
+}
+
+enum fees_and_charges {
+  atm_fee,
+  bank_fee,
+  finance_charge,
+  late_fee,
+  service_fee,
+  trade_commission,
+}
+
+enum gifts_and_donations {
+  charity,
+  gift,
+  tithe,
+}
+
+enum kids {
+  allowance,
+  baby_supplies,
+  babysitter,
+  daycare,
+  child_support,
+  toys,
+}
+
+enum pets {
+  pet_food,
+  pet_supplies,
+  pet_grooming,
+  veterinary,
+}
+
+enum business {
+  advertising,
+  legal,
+  office_supplies,
+  printing,
+  shipping,
+}
+
+enum uncategorized {
+  cash_and_ATM,
+  check,
+}
+
+enum custom {
+  custom_category,
+}
