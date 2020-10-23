@@ -1,49 +1,31 @@
-import 'package:Plutus/models/transaction.dart';
+import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
-import 'package:flutter/services.dart';
 
-class TransactionForm extends StatefulWidget {
+class BudgetForm extends StatefulWidget {
   @override
-  _TransactionFormState createState() => _TransactionFormState();
+  _BudgetFormState createState() => _BudgetFormState();
 }
 
-class _TransactionFormState extends State<TransactionForm> {
+class _BudgetFormState extends State<BudgetForm> {
   final _formKey = GlobalKey<FormState>();
-  DateTime _date = DateTime.now();
-  Transaction _transaction = Transaction(
+  Budget _budget = Budget(
     id: null,
     title: null,
     category: null,
     amount: null,
-    date: null,
+    transactions: null,
   );
 
-  void _setDate(DateTime value) {
-    if (value == null) return; // if user cancels datepicker
-    setState(() {
-      _date = value;
-      _transaction.date =
-          _date; // update date if date changes since no onsave property
-    });
-  }
-
-  void _submitTransactionForm() {
+  void _submitBudgetForm() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       print(
-          '${_transaction.amount}${_transaction.category}${_transaction.title}${_transaction.date}${_transaction.id}');
+          '${_budget.amount}${_budget.category}${_budget.title}${_budget.id}');
       Navigator.of(context).pop(
-        _transaction,
+        _budget,
       );
     }
-  }
-
-  @override
-  void initState() {
-    _transaction.date = _date; // initialize date since no onsave property
-    super.initState();
   }
 
   @override
@@ -69,15 +51,10 @@ class _TransactionFormState extends State<TransactionForm> {
                       labelText: 'Description',
                     ),
                     autofocus: true,
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(15),
-                    ],
-                    maxLength: 15,
+                    maxLength: null,
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                    onSaved: (val) => _transaction.title = val.trim(),
+                    onSaved: (val) => _budget.title = val,
                     validator: (val) {
-                      if (val.trim().length > 15)
-                        return 'Description is too long.';
                       if (val.isEmpty) return 'Please enter a description.';
                       return null;
                     },
@@ -89,7 +66,7 @@ class _TransactionFormState extends State<TransactionForm> {
                     ),
                     maxLength: null,
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                    onSaved: (val) => _transaction.category = val,
+                    onSaved: (val) => _budget.category = val,
                     validator: (val) {
                       if (val.isEmpty) return 'Please enter a category.';
                       return null;
@@ -102,55 +79,19 @@ class _TransactionFormState extends State<TransactionForm> {
                     keyboardType: TextInputType.number,
                     maxLength: null,
                     onEditingComplete: () => FocusScope.of(context).unfocus(),
-                    onSaved: (val) => _transaction.amount = double.parse(val),
+                    onSaved: (val) => _budget.amount = double.parse(val),
                     validator: (val) {
                       if (val.isEmpty) return 'Please enter an amount.';
                       if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
-                        // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
                         if (double.parse(
                                 double.parse(val).toStringAsFixed(2)) <=
                             0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
-                          return 'Please enter an amount greater than 0.';
-                        if (double.parse(double.parse(val).toStringAsFixed(2)) >
-                            999999999.99)
-                          return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
+                          return 'Please enter an amount greater than 0.'; // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
                         return null;
                       } else {
                         return 'Please enter a number.';
                       }
                     },
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                        width: 125,
-                        child: Text(
-                          'Date: ${DateFormat.MMMd().format(_date)}',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                      RaisedButton(
-                        color: Theme.of(context).primaryColorLight,
-                        child: Text('Pick Date'),
-                        onPressed: () => showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime.now().subtract(
-                            Duration(
-                              days: 365,
-                            ),
-                          ),
-                          lastDate: DateTime.now().add(
-                            Duration(
-                              days: 365,
-                            ),
-                          ),
-                        ).then(
-                          (value) => _setDate(value),
-                        ),
-                      ),
-                    ],
                   ),
                   SizedBox(
                     height: 25,
@@ -159,8 +100,8 @@ class _TransactionFormState extends State<TransactionForm> {
                     alignment: Alignment.bottomRight,
                     child: FloatingActionButton.extended(
                       backgroundColor: Theme.of(context).primaryColor,
-                      onPressed: _submitTransactionForm,
-                      label: Text('Add Transaction'),
+                      onPressed: _submitBudgetForm,
+                      label: Text('Add Budget'),
                     ),
                   ),
                 ],
