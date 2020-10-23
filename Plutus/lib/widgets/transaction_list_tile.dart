@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import '../models/transaction.dart';
 
@@ -19,8 +20,10 @@ class TransactionListTile extends StatelessWidget {
         child: ListTile(
           tileColor: Colors.grey[850],
           leading: CircleAvatar(child: Icon(Icons.category)),
-          title: Text(
+          title: AutoSizeText(
             '${transaction.title}',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style:
                 TextStyle(color: Theme.of(context).primaryColor, fontSize: 18),
           ),

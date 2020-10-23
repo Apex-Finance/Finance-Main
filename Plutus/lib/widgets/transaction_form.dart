@@ -2,6 +2,7 @@ import 'package:Plutus/models/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
+import 'package:flutter/services.dart';
 
 class TransactionForm extends StatefulWidget {
   @override
@@ -68,10 +69,15 @@ class _TransactionFormState extends State<TransactionForm> {
                       labelText: 'Description',
                     ),
                     autofocus: true,
-                    maxLength: null,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(15),
+                    ],
+                    maxLength: 15,
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                    onSaved: (val) => _transaction.title = val,
+                    onSaved: (val) => _transaction.title = val.trim(),
                     validator: (val) {
+                      if (val.trim().length > 15)
+                        return 'Description is too long.';
                       if (val.isEmpty) return 'Please enter a description.';
                       return null;
                     },
@@ -100,10 +106,14 @@ class _TransactionFormState extends State<TransactionForm> {
                     validator: (val) {
                       if (val.isEmpty) return 'Please enter an amount.';
                       if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
+                        // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
                         if (double.parse(
                                 double.parse(val).toStringAsFixed(2)) <=
                             0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
-                          return 'Please enter an amount greater than 0.'; // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
+                          return 'Please enter an amount greater than 0.';
+                        if (double.parse(double.parse(val).toStringAsFixed(2)) >
+                            999999999.99)
+                          return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
                         return null;
                       } else {
                         return 'Please enter a number.';
