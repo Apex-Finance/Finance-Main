@@ -1,3 +1,4 @@
+import 'package:Plutus/screens/new_budget_screens/income_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: '/',
+      initialRoute: IncomeScreen.routeName, //initialRoute: '/',
       routes: {
         '/': (context) => OnBoardingPage(),
         DashboardScreen.routeName: (context) => DashboardScreen(),
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
               transactions: [],
             ),
         GoalScreen.routeName: (context) => GoalScreen(),
+        IncomeScreen.routeName: (context) => IncomeScreen(),
       },
     );
   }
