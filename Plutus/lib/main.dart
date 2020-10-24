@@ -32,7 +32,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => OnBoardingPage(),
-        // '/': (context) => TabScreen(),
         DashboardScreen.routeName: (context) => DashboardScreen(),
         BudgetScreen.routeName: (context) => BudgetScreen(),
         TransactionScreen.routeName: (context) => TransactionScreen(
@@ -44,7 +43,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// change this to its own widget (maybe?)
+// Maybe put this into a separate file?
 class OnBoardingPage extends StatefulWidget {
   @override
   _OnBoardingPageState createState() => _OnBoardingPageState();
@@ -55,15 +54,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
   void _onIntroEnd(context) {
     Navigator.of(context).push(
-      MaterialPageRoute(
-          builder: (_) => TabScreen()), // redirect to Plutus homepage on master
+      MaterialPageRoute(builder: (_) => TabScreen()),
     );
   }
 
   Widget _buildImage(String assetName) {
     return Align(
-      child: Image.asset('assets/$assetName.jpg',
-          width: 350.0), // filler images for testing
+      child: Image.asset('images/$assetName.jpg', width: 350.0),
       alignment: Alignment.bottomCenter,
     );
   }
@@ -84,34 +81,33 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       pages: [
         PageViewModel(
           title: "Welcome to Plutus",
-          body: "Plutus helps you...",
-          image: _buildImage('83667a8005313ca195808d9262b91586'), // test image
+          body: "Plutus helps you take control of your finances with ease.",
+          image: _buildImage('83667a8005313ca195808d9262b91586'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Create a Budget",
-          body: "Manage your budgets with ease...",
-          image: _buildImage('budget-image'), // use different image
+          body: "Creating a budget...",
+          image: _buildImage('budget-image'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Manage Transactions",
-          body: "Managing your transactions has never been easier...",
+          body: "Stay on top of your expenses with Plutus...",
           image: _buildImage(
-              // this image size may be closer to what we may want the final size to be
               'pos-terminal-financial-transactions-operation-payment-credit-card-hands-hold-phone-attachment-cash-money-100337825'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Set Goals",
-          body: "Saving up for something special? Plutus helps you...",
+          title: "Set a goal",
+          body: "Saving up for that shiny new car? Plutus can help...",
           image: _buildImage('financial-goals-icons-600w-1118707967'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Want to create a budget manually?",
-          body: "Let's get you started",
-          image: _buildImage('img3'), // use different image
+          title: "Want to manually create a budget?",
+          body: "Let's get started",
+          image: _buildImage('lets get started'),
           footer: RaisedButton(
             onPressed: () {
               introKey.currentState?.animateScroll(0);
@@ -127,17 +123,16 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           ),
           decoration: pageDecoration,
         ),
+        // ***This page could be the login page***
         PageViewModel(
-          title: "Title of last page",
+          title: "Login Page",
           bodyWidget: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
-              Text("Click on ", style: bodyStyle),
-              Icon(Icons.edit),
-              Text(" to edit a post", style: bodyStyle),
+              Text("Insert Login Page", style: bodyStyle),
             ],
           ),
-          image: _buildImage('img1'),
+          image: _buildImage('financial-goals-icons-600w-1118707967'),
           decoration: pageDecoration,
         ),
       ],
@@ -147,8 +142,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       skipFlex: 0,
       nextFlex: 0,
       skip: const Text('Skip'),
-      // we may not need this arrow icon
-      // next: const Icon(Icons.arrow_forward),
+      next: const Icon(Icons.arrow_forward),
       done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
       dotsDecorator: const DotsDecorator(
         size: Size(10.0, 10.0),
