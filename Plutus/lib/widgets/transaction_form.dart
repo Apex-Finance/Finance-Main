@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:flutter/services.dart';
+import '../models/category.dart';
 
 class TransactionForm extends StatefulWidget {
   @override
@@ -83,19 +84,6 @@ class _TransactionFormState extends State<TransactionForm> {
                     },
                   ),
                   TextFormField(
-                    //TODO update to dropdown/another modal/card instead of string
-                    decoration: InputDecoration(
-                      labelText: 'Category',
-                    ),
-                    maxLength: null,
-                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                    onSaved: (val) => _transaction.category = val,
-                    validator: (val) {
-                      if (val.isEmpty) return 'Please enter a category.';
-                      return null;
-                    },
-                  ),
-                  TextFormField(
                     decoration: InputDecoration(
                       labelText: 'Amount',
                     ),
@@ -119,6 +107,48 @@ class _TransactionFormState extends State<TransactionForm> {
                         return 'Please enter a number.';
                       }
                     },
+                  ),
+                  TextFormField(
+                    //TODO update to dropdown/another modal/card instead of string
+                    decoration: InputDecoration(
+                      labelText: 'Category',
+                    ),
+                    maxLength: null,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                    onSaved: (val) => _transaction.category = val,
+                    validator: (val) {
+                      if (val.isEmpty) return 'Please enter a category.';
+                      return null;
+                    },
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Text(
+                        'Category: ',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      GestureDetector(
+                        onTap: () => showDialog(
+                            context: context,
+                            builder: (bctx) => AlertDialog(
+                                  content: Container(color: Colors.white),
+                                )),
+                        child: Chip(
+                          avatar: CircleAvatar(
+                            backgroundColor: Colors.black,
+                            child: Icon(
+                              Icons.category,
+                            ),
+                          ),
+                          label: Text(
+                            'Uncategorized',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          backgroundColor: Theme.of(context).primaryColorLight,
+                        ),
+                      ),
+                    ],
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.max,
