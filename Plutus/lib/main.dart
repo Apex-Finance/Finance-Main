@@ -7,6 +7,8 @@ import './screens/budget_screen.dart';
 import './screens/transaction_screen.dart';
 import './screens/goal_screen.dart';
 
+// TEST FOR PUSH COMMIT
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -22,6 +24,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.amber,
         primaryColor: Colors.amber,
+        primaryColorLight: Colors.amberAccent,
         accentColor: Colors.white,
         canvasColor: Colors.black,
         textTheme: GoogleFonts.latoTextTheme(
@@ -37,7 +40,9 @@ class _MyAppState extends State<MyApp> {
         '/': (context) => TabScreen(),
         DashboardScreen.routeName: (context) => DashboardScreen(),
         BudgetScreen.routeName: (context) => BudgetScreen(),
-        TransactionScreen.routeName: (context) => TransactionScreen(),
+        TransactionScreen.routeName: (context) => TransactionScreen(
+              transactions: [],
+            ),
         GoalScreen.routeName: (context) => GoalScreen(),
       },
     );
