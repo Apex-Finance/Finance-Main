@@ -238,6 +238,22 @@ enum uncategorized {
   check,
 }
 
+String enumValueToString(Object o) => o.toString().split('.').last;
+String stringToUserString(String category) =>
+    category.substring(0, 1).toUpperCase() +
+    category.substring(1).replaceAll('_', ' ');
+String enumCategoryFromUserString(String category) {
+  print('${category.toLowerCase().replaceAll(' ', '_')}');
+  return category.toLowerCase().replaceAll(' ', '_');
+}
+
+MainCategory enumValueFromString<MainCategory>(
+        String key, Iterable<MainCategory> values) =>
+    values.firstWhere(
+      (v) => v != null && key == enumValueToString(v),
+      orElse: () => null,
+    );
+
 class Category {
   String id;
   MainCategory title;

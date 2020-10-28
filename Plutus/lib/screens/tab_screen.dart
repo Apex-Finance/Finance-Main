@@ -1,3 +1,4 @@
+import 'package:Plutus/models/category.dart';
 import 'package:flutter/material.dart';
 
 import './budget_screen.dart';
@@ -16,6 +17,7 @@ class TabScreen extends StatefulWidget {
 class _TabScreenState extends State<TabScreen> {
   List<Transaction> transactions = [];
   List<Widget> _pages = [];
+  List<Category> categories = [];
 
   void addTransaction(Transaction transaction) {
     setState(() {

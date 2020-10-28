@@ -1,4 +1,5 @@
 import 'package:Plutus/models/transaction.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
@@ -20,6 +21,7 @@ class _TransactionFormState extends State<TransactionForm> {
     amount: null,
     date: null,
   );
+  MainCategory category = MainCategory.uncategorized;
 
   void _setDate(DateTime value) {
     if (value == null) return; // if user cancels datepicker
@@ -33,8 +35,6 @@ class _TransactionFormState extends State<TransactionForm> {
   void _submitTransactionForm() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      print(
-          '${_transaction.amount}${_transaction.category}${_transaction.title}${_transaction.date}${_transaction.id}');
       Navigator.of(context).pop(
         _transaction,
       );
@@ -43,6 +43,7 @@ class _TransactionFormState extends State<TransactionForm> {
 
   @override
   void initState() {
+    _transaction.category = category;
     _transaction.date = _date; // initialize date since no onsave property
     super.initState();
   }
@@ -52,7 +53,7 @@ class _TransactionFormState extends State<TransactionForm> {
     return KeyboardAvoider(
       // stops keyboard from overlapping form
       child: Container(
-        height: 400, // large enough to accommodate all errors
+        height: 380, // large enough to accommodate all errors
         child: Card(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(
@@ -108,19 +109,6 @@ class _TransactionFormState extends State<TransactionForm> {
                       }
                     },
                   ),
-                  TextFormField(
-                    //TODO update to dropdown/another modal/card instead of string
-                    decoration: InputDecoration(
-                      labelText: 'Category',
-                    ),
-                    maxLength: null,
-                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                    onSaved: (val) => _transaction.category = val,
-                    validator: (val) {
-                      if (val.isEmpty) return 'Please enter a category.';
-                      return null;
-                    },
-                  ),
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -130,10 +118,40 @@ class _TransactionFormState extends State<TransactionForm> {
                       ),
                       GestureDetector(
                         onTap: () => showDialog(
-                            context: context,
-                            builder: (bctx) => AlertDialog(
-                                  content: Container(color: Colors.white),
-                                )),
+                          context: context,
+                          builder: (bctx) => SimpleDialog(
+                            title: Text('Choose Category'),
+                            // children: [
+                            //   ListView.builder(
+                            //       itemBuilder: (context, index) => ListTile(
+                            //           title: Text('${mainCategories[index]}')))
+                            // ],
+                            children: [
+                              // ...MainCategory.values
+                              //     .map((category) => ListTile(
+                              //           title: Text(
+                              //               '${describeEnum(MainCategory.values.iterator)}'),
+                              //           onTap: () => Navigator.of(context)
+                              //               .pop('$category'),
+                              //         ))
+                              //     .toList(),
+                              ...MainCategory.values
+                                  .map((category) => ListTile(
+                                      title: Text(
+                                          '${stringToUserString(enumValueToString(category))}'),
+                                      onTap: () {
+                                        Navigator.of(context).pop(category);
+                                      }))
+                                  .toList(),
+                            ],
+                          ),
+                        ).then((chosenCategory) {
+                          if (chosenCategory == null) return;
+                          setState(() {
+                            category = chosenCategory;
+                            _transaction.category = category;
+                          });
+                        }),
                         child: Chip(
                           avatar: CircleAvatar(
                             backgroundColor: Colors.black,
@@ -142,7 +160,7 @@ class _TransactionFormState extends State<TransactionForm> {
                             ),
                           ),
                           label: Text(
-                            'Uncategorized',
+                            '${stringToUserString(enumValueToString(category.toString()))}',
                             style: TextStyle(color: Colors.black),
                           ),
                           backgroundColor: Theme.of(context).primaryColorLight,
