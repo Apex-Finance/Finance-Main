@@ -56,11 +56,10 @@ class _TabScreenState extends State<TabScreen> {
     _pages = [
       // manages tabs
       DashboardScreen(),
-      null, // workaround for spacing
       BudgetScreen(
         budgets: budgets,
       ),
-      null,
+      null, // workaround for spacing
       TransactionScreen(transactions: transactions),
       GoalScreen(),
     ];
