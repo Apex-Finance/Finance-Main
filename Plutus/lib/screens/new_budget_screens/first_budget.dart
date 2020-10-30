@@ -37,18 +37,30 @@ class _FirstPageState extends State<FirstPage> {
                     height: 50,
                   ),
                   // Taken from transaction_screen.dart
-                  // Expanded(
-                  //   child: ListView.builder(
-                  //     itemCount: widget
-                  //         .category // grab category for somewhere
-                  //         .length, // how many categories will we have listed?
-                  //     itemBuilder: (context, index) =>
-                  //         BudgetListTile(widget.category[index]),
-                  //     //TODO create BudgetListTile widget
-                  //   ),
-                  // ),
+                  MainCategory.values
+                      .map((category) => ListTile(
+                          title: Text(
+                              '${stringToUserString(enumValueToString(category))}'),
+                          onTap: () {
+                            Navigator.of(context).pop(category);
+                          }))
+                      .toList(),
+                  //TODO look into this method of making a ListTile
+
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: widget
+                          .category // grab category for somewhere
+                          .length, // how many categories will we have listed?
+                      itemBuilder: (context, index) =>
+                          CategoryListTile(widget.category[index]),
+                      //     //TODO create CategoryListTile widget
+                    ),
+                  ),
                   // Possibly need to wrap a ListTile() inside a Form() widget
                   // Keep the TextFormField()
+                  // remember to pull from transaction_form(); those 4 functions that convert the enum into a
+                  // string and back to an enum
                   Row(
                     children: [
                       Text('\$', style: Theme.of(context).textTheme.bodyText1),
