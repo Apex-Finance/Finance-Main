@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:flutter/services.dart';
+import '../models/category.dart';
 
+// Form to add a new transaction
 class TransactionForm extends StatefulWidget {
   @override
   _TransactionFormState createState() => _TransactionFormState();
@@ -19,21 +21,30 @@ class _TransactionFormState extends State<TransactionForm> {
     amount: null,
     date: null,
   );
+  MainCategory category = MainCategory.uncategorized;
 
+  // Change the date of the transaction
   void _setDate(DateTime value) {
     if (value == null) return; // if user cancels datepicker
     setState(() {
-      _date = value;
       _transaction.date =
-          _date; // update date if date changes since no onsave property
+          _date = value; // update date if date changes since no onsave property
     });
   }
 
+  // Change the category of the transaction
+  void _setCategory(MainCategory value) {
+    if (value == null) return; // if user taps out of popup
+    setState(() {
+      _transaction.category = category =
+          value; // update category if category changes since no onsave property
+    });
+  }
+
+  // If each textformfield passes the validation, save it's value to the transaction, and return the transaction to the previous screen
   void _submitTransactionForm() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      print(
-          '${_transaction.amount}${_transaction.category}${_transaction.title}${_transaction.date}${_transaction.id}');
       Navigator.of(context).pop(
         _transaction,
       );
@@ -42,7 +53,9 @@ class _TransactionFormState extends State<TransactionForm> {
 
   @override
   void initState() {
-    _transaction.date = _date; // initialize date since no onsave property
+    _transaction.category =
+        category; // initialize date and category since no onsave property
+    _transaction.date = _date;
     super.initState();
   }
 
@@ -51,7 +64,7 @@ class _TransactionFormState extends State<TransactionForm> {
     return KeyboardAvoider(
       // stops keyboard from overlapping form
       child: Container(
-        height: 400, // large enough to accommodate all errors
+        height: 380, // large enough to accommodate all errors
         child: Card(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(
@@ -64,111 +77,177 @@ class _TransactionFormState extends State<TransactionForm> {
               key: _formKey,
               child: Column(
                 children: [
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Description',
-                    ),
-                    autofocus: true,
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(15),
-                    ],
-                    maxLength: 15,
-                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                    onSaved: (val) => _transaction.title = val.trim(),
-                    validator: (val) {
-                      if (val.trim().length > 15)
-                        return 'Description is too long.';
-                      if (val.isEmpty) return 'Please enter a description.';
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    //TODO update to dropdown/another modal/card instead of string
-                    decoration: InputDecoration(
-                      labelText: 'Category',
-                    ),
-                    maxLength: null,
-                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                    onSaved: (val) => _transaction.category = val,
-                    validator: (val) {
-                      if (val.isEmpty) return 'Please enter a category.';
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Amount',
-                    ),
-                    keyboardType: TextInputType.number,
-                    maxLength: null,
-                    onEditingComplete: () => FocusScope.of(context).unfocus(),
-                    onSaved: (val) => _transaction.amount = double.parse(val),
-                    validator: (val) {
-                      if (val.isEmpty) return 'Please enter an amount.';
-                      if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
-                        // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
-                        if (double.parse(
-                                double.parse(val).toStringAsFixed(2)) <=
-                            0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
-                          return 'Please enter an amount greater than 0.';
-                        if (double.parse(double.parse(val).toStringAsFixed(2)) >
-                            999999999.99)
-                          return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
-                        return null;
-                      } else {
-                        return 'Please enter a number.';
-                      }
-                    },
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                        width: 125,
-                        child: Text(
-                          'Date: ${DateFormat.MMMd().format(_date)}',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                      RaisedButton(
-                        color: Theme.of(context).primaryColorLight,
-                        child: Text('Pick Date'),
-                        onPressed: () => showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime.now().subtract(
-                            Duration(
-                              days: 365,
-                            ),
-                          ),
-                          lastDate: DateTime.now().add(
-                            Duration(
-                              days: 365,
-                            ),
-                          ),
-                        ).then(
-                          (value) => _setDate(value),
-                        ),
-                      ),
-                    ],
-                  ),
+                  DescriptionTFF(transaction: _transaction),
+                  AmountTFF(transaction: _transaction),
+                  buildCategoryChanger(context),
+                  buildDateChanger(context),
                   SizedBox(
                     height: 25,
                   ),
-                  Container(
-                    alignment: Alignment.bottomRight,
-                    child: FloatingActionButton.extended(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      onPressed: _submitTransactionForm,
-                      label: Text('Add Transaction'),
-                    ),
-                  ),
+                  buildSubmitButton(context),
                 ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Container buildSubmitButton(BuildContext context) {
+    return Container(
+      alignment: Alignment.bottomRight,
+      child: FloatingActionButton.extended(
+        backgroundColor: Theme.of(context).primaryColor,
+        onPressed: _submitTransactionForm,
+        label: Text('Add Transaction'),
+      ),
+    );
+  }
+
+  Row buildDateChanger(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Container(
+          width: 125,
+          child: Text(
+            'Date: ${DateFormat.MMMd().format(_date)}',
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
+        RaisedButton(
+          color: Theme.of(context).primaryColorLight,
+          child: Text('Pick Date'),
+          onPressed: () => showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime.now().subtract(
+              Duration(
+                days: 365,
+              ),
+            ),
+            lastDate: DateTime.now().add(
+              Duration(
+                days: 365,
+              ),
+            ),
+          ).then(
+            (value) => _setDate(value),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row buildCategoryChanger(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Text(
+          'Category: ',
+          style: TextStyle(fontSize: 16),
+        ),
+        GestureDetector(
+          onTap: () => showDialog(
+            context: context,
+            builder: (bctx) => SimpleDialog(
+              title: Text('Choose Category'),
+              children: [
+                ...MainCategory.values
+                    .map((category) => ListTile(
+                        title: Text(
+                            '${stringToUserString(enumValueToString(category))}'),
+                        onTap: () {
+                          Navigator.of(context).pop(category);
+                        }))
+                    .toList(),
+              ],
+            ),
+          ).then((chosenCategory) => _setCategory(chosenCategory)),
+          child: Chip(
+            avatar: CircleAvatar(
+              backgroundColor: Colors.black,
+              child: Icon(
+                Icons.category,
+              ),
+            ),
+            label: Text(
+              '${stringToUserString(enumValueToString(category.toString()))}',
+              style: TextStyle(color: Colors.black),
+            ),
+            backgroundColor: Theme.of(context).primaryColorLight,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class AmountTFF extends StatelessWidget {
+  const AmountTFF({
+    Key key,
+    @required Transaction transaction,
+  })  : _transaction = transaction,
+        super(key: key);
+
+  final Transaction _transaction;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      decoration: InputDecoration(
+        labelText: 'Amount',
+      ),
+      keyboardType: TextInputType.number,
+      maxLength: null,
+      onEditingComplete: () => FocusScope.of(context).unfocus(),
+      onSaved: (val) => _transaction.amount = double.parse(val),
+      validator: (val) {
+        if (val.isEmpty) return 'Please enter an amount.';
+        if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
+          // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
+          if (double.parse(double.parse(val).toStringAsFixed(2)) <=
+              0.00) // seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
+            return 'Please enter an amount greater than 0.';
+          if (double.parse(double.parse(val).toStringAsFixed(2)) > 999999999.99)
+            return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
+          return null;
+        } else {
+          return 'Please enter a number.';
+        }
+      },
+    );
+  }
+}
+
+class DescriptionTFF extends StatelessWidget {
+  const DescriptionTFF({
+    Key key,
+    @required Transaction transaction,
+  })  : _transaction = transaction,
+        super(key: key);
+
+  final Transaction _transaction;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      decoration: InputDecoration(
+        labelText: 'Description',
+      ),
+      autofocus: true,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(15),
+      ],
+      maxLength: 15,
+      onEditingComplete: () => FocusScope.of(context).nextFocus(),
+      onSaved: (val) => _transaction.title = val.trim(),
+      validator: (val) {
+        if (val.trim().length > 15) return 'Description is too long.';
+        if (val.isEmpty) return 'Please enter a description.';
+        return null;
+      },
     );
   }
 }

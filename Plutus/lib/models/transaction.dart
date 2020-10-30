@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
+import 'category.dart';
 
 class Transaction {
   String id;
   String title;
-  String category;
+  MainCategory category;
   /* this will be treated like an id to 
      compare to the actual category id and
      a budget with the same category id */

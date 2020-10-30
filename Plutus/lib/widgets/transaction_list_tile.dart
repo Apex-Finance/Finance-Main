@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import '../models/transaction.dart';
+import '../models/category.dart';
 
 class TransactionListTile extends StatelessWidget {
   final Transaction transaction;
@@ -15,8 +16,7 @@ class TransactionListTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(
-            20)), //BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
         child: ListTile(
           tileColor: Colors.grey[850],
           leading: CircleAvatar(child: Icon(Icons.category)),
@@ -28,7 +28,7 @@ class TransactionListTile extends StatelessWidget {
                 TextStyle(color: Theme.of(context).primaryColor, fontSize: 18),
           ),
           subtitle: Text(
-              '${transaction.category} | ${DateFormat.MMMd().format(transaction.date)}',
+              '${stringToUserString(enumValueToString(transaction.category))} | ${DateFormat.MMMd().format(transaction.date)}',
               style: TextStyle(color: Theme.of(context).primaryColorLight)),
           trailing: Text(
             '\$${transaction.amount.toStringAsFixed(2)}',
