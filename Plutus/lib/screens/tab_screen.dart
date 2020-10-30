@@ -1,4 +1,5 @@
 import 'package:Plutus/models/category.dart';
+import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
 
 import './budget_screen.dart';
@@ -18,6 +19,7 @@ class _TabScreenState extends State<TabScreen> {
   List<Transaction> transactions = [];
   List<Widget> _pages = [];
   List<Category> categories = [];
+  List<Budget> budgets = [];
 
   // Add a new transaction to the list of transactions
   void addTransaction(Transaction transaction) {
@@ -54,8 +56,11 @@ class _TabScreenState extends State<TabScreen> {
     _pages = [
       // manages tabs
       DashboardScreen(),
-      BudgetScreen(),
       null, // workaround for spacing
+      BudgetScreen(
+        budgets: budgets,
+      ),
+      null,
       TransactionScreen(transactions: transactions),
       GoalScreen(),
     ];

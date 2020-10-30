@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import '../models/budget.dart';
 import '../widgets/budget_form.dart';
@@ -8,16 +9,18 @@ import '../widgets/budget_list_tile.dart';
 class BudgetScreen extends StatefulWidget {
   static const routeName = '/budget';
 
+  final List<Budget> budgets;
+
+  BudgetScreen({@required this.budgets});
+
   @override
   _BudgetScreenState createState() => _BudgetScreenState();
 }
 
 class _BudgetScreenState extends State<BudgetScreen> {
-  List<Budget> budgets = [];
-
   void addBudget(Budget budget) {
     setState(() {
-      budgets.add(budget);
+      widget.budgets.add(budget);
     });
   }
 
@@ -30,6 +33,14 @@ class _BudgetScreenState extends State<BudgetScreen> {
       if (newBudget == null) return;
       addBudget(newBudget);
     });
+  }
+
+  double get totalBudget {
+    var sum = 0.0;
+    for (var i = 0; i < widget.budgets.length; i++) {
+      sum += widget.budgets[i].amount;
+    }
+    return sum;
   }
 
   @override
@@ -46,8 +57,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
         ),
         Expanded(
           child: Container(
-            margin: EdgeInsets.only(top: 40),
-            child: budgets.isEmpty
+            child: widget.budgets.isEmpty
                 ? Center(
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: 250),
@@ -93,8 +103,9 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                                 Theme.of(context).primaryColor,
                                             fontSize: 18),
                                       ),
-                                      Text(
+                                      AutoSizeText(
                                         '\$4,900.00',
+                                        maxLines: 1,
                                         style: TextStyle(
                                             color:
                                                 Theme.of(context).primaryColor,
@@ -116,8 +127,9 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                                 Theme.of(context).primaryColor,
                                             fontSize: 18),
                                       ),
-                                      Text(
+                                      AutoSizeText(
                                         '\$213.04',
+                                        maxLines: 1,
                                         style: TextStyle(
                                             color:
                                                 Theme.of(context).primaryColor,
@@ -148,8 +160,9 @@ class _BudgetScreenState extends State<BudgetScreen> {
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    '\$2,000.00 of \$6,900.00',
+                                  AutoSizeText(
+                                    '\$2,000.00 of \$$totalBudget',
+                                    maxLines: 1,
                                     style: TextStyle(
                                         color: Theme.of(context).primaryColor,
                                         fontSize: 18),
@@ -163,9 +176,9 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       Divider(height: 10),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: budgets.length,
+                          itemCount: widget.budgets.length,
                           itemBuilder: (context, index) =>
-                              BudgetListTile(budgets[index]),
+                              BudgetListTile(widget.budgets[index]),
                         ),
                       ),
                     ]),
