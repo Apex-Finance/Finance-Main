@@ -1,22 +1,21 @@
-import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 
-class IncomeScreen extends StatefulWidget {
-  static const routeName = '/income';
+class FirstPage extends StatefulWidget {
+  static const routeName = '/first_budget';
   @override
-  _IncomeScreenState createState() => _IncomeScreenState();
+  _FirstPageState createState() => _FirstPageState();
 }
 
-class _IncomeScreenState extends State<IncomeScreen> {
+class _FirstPageState extends State<FirstPage> {
   final _formKey = GlobalKey<FormState>();
-  Budget budget;
-
+  double number;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Budget', style: Theme.of(context).textTheme.bodyText1),
+        title:
+            Text('First Budget', style: Theme.of(context).textTheme.bodyText1),
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(20, 50, 20, 0),
@@ -28,7 +27,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
               child: Column(
                 children: [
                   Text(
-                    "Monthly Income",
+                    "New Monthly Budget",
                     style: TextStyle(
                       color: Colors.amber,
                       fontSize: 35,
@@ -37,6 +36,19 @@ class _IncomeScreenState extends State<IncomeScreen> {
                   SizedBox(
                     height: 50,
                   ),
+                  // Taken from transaction_screen.dart
+                  // Expanded(
+                  //   child: ListView.builder(
+                  //     itemCount: widget
+                  //         .category // grab category for somewhere
+                  //         .length, // how many categories will we have listed?
+                  //     itemBuilder: (context, index) =>
+                  //         BudgetListTile(widget.category[index]),
+                  //     //TODO create BudgetListTile widget
+                  //   ),
+                  // ),
+                  // Possibly need to wrap a ListTile() inside a Form() widget
+                  // Keep the TextFormField()
                   Row(
                     children: [
                       Text('\$', style: Theme.of(context).textTheme.bodyText1),
@@ -47,7 +59,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             keyboardType: TextInputType.number,
                             initialValue: '0.00',
                             onEditingComplete: () {},
-                            onSaved: (val) => budget.amount = double.parse(val),
+                            onSaved: (val) => number = double.parse(val),
                             validator: (val) {
                               if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
                                 // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits

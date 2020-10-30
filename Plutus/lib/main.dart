@@ -8,6 +8,7 @@ import './screens/dashboard_screen.dart';
 import './screens/budget_screen.dart';
 import './screens/transaction_screen.dart';
 import './screens/goal_screen.dart';
+import './screens/new_budget_screens/first_budget.dart';
 
 void main() => runApp(MyApp());
 
@@ -30,7 +31,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: IncomeScreen.routeName, //initialRoute: '/',
+      initialRoute:
+          FirstPage.routeName, // IncomeScreen.routeName, //initialRoute: '/',
       routes: {
         '/': (context) => OnBoardingPage(),
         DashboardScreen.routeName: (context) => DashboardScreen(),
@@ -40,6 +42,7 @@ class MyApp extends StatelessWidget {
             ),
         GoalScreen.routeName: (context) => GoalScreen(),
         IncomeScreen.routeName: (context) => IncomeScreen(),
+        FirstPage.routeName: (context) => FirstPage(),
       },
     );
   }
@@ -96,8 +99,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Manage Transactions",
           body: "Stay on top of your expenses with Plutus...",
-          image: _buildImage(
-              'pos-terminal-financial-transactions-operation-payment-credit-card-hands-hold-phone-attachment-cash-money-100337825'),
+          //image: _buildImage(
+          //'pos-terminal-financial-transactions-operation-payment-credit-card-hands-hold-phone-attachment-cash-money-100337825'),
           decoration: pageDecoration,
         ),
         PageViewModel(
