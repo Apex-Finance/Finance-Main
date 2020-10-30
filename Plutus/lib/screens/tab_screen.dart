@@ -84,7 +84,7 @@ class _TabScreenState extends State<TabScreen> {
   BottomNavigationBar buildTabBar(BuildContext context) {
     return BottomNavigationBar(
       onTap: _selectPage,
-      backgroundColor: Theme.of(context).canvasColor,
+      backgroundColor: Colors.grey[900],
       unselectedItemColor: Colors.white,
       selectedItemColor: Theme.of(context).primaryColor,
       showUnselectedLabels: true,
@@ -94,8 +94,14 @@ class _TabScreenState extends State<TabScreen> {
       items: [
         buildTab(context, Icons.category, 'Dashboard'),
         buildTab(context, Icons.account_balance, 'Budget'),
-        buildTab(context, Icons.tab, '',
-            color: Colors.black), // blank "tab" for spacing around FAB
+        BottomNavigationBarItem(
+          backgroundColor: Theme.of(context).primaryColor,
+          icon: Icon(
+            Icons.tab,
+            color: Colors.black,
+          ),
+          label: '',
+        ), // blank "tab" for spacing around FAB
         buildTab(context, Icons.shopping_cart, 'Transaction'),
         buildTab(context, Icons.star, 'Goal'),
       ],
@@ -103,12 +109,15 @@ class _TabScreenState extends State<TabScreen> {
   }
 
   BottomNavigationBarItem buildTab(
-      BuildContext context, IconData icon, String label,
-      {Color color}) {
+    BuildContext context,
+    IconData icon,
+    String label,
+  ) {
     return BottomNavigationBarItem(
       backgroundColor: Theme.of(context).primaryColor,
-      icon: Icon(icon,
-          color: color == null ? IconTheme.of(context).color : color),
+      icon: Icon(
+        icon,
+      ),
       label: label,
     );
   }
