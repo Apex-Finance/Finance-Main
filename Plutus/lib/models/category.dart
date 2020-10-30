@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+// Our main categories
 enum MainCategory {
   home,
   food_and_drinks,
@@ -19,6 +20,7 @@ enum MainCategory {
   uncategorized
 }
 
+// All subcategories regardless of main
 enum SubCategory {
   furnishings,
   homeImprovement,
@@ -238,10 +240,13 @@ enum uncategorized {
   check,
 }
 
+// These next 4 functions convert an enum to a string and a string to an enum (and 2 more to make them pretty strings); will combine into 2 functions
 String enumValueToString(Object o) => o.toString().split('.').last;
+
 String stringToUserString(String category) =>
     category.substring(0, 1).toUpperCase() +
     category.substring(1).replaceAll('_', ' ');
+
 String enumCategoryFromUserString(String category) {
   print('${category.toLowerCase().replaceAll(' ', '_')}');
   return category.toLowerCase().replaceAll(' ', '_');

@@ -16,8 +16,7 @@ class TransactionListTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(
-            20)), //BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
         child: ListTile(
           tileColor: Colors.grey[850],
           leading: CircleAvatar(child: Icon(Icons.category)),

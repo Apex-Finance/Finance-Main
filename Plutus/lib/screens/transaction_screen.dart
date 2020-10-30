@@ -33,6 +33,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
   var selectedMonth = DateTime.now().month;
   var selectedYear = DateTime.now().year;
 
+  // Take all transactions, filter out only the ones from the selected month, and reverse the order from newest to oldest
   List<Transaction> get monthlyTransactions {
     var unsorted = widget.transactions
         .where((transaction) =>
@@ -43,6 +44,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
     return unsorted;
   }
 
+  // Sum the expenses for the month
   double get monthlyExpenses {
     var sum = 0.00;
     for (var transaction in monthlyTransactions) {
@@ -51,6 +53,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
     return sum;
   }
 
+  // Change the year and month
   void changeMonth(String direction) {
     setState(() {
       if (direction == 'back') {
@@ -78,90 +81,128 @@ class _TransactionScreenState extends State<TransactionScreen> {
           padding: const EdgeInsets.only(top: 20.0),
           child: Container(
             width: 250,
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  onPressed: () => changeMonth('back')),
-              Expanded(
-                child: Center(
-                  child: Text(
-                    '${months[selectedMonth - 1]}' +
-                        (selectedYear == DateTime.now().year
-                            ? ''
-                            : ' $selectedYear'),
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ),
-              IconButton(
-                  icon: Icon(
-                    Icons.arrow_forward,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  onPressed: () => changeMonth('forward')),
-            ]),
+            child: buildMonthChanger(context),
           ),
         ),
         Expanded(
           child: Container(
             margin: EdgeInsets.only(top: 25),
             child: monthlyTransactions.isEmpty
-                ? Center(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 250),
-                      child: Text(
-                        'No transactions have been added this month.',
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Theme.of(context).primaryColor),
-                      ),
-                    ),
-                  )
+                ? NoTransactionsYetText()
                 : Card(
                     color: Colors.grey[900],
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.vertical(
                       top: Radius.circular(20),
                     )),
-                    child: Column(children: [
-                      ClipRRect(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(20)),
-                        child: ListTile(
-                          tileColor: Colors.grey[900],
-                          title: Text(
-                            'Total Expenses',
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Theme.of(context).primaryColor),
-                          ),
-                          trailing: Text(
-                            '\$${monthlyExpenses.toStringAsFixed(2)}',
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Theme.of(context).primaryColor),
-                          ),
-                        ),
-                      ),
-                      Divider(height: 10),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: monthlyTransactions.length,
-                          itemBuilder: (context, index) =>
-                              TransactionListTile(monthlyTransactions[index]),
-                        ),
-                      ),
-                    ]),
+                    child: TransactionsCard(
+                        monthlyExpenses: monthlyExpenses,
+                        monthlyTransactions: monthlyTransactions),
                   ),
           ),
         ),
       ],
+    );
+  }
+
+  Row buildMonthChanger(BuildContext context) {
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Theme.of(context).primaryColor,
+          ),
+          onPressed: () => changeMonth('back')),
+      Expanded(
+        child: Center(
+          child: Text(
+            '${months[selectedMonth - 1]}' +
+                (selectedYear == DateTime.now().year ? '' : ' $selectedYear'),
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontSize: 16,
+            ),
+          ),
+        ),
+      ),
+      IconButton(
+          icon: Icon(
+            Icons.arrow_forward,
+            color: Theme.of(context).primaryColor,
+          ),
+          onPressed: () => changeMonth('forward')),
+    ]);
+  }
+}
+
+class TransactionsCard extends StatelessWidget {
+  const TransactionsCard({
+    Key key,
+    @required this.monthlyExpenses,
+    @required this.monthlyTransactions,
+  }) : super(key: key);
+
+  final double monthlyExpenses;
+  final List<Transaction> monthlyTransactions;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      ClipRRect(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        child: TotalExpenses(monthlyExpenses: monthlyExpenses),
+      ),
+      Divider(height: 10),
+      Expanded(
+        child: ListView.builder(
+          itemCount: monthlyTransactions.length,
+          itemBuilder: (context, index) =>
+              TransactionListTile(monthlyTransactions[index]),
+        ),
+      ),
+    ]);
+  }
+}
+
+class TotalExpenses extends StatelessWidget {
+  const TotalExpenses({
+    Key key,
+    @required this.monthlyExpenses,
+  }) : super(key: key);
+
+  final double monthlyExpenses;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      tileColor: Colors.grey[900],
+      title: Text(
+        'Total Expenses',
+        style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
+      ),
+      trailing: Text(
+        '\$${monthlyExpenses.toStringAsFixed(2)}',
+        style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
+      ),
+    );
+  }
+}
+
+class NoTransactionsYetText extends StatelessWidget {
+  const NoTransactionsYetText({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 250),
+        child: Text(
+          'No transactions have been added this month.',
+          style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
+        ),
+      ),
     );
   }
 }
