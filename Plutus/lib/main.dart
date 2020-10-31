@@ -36,7 +36,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => OnBoardingPage(),
         DashboardScreen.routeName: (context) => DashboardScreen(),
-        BudgetScreen.routeName: (context) => BudgetScreen(),
+        BudgetScreen.routeName: (context) => BudgetScreen(
+              budgets: [],
+            ),
         TransactionScreen.routeName: (context) => TransactionScreen(
               transactions: [],
             ),

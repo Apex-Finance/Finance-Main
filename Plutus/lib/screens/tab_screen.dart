@@ -1,4 +1,5 @@
 import 'package:Plutus/models/category.dart';
+import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
 
 import './budget_screen.dart';
@@ -18,6 +19,7 @@ class _TabScreenState extends State<TabScreen> {
   List<Transaction> transactions = [];
   List<Widget> _pages = [];
   List<Category> categories = [];
+  List<Budget> budgets = [];
 
   // Add a new transaction to the list of transactions
   void addTransaction(Transaction transaction) {
@@ -54,7 +56,9 @@ class _TabScreenState extends State<TabScreen> {
     _pages = [
       // manages tabs
       DashboardScreen(),
-      BudgetScreen(),
+      BudgetScreen(
+        budgets: budgets,
+      ),
       null, // workaround for spacing
       TransactionScreen(transactions: transactions),
       GoalScreen(),
@@ -84,7 +88,7 @@ class _TabScreenState extends State<TabScreen> {
   BottomNavigationBar buildTabBar(BuildContext context) {
     return BottomNavigationBar(
       onTap: _selectPage,
-      backgroundColor: Theme.of(context).canvasColor,
+      backgroundColor: Colors.grey[900],
       unselectedItemColor: Colors.white,
       selectedItemColor: Theme.of(context).primaryColor,
       showUnselectedLabels: true,
@@ -94,8 +98,14 @@ class _TabScreenState extends State<TabScreen> {
       items: [
         buildTab(context, Icons.category, 'Dashboard'),
         buildTab(context, Icons.account_balance, 'Budget'),
-        buildTab(context, Icons.tab, '',
-            color: Colors.black), // blank "tab" for spacing around FAB
+        BottomNavigationBarItem(
+          backgroundColor: Theme.of(context).primaryColor,
+          icon: Icon(
+            Icons.tab,
+            color: Colors.black,
+          ),
+          label: '',
+        ), // blank "tab" for spacing around FAB
         buildTab(context, Icons.shopping_cart, 'Transaction'),
         buildTab(context, Icons.star, 'Goal'),
       ],
@@ -103,12 +113,15 @@ class _TabScreenState extends State<TabScreen> {
   }
 
   BottomNavigationBarItem buildTab(
-      BuildContext context, IconData icon, String label,
-      {Color color}) {
+    BuildContext context,
+    IconData icon,
+    String label,
+  ) {
     return BottomNavigationBarItem(
       backgroundColor: Theme.of(context).primaryColor,
-      icon: Icon(icon,
-          color: color == null ? IconTheme.of(context).color : color),
+      icon: Icon(
+        icon,
+      ),
       label: label,
     );
   }
