@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class FirstPage extends StatefulWidget {
   static const routeName = '/first_budget';
@@ -10,6 +11,7 @@ class FirstPage extends StatefulWidget {
 class _FirstPageState extends State<FirstPage> {
   final _formKey = GlobalKey<FormState>();
   double number;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,27 +38,75 @@ class _FirstPageState extends State<FirstPage> {
                   SizedBox(
                     height: 50,
                   ),
-                  // Taken from transaction_screen.dart
-                  MainCategory.values
-                      .map((category) => ListTile(
-                          title: Text(
-                              '${stringToUserString(enumValueToString(category))}'),
-                          onTap: () {
-                            Navigator.of(context).pop(category);
-                          }))
-                      .toList(),
-                  //TODO look into this method of making a ListTile
 
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: widget
-                          .category // grab category for somewhere
-                          .length, // how many categories will we have listed?
-                      itemBuilder: (context, index) =>
-                          CategoryListTile(widget.category[index]),
-                      //     //TODO create CategoryListTile widget
+                  //TODO Implement categories instead of hardcoding in category names
+                  //TODO Create a CategoryListTile
+                  ListTile(
+                    tileColor: Colors.grey[850],
+                    leading: CircleAvatar(child: Icon(Icons.category)),
+                    title: AutoSizeText(
+                      'Food and Drinks',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor, fontSize: 18),
+                    ),
+                    trailing: Container(child: TextField()),
+                  ),
+                  ListTile(
+                    tileColor: Colors.grey[850],
+                    leading: CircleAvatar(child: Icon(Icons.category)),
+                    title: AutoSizeText(
+                      'Education',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor, fontSize: 18),
+                    ),
+                    trailing: Text(
+                      '\$0.00',
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor, fontSize: 18),
                     ),
                   ),
+                  ListTile(
+                    tileColor: Colors.grey[850],
+                    leading: CircleAvatar(child: Icon(Icons.category)),
+                    title: AutoSizeText(
+                      'Home',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor, fontSize: 18),
+                    ),
+                    trailing: Text(
+                      '\$0.00',
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor, fontSize: 18),
+                    ),
+                  ),
+
+                  // Taken from transaction_screen.dart
+                  // ...MainCategory.values
+                  //     .map((category) => ListTile(
+                  //         title: Text(
+                  //             '${stringToUserString(enumValueToString(category))}'),
+                  //         onTap: () {
+                  //           Navigator.of(context).pop(category);
+                  //         }))
+                  //     .toList(),
+                  //TODO look into this method of making a ListTile
+
+                  // Expanded(
+                  //   child: ListView.builder(
+                  //     itemCount: widget
+                  //         .category // grab category for somewhere
+                  //         .length, // how many categories will we have listed?
+                  //     itemBuilder: (context, index) =>
+                  //         CategoryListTile(widget.category[index]),
+                  //     //     //TODO create CategoryListTile widget
+                  //   ),
+                  // ),
                   // Possibly need to wrap a ListTile() inside a Form() widget
                   // Keep the TextFormField()
                   // remember to pull from transaction_form(); those 4 functions that convert the enum into a
