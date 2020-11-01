@@ -8,7 +8,7 @@ import './screens/dashboard_screen.dart';
 import './screens/budget_screen.dart';
 import './screens/transaction_screen.dart';
 import './screens/goal_screen.dart';
-import './screens/new_budget_screens/first_budget.dart';
+import './screens/new_budget_screens/first_budget_screen.dart';
 
 void main() => runApp(MyApp());
 
