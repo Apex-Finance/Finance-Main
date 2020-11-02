@@ -41,7 +41,7 @@ class _FirstPageState extends State<FirstPage> {
                   ),
                   //TODO Implement categories instead of hardcoding in category names
                   //TODO Create a CategoryListTile
-                  Expanded(
+                  Container(
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: 5, // # of main categories; change later

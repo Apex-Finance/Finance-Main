@@ -11,19 +11,18 @@ class CategoryListTile extends StatelessWidget {
   double number = 0; // Amount the user inputs for that category; PLS change
   @override
   Widget build(BuildContext context) {
-    return Container(
-      //padding: EdgeInsets.all(10),
-      width: 50,
-      child: ListTile(
-        tileColor: Colors.grey[850],
-        leading: CircleAvatar(child: Icon(Icons.category)),
-        title: AutoSizeText(
-          'Food and Drinks', // this is where you would implement the category name
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 18),
-        ),
-        trailing: Row(
+    return ListTile(
+      tileColor: Colors.grey[850],
+      leading: CircleAvatar(child: Icon(Icons.category)),
+      title: AutoSizeText(
+        'Food and Drinks', // this is where you would implement the category name
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 18),
+      ),
+      trailing: Container(
+        width: 50,
+        child: Row(
           children: [
             Text('\$', style: Theme.of(context).textTheme.bodyText1),
             Expanded(
