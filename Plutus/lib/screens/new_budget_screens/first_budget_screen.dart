@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../widgets/category_list_tile.dart';
 import '../../models/category.dart';
-import '../../models/budget.dart';
+import './income_screen.dart';
 
 class FirstPage extends StatefulWidget {
   static const routeName = '/first_budget';
-  Budget amount;
 
-  FirstPage(this.amount);
   @override
   _FirstPageState createState() => _FirstPageState();
 }
@@ -18,6 +16,7 @@ class _FirstPageState extends State<FirstPage> {
 
   @override
   Widget build(BuildContext context) {
+    var budgetAmount = Navigator.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         title:
@@ -41,7 +40,7 @@ class _FirstPageState extends State<FirstPage> {
                 Padding(
                   padding: EdgeInsets.all(15),
                   child: Text(
-                    'Total Budget: \$0.00',
+                    'Total Budget: \$$budgetAmount',
                     style: TextStyle(color: Colors.amber, fontSize: 15),
                   ),
                 ),
@@ -57,18 +56,6 @@ class _FirstPageState extends State<FirstPage> {
                   height: 30,
                 )
               ],
-              // Taken from transaction_screen.dart
-              // ...MainCategory.values
-              //     .map((category) => ListTile(
-              //         title: Text(
-              //             '${stringToUserString(enumValueToString(category))}'),
-              //         onTap: () {
-              //           Navigator.of(context).pop(category);
-              //         }))
-              //     .toList(),
-
-              // remember to pull from transaction_form(); those 4 functions that convert the enum into a
-              // string and back to an enum
             ),
           ),
         ),

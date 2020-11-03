@@ -43,13 +43,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             autofocus: true,
                             keyboardType: TextInputType.number,
                             initialValue: '0.00',
-                            onEditingComplete: () => Navigator.pushNamed(
-                                  context,
-                                  FirstPage.routeName,
-                                  arguments: FirstPage(
-                                    budget,
-                                  ),
-                                ),
+                            onEditingComplete: () {
+                              Navigator.pushNamed(
+                                context,
+                                FirstPage.routeName,
+                                arguments: budget,
+                              );
+                            },
                             onSaved: (val) => budget.amount = double.parse(val),
                             validator: (val) {
                               if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
