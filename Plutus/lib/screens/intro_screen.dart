@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 import './auth_screen.dart';
+import './dashboard_screen.dart';
 
 class OnBoardingPage extends StatefulWidget {
   @override
@@ -13,8 +14,12 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
   void _onIntroEnd(context) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => AuthScreen()),
+      MaterialPageRoute(builder: (_) => DashboardScreen()),
     );
+  }
+
+  void _onSignUp(context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => AuthScreen()));
   }
 
   Widget _buildImage(String assetName) {
@@ -64,6 +69,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           decoration: pageDecoration,
         ),
         PageViewModel(
+          title: "Login Page",
+        ),
+        PageViewModel(
           title: "Want to manually create a budget?",
           body: "Let's get started",
           image: _buildImage('lets get started'),
@@ -80,18 +88,6 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               borderRadius: BorderRadius.circular(8.0),
             ),
           ),
-          decoration: pageDecoration,
-        ),
-        // ***This page could be the login page***
-        PageViewModel(
-          title: "Login Page",
-          bodyWidget: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text("Insert Login Page", style: bodyStyle),
-            ],
-          ),
-          image: _buildImage('financial-goals-icons-600w-1118707967'),
           decoration: pageDecoration,
         ),
       ],
