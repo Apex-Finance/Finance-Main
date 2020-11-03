@@ -107,6 +107,17 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           decoration: pageDecoration,
         ),
         PageViewModel(
+          title: "Login Page",
+          bodyWidget: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text("Insert Login Page", style: bodyStyle),
+            ],
+          ),
+          image: _buildImage('financial-goals-icons-600w-1118707967'),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
           title: "Want to manually create a budget?",
           body: "Let's get started",
           image: _buildImage('lets get started'),
@@ -123,18 +134,6 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               borderRadius: BorderRadius.circular(8.0),
             ),
           ),
-          decoration: pageDecoration,
-        ),
-        // ***This page could be the login page***
-        PageViewModel(
-          title: "Login Page",
-          bodyWidget: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text("Insert Login Page", style: bodyStyle),
-            ],
-          ),
-          image: _buildImage('financial-goals-icons-600w-1118707967'),
           decoration: pageDecoration,
         ),
       ],
