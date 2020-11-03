@@ -31,8 +31,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute:
-          FirstPage.routeName, // IncomeScreen.routeName, //initialRoute: '/',
+      initialRoute: IncomeScreen
+          .routeName, // IncomeScreen.routeName, //initialRoute: '/',
       routes: {
         '/': (context) => OnBoardingPage(),
         DashboardScreen.routeName: (context) => DashboardScreen(),
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
             ),
         GoalScreen.routeName: (context) => GoalScreen(),
         IncomeScreen.routeName: (context) => IncomeScreen(),
-        FirstPage.routeName: (context) => FirstPage(),
+        FirstBudgetScreen.routeName: (context) => FirstBudgetScreen(),
       },
     );
   }

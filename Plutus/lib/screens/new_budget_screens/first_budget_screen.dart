@@ -1,22 +1,24 @@
+import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/category_list_tile.dart';
 import '../../models/category.dart';
-import './income_screen.dart';
 
-class FirstPage extends StatefulWidget {
+class FirstBudgetScreen extends StatefulWidget {
   static const routeName = '/first_budget';
 
   @override
-  _FirstPageState createState() => _FirstPageState();
+  _FirstBudgetScreenState createState() => _FirstBudgetScreenState();
 }
 
-class _FirstPageState extends State<FirstPage> {
+class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    var budgetAmount = Navigator.of(context).settings.arguments;
+    //TODO currently, budgetAmount is null (pulling from budget.dart); figure out how to pass data from
+    //TODO income.dart to this screen
+    final Budget budgetAmount = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         title:

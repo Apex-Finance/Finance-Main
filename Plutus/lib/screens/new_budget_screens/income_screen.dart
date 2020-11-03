@@ -44,10 +44,12 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             keyboardType: TextInputType.number,
                             initialValue: '0.00',
                             onEditingComplete: () {
-                              Navigator.pushNamed(
+                              Navigator.push(
                                 context,
-                                FirstPage.routeName,
-                                arguments: budget,
+                                MaterialPageRoute(
+                                  builder: (context) => FirstBudgetScreen(),
+                                ), // Once the user inputs his desired budget amount, they are redirected
+                                // to the first budget creation screen
                               );
                             },
                             onSaved: (val) => budget.amount = double.parse(val),
