@@ -44,7 +44,8 @@ class MyApp extends StatelessWidget {
             ),
         GoalScreen.routeName: (context) => GoalScreen(),
         IncomeScreen.routeName: (context) => IncomeScreen(),
-        FirstPage.routeName: (context) => FirstPage(),
+        //TODO Figure out how to pass budget from IncomeScreen to FirstBudgetScreen
+        FirstPage.routeName: (context) => FirstPage(budget),
       },
     );
   }

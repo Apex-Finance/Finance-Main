@@ -2,6 +2,8 @@ import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 
+import './first_budget_screen.dart';
+
 class IncomeScreen extends StatefulWidget {
   static const routeName = '/income';
   @override
@@ -41,7 +43,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             autofocus: true,
                             keyboardType: TextInputType.number,
                             initialValue: '0.00',
-                            onEditingComplete: () {},
+                            onEditingComplete: () => Navigator.pushNamed(
+                                  context,
+                                  FirstPage.routeName,
+                                  arguments: FirstPage(
+                                    budget,
+                                  ),
+                                ),
                             onSaved: (val) => budget.amount = double.parse(val),
                             validator: (val) {
                               if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {

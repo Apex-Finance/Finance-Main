@@ -8,14 +8,15 @@ class CategoryListTile extends StatelessWidget {
 
   CategoryListTile(this.category);
 
-  double number = 0; // Amount the user inputs for that category; PLS change
+  double categoryAmount =
+      0; // Amount the user inputs for that category; PLS change
   @override
   Widget build(BuildContext context) {
     return ListTile(
       tileColor: Colors.grey[850],
       leading: CircleAvatar(child: Icon(Icons.category)),
       title: AutoSizeText(
-        'Food and Drinks', // this is where you would implement the category name
+        stringToUserString(enumValueToString(category)),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 18),
@@ -28,11 +29,11 @@ class CategoryListTile extends StatelessWidget {
             Expanded(
               child: TextFormField(
                   style: Theme.of(context).textTheme.bodyText1,
-                  autofocus: true,
+                  // autofocus: true, (probably not needed)
                   keyboardType: TextInputType.number,
                   initialValue: '0.00',
                   onEditingComplete: () {},
-                  onSaved: (val) => number = double.parse(val),
+                  onSaved: (val) => categoryAmount = double.parse(val),
                   validator: (val) {
                     if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
                       // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
