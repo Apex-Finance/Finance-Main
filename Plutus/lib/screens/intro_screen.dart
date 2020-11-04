@@ -70,6 +70,11 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         ),
         PageViewModel(
           title: "Login Page",
+          bodyWidget: RaisedButton(
+            child: Text('Sign In'),
+            onPressed: () =>
+                Navigator.of(context).pushNamed(AuthScreen.routeName),
+          ),
         ),
         PageViewModel(
           title: "Want to manually create a budget?",
