@@ -18,7 +18,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   Widget build(BuildContext context) {
     //TODO currently, budgetAmount is null (pulling from budget.dart); figure out how to pass data from
     //TODO income.dart to this screen
-    final Budget budgetAmount = ModalRoute.of(context).settings.arguments;
+    final Budget budget = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         title:
@@ -42,7 +42,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                 Padding(
                   padding: EdgeInsets.all(15),
                   child: Text(
-                    'Total Budget: \$$budgetAmount',
+                    'Total Budget: \$${budget.amount}',
                     style: TextStyle(color: Colors.amber, fontSize: 15),
                   ),
                 ),

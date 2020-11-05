@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 
 import './first_budget_screen.dart';
+import '../../models/budget.dart';
 
 class IncomeScreen extends StatefulWidget {
   static const routeName = '/income';
@@ -12,7 +13,25 @@ class IncomeScreen extends StatefulWidget {
 
 class _IncomeScreenState extends State<IncomeScreen> {
   final _formKey = GlobalKey<FormState>();
-  Budget budget;
+  // For some reason this initialization requires explicit values or
+  // it won't push to the next screen
+  Budget _budget = Budget(
+    id: null,
+    title: null,
+    category: null,
+    amount: null,
+    transactions: null,
+  );
+
+  // TODO Work on this
+  //Validates the budget and pushes to First Budget Screen
+  void setBudgetAmount() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      Navigator.of(context)
+          .pushNamed(FirstBudgetScreen.routeName, arguments: _budget);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,36 +58,31 @@ class _IncomeScreenState extends State<IncomeScreen> {
                       Text('\$', style: Theme.of(context).textTheme.bodyText1),
                       Expanded(
                         child: TextFormField(
-                            style: Theme.of(context).textTheme.bodyText1,
-                            autofocus: true,
-                            keyboardType: TextInputType.number,
-                            initialValue: '0.00',
-                            onEditingComplete: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => FirstBudgetScreen(),
-                                ), // Once the user inputs his desired budget amount, they are redirected
-                                // to the first budget creation screen
-                              );
-                            },
-                            onSaved: (val) => budget.amount = double.parse(val),
-                            validator: (val) {
-                              if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
-                                // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
-                                if (double.parse(
-                                        double.parse(val).toStringAsFixed(2)) <=
-                                    0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
-                                  return 'Please enter an amount greater than 0.';
-                                if (double.parse(
-                                        double.parse(val).toStringAsFixed(2)) >
-                                    999999999.99)
-                                  return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
-                                return null;
-                              } else {
-                                return 'Please enter a number.';
-                              }
-                            }),
+                          style: Theme.of(context).textTheme.bodyText1,
+                          autofocus: true,
+                          keyboardType: TextInputType.number,
+                          initialValue: '0.00',
+                          onEditingComplete: () {
+                            setBudgetAmount();
+                          },
+                          onSaved: (val) => _budget.amount = double.parse(val),
+                          validator: (val) {
+                            if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
+                              // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
+                              if (double.parse(
+                                      double.parse(val).toStringAsFixed(2)) <=
+                                  0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
+                                return 'Please enter an amount greater than 0.';
+                              if (double.parse(
+                                      double.parse(val).toStringAsFixed(2)) >
+                                  999999999.99)
+                                return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
+                              return null;
+                            } else {
+                              return 'Please enter a number.';
+                            }
+                          },
+                        ),
                       ),
                     ],
                   ),

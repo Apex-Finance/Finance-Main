@@ -8,8 +8,7 @@ class CategoryListTile extends StatelessWidget {
 
   CategoryListTile(this.category);
 
-  double categoryAmount =
-      0; // Amount the user inputs for that category; PLS change
+  double categoryAmount = 0; // Amount the user inputs for that category
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -32,6 +31,8 @@ class CategoryListTile extends StatelessWidget {
                   // autofocus: true, (probably not needed)
                   keyboardType: TextInputType.number,
                   initialValue: '0.00',
+                  // TODO May have to call setState here to change values
+                  // Also allow the user to edit the textfield as much as he wants
                   onEditingComplete: () {},
                   onSaved: (val) => categoryAmount = double.parse(val),
                   validator: (val) {
