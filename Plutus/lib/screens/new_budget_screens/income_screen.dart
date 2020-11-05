@@ -23,8 +23,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
     transactions: null,
   );
 
-  // TODO Work on this
-  //Validates the budget and pushes to First Budget Screen
+  //Validates the budget amount and pushes to First Budget Screen
   void setBudgetAmount() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();

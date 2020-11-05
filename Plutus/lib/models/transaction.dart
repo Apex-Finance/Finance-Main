@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'category.dart';
+import 'categories.dart';
 
 class Transaction {
   String id;

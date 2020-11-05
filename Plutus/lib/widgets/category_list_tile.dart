@@ -1,21 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-import '../models/category.dart';
+import '../models/categories.dart';
 
-class CategoryListTile extends StatelessWidget {
+class CategoryListTile extends StatefulWidget {
   MainCategory category;
 
   CategoryListTile(this.category);
 
-  double categoryAmount = 0; // Amount the user inputs for that category
+  @override
+  _CategoryListTileState createState() => _CategoryListTileState();
+}
+
+class _CategoryListTileState extends State<CategoryListTile> {
+  final _formKey = GlobalKey<FormState>();
+  double categoryAmount = 0;
+
+  // Saves the current inputed category amount
+  void setCategoryAmount() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
       tileColor: Colors.grey[850],
       leading: CircleAvatar(child: Icon(Icons.category)),
       title: AutoSizeText(
-        stringToUserString(enumValueToString(category)),
+        stringToUserString(enumValueToString(widget.category)),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 18),
@@ -33,7 +47,9 @@ class CategoryListTile extends StatelessWidget {
                   initialValue: '0.00',
                   // TODO May have to call setState here to change values
                   // Also allow the user to edit the textfield as much as he wants
-                  onEditingComplete: () {},
+                  onEditingComplete: () {
+                    setCategoryAmount();
+                  },
                   onSaved: (val) => categoryAmount = double.parse(val),
                   validator: (val) {
                     if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {

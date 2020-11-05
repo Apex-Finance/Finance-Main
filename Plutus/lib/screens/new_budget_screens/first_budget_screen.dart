@@ -2,7 +2,7 @@ import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/category_list_tile.dart';
-import '../../models/category.dart';
+import '../../models/categories.dart';
 
 class FirstBudgetScreen extends StatefulWidget {
   static const routeName = '/first_budget';
@@ -16,8 +16,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO currently, budgetAmount is null (pulling from budget.dart); figure out how to pass data from
-    //TODO income.dart to this screen
     final Budget budget = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(

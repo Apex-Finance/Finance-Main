@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:flutter/services.dart';
-import '../models/category.dart';
+import '../models/categories.dart';
 
 // Form to add a new transaction
 class TransactionForm extends StatefulWidget {
