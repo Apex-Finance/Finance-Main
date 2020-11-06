@@ -9,6 +9,8 @@ import './goal_screen.dart';
 import '../widgets/transaction_form.dart';
 import '../models/transaction.dart';
 
+import 'package:provider/provider.dart';
+
 // Our Main Screen that controls the other screens; necessary to implement this way because of the FAB managing transaction
 class TabScreen extends StatefulWidget {
   @override
@@ -22,11 +24,11 @@ class _TabScreenState extends State<TabScreen> {
   List<Budget> budgets = [];
 
   // Add a new transaction to the list of transactions
-  void addTransaction(Transaction transaction) {
-    setState(() {
-      transactions.add(transaction);
-    });
-  }
+  // void addTransaction(Transaction transaction) {
+  //   setState(() {
+  //     transactions.add(transaction);
+  //   });
+  // }
 
   int _selectedPageIndex = 0;
 
@@ -47,7 +49,8 @@ class _TabScreenState extends State<TabScreen> {
       builder: (_) => TransactionForm(),
     ).then((newTransaction) {
       if (newTransaction == null) return;
-      addTransaction(newTransaction);
+      Provider.of<Transactions>(context, listen: false)
+          .addTransaction(newTransaction);
     });
   }
 
@@ -60,7 +63,7 @@ class _TabScreenState extends State<TabScreen> {
         budgets: budgets,
       ),
       null, // workaround for spacing
-      TransactionScreen(transactions: transactions),
+      TransactionScreen(),
       GoalScreen(),
     ];
 
@@ -100,10 +103,7 @@ class _TabScreenState extends State<TabScreen> {
         buildTab(context, Icons.account_balance, 'Budget'),
         BottomNavigationBarItem(
           backgroundColor: Theme.of(context).primaryColor,
-          icon: Icon(
-            Icons.tab,
-            color: Colors.black,
-          ),
+          icon: Icon(Icons.tab, color: Colors.black),
           label: '',
         ), // blank "tab" for spacing around FAB
         buildTab(context, Icons.shopping_cart, 'Transaction'),
@@ -113,15 +113,10 @@ class _TabScreenState extends State<TabScreen> {
   }
 
   BottomNavigationBarItem buildTab(
-    BuildContext context,
-    IconData icon,
-    String label,
-  ) {
+      BuildContext context, IconData icon, String label) {
     return BottomNavigationBarItem(
       backgroundColor: Theme.of(context).primaryColor,
-      icon: Icon(
-        icon,
-      ),
+      icon: Icon(icon),
       label: label,
     );
   }

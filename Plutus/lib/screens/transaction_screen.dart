@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../models/transaction.dart';
 import '../widgets/transaction_list_tile.dart';
+import 'package:provider/provider.dart';
 
 const months = [
   'January',
@@ -21,9 +22,9 @@ const months = [
 
 class TransactionScreen extends StatefulWidget {
   static const routeName = '/transaction';
-  List<Transaction> transactions;
+  // List<Transaction> transactions;
 
-  TransactionScreen({@required this.transactions});
+  // TransactionScreen({@required this.transactions});
 
   @override
   _TransactionScreenState createState() => _TransactionScreenState();
@@ -32,26 +33,6 @@ class TransactionScreen extends StatefulWidget {
 class _TransactionScreenState extends State<TransactionScreen> {
   var selectedMonth = DateTime.now().month;
   var selectedYear = DateTime.now().year;
-
-  // Take all transactions, filter out only the ones from the selected month, and reverse the order from newest to oldest
-  List<Transaction> get monthlyTransactions {
-    var unsorted = widget.transactions
-        .where((transaction) =>
-            transaction.date.month == selectedMonth &&
-            transaction.date.year == selectedYear)
-        .toList();
-    unsorted.sort((a, b) => (b.date).compareTo(a.date));
-    return unsorted;
-  }
-
-  // Sum the expenses for the month
-  double get monthlyExpenses {
-    var sum = 0.00;
-    for (var transaction in monthlyTransactions) {
-      sum += transaction.amount;
-    }
-    return sum;
-  }
 
   // Change the year and month
   void changeMonth(String direction) {
@@ -75,6 +56,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final transactionsData = Provider.of<Transactions>(context);
+    print(transactionsData.transactions);
     return Column(
       children: [
         Padding(
@@ -87,7 +70,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
         Expanded(
           child: Container(
             margin: EdgeInsets.only(top: 25),
-            child: monthlyTransactions.isEmpty
+            child: transactionsData.monthlyTransactions.isEmpty
                 ? NoTransactionsYetText()
                 : Card(
                     color: Colors.grey[900],
@@ -96,8 +79,9 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       top: Radius.circular(20),
                     )),
                     child: TransactionsCard(
-                        monthlyExpenses: monthlyExpenses,
-                        monthlyTransactions: monthlyTransactions),
+                        monthlyExpenses: transactionsData.monthlyExpenses,
+                        monthlyTransactions:
+                            transactionsData.monthlyTransactions),
                   ),
           ),
         ),
