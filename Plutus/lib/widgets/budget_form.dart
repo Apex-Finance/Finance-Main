@@ -66,7 +66,6 @@ class _BudgetFormState extends State<BudgetForm> {
                     },
                   ),
                   TextFormField(
-                    //TODO update to dropdown/another modal/card instead of string
                     decoration: InputDecoration(
                       labelText: 'Category',
                     ),
