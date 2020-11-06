@@ -21,6 +21,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
     category: null,
     amount: null,
     transactions: null,
+    categoryAmount: null,
   );
 
   //Validates the budget amount and pushes to First Budget Screen

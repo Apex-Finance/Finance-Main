@@ -17,6 +17,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   @override
   Widget build(BuildContext context) {
     final Budget budget = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
       appBar: AppBar(
         title:
@@ -40,7 +41,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                 Padding(
                   padding: EdgeInsets.all(15),
                   child: Text(
-                    'Total Budget: \$${budget.amount}',
+                    'Total Budget: \$${budget.amount}   Remaining Budget:\$${Provider.of<Budgets>(context).budgets.remainingAmount}',
                     style: TextStyle(color: Colors.amber, fontSize: 15),
                   ),
                 ),
@@ -50,6 +51,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                     itemCount: MainCategory.values.length,
                     itemBuilder: (context, index) =>
                         CategoryListTile(MainCategory.values[index]),
+                    //Navigator.of(context).pushNamed(CategoryListTile.routeName, arguments: budget),//.then((budgets) => function_to_subtract_budgets.categoryData['category_name']_from_totalprice);
                   ),
                 ),
                 SizedBox(

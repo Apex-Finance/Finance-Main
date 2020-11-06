@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import '../models/categories.dart';
+import '../screens/new_budget_screens/first_budget_screen.dart';
+import '../models/budget.dart';
 
 class CategoryListTile extends StatefulWidget {
   MainCategory category;
@@ -20,6 +22,8 @@ class _CategoryListTileState extends State<CategoryListTile> {
   void setCategoryAmount() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+      // Navigator.of(context)
+      //     .pushNamed(FirstBudgetScreen.routeName, arguments: categoryAmount);
     }
   }
 
@@ -50,7 +54,11 @@ class _CategoryListTileState extends State<CategoryListTile> {
                   onEditingComplete: () {
                     setCategoryAmount();
                   },
-                  onSaved: (val) => categoryAmount = double.parse(val),
+                  onSaved: (val) {
+                    categoryAmount = double.parse(val);
+                    Provider.of<Budgets>(context, listen: false)
+                        .remainingAmount = categoryAmount;
+                  },
                   validator: (val) {
                     if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
                       // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
