@@ -5,6 +5,8 @@ import '../models/budget.dart';
 import '../widgets/budget_form.dart';
 import '../widgets/budget_list_tile.dart';
 
+import 'package:provider/provider.dart';
+
 class BudgetScreen extends StatefulWidget {
   static const routeName = '/budget';
 
@@ -13,14 +15,6 @@ class BudgetScreen extends StatefulWidget {
 }
 
 class _BudgetScreenState extends State<BudgetScreen> {
-  List<Budget> budgets = [];
-
-  void addBudget(Budget budget) {
-    setState(() {
-      budgets.add(budget);
-    });
-  }
-
   void _enterBudget(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -28,12 +22,13 @@ class _BudgetScreenState extends State<BudgetScreen> {
       builder: (_) => BudgetForm(),
     ).then((newBudget) {
       if (newBudget == null) return;
-      addBudget(newBudget);
+      Provider.of<Budgets>(context, listen: false).addBudget(newBudget);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final budgetsData = Provider.of<Budgets>(context);
     return Column(
       children: [
         Text(
@@ -47,7 +42,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
         Expanded(
           child: Container(
             margin: EdgeInsets.only(top: 40),
-            child: budgets.isEmpty
+            child: budgetsData.budgets.isEmpty
                 ? Center(
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: 250),
@@ -163,9 +158,9 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       Divider(height: 10),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: budgets.length,
+                          itemCount: budgetsData.budgets.length,
                           itemBuilder: (context, index) =>
-                              BudgetListTile(budgets[index]),
+                              BudgetListTile(budgetsData.budgets[index]),
                         ),
                       ),
                     ]),

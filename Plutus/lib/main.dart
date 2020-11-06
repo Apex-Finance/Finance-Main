@@ -7,38 +7,47 @@ import './screens/dashboard_screen.dart';
 import './screens/budget_screen.dart';
 import './screens/transaction_screen.dart';
 import './screens/goal_screen.dart';
+import 'package:provider/provider.dart';
+import './models/transaction.dart';
+import './models/budget.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Plutus',
-      theme: ThemeData(
-        primarySwatch: Colors.amber,
-        primaryColor: Colors.amber,
-        primaryColorLight: Colors.amberAccent,
-        accentColor: Colors.white,
-        canvasColor: Colors.black,
-        textTheme: GoogleFonts.latoTextTheme(
-          TextTheme(
-            bodyText1: TextStyle(
-              color: Colors.amber,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => Transactions()),
+        ChangeNotifierProvider(create: (context) => Budgets()),
+      ],
+      child: Builder(
+        builder: (context) => MaterialApp(
+          title: 'Plutus',
+          theme: ThemeData(
+            primarySwatch: Colors.amber,
+            primaryColor: Colors.amber,
+            primaryColorLight: Colors.amberAccent,
+            accentColor: Colors.white,
+            canvasColor: Colors.black,
+            textTheme: GoogleFonts.latoTextTheme(
+              TextTheme(
+                bodyText1: TextStyle(
+                  color: Colors.amber,
+                ),
+              ),
             ),
           ),
+          initialRoute: '/',
+          routes: {
+            '/': (context) => OnBoardingPage(),
+            DashboardScreen.routeName: (context) => DashboardScreen(),
+            BudgetScreen.routeName: (context) => BudgetScreen(),
+            TransactionScreen.routeName: (context) => TransactionScreen(),
+            GoalScreen.routeName: (context) => GoalScreen(),
+          },
         ),
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => OnBoardingPage(),
-        DashboardScreen.routeName: (context) => DashboardScreen(),
-        BudgetScreen.routeName: (context) => BudgetScreen(),
-        TransactionScreen.routeName: (context) => TransactionScreen(
-              transactions: [],
-            ),
-        GoalScreen.routeName: (context) => GoalScreen(),
-      },
     );
   }
 }

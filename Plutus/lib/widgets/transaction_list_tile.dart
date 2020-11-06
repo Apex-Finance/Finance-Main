@@ -18,6 +18,8 @@ class TransactionListTile extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(20)),
         child: ListTile(
+          //TODO onTap: open transaction screen to edit,
+          //TODO dismissible to delete, code is Provider.of<Transactions>(context, listen: false).deleteTransaction(transaction.id)
           tileColor: Colors.grey[850],
           leading: CircleAvatar(child: Icon(Icons.category)),
           title: AutoSizeText(
