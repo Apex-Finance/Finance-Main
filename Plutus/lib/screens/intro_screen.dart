@@ -96,7 +96,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           decoration: pageDecoration,
         ),
       ],
-      onDone: () => _onIntroEnd(context),
+      onDone: () => Navigator.of(context).pushNamed(AuthScreen.routeName),
       //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
       showSkipButton: true,
       skipFlex: 0,
