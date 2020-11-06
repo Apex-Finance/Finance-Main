@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => Transactions()),
         ChangeNotifierProvider(create: (context) => Budgets()),
+        ChangeNotifierProvider(create: (context) => Budget()),
       ],
       child: Builder(
         builder: (context) => MaterialApp(
@@ -47,6 +48,8 @@ class MyApp extends StatelessWidget {
             BudgetScreen.routeName: (context) => BudgetScreen(),
             TransactionScreen.routeName: (context) => TransactionScreen(),
             GoalScreen.routeName: (context) => GoalScreen(),
+            IncomeScreen.routeName: (context) => IncomeScreen(),
+            FirstBudgetScreen.routeName: (context) => FirstBudgetScreen(),
           },
         ),
       ),
@@ -121,7 +124,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           image: _buildImage('lets get started'),
           footer: RaisedButton(
             onPressed: () {
-              introKey.currentState?.animateScroll(0);
+              Navigator.of(context).pushNamed(IncomeScreen.routeName);
             },
             child: const Text(
               'Create a Budget',

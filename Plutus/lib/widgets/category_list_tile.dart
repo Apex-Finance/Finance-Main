@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:provider/provider.dart';
 
 import '../models/categories.dart';
 import '../screens/new_budget_screens/first_budget_screen.dart';
@@ -7,8 +8,9 @@ import '../models/budget.dart';
 
 class CategoryListTile extends StatefulWidget {
   MainCategory category;
+  Map<MainCategory, double> categoryAmount;
 
-  CategoryListTile(this.category);
+  CategoryListTile(this.category, this.categoryAmount);
 
   @override
   _CategoryListTileState createState() => _CategoryListTileState();
@@ -16,7 +18,6 @@ class CategoryListTile extends StatefulWidget {
 
 class _CategoryListTileState extends State<CategoryListTile> {
   final _formKey = GlobalKey<FormState>();
-  double categoryAmount = 0;
 
   // Saves the current inputed category amount
   void setCategoryAmount() {
@@ -55,9 +56,9 @@ class _CategoryListTileState extends State<CategoryListTile> {
                     setCategoryAmount();
                   },
                   onSaved: (val) {
-                    categoryAmount = double.parse(val);
-                    Provider.of<Budgets>(context, listen: false)
-                        .remainingAmount = categoryAmount;
+                    widget.categoryAmount[widget.category] = double.parse(val);
+                    print(Provider.of<Budget>(context)
+                        .categoryAmount[widget.category]);
                   },
                   validator: (val) {
                     if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {

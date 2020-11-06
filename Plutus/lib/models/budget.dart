@@ -3,21 +3,30 @@ import 'package:flutter/foundation.dart';
 import './transaction.dart';
 import './categories.dart';
 
-class Budget {
+class Budget with ChangeNotifier {
   String id;
   String title;
   String category; // TODO Needs to be deleted later
   double amount;
   List<Transaction> transactions;
+
   Map<MainCategory, double> categoryAmount;
+  double get remainingAmount {
+    double tempAmount = amount;
+    if (categoryAmount != null)
+      categoryAmount.forEach((key, value) {
+        tempAmount -= value;
+      });
+    return tempAmount;
+  }
 
   Budget({
-    @required this.id,
-    @required this.title,
-    @required this.category,
-    @required this.amount,
-    @required this.transactions,
-    @required this.categoryAmount,
+    this.id,
+    this.title,
+    this.category,
+    this.amount,
+    this.transactions,
+    this.categoryAmount,
   });
 }
 
@@ -26,12 +35,6 @@ class Budgets with ChangeNotifier {
   List<Budget> _budgets = [];
 
   List<Budget> get budgets => [..._budgets];
-
-  // double get remainingAmount(Budget budget) {
-  //   for (var categoryItem in budget.categoryAmount) {
-  //     amount -=categoryItem
-  //   }
-  // };
 
   void addBudget(Budget budget) {
     _budgets.add(budget);

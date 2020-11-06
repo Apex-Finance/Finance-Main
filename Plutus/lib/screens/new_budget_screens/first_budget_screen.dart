@@ -1,8 +1,10 @@
 import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../widgets/category_list_tile.dart';
 import '../../models/categories.dart';
+import '../../models/budget.dart';
 
 class FirstBudgetScreen extends StatefulWidget {
   static const routeName = '/first_budget';
@@ -41,7 +43,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                 Padding(
                   padding: EdgeInsets.all(15),
                   child: Text(
-                    'Total Budget: \$${budget.amount}   Remaining Budget:\$${Provider.of<Budgets>(context).budgets.remainingAmount}',
+                    // TODO remainingBudget returns null here
+                    'Total Budget: \$${budget.amount}   Remaining Budget:\$${Provider.of<Budget>(context).remainingAmount}',
                     style: TextStyle(color: Colors.amber, fontSize: 15),
                   ),
                 ),
@@ -49,8 +52,13 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                   child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: MainCategory.values.length,
-                    itemBuilder: (context, index) =>
-                        CategoryListTile(MainCategory.values[index]),
+                    itemBuilder: (context, index) => CategoryListTile(
+                      MainCategory.values[index],
+                      //budget.categoryAmount != null
+                      //?
+                      budget.categoryAmount, //[MainCategory.values[index]]
+                      //: 0
+                    ),
                     //Navigator.of(context).pushNamed(CategoryListTile.routeName, arguments: budget),//.then((budgets) => function_to_subtract_budgets.categoryData['category_name']_from_totalprice);
                   ),
                 ),
