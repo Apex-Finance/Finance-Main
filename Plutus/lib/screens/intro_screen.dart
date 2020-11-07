@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 import './auth_screen.dart';
-import './dashboard_screen.dart';
+import './tab_screen.dart';
 
 class OnBoardingPage extends StatefulWidget {
   @override
@@ -14,12 +14,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
   void _onIntroEnd(context) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => DashboardScreen()),
+      MaterialPageRoute(builder: (_) => TabScreen()),
     );
-  }
-
-  void _onSignUp(context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => AuthScreen()));
   }
 
   Widget _buildImage(String assetName) {
@@ -97,7 +93,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         ),
       ],
       onDone: () => Navigator.of(context).pushNamed(AuthScreen.routeName),
-      //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
+      onSkip: () => _onIntroEnd(context), // You can override onSkip callback
       showSkipButton: true,
       skipFlex: 0,
       nextFlex: 0,
