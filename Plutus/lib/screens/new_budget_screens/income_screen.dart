@@ -1,6 +1,7 @@
 import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
+import 'package:provider/provider.dart';
 
 import './first_budget_screen.dart';
 import '../../models/budget.dart';
@@ -15,26 +16,12 @@ class _IncomeScreenState extends State<IncomeScreen> {
   final _formKey = GlobalKey<FormState>();
   // For some reason this initialization requires explicit values or
   // it won't push to the next screen
-  Budget _budget = Budget(
-    id: null,
-    title: null,
-    category: null,
-    amount: null,
-    transactions: null,
-    categoryAmount: null,
-  );
 
-  //Validates the budget amount and pushes to First Budget Screen
-  void setBudgetAmount() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      Navigator.of(context)
-          .pushNamed(FirstBudgetScreen.routeName, arguments: _budget);
-    }
-  }
+  // Validates the budget amount and pushes to First Budget Screen
 
   @override
   Widget build(BuildContext context) {
+    final _budget = Provider.of<Budget>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('New Budget', style: Theme.of(context).textTheme.bodyText1),
@@ -63,7 +50,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
                           keyboardType: TextInputType.number,
                           initialValue: '0.00',
                           onEditingComplete: () {
-                            setBudgetAmount();
+                            if (_formKey.currentState.validate()) {
+                              _formKey.currentState.save();
+                              // perhaps we need to call addBudget here?
+                              Navigator.of(context).pushNamed(
+                                  FirstBudgetScreen.routeName,
+                                  arguments: _budget);
+                            }
                           },
                           onSaved: (val) => _budget.amount = double.parse(val),
                           validator: (val) {
