@@ -1,93 +1,39 @@
+import 'package:Plutus/models/month_changer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../models/transaction.dart';
 import '../widgets/transaction_list_tile.dart';
-
-const months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
-];
+import 'package:provider/provider.dart';
+import '../models/month_changer.dart';
 
 class TransactionScreen extends StatefulWidget {
   static const routeName = '/transaction';
-  List<Transaction> transactions;
-
-  TransactionScreen({@required this.transactions});
 
   @override
   _TransactionScreenState createState() => _TransactionScreenState();
 }
 
 class _TransactionScreenState extends State<TransactionScreen> {
-  var selectedMonth = DateTime.now().month;
-  var selectedYear = DateTime.now().year;
-
-  // Take all transactions, filter out only the ones from the selected month, and reverse the order from newest to oldest
-  List<Transaction> get monthlyTransactions {
-    var unsorted = widget.transactions
-        .where((transaction) =>
-            transaction.date.month == selectedMonth &&
-            transaction.date.year == selectedYear)
-        .toList();
-    unsorted.sort((a, b) => (b.date).compareTo(a.date));
-    return unsorted;
-  }
-
-  // Sum the expenses for the month
-  double get monthlyExpenses {
-    var sum = 0.00;
-    for (var transaction in monthlyTransactions) {
-      sum += transaction.amount;
-    }
-    return sum;
-  }
-
-  // Change the year and month
-  void changeMonth(String direction) {
-    setState(() {
-      if (direction == 'back') {
-        if (selectedMonth == 1) {
-          selectedMonth = 12;
-          selectedYear -= 1;
-        } else
-          selectedMonth -= 1;
-      } else if (direction == 'forward') {
-        if (selectedMonth == 12) {
-          selectedMonth = 1;
-          selectedYear += 1;
-        } else
-          selectedMonth += 1;
-      }
-    });
-    return;
-  }
-
   @override
   Widget build(BuildContext context) {
+    final transactionsData = Provider.of<Transactions>(context);
+    var monthData = Provider.of<MonthChanger>(context);
+
+    print(transactionsData.transactions);
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 20.0),
           child: Container(
             width: 250,
-            child: buildMonthChanger(context),
+            child: buildMonthChanger(context, monthData),
           ),
         ),
         Expanded(
           child: Container(
             margin: EdgeInsets.only(top: 25),
-            child: monthlyTransactions.isEmpty
+            child: transactionsData.monthlyTransactions.isEmpty
                 ? NoTransactionsYetText()
                 : Card(
                     color: Colors.grey[900],
@@ -96,8 +42,9 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       top: Radius.circular(20),
                     )),
                     child: TransactionsCard(
-                        monthlyExpenses: monthlyExpenses,
-                        monthlyTransactions: monthlyTransactions),
+                        monthlyExpenses: transactionsData.monthlyExpenses,
+                        monthlyTransactions:
+                            transactionsData.monthlyTransactions),
                   ),
           ),
         ),
@@ -105,19 +52,23 @@ class _TransactionScreenState extends State<TransactionScreen> {
     );
   }
 
-  Row buildMonthChanger(BuildContext context) {
+  Row buildMonthChanger(BuildContext context, MonthChanger monthData) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Theme.of(context).primaryColor,
-          ),
-          onPressed: () => changeMonth('back')),
+      if (monthData.selectedMonth > DateTime.now().month ||
+          monthData.selectedYear >= DateTime.now().year)
+        IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Theme.of(context).primaryColor,
+            ),
+            onPressed: () => monthData.changeMonth('back')),
       Expanded(
         child: Center(
           child: Text(
-            '${months[selectedMonth - 1]}' +
-                (selectedYear == DateTime.now().year ? '' : ' $selectedYear'),
+            '${MonthChanger.months[monthData.selectedMonth - 1]}' +
+                (monthData.selectedYear == DateTime.now().year
+                    ? ''
+                    : ' ${monthData.selectedYear}'),
             style: TextStyle(
               color: Theme.of(context).primaryColor,
               fontSize: 16,
@@ -125,12 +76,14 @@ class _TransactionScreenState extends State<TransactionScreen> {
           ),
         ),
       ),
-      IconButton(
-          icon: Icon(
-            Icons.arrow_forward,
-            color: Theme.of(context).primaryColor,
-          ),
-          onPressed: () => changeMonth('forward')),
+      if (monthData.selectedMonth < DateTime.now().month ||
+          monthData.selectedYear <= DateTime.now().year)
+        IconButton(
+            icon: Icon(
+              Icons.arrow_forward,
+              color: Theme.of(context).primaryColor,
+            ),
+            onPressed: () => monthData.changeMonth('forward')),
     ]);
   }
 }

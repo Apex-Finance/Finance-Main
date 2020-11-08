@@ -6,6 +6,9 @@ import '../models/budget.dart';
 import '../widgets/budget_form.dart';
 import '../widgets/budget_list_tile.dart';
 
+import 'package:provider/provider.dart';
+import '../models/month_changer.dart';
+
 class BudgetScreen extends StatefulWidget {
   static const routeName = '/budget';
   final List<Budget> budgets;
@@ -17,12 +20,6 @@ class BudgetScreen extends StatefulWidget {
 }
 
 class _BudgetScreenState extends State<BudgetScreen> {
-  void addBudget(Budget budget) {
-    setState(() {
-      widget.budgets.add(budget);
-    });
-  }
-
   void _enterBudget(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -30,7 +27,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
       builder: (_) => BudgetForm(),
     ).then((newBudget) {
       if (newBudget == null) return;
-      addBudget(newBudget);
+      Provider.of<Budgets>(context, listen: false).addBudget(newBudget);
     });
   }
 
@@ -44,11 +41,17 @@ class _BudgetScreenState extends State<BudgetScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final budgetsData = Provider.of<Budgets>(context);
+    var monthData = Provider.of<MonthChanger>(context);
+
     return Column(
       children: [
-        Text(
-          'month changer',
-          style: Theme.of(context).textTheme.bodyText1,
+        Padding(
+          padding: const EdgeInsets.only(top: 20.0),
+          child: Container(
+            width: 250,
+            child: buildMonthChanger(context, monthData),
+          ),
         ),
         RaisedButton(
           child: Text('Add Budget'),
@@ -56,7 +59,8 @@ class _BudgetScreenState extends State<BudgetScreen> {
         ),
         Expanded(
           child: Container(
-            child: widget.budgets.isEmpty
+            margin: EdgeInsets.only(top: 40),
+            child: budgetsData.budgets.isEmpty
                 ? Center(
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: 250),
@@ -175,9 +179,9 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       Divider(height: 10),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: widget.budgets.length,
+                          itemCount: budgetsData.budgets.length,
                           itemBuilder: (context, index) =>
-                              BudgetListTile(widget.budgets[index]),
+                              BudgetListTile(budgetsData.budgets[index]),
                         ),
                       ),
                     ]),
@@ -187,4 +191,39 @@ class _BudgetScreenState extends State<BudgetScreen> {
       ],
     );
   }
+}
+
+Row buildMonthChanger(BuildContext context, MonthChanger monthData) {
+  return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+    if (monthData.selectedMonth > DateTime.now().month ||
+        monthData.selectedYear >= DateTime.now().year)
+      IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Theme.of(context).primaryColor,
+          ),
+          onPressed: () => monthData.changeMonth('back')),
+    Expanded(
+      child: Center(
+        child: Text(
+          '${MonthChanger.months[monthData.selectedMonth - 1]}' +
+              (monthData.selectedYear == DateTime.now().year
+                  ? ''
+                  : ' ${monthData.selectedYear}'),
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+            fontSize: 16,
+          ),
+        ),
+      ),
+    ),
+    if (monthData.selectedMonth < DateTime.now().month ||
+        monthData.selectedYear <= DateTime.now().year)
+      IconButton(
+          icon: Icon(
+            Icons.arrow_forward,
+            color: Theme.of(context).primaryColor,
+          ),
+          onPressed: () => monthData.changeMonth('forward')),
+  ]);
 }
