@@ -11,9 +11,6 @@ import '../models/month_changer.dart';
 
 class BudgetScreen extends StatefulWidget {
   static const routeName = '/budget';
-  final List<Budget> budgets;
-
-  BudgetScreen({@required this.budgets});
 
   @override
   _BudgetScreenState createState() => _BudgetScreenState();
@@ -31,13 +28,13 @@ class _BudgetScreenState extends State<BudgetScreen> {
     });
   }
 
-  double get totalBudget {
-    var sum = 0.0;
-    for (var i = 0; i < widget.budgets.length; i++) {
-      sum += widget.budgets[i].amount;
-    }
-    return sum;
-  }
+  // double get totalBudget {
+  //   var sum = 0.0;
+  //   for (var i = 0; i < widget.budgets.length; i++) {
+  //     sum += widget.budgets[i].amount;
+  //   }
+  //   return sum;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +161,8 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   AutoSizeText(
-                                    '\$2,000.00 of \$$totalBudget',
+                                    '\$2,000.00 of \$3,000.00',
+                                    // '\$2,000.00 of \$$totalBudget',
                                     maxLines: 1,
                                     style: TextStyle(
                                         color: Theme.of(context).primaryColor,
