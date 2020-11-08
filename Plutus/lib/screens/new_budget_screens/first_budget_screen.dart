@@ -43,7 +43,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                 Padding(
                   padding: EdgeInsets.all(15),
                   child: Text(
-                    // TODO remainingBudget returns null here
                     'Total Budget: \$${budget.amount}   Remaining Budget:\$${Provider.of<Budget>(context).remainingAmount}',
                     style: TextStyle(color: Colors.amber, fontSize: 15),
                   ),

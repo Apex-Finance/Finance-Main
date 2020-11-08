@@ -3,6 +3,9 @@ import 'package:flutter/foundation.dart';
 import './transaction.dart';
 import './categories.dart';
 
+//TODO We may need to combine these two classes into one
+//TODO Not entirely sure why we have two to begin with
+
 class Budget with ChangeNotifier {
   String id;
   String title;
