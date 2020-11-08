@@ -95,7 +95,11 @@ class _TabScreenState extends State<TabScreen> {
         buildTab(context, Icons.account_balance, 'Budget'),
         BottomNavigationBarItem(
           backgroundColor: Theme.of(context).primaryColor,
-          icon: Icon(Icons.tab, color: Colors.black),
+          icon: Icon(
+            Icons.tab,
+            color: Colors.grey[900],
+            size: 0, // needed to hide icon when a snackbar pops up
+          ),
           label: '',
         ), // blank "tab" for spacing around FAB
         buildTab(context, Icons.shopping_cart, 'Transaction'),

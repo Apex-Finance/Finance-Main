@@ -20,7 +20,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
     final transactionsData = Provider.of<Transactions>(context);
     var monthData = Provider.of<MonthChanger>(context);
 
-    print(transactionsData.transactions);
     return Column(
       children: [
         Padding(

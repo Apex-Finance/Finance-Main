@@ -34,9 +34,9 @@ class Transactions with ChangeNotifier {
     notifyListeners();
   }
 
-  void editTransaction(String id, Transaction updatedTransaction) {
-    final transactionIndex =
-        _transactions.indexWhere((transaction) => transaction.id == id);
+  void editTransaction(Transaction updatedTransaction) {
+    final transactionIndex = _transactions
+        .indexWhere((transaction) => transaction.id == updatedTransaction.id);
     if (transactionIndex >= 0) {
       _transactions[transactionIndex] = updatedTransaction;
       notifyListeners();
