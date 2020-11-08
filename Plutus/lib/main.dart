@@ -1,3 +1,4 @@
+import 'package:Plutus/models/month_changer.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -18,8 +19,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => Transactions()),
-        ChangeNotifierProvider(create: (context) => Budgets()),
+        ChangeNotifierProvider(create: (context) => MonthChanger()),
+        ChangeNotifierProxyProvider<MonthChanger, Transactions>(
+          update: (buildContext, monthChanger, previousTransactions) =>
+              Transactions(
+                  monthChanger,
+                  previousTransactions == null
+                      ? []
+                      : previousTransactions.transactions),
+          create: null,
+        ),
+        ChangeNotifierProxyProvider<MonthChanger, Budgets>(
+          update: (buildContext, monthChanger, previousBudgets) => Budgets(
+              monthChanger,
+              previousBudgets == null ? [] : previousBudgets.budgets),
+          create: null,
+        ),
       ],
       child: Builder(
         builder: (context) => MaterialApp(

@@ -6,6 +6,7 @@ import '../widgets/budget_form.dart';
 import '../widgets/budget_list_tile.dart';
 
 import 'package:provider/provider.dart';
+import '../models/month_changer.dart';
 
 class BudgetScreen extends StatefulWidget {
   static const routeName = '/budget';
@@ -29,11 +30,16 @@ class _BudgetScreenState extends State<BudgetScreen> {
   @override
   Widget build(BuildContext context) {
     final budgetsData = Provider.of<Budgets>(context);
+    var monthData = Provider.of<MonthChanger>(context);
+
     return Column(
       children: [
-        Text(
-          'month changer',
-          style: Theme.of(context).textTheme.bodyText1,
+        Padding(
+          padding: const EdgeInsets.only(top: 20.0),
+          child: Container(
+            width: 250,
+            child: buildMonthChanger(context, monthData),
+          ),
         ),
         RaisedButton(
           child: Text('Add Budget'),
@@ -170,4 +176,39 @@ class _BudgetScreenState extends State<BudgetScreen> {
       ],
     );
   }
+}
+
+Row buildMonthChanger(BuildContext context, MonthChanger monthData) {
+  return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+    if (monthData.selectedMonth > DateTime.now().month ||
+        monthData.selectedYear >= DateTime.now().year)
+      IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Theme.of(context).primaryColor,
+          ),
+          onPressed: () => monthData.changeMonth('back')),
+    Expanded(
+      child: Center(
+        child: Text(
+          '${MonthChanger.months[monthData.selectedMonth - 1]}' +
+              (monthData.selectedYear == DateTime.now().year
+                  ? ''
+                  : ' ${monthData.selectedYear}'),
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+            fontSize: 16,
+          ),
+        ),
+      ),
+    ),
+    if (monthData.selectedMonth < DateTime.now().month ||
+        monthData.selectedYear <= DateTime.now().year)
+      IconButton(
+          icon: Icon(
+            Icons.arrow_forward,
+            color: Theme.of(context).primaryColor,
+          ),
+          onPressed: () => monthData.changeMonth('forward')),
+  ]);
 }

@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
 
 import './transaction.dart';
+import './month_changer.dart';
 
 class Budget {
   String id;
   String title;
-  String category;
+  String category; //TODO update to MainCategory
   double amount;
   List<Transaction> transactions;
 
@@ -21,7 +22,9 @@ class Budget {
 //TODO add transactionsbyBudgetandCategory, totalBudgetExpensesByCategory, totalBudgetExpenses
 class Budgets with ChangeNotifier {
   List<Budget> _budgets = [];
+  MonthChanger monthChanger;
 
+  Budgets(this.monthChanger, this._budgets);
   List<Budget> get budgets => [..._budgets];
 
   // double get remainingAmount(Budget budget) {
