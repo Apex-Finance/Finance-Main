@@ -8,7 +8,6 @@ import '../widgets/budget_list_tile.dart';
 
 class BudgetScreen extends StatefulWidget {
   static const routeName = '/budget';
-
   final List<Budget> budgets;
 
   BudgetScreen({@required this.budgets});
