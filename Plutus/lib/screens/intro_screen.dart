@@ -58,8 +58,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Manage Transactions",
           body: "Stay on top of your expenses with Plutus...",
-          image: _buildImage(
-              'pos-terminal-financial-transactions-operation-payment-credit-card-hands-hold-phone-attachment-cash-money-100337825'),
+          //image: _buildImage(
+          //'pos-terminal-financial-transactions-operation-payment-credit-card-hands-hold-phone-attachment-cash-money-100337825'),
           decoration: pageDecoration,
         ),
         PageViewModel(
