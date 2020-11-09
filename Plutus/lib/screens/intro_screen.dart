@@ -18,10 +18,6 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     );
   }
 
-  void _onSignUp(context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => AuthScreen()));
-  }
-
   Widget _buildImage(String assetName) {
     return Align(
       child: Image.asset('images/$assetName.jpg', width: 350.0),
@@ -96,8 +92,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           decoration: pageDecoration,
         ),
       ],
-      onDone: () => Navigator.of(context).pushNamed(TabScreen.routeName),
-      //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
+      onDone: () => Navigator.of(context).pushNamed(AuthScreen.routeName),
+      onSkip: () => _onIntroEnd(context), // You can override onSkip callback
       showSkipButton: true,
       skipFlex: 0,
       nextFlex: 0,
