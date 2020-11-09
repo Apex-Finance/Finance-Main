@@ -90,6 +90,8 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                     color: Theme.of(context).primaryColor),
                               ),
                               Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
                                     crossAxisAlignment:
@@ -111,9 +113,6 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                             fontSize: 18),
                                       ),
                                     ],
-                                  ),
-                                  SizedBox(
-                                    width: 150,
                                   ),
                                   Column(
                                     crossAxisAlignment:
