@@ -2,7 +2,9 @@ import 'package:Plutus/screens/tab_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
-import './auth_screen.dart';
+// TODO Need to finish Auth screen
+// Commented out until it is working
+//import './auth_screen.dart';
 import './tab_screen.dart';
 
 class OnBoardingPage extends StatefulWidget {
@@ -82,7 +84,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           bodyWidget: RaisedButton(
             child: Text('Sign me up!'),
             onPressed: () =>
-                Navigator.of(context).pushNamed(AuthScreen.routeName),
+                Navigator.of(context).pushNamed(TabScreen.routeName),
             color: Colors.amber,
           ),
           image: _buildImage('lets get started.jpg'),
@@ -107,7 +109,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           decoration: pageDecoration,
         ),
       ],
-      onDone: () => Navigator.of(context).pushNamed(AuthScreen.routeName),
+      onDone: () => Navigator.of(context).pushNamed(TabScreen.routeName),
       onSkip: () => _onIntroEnd(context), // You can override onSkip callback
       showSkipButton: true,
       skipFlex: 0,
