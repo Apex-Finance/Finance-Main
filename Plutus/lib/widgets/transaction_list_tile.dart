@@ -5,11 +5,30 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 import '../models/transaction.dart';
 import '../models/categories.dart';
+import 'package:provider/provider.dart';
+import './transaction_form.dart';
 
-class TransactionListTile extends StatelessWidget {
+class TransactionListTile extends StatefulWidget {
   final Transaction transaction;
 
   TransactionListTile(this.transaction);
+
+  @override
+  _TransactionListTileState createState() => _TransactionListTileState();
+}
+
+class _TransactionListTileState extends State<TransactionListTile> {
+  void _updateTransaction(BuildContext context, Transaction transaction) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (_) => TransactionForm(transaction: transaction),
+    ).then((newTransaction) {
+      if (newTransaction == null) return;
+      Provider.of<Transactions>(context, listen: false)
+          .editTransaction(newTransaction);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,25 +36,78 @@ class TransactionListTile extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(20)),
-        child: ListTile(
-          //TODO onTap: open transaction screen to edit,
-          //TODO dismissible to delete, code is Provider.of<Transactions>(context, listen: false).deleteTransaction(transaction.id)
-          tileColor: Colors.grey[850],
-          leading: CircleAvatar(child: Icon(Icons.category)),
-          title: AutoSizeText(
-            '${transaction.title}',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style:
-                TextStyle(color: Theme.of(context).primaryColor, fontSize: 18),
+        child: Dismissible(
+          key: ValueKey(widget.transaction.id),
+          background: Container(
+            color: Theme.of(context).errorColor,
+            child: Icon(
+              Icons.delete,
+              color: Colors.white,
+              size: 40,
+            ),
+            alignment: Alignment.centerRight,
+            padding: EdgeInsets.only(right: 20),
+            margin: EdgeInsets.symmetric(
+              horizontal: 15,
+              vertical: 4,
+            ),
           ),
-          subtitle: Text(
-              '${stringToUserString(enumValueToString(transaction.category))} | ${DateFormat.MMMd().format(transaction.date)}',
-              style: TextStyle(color: Theme.of(context).primaryColorLight)),
-          trailing: Text(
-            '\$${transaction.amount.toStringAsFixed(2)}',
-            style:
-                TextStyle(color: Theme.of(context).primaryColor, fontSize: 18),
+          direction: DismissDirection.endToStart,
+          confirmDismiss: (direction) {
+            return showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: Text('Do you want to remove this transaction?'),
+                content: Text(
+                  'This cannot be undone later.',
+                ),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('No'),
+                    onPressed: () {
+                      Navigator.of(ctx).pop(false);
+                    },
+                  ),
+                  FlatButton(
+                    child: Text('Yes'),
+                    onPressed: () {
+                      Navigator.of(ctx).pop(true);
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+          onDismissed: (direction) {
+            Provider.of<Transactions>(context, listen: false)
+                .deleteTransaction(widget.transaction.id);
+            Scaffold.of(context)
+              ..removeCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text('Transaction deleted.'),
+                ),
+              );
+          },
+          child: ListTile(
+            onTap: () => _updateTransaction(context, widget.transaction),
+            tileColor: Colors.grey[850],
+            leading: CircleAvatar(child: Icon(Icons.category)),
+            title: AutoSizeText(
+              '${widget.transaction.title}',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  color: Theme.of(context).primaryColor, fontSize: 18),
+            ),
+            subtitle: Text(
+                '${stringToUserString(enumValueToString(widget.transaction.category))} | ${DateFormat.MMMd().format(widget.transaction.date)}',
+                style: TextStyle(color: Theme.of(context).primaryColorLight)),
+            trailing: Text(
+              '\$${widget.transaction.amount.toStringAsFixed(2)}',
+              style: TextStyle(
+                  color: Theme.of(context).primaryColor, fontSize: 18),
+            ),
           ),
         ),
       ),

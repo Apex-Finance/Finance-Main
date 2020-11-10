@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 // Our Main Screen that controls the other screens; necessary to implement this way because of the FAB managing transaction
 class TabScreen extends StatefulWidget {
+  static const routeName = '/tab';
   @override
   _TabScreenState createState() => _TabScreenState();
 }
@@ -22,13 +23,6 @@ class _TabScreenState extends State<TabScreen> {
   List<Widget> _pages = [];
   List<Category> categories = [];
   List<Budget> budgets = [];
-
-  // Add a new transaction to the list of transactions
-  // void addTransaction(Transaction transaction) {
-  //   setState(() {
-  //     transactions.add(transaction);
-  //   });
-  // }
 
   int _selectedPageIndex = 0;
 
@@ -59,9 +53,7 @@ class _TabScreenState extends State<TabScreen> {
     _pages = [
       // manages tabs
       DashboardScreen(),
-      BudgetScreen(
-        budgets: budgets,
-      ),
+      BudgetScreen(),
       null, // workaround for spacing
       TransactionScreen(),
       GoalScreen(),
@@ -103,7 +95,11 @@ class _TabScreenState extends State<TabScreen> {
         buildTab(context, Icons.account_balance, 'Budget'),
         BottomNavigationBarItem(
           backgroundColor: Theme.of(context).primaryColor,
-          icon: Icon(Icons.tab, color: Colors.black),
+          icon: Icon(
+            Icons.tab,
+            color: Colors.grey[900],
+            size: 0, // needed to hide icon when a snackbar pops up
+          ),
           label: '',
         ), // blank "tab" for spacing around FAB
         buildTab(context, Icons.shopping_cart, 'Transaction'),
