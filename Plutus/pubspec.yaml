@@ -32,6 +32,7 @@ dependencies:
   http: ^0.12.0+2
   shared_preferences: ^0.5.3+1
   provider: ^4.3.2+2
+  firebase_core: ^0.2.5  # add dependency for Firebase Core
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
