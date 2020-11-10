@@ -16,6 +16,14 @@ class BudgetListTile extends StatefulWidget {
 class _BudgetListTileState extends State<BudgetListTile> {
   var _expanded = false;
 
+  double get totalTransactions {
+    var sum = 0.0;
+    for (var i = 0; i < widget.budget.transactions.length; i++) {
+      sum += widget.budget.transactions[i].amount;
+    }
+    return sum;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -47,7 +55,9 @@ class _BudgetListTileState extends State<BudgetListTile> {
                   new LinearPercentIndicator(
                     width: 350.0,
                     lineHeight: 12.0,
-                    percent: 0.5,
+                    percent: widget.budget.transactions == null
+                        ? 0.0
+                        : totalTransactions / widget.budget.amount,
                     backgroundColor: Colors.black,
                     progressColor: Colors.amber,
                   ),
@@ -55,7 +65,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                     height: 20,
                   ),
                   Text(
-                    '\$Amount left of \$${widget.budget.amount}',
+                    '\$${widget.budget.amount - totalTransactions} of \$${widget.budget.amount}',
                     style: TextStyle(
                         color: Theme.of(context).primaryColor, fontSize: 18),
                   ),
@@ -65,13 +75,40 @@ class _BudgetListTileState extends State<BudgetListTile> {
             if (_expanded)
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-                color: Colors.blue,
-                height: 30,
-                child: Text(
-                  'list of transactions',
-                  style: TextStyle(
-                      color: Theme.of(context).primaryColor, fontSize: 18),
-                ),
+                color: Colors.grey[550],
+                height: 100,
+                child: widget.budget.transactions == null
+                    ? Text(
+                        'No transaction has been added yet',
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 18),
+                        textAlign: TextAlign.center,
+                      )
+                    : ListView(
+                        children: widget.budget.transactions
+                            .map(
+                              (trans) => Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    trans.title,
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 18),
+                                  ),
+                                  Text(
+                                    '\$${trans.amount}',
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 18),
+                                  )
+                                ],
+                              ),
+                            )
+                            .toList(),
+                      ),
               ),
           ],
         ),
