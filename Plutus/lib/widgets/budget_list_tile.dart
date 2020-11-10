@@ -57,7 +57,9 @@ class _BudgetListTileState extends State<BudgetListTile> {
                     lineHeight: 12.0,
                     percent: widget.budget.transactions == null
                         ? 0.0
-                        : totalTransactions / widget.budget.amount,
+                        : totalTransactions > widget.budget.amount
+                            ? 1
+                            : totalTransactions / widget.budget.amount,
                     backgroundColor: Colors.black,
                     progressColor: Colors.amber,
                   ),
@@ -65,7 +67,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                     height: 20,
                   ),
                   Text(
-                    '\$${widget.budget.amount - totalTransactions} of \$${widget.budget.amount}',
+                    '\$${totalTransactions > widget.budget.amount ? totalTransactions : widget.budget.amount - totalTransactions} of \$${widget.budget.amount}',
                     style: TextStyle(
                         color: Theme.of(context).primaryColor, fontSize: 18),
                   ),
