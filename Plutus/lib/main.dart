@@ -3,7 +3,6 @@ import 'package:Plutus/models/month_changer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 import './screens/tab_screen.dart';
 import './screens/intro_screen.dart';
