@@ -1,4 +1,4 @@
-import 'package:Plutus/models/category.dart';
+import 'package:Plutus/models/categories.dart';
 import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
 
