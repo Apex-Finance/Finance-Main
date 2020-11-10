@@ -3,9 +3,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
 
 import '../models/categories.dart';
-import '../screens/new_budget_screens/first_budget_screen.dart';
 import '../models/budget.dart';
 
+// ignore: must_be_immutable
 class CategoryListTile extends StatefulWidget {
   MainCategory category;
   Map<MainCategory, double> categoryAmount;
