@@ -111,9 +111,16 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       showSkipButton: true,
       skipFlex: 0,
       nextFlex: 0,
-      skip: const Text('Skip'),
+      skip: const Text('Skip',
+          style: TextStyle(
+            color: Colors.amber,
+          )),
       next: const Icon(Icons.arrow_forward),
-      done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
+      done: const Text('Done',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Colors.amber,
+          )),
       dotsDecorator: const DotsDecorator(
         activeColor: Colors.amber,
         size: Size(10.0, 10.0),
