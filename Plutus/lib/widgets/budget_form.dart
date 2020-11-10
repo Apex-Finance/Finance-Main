@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:flutter/services.dart';
 import '../models/transaction.dart';
-import '../models/category.dart';
+import '../models/categories.dart';
 
 class BudgetForm extends StatefulWidget {
   @override

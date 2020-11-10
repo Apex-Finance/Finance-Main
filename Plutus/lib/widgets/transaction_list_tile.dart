@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import '../models/transaction.dart';
-import '../models/category.dart';
+import '../models/categories.dart';
 import 'package:provider/provider.dart';
 import './transaction_form.dart';
 
