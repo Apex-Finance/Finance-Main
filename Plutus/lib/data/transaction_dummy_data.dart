@@ -1,5 +1,5 @@
 import '../models/transaction.dart';
-import '../models/category.dart';
+import '../models/categories.dart';
 
 List<Transaction> dummyTransactions = [
   Transaction(
