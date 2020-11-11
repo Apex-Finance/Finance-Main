@@ -54,8 +54,6 @@ class _BudgetFormState extends State<BudgetForm> {
   void _submitBudgetForm() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      print(
-          '${_budget.amount}${_budget.category}${_budget.title}${_budget.id}');
       Navigator.of(context).pop(
         _budget,
       );
