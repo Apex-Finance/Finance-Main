@@ -18,6 +18,7 @@ class CategoryListTile extends StatefulWidget {
 }
 
 class _CategoryListTileState extends State<CategoryListTile> {
+  var errorMessage = '';
   // Saves the current inputed category amount
   // void setCategoryAmount(String val) {
   //   widget.budget.categoryAmount[widget.category] = double.parse(val);
@@ -57,8 +58,15 @@ class _CategoryListTileState extends State<CategoryListTile> {
                       _controller.text =
                           '0.00'; //TODO NOT WORKING... PROB NEED A LIST OF CONTROLLERS?? NOT SURE
                     //TODO ADD INDIVIDUAL TEXTFIELD VALIDATION HERE, obviously if it's a number and in range but also not zero
-                    budget.setCategoryAmount(
-                        widget.category, double.parse(_controller.text));
+                    if (_controller.text
+                        .contains(new RegExp(r'^\d*(\.\d+)?$'))) {
+                      if (double.parse(double.parse(_controller.text)
+                              .toStringAsFixed(2)) <=
+                          0.00)
+                        errorMessage = 'Please enter an amount greater than 0';
+                      budget.setCategoryAmount(
+                          widget.category, double.parse(_controller.text));
+                    }
                   } else if (_controller.text == '0.00') _controller.text = '';
                 },
                 child: TextFormField(

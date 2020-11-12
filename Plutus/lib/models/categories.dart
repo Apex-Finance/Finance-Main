@@ -8,16 +8,16 @@ enum MainCategory {
   education,
   shopping,
   travel,
-  transportation,
+  //transportation,
   life_and_entertainment,
   health_and_fitness,
-  investments,
-  fees_and_charges,
-  gifts_and_donations,
-  kids,
-  pets,
-  business,
-  uncategorized
+  //investments,
+  //fees_and_charges,
+  //gifts_and_donations,
+  //kids,
+  //pets,
+  //business,
+  uncategorized, // Needed for getter
 }
 
 // All subcategories regardless of main
