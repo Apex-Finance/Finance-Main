@@ -81,7 +81,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           errorMessage =
                               'You have some money that still needs to be budgeted.';
                         } else {
-                          //TODO ADD A BUDGET ID, TITLE, ETC.
+                          //TODO ADD A BUDGET ID, TITLE, ETC. AND ADD INTO BUDGETS PROVIDER
                           errorMessage = '';
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               '/tab', (Route<dynamic> route) => false);
