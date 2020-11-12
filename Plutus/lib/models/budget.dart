@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import './transaction.dart';
 import './categories.dart';
+import './month_changer.dart';
 
 class Budget with ChangeNotifier {
   String id;
@@ -38,7 +39,9 @@ class Budget with ChangeNotifier {
 //TODO add transactionsbyBudgetandCategory, totalBudgetExpensesByCategory, totalBudgetExpenses
 class Budgets with ChangeNotifier {
   List<Budget> _budgets = [];
+  MonthChanger monthChanger;
 
+  Budgets(this.monthChanger, this._budgets);
   List<Budget> get budgets => [..._budgets];
 
   void addBudget(Budget budget) {

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../models/categories.dart';
 import '../models/budget.dart';
 
+// ignore: must_be_immutable
 class CategoryListTile extends StatefulWidget {
   MainCategory category;
 

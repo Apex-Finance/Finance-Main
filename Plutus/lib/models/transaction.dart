@@ -1,3 +1,4 @@
+import 'package:Plutus/models/month_changer.dart';
 import 'package:flutter/foundation.dart';
 import 'categories.dart';
 
@@ -22,6 +23,9 @@ class Transaction {
 
 class Transactions with ChangeNotifier {
   List<Transaction> _transactions = [];
+  MonthChanger monthChanger;
+
+  Transactions(this.monthChanger, this._transactions);
 
   List<Transaction> get transactions => [..._transactions];
 
@@ -30,9 +34,9 @@ class Transactions with ChangeNotifier {
     notifyListeners();
   }
 
-  void editTransaction(String id, Transaction updatedTransaction) {
-    final transactionIndex =
-        _transactions.indexWhere((transaction) => transaction.id == id);
+  void editTransaction(Transaction updatedTransaction) {
+    final transactionIndex = _transactions
+        .indexWhere((transaction) => transaction.id == updatedTransaction.id);
     if (transactionIndex >= 0) {
       _transactions[transactionIndex] = updatedTransaction;
       notifyListeners();
@@ -48,11 +52,10 @@ class Transactions with ChangeNotifier {
 
   // Take all transactions, filter out only the ones from the selected month, and reverse the order from newest to oldest
   List<Transaction> get monthlyTransactions {
-    //TODO UPDATE SELECTEDMONTH AND YEAR IN PROVIDER;;CURRENTLY BROKEN
     var unsorted = _transactions
         .where((transaction) =>
-            transaction.date.month == DateTime.now().month && //selectedMonth &&
-            transaction.date.year == DateTime.now().year) //selectedYear)
+            transaction.date.month == monthChanger.selectedMonth &&
+            transaction.date.year == monthChanger.selectedYear)
         .toList();
     unsorted.sort((a, b) => (b.date).compareTo(a.date));
     return unsorted;
