@@ -1,6 +1,7 @@
 import 'package:Plutus/screens/tab_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import '../screens/new_budget_screens/income_screen.dart';
 
 // TODO Need to finish Auth screen
 // Commented out until it is working
@@ -94,7 +95,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           title: "Want to manually create a budget?",
           bodyWidget: RaisedButton(
             onPressed: () {
-              introKey.currentState?.animateScroll(0);
+              Navigator.of(context).popAndPushNamed(IncomeScreen.routeName);
             },
             child: const Text(
               'Create a Budget',

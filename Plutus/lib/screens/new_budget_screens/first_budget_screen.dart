@@ -84,7 +84,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           //TODO ADD A BUDGET ID, TITLE, ETC.
                           errorMessage = '';
                           Navigator.of(context).pushNamedAndRemoveUntil(
-                              '/', (Route<dynamic> route) => false);
+                              '/tab', (Route<dynamic> route) => false);
                         }
                       });
                     }, // removes all screens besides tab (useful after intro or just normal budget creation)
