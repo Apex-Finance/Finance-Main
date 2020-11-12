@@ -21,7 +21,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _budget = Provider.of<Budget>(context);
+    var _budget = Provider.of<Budget>(
+        context); // budget initialized to all nulls and subsequent changes will update Provider
     return Scaffold(
       appBar: AppBar(
         title: Text('New Budget', style: Theme.of(context).textTheme.bodyText1),
@@ -53,9 +54,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             if (_formKey.currentState.validate()) {
                               _formKey.currentState.save();
                               // perhaps we need to call addBudget here?
-                              Navigator.of(context).pushNamed(
-                                  FirstBudgetScreen.routeName,
-                                  arguments: _budget);
+                              Navigator.of(context)
+                                  .pushNamed(FirstBudgetScreen.routeName);
                             }
                           },
                           onSaved: (val) => _budget.amount = double.parse(val),

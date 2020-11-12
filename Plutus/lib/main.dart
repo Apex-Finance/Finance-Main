@@ -41,11 +41,13 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-          initialRoute: '/',
+          initialRoute: '/onboarding',
           routes: {
-            '/': (context) => OnBoardingPage(),
+            '/': (context) => TabScreen(),
+            '/onboarding': (context) => OnBoardingPage(),
             DashboardScreen.routeName: (context) => DashboardScreen(),
-            BudgetScreen.routeName: (context) => BudgetScreen(),
+            BudgetScreen.routeName: (context) =>
+                BudgetScreen(), //TODO UPDATE BUDGETSCREEN TO SOLELY USE PROVIDER
             TransactionScreen.routeName: (context) => TransactionScreen(),
             GoalScreen.routeName: (context) => GoalScreen(),
             IncomeScreen.routeName: (context) => IncomeScreen(),
@@ -59,6 +61,7 @@ class MyApp extends StatelessWidget {
 
 // Maybe put this into a separate file?
 class OnBoardingPage extends StatefulWidget {
+  static const routeName = '/onboarding';
   @override
   _OnBoardingPageState createState() => _OnBoardingPageState();
 }

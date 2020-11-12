@@ -13,7 +13,6 @@ class _BudgetFormState extends State<BudgetForm> {
   Budget _budget = Budget(
     id: null,
     title: null,
-    category: null,
     amount: null,
     transactions: null,
   );
@@ -21,8 +20,6 @@ class _BudgetFormState extends State<BudgetForm> {
   void _submitBudgetForm() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      print(
-          '${_budget.amount}${_budget.category}${_budget.title}${_budget.id}');
       Navigator.of(context).pop(
         _budget,
       );
@@ -62,19 +59,6 @@ class _BudgetFormState extends State<BudgetForm> {
                       if (val.trim().length > 15)
                         return 'Description is too long.';
                       if (val.isEmpty) return 'Please enter a description.';
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    //TODO update to dropdown/another modal/card instead of string
-                    decoration: InputDecoration(
-                      labelText: 'Category',
-                    ),
-                    maxLength: null,
-                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                    onSaved: (val) => _budget.category = val,
-                    validator: (val) {
-                      if (val.isEmpty) return 'Please enter a category.';
                       return null;
                     },
                   ),

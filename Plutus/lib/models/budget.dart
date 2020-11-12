@@ -3,17 +3,13 @@ import 'package:flutter/foundation.dart';
 import './transaction.dart';
 import './categories.dart';
 
-//TODO We may need to combine these two classes into one
-//TODO Not entirely sure why we have two to begin with
-
 class Budget with ChangeNotifier {
   String id;
   String title;
-  String category; // TODO Needs to be deleted later
   double amount;
   List<Transaction> transactions;
-
   Map<MainCategory, double> categoryAmount;
+
   double get remainingAmount {
     double tempAmount = amount;
     if (categoryAmount != null)
@@ -23,10 +19,16 @@ class Budget with ChangeNotifier {
     return tempAmount;
   }
 
+//TODO MAKE SURE FUTURE FUNCTIONS FILTER OUT CATEGORIES WITH AMOUNTS OF 0
+
+  void setCategoryAmount(MainCategory category, double amount) {
+    categoryAmount[category] = amount;
+    notifyListeners();
+  }
+
   Budget({
     this.id,
     this.title,
-    this.category,
     this.amount,
     this.transactions,
     this.categoryAmount,

@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 // Our Main Screen that controls the other screens; necessary to implement this way because of the FAB managing transaction
 class TabScreen extends StatefulWidget {
+  static const routeName = '/';
   @override
   _TabScreenState createState() => _TabScreenState();
 }

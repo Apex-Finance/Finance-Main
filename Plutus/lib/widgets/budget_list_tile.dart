@@ -14,7 +14,8 @@ class BudgetListTile extends StatelessWidget {
     Navigator.of(ctx).push(
       MaterialPageRoute(
         builder: (_) {
-          return BudgetInfoScreen(budget.title, budget.category);
+          return BudgetInfoScreen(
+              budget.title, ''); //TODO update to the right maincategory
         },
       ),
     );
