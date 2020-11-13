@@ -108,7 +108,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                             fontSize: 18),
                                       ),
                                       AutoSizeText(
-                                        '\$4,900.00',
+                                        '\$${monthlyBudget.amount < monthlyTransactions.monthlyExpenses ? 0.0 : monthlyBudget.amount - monthlyTransactions.monthlyExpenses}',
                                         maxLines: 1,
                                         style: TextStyle(
                                             color:
@@ -129,7 +129,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                             fontSize: 18),
                                       ),
                                       AutoSizeText(
-                                        '\$213.04',
+                                        '\$',
                                         maxLines: 1,
                                         style: TextStyle(
                                             color:
@@ -149,7 +149,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                   new LinearPercentIndicator(
                                     width: 310.0,
                                     lineHeight: 14.0,
-                                    percent: 0.5,
+                                    percent: monthlyTransactions
+                                                .monthlyExpenses >
+                                            monthlyBudget.amount
+                                        ? 1
+                                        : monthlyTransactions.monthlyExpenses /
+                                            monthlyBudget.amount,
                                     backgroundColor: Colors.black,
                                     progressColor: Colors.amber,
                                   ),
@@ -159,11 +164,10 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                 height: 20,
                               ),
                               Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   AutoSizeText(
                                     '\$${monthlyTransactions.monthlyExpenses} of \$${monthlyBudget.amount}',
-                                    // '\$2,000.00 of \$$totalBudget',
                                     maxLines: 1,
                                     style: TextStyle(
                                         color: Theme.of(context).primaryColor,

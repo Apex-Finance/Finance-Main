@@ -66,7 +66,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                     height: 20,
                   ),
                   Text(
-                    '\$${monthlyBudget.getCategoryTransactionsAmount(monthlyBudget, widget.category) > monthlyBudget.categoryAmount[widget.category] ? monthlyBudget.getCategoryTransactionsAmount(monthlyBudget, widget.category) : monthlyBudget.categoryAmount[widget.category] - monthlyBudget.getCategoryTransactionsAmount(monthlyBudget, widget.category)} of \$${monthlyBudget.categoryAmount[widget.category]}',
+                    '\$${monthlyBudget.getCategoryTransactionsAmount(monthlyBudget, widget.category)} of \$${monthlyBudget.categoryAmount[widget.category]}',
                     style: TextStyle(
                         color: Theme.of(context).primaryColor, fontSize: 18),
                   ),
