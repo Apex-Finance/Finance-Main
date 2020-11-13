@@ -145,7 +145,8 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   new LinearPercentIndicator(
-                                    width: 310.0,
+                                    width:
+                                        MediaQuery.of(context).size.width * .80,
                                     lineHeight: 14.0,
                                     percent: 0.5,
                                     backgroundColor: Colors.black,
@@ -158,10 +159,10 @@ class _BudgetScreenState extends State<BudgetScreen> {
                               ),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   AutoSizeText(
                                     '\$2,000.00 of \$3,000.00',
-                                    // '\$2,000.00 of \$$totalBudget',
                                     maxLines: 1,
                                     style: TextStyle(
                                         color: Theme.of(context).primaryColor,
