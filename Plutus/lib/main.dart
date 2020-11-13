@@ -37,10 +37,10 @@ class MyApp extends StatelessWidget {
                       : previousTransactions.transactions),
           create: null,
         ),
-        ChangeNotifierProxyProvider<MonthChanger, Budgets>(
-          update: (buildContext, monthChanger, previousBudgets) => Budgets(
-              monthChanger,
-              previousBudgets == null ? [] : previousBudgets.budgets),
+        ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
+          update: (buildContext, monthChanger, transactions, previousBudgets) =>
+              Budgets(monthChanger, transactions.monthlyTransactions,
+                  previousBudgets == null ? [] : previousBudgets.budgets),
           create: null,
         ),
       ],

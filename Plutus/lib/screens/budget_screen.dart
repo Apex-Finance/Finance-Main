@@ -1,3 +1,4 @@
+import 'package:Plutus/models/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -33,6 +34,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
   Widget build(BuildContext context) {
     final monthlyBudget = Provider.of<Budgets>(context).monthlyBudget;
     var monthData = Provider.of<MonthChanger>(context);
+    var monthlyTransactions = Provider.of<Transactions>(context);
 
     return Column(
       children: [
@@ -145,8 +147,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   new LinearPercentIndicator(
-                                    width:
-                                        MediaQuery.of(context).size.width * .80,
+                                    width: 310.0,
                                     lineHeight: 14.0,
                                     percent: 0.5,
                                     backgroundColor: Colors.black,
@@ -159,10 +160,10 @@ class _BudgetScreenState extends State<BudgetScreen> {
                               ),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   AutoSizeText(
-                                    '\$2,000.00 of \$3,000.00',
+                                    '\$${monthlyTransactions.monthlyExpenses} of \$${monthlyBudget.amount}',
+                                    // '\$2,000.00 of \$$totalBudget',
                                     maxLines: 1,
                                     style: TextStyle(
                                         color: Theme.of(context).primaryColor,
@@ -177,7 +178,8 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       Divider(height: 10),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: monthlyBudget.categoryAmount.length,
+                          itemCount: monthlyBudget.categoryAmount
+                              .length, //TODO check for categories not budgeted for, but have expenses for
                           itemBuilder: (context, index) =>
                               BudgetListTile(MainCategory.values[index]),
                         ),
