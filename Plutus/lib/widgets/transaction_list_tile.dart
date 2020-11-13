@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 import '../models/transaction.dart';
 import '../models/categories.dart';
+import '../models/category_icon.dart';
 import 'package:provider/provider.dart';
 import './transaction_form.dart';
 
@@ -92,7 +93,8 @@ class _TransactionListTileState extends State<TransactionListTile> {
           child: ListTile(
             onTap: () => _updateTransaction(context, widget.transaction),
             tileColor: Colors.grey[850],
-            leading: CircleAvatar(child: Icon(Icons.category)),
+            leading: CircleAvatar(
+                child: Icon(categoryIcon[widget.transaction.category])),
             title: AutoSizeText(
               '${widget.transaction.title}',
               maxLines: 1,
