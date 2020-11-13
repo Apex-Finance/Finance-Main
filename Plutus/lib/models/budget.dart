@@ -72,7 +72,7 @@ class Budgets with ChangeNotifier {
       (budget) =>
           DateTime.parse(budget.title).month == monthChanger.selectedMonth &&
           DateTime.parse(budget.title).year == monthChanger.selectedYear,
-      orElse: null,
+      orElse: () => null,
     );
   }
 
