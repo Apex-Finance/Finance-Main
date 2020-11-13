@@ -11,15 +11,6 @@ class BudgetListTile extends StatefulWidget {
 
   BudgetListTile(this.category);
 
-  // void selectBudget(BuildContext ctx) {
-  //   Navigator.of(ctx).push(
-  //     MaterialPageRoute(
-  //       builder: (_) {
-  //         return BudgetInfoScreen(
-  //             budget.title, ''); //TODO update to the right maincategory
-  //       },
-  //     ),
-  //   );
   @override
   _BudgetListTileState createState() => _BudgetListTileState();
 }
@@ -56,21 +47,23 @@ class _BudgetListTileState extends State<BudgetListTile> {
                   SizedBox(
                     height: 20,
                   ),
-                  new LinearPercentIndicator(
-                    width: 350.0,
-                    lineHeight: 12.0,
-                    percent: monthlyBudget.transactions ==
-                            null //TODO FIX ALL TRANSACTION CALLS WITH PROVIDER FUNCTION
-                        ? 0.0
-                        : monthlyBudget.getCategoryTransactionsAmount(
-                                    monthlyBudget, widget.category) >
-                                monthlyBudget.categoryAmount[widget.category]
-                            ? 1
-                            : monthlyBudget.getCategoryTransactionsAmount(
-                                    monthlyBudget, widget.category) /
-                                monthlyBudget.categoryAmount[widget.category],
-                    backgroundColor: Colors.black,
-                    progressColor: Colors.amber,
+                  Expanded(
+                    child: new LinearPercentIndicator(
+                      width: 350.0,
+                      lineHeight: 12.0,
+                      percent: monthlyBudget.transactions ==
+                              null //TODO FIX ALL TRANSACTION CALLS WITH PROVIDER FUNCTION
+                          ? 0.0
+                          : monthlyBudget.getCategoryTransactionsAmount(
+                                      monthlyBudget, widget.category) >
+                                  monthlyBudget.categoryAmount[widget.category]
+                              ? 1
+                              : monthlyBudget.getCategoryTransactionsAmount(
+                                      monthlyBudget, widget.category) /
+                                  monthlyBudget.categoryAmount[widget.category],
+                      backgroundColor: Colors.black,
+                      progressColor: Colors.amber,
+                    ),
                   ),
                   SizedBox(
                     height: 20,
