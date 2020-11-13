@@ -8,7 +8,7 @@ import '../models/category_icon.dart';
 
 // Form to add a new transaction
 class TransactionForm extends StatefulWidget {
-  Transaction transaction;
+  final Transaction transaction;
   TransactionForm(
       {this.transaction}); //optional constructor for editing transaction
 

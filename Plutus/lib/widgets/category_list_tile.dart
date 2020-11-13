@@ -63,27 +63,25 @@ class _CategoryListTileState extends State<CategoryListTile> {
                   } else if (_controller.text == '0.00') _controller.text = '';
                 },
                 child: TextFormField(
-                    style: Theme.of(context).textTheme.bodyText1,
-                    // autofocus: true, (probably not needed)
-                    keyboardType: TextInputType.number,
-                    controller: _controller,
-                    // Also allow the user to edit the textfield as much as he wants
-                    // onEditingComplete: () {
-                    //   print('onEditingComplete');
-                    //   setCategoryAmount();
-                    // },
-                    onFieldSubmitted: (val) {
-                      //TODO GO TO NEXT FIELD
-                      // need to outsource function to Provider to notifyListeners
-                    },
-                    onEditingComplete: () {
-                      print('oneditingcomplete');
-                      FocusScope.of(context)
-                          .nextFocus(); //TODO NOT WORKING--NEED A LIST OF FOCUSNODES PASSED IN...
-                    },
-                    validator: (val) {
-                      return; // TODO altogether group validation; possibly outsourced to firstbudgetscreen or even provider function
-                    }),
+                  style: Theme.of(context).textTheme.bodyText1,
+                  // autofocus: true, (probably not needed)
+                  keyboardType: TextInputType.number,
+                  controller: _controller,
+                  // Also allow the user to edit the textfield as much as he wants
+                  // onEditingComplete: () {
+                  //   print('onEditingComplete');
+                  //   setCategoryAmount();
+                  // },
+                  onFieldSubmitted: (val) {
+                    //TODO GO TO NEXT FIELD
+                    // need to outsource function to Provider to notifyListeners
+                  },
+                  onEditingComplete: () {
+                    print('oneditingcomplete');
+                    FocusScope.of(context)
+                        .nextFocus(); //TODO NOT WORKING--NEED A LIST OF FOCUSNODES PASSED IN...
+                  },
+                ),
               ),
             ),
           ],

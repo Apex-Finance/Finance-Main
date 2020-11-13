@@ -20,11 +20,11 @@ class Budget with ChangeNotifier {
     return tempAmount;
   }
 
-//TODO MAKE SURE FUTURE FUNCTIONS FILTER OUT CATEGORIES WITH AMOUNTS OF 0
-
   void setCategoryAmount(MainCategory category, double amount) {
-    categoryAmount[category] = amount;
-    notifyListeners();
+    if (amount > 0) {
+      categoryAmount[category] = amount;
+      notifyListeners();
+    }
   }
 
   List<Transaction> getCategoryTransactions(
@@ -59,21 +59,24 @@ class Budget with ChangeNotifier {
   });
 }
 
-//TODO add transactionsbyBudgetandCategory, totalBudgetExpensesByCategory, totalBudgetExpenses
 class Budgets with ChangeNotifier {
   List<Budget> _budgets = [];
   MonthChanger monthChanger;
+  List<Transaction> monthlyTransactions;
 
-  Budgets(this.monthChanger, this._budgets);
+  Budgets(this.monthChanger, this.monthlyTransactions, this._budgets);
   List<Budget> get budgets => [..._budgets];
 
   Budget get monthlyBudget {
-    return budgets.firstWhere(
+    var budgetWithTransactions = budgets.firstWhere(
       (budget) =>
           DateTime.parse(budget.title).month == monthChanger.selectedMonth &&
           DateTime.parse(budget.title).year == monthChanger.selectedYear,
       orElse: () => null,
     );
+    if (budgetWithTransactions != null)
+      budgetWithTransactions.transactions = monthlyTransactions;
+    return budgetWithTransactions;
   }
 
   void addBudget(Budget budget) {
