@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../widgets/category_list_tile.dart';
 import '../../models/categories.dart';
 import '../../models/budget.dart';
+import '../../models/month_changer.dart';
 
 class FirstBudgetScreen extends StatefulWidget {
   static const routeName = '/first_budget';
@@ -19,6 +20,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final MonthChanger monthData = Provider.of<MonthChanger>(context);
     final Budget budget = Provider.of<Budget>(
         context); // budget contains the amounts; rest are null on first run of build
     budget.categoryAmount =
@@ -81,7 +83,14 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           errorMessage =
                               'You have some money that still needs to be budgeted.';
                         } else {
-                          //TODO ADD A BUDGET ID, TITLE, ETC.
+                          budget.id = DateTime(monthData.selectedYear,
+                                  monthData.selectedMonth)
+                              .toIso8601String();
+                          budget.title = DateTime(monthData.selectedYear,
+                                  monthData.selectedMonth)
+                              .toIso8601String(); // will eventually change to db-generated id, and we can parse title to get correct budget for each month
+                          Provider.of<Budgets>(context, listen: false)
+                              .addBudget(budget);
                           errorMessage = '';
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               '/tab', (Route<dynamic> route) => false);
