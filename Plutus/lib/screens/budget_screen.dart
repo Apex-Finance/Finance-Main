@@ -3,8 +3,9 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import '../models/budget.dart';
-import '../widgets/budget_form.dart';
+import 'new_budget_screens/income_screen.dart';
 import '../widgets/budget_list_tile.dart';
+import '../models/categories.dart';
 
 import 'package:provider/provider.dart';
 import '../models/month_changer.dart';
@@ -21,24 +22,16 @@ class _BudgetScreenState extends State<BudgetScreen> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (_) => BudgetForm(),
+      builder: (_) => IncomeScreen(),
     ).then((newBudget) {
       if (newBudget == null) return;
       Provider.of<Budgets>(context, listen: false).addBudget(newBudget);
     });
   }
 
-  // double get totalBudget {
-  //   var sum = 0.0;
-  //   for (var i = 0; i < widget.budgets.length; i++) {
-  //     sum += widget.budgets[i].amount;
-  //   }
-  //   return sum;
-  // }
-
   @override
   Widget build(BuildContext context) {
-    final budgetsData = Provider.of<Budgets>(context);
+    final monthlyBudget = Provider.of<Budgets>(context).monthlyBudget;
     var monthData = Provider.of<MonthChanger>(context);
 
     return Column(
@@ -50,22 +43,29 @@ class _BudgetScreenState extends State<BudgetScreen> {
             child: buildMonthChanger(context, monthData),
           ),
         ),
-        RaisedButton(
-          child: Text('Add Budget'),
-          onPressed: () => _enterBudget(context),
-        ),
         Expanded(
           child: Container(
             margin: EdgeInsets.only(top: 40),
-            child: budgetsData.budgets.isEmpty
+            child: monthlyBudget == null
                 ? Center(
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: 250),
-                      child: Text(
-                        'No budget has been added this month.',
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Theme.of(context).primaryColor),
+                      child: Column(
+                        children: [
+                          Text(
+                            'No budget has been added this month.',
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Theme.of(context).primaryColor),
+                            textAlign: TextAlign.center,
+                          ),
+                          RaisedButton(
+                            child: Text('Add Budget'),
+                            color: Theme.of(context).primaryColor,
+                            textColor: Theme.of(context).canvasColor,
+                            onPressed: () => _enterBudget(context),
+                          ),
+                        ],
                       ),
                     ),
                   )
@@ -176,9 +176,9 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       Divider(height: 10),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: budgetsData.budgets.length,
+                          itemCount: monthlyBudget.categoryAmount.length,
                           itemBuilder: (context, index) =>
-                              BudgetListTile(budgetsData.budgets[index]),
+                              BudgetListTile(MainCategory.values[index]),
                         ),
                       ),
                     ]),

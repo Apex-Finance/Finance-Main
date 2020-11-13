@@ -27,6 +27,29 @@ class Budget with ChangeNotifier {
     notifyListeners();
   }
 
+  List<Transaction> getCategoryTransactions(
+      Budget budget, MainCategory category) {
+    return budget.transactions == null
+        ? null
+        : budget.transactions
+            .where((transaction) => transaction.category == category)
+            .toList();
+  }
+
+  double getCategoryTransactionsAmount(Budget budget, MainCategory category) {
+    List<Transaction> categoryTransactions =
+        getCategoryTransactions(budget, category);
+    if (categoryTransactions == null)
+      return 0.00;
+    else {
+      var sum = 0.0;
+      for (var transaction in categoryTransactions) {
+        sum += transaction.amount;
+      }
+      return sum;
+    }
+  }
+
   Budget({
     this.id,
     this.title,
@@ -43,6 +66,15 @@ class Budgets with ChangeNotifier {
 
   Budgets(this.monthChanger, this._budgets);
   List<Budget> get budgets => [..._budgets];
+
+  Budget get monthlyBudget {
+    return budgets.firstWhere(
+      (budget) =>
+          DateTime.parse(budget.title).month == monthChanger.selectedMonth &&
+          DateTime.parse(budget.title).year == monthChanger.selectedYear,
+      orElse: () => null,
+    );
+  }
 
   void addBudget(Budget budget) {
     _budgets.add(budget);

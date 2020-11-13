@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:flutter/services.dart';
 import '../models/categories.dart';
+import '../models/category_icon.dart';
 
 // Form to add a new transaction
 class TransactionForm extends StatefulWidget {
@@ -185,7 +186,7 @@ class _TransactionFormState extends State<TransactionForm> {
             avatar: CircleAvatar(
               backgroundColor: Colors.black,
               child: Icon(
-                Icons.category,
+                categoryIcon[category],
               ),
             ),
             label: Text(

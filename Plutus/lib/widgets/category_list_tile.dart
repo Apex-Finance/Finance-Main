@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
 
 import '../models/categories.dart';
+import '../models/category_icon.dart';
 import '../models/budget.dart';
 
 // ignore: must_be_immutable
@@ -33,7 +34,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
             : '0.00');
     return ListTile(
       tileColor: Colors.grey[850],
-      leading: CircleAvatar(child: Icon(Icons.category)),
+      leading: CircleAvatar(child: Icon(categoryIcon[widget.category])),
       title: AutoSizeText(
         stringToUserString(enumValueToString(widget.category)),
         maxLines: 1,
