@@ -15,7 +15,6 @@ class _BudgetFormState extends State<BudgetForm> {
   Budget _budget = Budget(
     id: null,
     title: null,
-    category: null,
     amount: null,
     transactions: [
       Transaction(
@@ -93,18 +92,6 @@ class _BudgetFormState extends State<BudgetForm> {
                       if (val.trim().length > 15)
                         return 'Description is too long.';
                       if (val.isEmpty) return 'Please enter a description.';
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Category',
-                    ),
-                    maxLength: null,
-                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                    onSaved: (val) => _budget.category = val,
-                    validator: (val) {
-                      if (val.isEmpty) return 'Please enter a category.';
                       return null;
                     },
                   ),

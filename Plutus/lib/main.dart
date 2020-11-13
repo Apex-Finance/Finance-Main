@@ -61,9 +61,9 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-          initialRoute: '/',
+          initialRoute: '/onboarding',
           routes: {
-            '/': (context) => OnBoardingPage(),
+            '/onboarding': (context) => OnBoardingPage(),
             DashboardScreen.routeName: (context) => DashboardScreen(),
             BudgetScreen.routeName: (context) => BudgetScreen(),
             TransactionScreen.routeName: (context) => TransactionScreen(),

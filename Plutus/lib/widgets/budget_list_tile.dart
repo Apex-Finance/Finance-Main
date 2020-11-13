@@ -9,6 +9,15 @@ class BudgetListTile extends StatefulWidget {
 
   BudgetListTile(this.budget);
 
+  // void selectBudget(BuildContext ctx) {
+  //   Navigator.of(ctx).push(
+  //     MaterialPageRoute(
+  //       builder: (_) {
+  //         return BudgetInfoScreen(
+  //             budget.title, ''); //TODO update to the right maincategory
+  //       },
+  //     ),
+  //   );
   @override
   _BudgetListTileState createState() => _BudgetListTileState();
 }
