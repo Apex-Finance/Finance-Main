@@ -2,8 +2,6 @@ import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:flutter/services.dart';
-import '../models/transaction.dart';
-import '../models/categories.dart';
 
 class BudgetForm extends StatefulWidget {
   @override
@@ -16,38 +14,7 @@ class _BudgetFormState extends State<BudgetForm> {
     id: null,
     title: null,
     amount: null,
-    transactions: [
-      Transaction(
-        id: 't1',
-        title: 'Coffee',
-        amount: 10.00,
-        category: MainCategory.home,
-      ),
-      Transaction(
-        id: 't2',
-        title: 'Shirt',
-        amount: 40.00,
-        category: MainCategory.bills_and_utilities,
-      ),
-      Transaction(
-        id: 't3',
-        title: 'Water Bill',
-        amount: 30.00,
-        category: MainCategory.health_and_fitness,
-      ),
-      Transaction(
-        id: 't4',
-        title: 'Movies',
-        amount: 20.00,
-        category: MainCategory.home,
-      ),
-      Transaction(
-        id: 't5',
-        title: 'Shoes',
-        amount: 10.00,
-        category: MainCategory.food_and_drinks,
-      ),
-    ],
+    transactions: null,
   );
 
   void _submitBudgetForm() {
