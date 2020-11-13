@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import '../models/budget.dart';
 import '../widgets/budget_form.dart';
 import '../widgets/budget_list_tile.dart';
+import '../models/categories.dart';
 
 import 'package:provider/provider.dart';
 import '../models/month_changer.dart';
@@ -38,7 +39,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final budgetsData = Provider.of<Budgets>(context);
+    final monthlyBudget = Provider.of<Budgets>(context).monthlyBudget;
     var monthData = Provider.of<MonthChanger>(context);
 
     return Column(
@@ -57,7 +58,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
         Expanded(
           child: Container(
             margin: EdgeInsets.only(top: 40),
-            child: budgetsData.budgets.isEmpty
+            child: monthlyBudget == null
                 ? Center(
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: 250),
@@ -176,9 +177,9 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       Divider(height: 10),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: budgetsData.budgets.length,
+                          itemCount: monthlyBudget.categoryAmount.length,
                           itemBuilder: (context, index) =>
-                              BudgetListTile(budgetsData.budgets[index]),
+                              BudgetListTile(MainCategory.values[index]),
                         ),
                       ),
                     ]),
