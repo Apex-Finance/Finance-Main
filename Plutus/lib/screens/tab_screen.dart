@@ -1,4 +1,4 @@
-import 'package:Plutus/models/category.dart';
+import 'package:Plutus/models/categories.dart';
 import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
 
@@ -9,8 +9,11 @@ import './goal_screen.dart';
 import '../widgets/transaction_form.dart';
 import '../models/transaction.dart';
 
+import 'package:provider/provider.dart';
+
 // Our Main Screen that controls the other screens; necessary to implement this way because of the FAB managing transaction
 class TabScreen extends StatefulWidget {
+  static const routeName = '/tab';
   @override
   _TabScreenState createState() => _TabScreenState();
 }
@@ -20,13 +23,6 @@ class _TabScreenState extends State<TabScreen> {
   List<Widget> _pages = [];
   List<Category> categories = [];
   List<Budget> budgets = [];
-
-  // Add a new transaction to the list of transactions
-  void addTransaction(Transaction transaction) {
-    setState(() {
-      transactions.add(transaction);
-    });
-  }
 
   int _selectedPageIndex = 0;
 
@@ -47,7 +43,8 @@ class _TabScreenState extends State<TabScreen> {
       builder: (_) => TransactionForm(),
     ).then((newTransaction) {
       if (newTransaction == null) return;
-      addTransaction(newTransaction);
+      Provider.of<Transactions>(context, listen: false)
+          .addTransaction(newTransaction);
     });
   }
 
@@ -56,11 +53,9 @@ class _TabScreenState extends State<TabScreen> {
     _pages = [
       // manages tabs
       DashboardScreen(),
-      BudgetScreen(
-        budgets: budgets,
-      ),
+      BudgetScreen(),
       null, // workaround for spacing
-      TransactionScreen(transactions: transactions),
+      TransactionScreen(),
       GoalScreen(),
     ];
 
@@ -102,7 +97,8 @@ class _TabScreenState extends State<TabScreen> {
           backgroundColor: Theme.of(context).primaryColor,
           icon: Icon(
             Icons.tab,
-            color: Colors.black,
+            color: Colors.grey[900],
+            size: 0, // needed to hide icon when a snackbar pops up
           ),
           label: '',
         ), // blank "tab" for spacing around FAB
@@ -113,15 +109,10 @@ class _TabScreenState extends State<TabScreen> {
   }
 
   BottomNavigationBarItem buildTab(
-    BuildContext context,
-    IconData icon,
-    String label,
-  ) {
+      BuildContext context, IconData icon, String label) {
     return BottomNavigationBarItem(
       backgroundColor: Theme.of(context).primaryColor,
-      icon: Icon(
-        icon,
-      ),
+      icon: Icon(icon),
       label: label,
     );
   }

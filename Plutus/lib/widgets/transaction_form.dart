@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:flutter/services.dart';
-import '../models/category.dart';
+import '../models/categories.dart';
 
 // Form to add a new transaction
 class TransactionForm extends StatefulWidget {
+  Transaction transaction;
+  TransactionForm(
+      {this.transaction}); //optional constructor for editing transaction
+
   @override
   _TransactionFormState createState() => _TransactionFormState();
 }
@@ -45,6 +49,8 @@ class _TransactionFormState extends State<TransactionForm> {
   void _submitTransactionForm() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+      if (_transaction.id == null) // assign new id if not editing
+        _transaction.id = DateTime.now().toIso8601String();
       Navigator.of(context).pop(
         _transaction,
       );
@@ -56,6 +62,15 @@ class _TransactionFormState extends State<TransactionForm> {
     _transaction.category =
         category; // initialize date and category since no onsave property
     _transaction.date = _date;
+
+    if (widget.transaction != null) {
+      // if editing, store previous values in transaction to display previous values and submit them later
+      _transaction.id = widget.transaction.id;
+      _transaction.title = widget.transaction.title;
+      _transaction.category = category = widget.transaction.category;
+      _transaction.amount = widget.transaction.amount;
+      _transaction.date = _date = widget.transaction.date;
+    }
     super.initState();
   }
 
@@ -84,7 +99,7 @@ class _TransactionFormState extends State<TransactionForm> {
                   SizedBox(
                     height: 25,
                   ),
-                  buildSubmitButton(context),
+                  buildSubmitButton(context, _transaction.id),
                 ],
               ),
             ),
@@ -94,13 +109,14 @@ class _TransactionFormState extends State<TransactionForm> {
     );
   }
 
-  Container buildSubmitButton(BuildContext context) {
+  Container buildSubmitButton(BuildContext context, String transactionId) {
     return Container(
       alignment: Alignment.bottomRight,
       child: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: _submitTransactionForm,
-        label: Text('Add Transaction'),
+        label: Text(
+            transactionId == null ? 'Add Transaction' : 'Edit Transaction'),
       ),
     );
   }
@@ -196,6 +212,8 @@ class AmountTFF extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue:
+          _transaction.amount == null ? '' : _transaction.amount.toString(),
       decoration: InputDecoration(
         labelText: 'Amount',
       ),
@@ -233,6 +251,7 @@ class DescriptionTFF extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: _transaction.title ?? '',
       decoration: InputDecoration(
         labelText: 'Description',
       ),
