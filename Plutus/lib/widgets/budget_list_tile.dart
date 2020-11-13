@@ -11,15 +11,6 @@ class BudgetListTile extends StatefulWidget {
 
   BudgetListTile(this.category);
 
-  // void selectBudget(BuildContext ctx) {
-  //   Navigator.of(ctx).push(
-  //     MaterialPageRoute(
-  //       builder: (_) {
-  //         return BudgetInfoScreen(
-  //             budget.title, ''); //TODO update to the right maincategory
-  //       },
-  //     ),
-  //   );
   @override
   _BudgetListTileState createState() => _BudgetListTileState();
 }
@@ -57,10 +48,9 @@ class _BudgetListTileState extends State<BudgetListTile> {
                     height: 20,
                   ),
                   new LinearPercentIndicator(
-                    width: 350.0,
+                    width: MediaQuery.of(context).size.width * .85,
                     lineHeight: 12.0,
-                    percent: monthlyBudget.transactions ==
-                            null //TODO FIX ALL TRANSACTION CALLS WITH PROVIDER FUNCTION
+                    percent: monthlyBudget.transactions == null
                         ? 0.0
                         : monthlyBudget.getCategoryTransactionsAmount(
                                     monthlyBudget, widget.category) >
@@ -88,7 +78,9 @@ class _BudgetListTileState extends State<BudgetListTile> {
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
                 color: Colors.grey[550],
                 height: 100,
-                child: monthlyBudget.transactions == null
+                child: monthlyBudget.getCategoryTransactions(
+                            monthlyBudget, widget.category) ==
+                        null
                     ? Text(
                         'No transaction has been added yet',
                         style: TextStyle(
@@ -97,7 +89,9 @@ class _BudgetListTileState extends State<BudgetListTile> {
                         textAlign: TextAlign.center,
                       )
                     : ListView(
-                        children: monthlyBudget.transactions
+                        children: monthlyBudget
+                            .getCategoryTransactions(
+                                monthlyBudget, widget.category)
                             .map(
                               (trans) => Row(
                                 mainAxisAlignment:
