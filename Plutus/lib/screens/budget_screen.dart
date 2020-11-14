@@ -1,10 +1,12 @@
+import 'package:Plutus/models/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import '../models/budget.dart';
-import '../widgets/budget_form.dart';
+import 'new_budget_screens/income_screen.dart';
 import '../widgets/budget_list_tile.dart';
+import '../models/categories.dart';
 
 import 'package:provider/provider.dart';
 import '../models/month_changer.dart';
@@ -21,25 +23,18 @@ class _BudgetScreenState extends State<BudgetScreen> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (_) => BudgetForm(),
+      builder: (_) => IncomeScreen(),
     ).then((newBudget) {
       if (newBudget == null) return;
       Provider.of<Budgets>(context, listen: false).addBudget(newBudget);
     });
   }
 
-  // double get totalBudget {
-  //   var sum = 0.0;
-  //   for (var i = 0; i < widget.budgets.length; i++) {
-  //     sum += widget.budgets[i].amount;
-  //   }
-  //   return sum;
-  // }
-
   @override
   Widget build(BuildContext context) {
-    final budgetsData = Provider.of<Budgets>(context);
+    final monthlyBudget = Provider.of<Budgets>(context).monthlyBudget;
     var monthData = Provider.of<MonthChanger>(context);
+    var monthlyTransactions = Provider.of<Transactions>(context);
 
     return Column(
       children: [
@@ -50,22 +45,29 @@ class _BudgetScreenState extends State<BudgetScreen> {
             child: buildMonthChanger(context, monthData),
           ),
         ),
-        RaisedButton(
-          child: Text('Add Budget'),
-          onPressed: () => _enterBudget(context),
-        ),
         Expanded(
           child: Container(
             margin: EdgeInsets.only(top: 40),
-            child: budgetsData.budgets.isEmpty
+            child: monthlyBudget == null
                 ? Center(
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: 250),
-                      child: Text(
-                        'No budget has been added this month.',
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Theme.of(context).primaryColor),
+                      child: Column(
+                        children: [
+                          Text(
+                            'No budget has been added this month.',
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Theme.of(context).primaryColor),
+                            textAlign: TextAlign.center,
+                          ),
+                          RaisedButton(
+                            child: Text('Add Budget'),
+                            color: Theme.of(context).primaryColor,
+                            textColor: Theme.of(context).canvasColor,
+                            onPressed: () => _enterBudget(context),
+                          ),
+                        ],
                       ),
                     ),
                   )
@@ -106,7 +108,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                             fontSize: 18),
                                       ),
                                       AutoSizeText(
-                                        '\$4,900.00',
+                                        '\$${monthlyBudget.amount < monthlyTransactions.monthlyExpenses ? 0.0 : monthlyBudget.amount - monthlyTransactions.monthlyExpenses}',
                                         maxLines: 1,
                                         style: TextStyle(
                                             color:
@@ -127,7 +129,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                             fontSize: 18),
                                       ),
                                       AutoSizeText(
-                                        '\$213.04',
+                                        '\$',
                                         maxLines: 1,
                                         style: TextStyle(
                                             color:
@@ -147,7 +149,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                   new LinearPercentIndicator(
                                     width: 310.0,
                                     lineHeight: 14.0,
-                                    percent: 0.5,
+                                    percent: monthlyTransactions
+                                                .monthlyExpenses >
+                                            monthlyBudget.amount
+                                        ? 1
+                                        : monthlyTransactions.monthlyExpenses /
+                                            monthlyBudget.amount,
                                     backgroundColor: Colors.black,
                                     progressColor: Colors.amber,
                                   ),
@@ -157,11 +164,10 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                 height: 20,
                               ),
                               Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   AutoSizeText(
-                                    '\$2,000.00 of \$3,000.00',
-                                    // '\$2,000.00 of \$$totalBudget',
+                                    '\$${monthlyTransactions.monthlyExpenses} of \$${monthlyBudget.amount}',
                                     maxLines: 1,
                                     style: TextStyle(
                                         color: Theme.of(context).primaryColor,
@@ -176,9 +182,10 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       Divider(height: 10),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: budgetsData.budgets.length,
+                          itemCount: monthlyBudget.categoryAmount
+                              .length, //TODO check for categories not budgeted for, but have expenses for
                           itemBuilder: (context, index) =>
-                              BudgetListTile(budgetsData.budgets[index]),
+                              BudgetListTile(MainCategory.values[index]),
                         ),
                       ),
                     ]),

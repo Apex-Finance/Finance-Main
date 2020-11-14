@@ -1,6 +1,7 @@
 import 'package:Plutus/models/categories.dart';
 import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import './budget_screen.dart';
 import './transaction_screen.dart';
@@ -19,6 +20,32 @@ class TabScreen extends StatefulWidget {
 }
 
 class _TabScreenState extends State<TabScreen> {
+  final _auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    super.initState();
+
+    getUser();
+  }
+
+  void getUser() {
+    try {
+      final userChanges = _auth.userChanges();
+      userChanges.listen(
+        (User user) {
+          if (user == null) {
+            print('User is currently signed out!');
+          } else {
+            print('User is signed in!');
+          }
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
   List<Transaction> transactions = [];
   List<Widget> _pages = [];
   List<Category> categories = [];
