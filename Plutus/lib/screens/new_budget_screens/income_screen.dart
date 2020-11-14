@@ -14,10 +14,6 @@ class IncomeScreen extends StatefulWidget {
 
 class _IncomeScreenState extends State<IncomeScreen> {
   final _formKey = GlobalKey<FormState>();
-  // For some reason this initialization requires explicit values or
-  // it won't push to the next screen
-
-  // Validates the budget amount and pushes to First Budget Screen
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +45,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                           style: Theme.of(context).textTheme.bodyText1,
                           autofocus: true,
                           keyboardType: TextInputType.number,
-                          initialValue: '0.00',
+                          //initialValue: '0.00', // Since autofocus == true, not needed
                           onEditingComplete: () {
                             if (_formKey.currentState.validate()) {
                               _formKey.currentState.save();
