@@ -3,6 +3,7 @@ import 'package:Plutus/models/month_changer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import './screens/tab_screen.dart';
 import './screens/intro_screen.dart';
@@ -16,7 +17,10 @@ import './models/transaction.dart';
 import './models/budget.dart';
 import './providers/auth.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+   runApp(MyApp());}
 
 class MyApp extends StatelessWidget {
   @override

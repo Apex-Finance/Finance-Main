@@ -1,8 +1,10 @@
 // import 'dart:math';
+
 import 'tab_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../providers/auth.dart';
 import '../models/http_exception.dart';
@@ -99,10 +101,9 @@ class AuthCard extends StatefulWidget {
 class _AuthCardState extends State<AuthCard> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   AuthMode _authMode = AuthMode.Login;
-  Map<String, String> _authData = {
-    'email': '',
-    'password': '',
-  };
+  final _auth = FirebaseAuth.instance;
+  String email;
+  String password;
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
@@ -135,21 +136,40 @@ class _AuthCardState extends State<AuthCard> {
     setState(() {
       _isLoading = true;
     });
-    try {
       if (_authMode == AuthMode.Login) {
+    try {
         // Log user in
-        await Provider.of<Auth>(context, listen: false).login(
-          _authData['email'],
-          _authData['password'],
-        );
-      } else {
-        // Sign user up
-        await Provider.of<Auth>(context, listen: false).signup(
-          _authData['email'],
-          _authData['password'],
-        );
+        final user = await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
+        if (user != null) {
+          Navigator.pushNamed(context, TabScreen.routeName);
+        }}on FirebaseAuthException catch (error) {
+      var errorMessage = 'Authentication failed';
+      if (error.toString().contains('EMAIL_EXISTS')) {
+        errorMessage = 'This email address is already in use.';
+      } else if (error.toString().contains('INVALID_EMAIL')) {
+        errorMessage = 'This is not a valid email address';
+      } else if (error.toString().contains('WEAK_PASSWORD')) {
+        errorMessage = 'This password is too weak.';
+      } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
+        errorMessage = 'Could not find a user with that email.';
+      } else if (error.toString().contains('INVALID_PASSWORD')) {
+        errorMessage = 'Invalid password.';
       }
-    } on HttpException catch (error) {
+      _showErrorDialog(errorMessage);
+    } catch (error) {
+      const errorMessage =
+          'Could not authenticate you. Please try again later.';
+      _showErrorDialog(errorMessage);
+    }}
+      } else {
+        try {
+        // Sign user up
+        final newUser = await _auth.createUserWithEmailAndPassword(
+            email: email, password: password);
+        if (newUser != null) {
+          Navigator.pushNamed(context, TabScreen.routeName);
+        }}on FirebaseAuthException catch (error) {
       var errorMessage = 'Authentication failed';
       if (error.toString().contains('EMAIL_EXISTS')) {
         errorMessage = 'This email address is already in use.';
@@ -168,6 +188,8 @@ class _AuthCardState extends State<AuthCard> {
           'Could not authenticate you. Please try again later.';
       _showErrorDialog(errorMessage);
     }
+      }
+    } 
 
     setState(() {
       _isLoading = false;
@@ -215,7 +237,7 @@ class _AuthCardState extends State<AuthCard> {
                     return null;
                   },
                   onSaved: (value) {
-                    _authData['email'] = value;
+                    email = value;
                   },
                 ),
                 TextFormField(
@@ -229,7 +251,7 @@ class _AuthCardState extends State<AuthCard> {
                     }
                   },
                   onSaved: (value) {
-                    _authData['password'] = value;
+                    password = value;
                   },
                 ),
                 if (_authMode == AuthMode.Signup)

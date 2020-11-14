@@ -7,6 +7,7 @@ import '../screens/new_budget_screens/income_screen.dart';
 // Commented out until it is working
 //import './auth_screen.dart';
 import './tab_screen.dart';
+import './auth_screen.dart';
 
 class OnBoardingPage extends StatefulWidget {
   @override
@@ -85,7 +86,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           bodyWidget: RaisedButton(
             child: Text('Sign me up!'),
             onPressed: () =>
-                Navigator.of(context).pushNamed(TabScreen.routeName),
+                Navigator.of(context).pushNamed(AuthScreen.routeName),
             color: Colors.amber,
           ),
           image: _buildImage('lets get started.jpg'),
@@ -110,7 +111,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           decoration: pageDecoration,
         ),
       ],
-      onDone: () => Navigator.of(context).pushNamed(TabScreen.routeName),
+      onDone: () => Navigator.of(context).pushNamed(AuthScreen.routeName),
       onSkip: () => _onIntroEnd(context), // You can override onSkip callback
       showSkipButton: true,
       skipFlex: 0,
