@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import './first_budget_screen.dart';
 import '../../models/budget.dart';
+import '../../models/month_changer.dart';
 
 class IncomeScreen extends StatefulWidget {
   static const routeName = '/income';
@@ -15,10 +16,13 @@ class IncomeScreen extends StatefulWidget {
 class _IncomeScreenState extends State<IncomeScreen> {
   final _formKey = GlobalKey<FormState>();
 
+  // Validates the budget amount and pushes to First Budget Screen
+
   @override
   Widget build(BuildContext context) {
-    var _budget = Provider.of<Budget>(
-        context); // budget initialized to all nulls and subsequent changes will update Provider
+    var _budget = Provider.of<Budgets>(context)
+        .monthlyBudget; // budget initialized to all nulls and subsequent changes will update Provider
+    var monthData = Provider.of<MonthChanger>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('New Budget', style: Theme.of(context).textTheme.bodyText1),
@@ -50,6 +54,14 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             if (_formKey.currentState.validate()) {
                               _formKey.currentState.save();
                               // perhaps we need to call addBudget here?
+                              _budget.id = DateTime(monthData.selectedYear,
+                                      monthData.selectedMonth)
+                                  .toIso8601String();
+                              _budget.title = DateTime(monthData.selectedYear,
+                                      monthData.selectedMonth)
+                                  .toIso8601String();
+                              Provider.of<Budgets>(context, listen: false)
+                                  .addBudget(_budget);
                               Navigator.of(context)
                                   .pushNamed(FirstBudgetScreen.routeName);
                             }

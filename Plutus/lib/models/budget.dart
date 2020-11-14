@@ -11,6 +11,8 @@ class Budget with ChangeNotifier {
   List<Transaction> transactions;
   Map<MainCategory, double> categoryAmount;
 
+  double remainingMonthlyAmount;
+
   double get remainingAmount {
     double tempAmount = amount;
     if (categoryAmount != null)
@@ -20,12 +22,19 @@ class Budget with ChangeNotifier {
     return tempAmount;
   }
 
-  void setCategoryAmount(MainCategory category, double amount) {
-    if (amount > 0) {
-      categoryAmount[category] = amount;
-      notifyListeners();
-    }
-  }
+  // int getUnbudgetedCategoriesWithExpenses() {
+  //   var unbudgetedCategories = 0;
+  //   //expensive but necessary function; needs to be improved somehow
+  //   for (var transaction in transactions) {
+  //     if (categoryAmount[transaction.category] == null) {
+  //       print(transaction.category);
+  //       categoryAmount[transaction.category] = 0.00;
+  //       unbudgetedCategories++;
+  //     }
+  //     notifyListeners();
+  //   }
+  //   return unbudgetedCategories;
+  // }
 
   List<Transaction> getCategoryTransactions(
       Budget budget, MainCategory category) {
@@ -50,6 +59,12 @@ class Budget with ChangeNotifier {
     }
   }
 
+  List<MainCategory> get budgetedCategory {
+    return MainCategory.values
+        .where((category) => categoryAmount[category] != null)
+        .toList();
+  }
+
   Budget({
     this.id,
     this.title,
@@ -62,9 +77,10 @@ class Budget with ChangeNotifier {
 class Budgets with ChangeNotifier {
   List<Budget> _budgets = [];
   MonthChanger monthChanger;
-  List<Transaction> monthlyTransactions;
+  Transactions transactions;
+  List<Transaction> get monthlyTransactions => transactions.monthlyTransactions;
 
-  Budgets(this.monthChanger, this.monthlyTransactions, this._budgets);
+  Budgets(this.monthChanger, this.transactions, this._budgets);
   List<Budget> get budgets => [..._budgets];
 
   Budget get monthlyBudget {
@@ -72,11 +88,28 @@ class Budgets with ChangeNotifier {
       (budget) =>
           DateTime.parse(budget.title).month == monthChanger.selectedMonth &&
           DateTime.parse(budget.title).year == monthChanger.selectedYear,
-      orElse: () => null,
+      orElse: () => Budget(
+          id: null,
+          title: null,
+          amount: null,
+          transactions: null,
+          categoryAmount: null),
     );
-    if (budgetWithTransactions != null)
+    if (budgetWithTransactions.amount != null) {
+      //b/c of the way data is set up, initializing properties here, but should eventually be getters in Budget Provider
       budgetWithTransactions.transactions = monthlyTransactions;
+      budgetWithTransactions.remainingMonthlyAmount =
+          budgetWithTransactions.amount - transactions.monthlyExpenses;
+    }
     return budgetWithTransactions;
+  }
+
+  void setCategoryAmount(MainCategory category, double amount) {
+    if (amount > 0) {
+      print('actuallyset');
+      monthlyBudget.categoryAmount[category] = amount;
+      notifyListeners();
+    }
   }
 
   void addBudget(Budget budget) {

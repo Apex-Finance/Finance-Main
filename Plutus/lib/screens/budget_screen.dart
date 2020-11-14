@@ -6,7 +6,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import '../models/budget.dart';
 import 'new_budget_screens/income_screen.dart';
 import '../widgets/budget_list_tile.dart';
-import '../models/categories.dart';
 
 import 'package:provider/provider.dart';
 import '../models/month_changer.dart';
@@ -26,8 +25,38 @@ class _BudgetScreenState extends State<BudgetScreen> {
       builder: (_) => IncomeScreen(),
     ).then((newBudget) {
       if (newBudget == null) return;
-      Provider.of<Budgets>(context, listen: false).addBudget(newBudget);
+      Provider.of<Budgets>(context, listen: false)
+          .addBudget(newBudget); //TODO check if needed
     });
+  }
+
+  double _getRemainingAmountPerDay(
+      MonthChanger monthData, double remainingAmount) {
+    var daysInMonth = monthData.selectedMonth == 12
+        ? DateTime(monthData.selectedYear + 1, monthData.selectedMonth + 1, 0)
+        : DateTime(monthData.selectedYear, monthData.selectedMonth + 1, 0);
+
+    int daysLeft;
+    double remainingAmountPerDay;
+    if (monthData.selectedMonth == DateTime.now().month &&
+        monthData.selectedYear == DateTime.now().year) {
+      //current month (currently spending)
+      daysLeft = daysInMonth.day - DateTime.now().day;
+      remainingAmountPerDay = remainingAmount / daysLeft;
+    } else if (monthData.selectedYear > DateTime.now().year ||
+        (monthData.selectedMonth > DateTime.now().month &&
+            monthData.selectedYear == DateTime.now().year)) {
+      // in future (full month left)
+      daysLeft = daysInMonth.day;
+      remainingAmountPerDay = remainingAmount / daysLeft;
+    } else {
+      // in past (can't spend)
+      daysLeft = 0;
+      remainingAmountPerDay = 0;
+    }
+    if (remainingAmountPerDay < 0) remainingAmountPerDay = 0;
+
+    return remainingAmountPerDay;
   }
 
   @override
@@ -48,7 +77,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
         Expanded(
           child: Container(
             margin: EdgeInsets.only(top: 40),
-            child: monthlyBudget == null
+            child: monthlyBudget.id == null
                 ? Center(
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: 250),
@@ -129,7 +158,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                             fontSize: 18),
                                       ),
                                       AutoSizeText(
-                                        '\$',
+                                        '\$${_getRemainingAmountPerDay(monthData, monthlyBudget.remainingMonthlyAmount).toStringAsFixed(2)}',
                                         maxLines: 1,
                                         style: TextStyle(
                                             color:
@@ -182,10 +211,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       Divider(height: 10),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: monthlyBudget.categoryAmount
-                              .length, //TODO check for categories not budgeted for, but have expenses for
-                          itemBuilder: (context, index) =>
-                              BudgetListTile(MainCategory.values[index]),
+                          itemCount: monthlyBudget.categoryAmount.length,
+                          //+ monthlyBudget
+                          //     .getUnbudgetedCategoriesWithExpenses(),
+                          //TODO check for categories not budgeted for, but have expenses for
+                          itemBuilder: (context, index) => BudgetListTile(
+                              monthlyBudget.budgetedCategory[index]),
                         ),
                       ),
                     ]),

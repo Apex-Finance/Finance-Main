@@ -20,7 +20,8 @@ import './providers/auth.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-   runApp(MyApp());}
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
           update: (buildContext, monthChanger, transactions, previousBudgets) =>
-              Budgets(monthChanger, transactions.monthlyTransactions,
+              Budgets(monthChanger, transactions,
                   previousBudgets == null ? [] : previousBudgets.budgets),
           create: null,
         ),
