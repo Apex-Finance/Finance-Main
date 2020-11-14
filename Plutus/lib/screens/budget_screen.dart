@@ -30,6 +30,34 @@ class _BudgetScreenState extends State<BudgetScreen> {
     });
   }
 
+  double _getRemainingAmountPerDay(
+      MonthChanger monthData, double remainingAmount) {
+    var daysInMonth = monthData.selectedMonth == 12
+        ? DateTime(monthData.selectedYear + 1, monthData.selectedMonth + 1, 0)
+        : DateTime(monthData.selectedYear, monthData.selectedMonth + 1, 0);
+
+    int daysLeft;
+    double remainingAmountPerDay;
+    if (monthData.selectedMonth == DateTime.now().month &&
+        monthData.selectedYear == DateTime.now().year) {
+      //current month (currently spending)
+      daysLeft = daysInMonth.day - DateTime.now().day;
+      remainingAmountPerDay = remainingAmount / daysLeft;
+    } else if (monthData.selectedYear > DateTime.now().year ||
+        (monthData.selectedMonth > DateTime.now().month &&
+            monthData.selectedYear == DateTime.now().year)) {
+      // in future (full month left)
+      daysLeft = daysInMonth.day;
+      remainingAmountPerDay = remainingAmount / daysLeft;
+    } else {
+      // in past (can't spend)
+      daysLeft = 0;
+      remainingAmountPerDay = 0;
+    }
+
+    return remainingAmountPerDay;
+  }
+
   @override
   Widget build(BuildContext context) {
     final monthlyBudget = Provider.of<Budgets>(context).monthlyBudget;
@@ -129,7 +157,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                             fontSize: 18),
                                       ),
                                       AutoSizeText(
-                                        '\$',
+                                        '\$${_getRemainingAmountPerDay(monthData, monthlyBudget.remainingMonthlyAmount).toStringAsFixed(2)}',
                                         maxLines: 1,
                                         style: TextStyle(
                                             color:
@@ -182,8 +210,10 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       Divider(height: 10),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: monthlyBudget.categoryAmount
-                              .length, //TODO check for categories not budgeted for, but have expenses for
+                          itemCount: monthlyBudget.categoryAmount.length,
+                          //+ monthlyBudget
+                          //     .getUnbudgetedCategoriesWithExpenses(),
+                          //TODO check for categories not budgeted for, but have expenses for
                           itemBuilder: (context, index) =>
                               BudgetListTile(MainCategory.values[index]),
                         ),

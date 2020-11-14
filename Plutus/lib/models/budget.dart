@@ -11,6 +11,8 @@ class Budget with ChangeNotifier {
   List<Transaction> transactions;
   Map<MainCategory, double> categoryAmount;
 
+  double remainingMonthlyAmount;
+
   double get remainingAmount {
     double tempAmount = amount;
     if (categoryAmount != null)
@@ -26,6 +28,20 @@ class Budget with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  // int getUnbudgetedCategoriesWithExpenses() {
+  //   var unbudgetedCategories = 0;
+  //   //expensive but necessary function; needs to be improved somehow
+  //   for (var transaction in transactions) {
+  //     if (categoryAmount[transaction.category] == null) {
+  //       print(transaction.category);
+  //       categoryAmount[transaction.category] = 0.00;
+  //       unbudgetedCategories++;
+  //     }
+  //     notifyListeners();
+  //   }
+  //   return unbudgetedCategories;
+  // }
 
   List<Transaction> getCategoryTransactions(
       Budget budget, MainCategory category) {
@@ -62,9 +78,10 @@ class Budget with ChangeNotifier {
 class Budgets with ChangeNotifier {
   List<Budget> _budgets = [];
   MonthChanger monthChanger;
-  List<Transaction> monthlyTransactions;
+  Transactions transactions;
+  List<Transaction> get monthlyTransactions => transactions.monthlyTransactions;
 
-  Budgets(this.monthChanger, this.monthlyTransactions, this._budgets);
+  Budgets(this.monthChanger, this.transactions, this._budgets);
   List<Budget> get budgets => [..._budgets];
 
   Budget get monthlyBudget {
@@ -74,8 +91,12 @@ class Budgets with ChangeNotifier {
           DateTime.parse(budget.title).year == monthChanger.selectedYear,
       orElse: () => null,
     );
-    if (budgetWithTransactions != null)
+    if (budgetWithTransactions != null) {
+      //b/c of the way data is set up, initializing properties here, but should eventually be getters in Budget Provider
       budgetWithTransactions.transactions = monthlyTransactions;
+      budgetWithTransactions.remainingMonthlyAmount =
+          budgetWithTransactions.amount - transactions.monthlyExpenses;
+    }
     return budgetWithTransactions;
   }
 

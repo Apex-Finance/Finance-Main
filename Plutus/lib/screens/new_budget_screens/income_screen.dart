@@ -14,6 +14,7 @@ class IncomeScreen extends StatefulWidget {
 
 class _IncomeScreenState extends State<IncomeScreen> {
   final _formKey = GlobalKey<FormState>();
+  bool resetBudgetValues = true;
   // For some reason this initialization requires explicit values or
   // it won't push to the next screen
 
@@ -23,6 +24,10 @@ class _IncomeScreenState extends State<IncomeScreen> {
   Widget build(BuildContext context) {
     var _budget = Provider.of<Budget>(
         context); // budget initialized to all nulls and subsequent changes will update Provider
+        if(resetBudgetValues) {
+          _budget.id = null; _budget.amount = null; _budget.title = null; _budget.transactions = null; _budget.categoryAmount = null;
+          resetBudgetValues = false;
+        }
     return Scaffold(
       appBar: AppBar(
         title: Text('New Budget', style: Theme.of(context).textTheme.bodyText1),
