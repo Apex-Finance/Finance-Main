@@ -6,7 +6,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import '../models/budget.dart';
 import 'new_budget_screens/income_screen.dart';
 import '../widgets/budget_list_tile.dart';
-import '../models/categories.dart';
 
 import 'package:provider/provider.dart';
 import '../models/month_changer.dart';
@@ -26,7 +25,8 @@ class _BudgetScreenState extends State<BudgetScreen> {
       builder: (_) => IncomeScreen(),
     ).then((newBudget) {
       if (newBudget == null) return;
-      Provider.of<Budgets>(context, listen: false).addBudget(newBudget);
+      Provider.of<Budgets>(context, listen: false)
+          .addBudget(newBudget); //TODO check if needed
     });
   }
 
@@ -54,6 +54,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
       daysLeft = 0;
       remainingAmountPerDay = 0;
     }
+    if (remainingAmountPerDay < 0) remainingAmountPerDay = 0;
 
     return remainingAmountPerDay;
   }
@@ -76,7 +77,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
         Expanded(
           child: Container(
             margin: EdgeInsets.only(top: 40),
-            child: monthlyBudget == null
+            child: monthlyBudget.id == null
                 ? Center(
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: 250),
@@ -214,8 +215,8 @@ class _BudgetScreenState extends State<BudgetScreen> {
                           //+ monthlyBudget
                           //     .getUnbudgetedCategoriesWithExpenses(),
                           //TODO check for categories not budgeted for, but have expenses for
-                          itemBuilder: (context, index) =>
-                              BudgetListTile(MainCategory.values[index]),
+                          itemBuilder: (context, index) => BudgetListTile(
+                              monthlyBudget.budgetedCategory[index]),
                         ),
                       ),
                     ]),

@@ -22,13 +22,6 @@ class Budget with ChangeNotifier {
     return tempAmount;
   }
 
-  void setCategoryAmount(MainCategory category, double amount) {
-    if (amount > 0) {
-      categoryAmount[category] = amount;
-      notifyListeners();
-    }
-  }
-
   // int getUnbudgetedCategoriesWithExpenses() {
   //   var unbudgetedCategories = 0;
   //   //expensive but necessary function; needs to be improved somehow
@@ -66,6 +59,12 @@ class Budget with ChangeNotifier {
     }
   }
 
+  List<MainCategory> get budgetedCategory {
+    return MainCategory.values
+        .where((category) => categoryAmount[category] != null)
+        .toList();
+  }
+
   Budget({
     this.id,
     this.title,
@@ -89,15 +88,28 @@ class Budgets with ChangeNotifier {
       (budget) =>
           DateTime.parse(budget.title).month == monthChanger.selectedMonth &&
           DateTime.parse(budget.title).year == monthChanger.selectedYear,
-      orElse: () => null,
+      orElse: () => Budget(
+          id: null,
+          title: null,
+          amount: null,
+          transactions: null,
+          categoryAmount: null),
     );
-    if (budgetWithTransactions != null) {
+    if (budgetWithTransactions.amount != null) {
       //b/c of the way data is set up, initializing properties here, but should eventually be getters in Budget Provider
       budgetWithTransactions.transactions = monthlyTransactions;
       budgetWithTransactions.remainingMonthlyAmount =
           budgetWithTransactions.amount - transactions.monthlyExpenses;
     }
     return budgetWithTransactions;
+  }
+
+  void setCategoryAmount(MainCategory category, double amount) {
+    if (amount > 0) {
+      print('actuallyset');
+      monthlyBudget.categoryAmount[category] = amount;
+      notifyListeners();
+    }
   }
 
   void addBudget(Budget budget) {

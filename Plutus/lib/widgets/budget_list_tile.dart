@@ -80,8 +80,8 @@ class _BudgetListTileState extends State<BudgetListTile> {
                 height: 100,
                 child: monthlyBudget.getCategoryTransactions(
                             monthlyBudget, widget.category) ==
-                        null
-                    ? Text(
+                        []
+                    ? Text( // TODO DOES NOT WORK...WHY? same with color of container too
                         'No transaction has been added yet',
                         style: TextStyle(
                             color: Theme.of(context).primaryColor,
