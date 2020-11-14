@@ -1,3 +1,4 @@
+import 'package:Plutus/screens/new_budget_screens/first_budget_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +19,6 @@ class CategoryListTile extends StatefulWidget {
 }
 
 class _CategoryListTileState extends State<CategoryListTile> {
-  var errorMessage = '';
   // Saves the current inputed category amount
   // void setCategoryAmount(String val) {
   //   widget.budget.categoryAmount[widget.category] = double.parse(val);
@@ -56,14 +56,35 @@ class _CategoryListTileState extends State<CategoryListTile> {
                     if (_controller.text ==
                         '') // if field left empty, set it to 0.00
                       _controller.text =
-                          '0.00'; //TODO NOT WORKING... PROB NEED A LIST OF CONTROLLERS?? NOT SURE
-                    //TODO ADD INDIVIDUAL TEXTFIELD VALIDATION HERE, obviously if it's a number and in range but also not zero
+                          '0.00'; // Is currently working on Juan's phone  ¯\_(ツ)_/¯
                     if (_controller.text
                         .contains(new RegExp(r'^\d*(\.\d+)?$'))) {
                       if (double.parse(double.parse(_controller.text)
-                              .toStringAsFixed(2)) <=
-                          0.00)
-                        errorMessage = 'Please enter an amount greater than 0';
+                              .toStringAsFixed(2)) <
+                          0.00) {
+                        Scaffold.of(context).showSnackBar(
+                          SnackBar(
+                            content: Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Text('Amount must be greater than 0'),
+                            ),
+                          ),
+                        );
+                      }
+                      // MAY NOT NEED SINCE THE USER WILL RECEIVE THE OTHER ERROR IF CATEGORY_AMOUNT > BUDGET_AMOUNT
+                      // if (double.parse(double.parse(_controller.text)
+                      //         .toStringAsFixed(2)) >
+                      //     999999999.99) {
+                      //   Scaffold.of(context).showSnackBar(
+                      //     SnackBar(
+                      //       content: Padding(
+                      //         padding: const EdgeInsets.only(top: 5.0),
+                      //         child: Text('Max amount is \$999,999,999.99'),
+                      //       ),
+                      //     ),
+                      //   );
+                      // }
+                      // set the category amount if validation checks pass
                       budget.setCategoryAmount(
                           widget.category, double.parse(_controller.text));
                     }
