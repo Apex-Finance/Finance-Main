@@ -1,12 +1,6 @@
-import 'package:Plutus/screens/tab_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import '../screens/new_budget_screens/income_screen.dart';
 
-// TODO Need to finish Auth screen
-// Commented out until it is working
-//import './auth_screen.dart';
-import './tab_screen.dart';
 import './auth_screen.dart';
 
 class OnBoardingPage extends StatefulWidget {
@@ -16,12 +10,6 @@ class OnBoardingPage extends StatefulWidget {
 
 class _OnBoardingPageState extends State<OnBoardingPage> {
   final introKey = GlobalKey<IntroductionScreenState>();
-
-  void _onIntroEnd(context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => TabScreen()),
-    );
-  }
 
   Widget _buildImage(String assetName) {
     return Align(

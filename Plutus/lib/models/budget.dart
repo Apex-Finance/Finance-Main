@@ -22,20 +22,6 @@ class Budget with ChangeNotifier {
     return tempAmount;
   }
 
-  // int getUnbudgetedCategoriesWithExpenses() {
-  //   var unbudgetedCategories = 0;
-  //   //expensive but necessary function; needs to be improved somehow
-  //   for (var transaction in transactions) {
-  //     if (categoryAmount[transaction.category] == null) {
-  //       print(transaction.category);
-  //       categoryAmount[transaction.category] = 0.00;
-  //       unbudgetedCategories++;
-  //     }
-  //     notifyListeners();
-  //   }
-  //   return unbudgetedCategories;
-  // }
-
   List<Transaction> getCategoryTransactions(
       Budget budget, MainCategory category) {
     return budget.transactions == null
@@ -63,6 +49,19 @@ class Budget with ChangeNotifier {
     return MainCategory.values
         .where((category) => categoryAmount[category] != null)
         .toList();
+  }
+
+  void setUnbudgetedCategory() {
+    // adds categories that were not budgeted but expenses were made
+    for (var transaction in transactions)
+      if (categoryAmount[transaction.category] == null)
+        categoryAmount[transaction.category] = 0.00;
+    notifyListeners();
+  }
+
+  List<MainCategory> get budgetedAndUnbudgetedCategories {
+    setUnbudgetedCategory();
+    return budgetedCategory;
   }
 
   Budget({
@@ -107,11 +106,11 @@ class Budgets with ChangeNotifier {
   void setCategoryAmount(MainCategory category, double amount) {
     if (amount > 0) {
       monthlyBudget.categoryAmount[category] = amount;
-      notifyListeners();
     }
     if (amount == 0) {
       monthlyBudget.categoryAmount.remove(category);
     }
+    notifyListeners();
   }
 
   void addBudget(Budget budget) {

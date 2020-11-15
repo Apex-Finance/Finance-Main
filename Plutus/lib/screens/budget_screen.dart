@@ -211,12 +211,11 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       Divider(height: 10),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: monthlyBudget.categoryAmount.length,
-                          //+ monthlyBudget
-                          //     .getUnbudgetedCategoriesWithExpenses(),
-                          //TODO check for categories not budgeted for, but have expenses for
+                          itemCount: monthlyBudget
+                              .budgetedAndUnbudgetedCategories.length,
                           itemBuilder: (context, index) => BudgetListTile(
-                              monthlyBudget.budgetedCategory[index]),
+                              monthlyBudget
+                                  .budgetedAndUnbudgetedCategories[index]),
                         ),
                       ),
                     ]),
