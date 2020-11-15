@@ -1,6 +1,7 @@
 import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import '../../widgets/category_list_tile.dart';
 import '../../models/categories.dart';
@@ -45,10 +46,43 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(15),
-                  child: Text(
-                    'Total Budget: \$${budget.amount}   Remaining Budget:\$${budget.remainingAmount}',
-                    style: TextStyle(color: Colors.amber, fontSize: 15),
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Total Budget:',
+                            style: TextStyle(color: Colors.amber, fontSize: 15),
+                          ),
+                          AutoSizeText(
+                            '\$${budget.amount}',
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 18),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Remaining Budget:',
+                            style: TextStyle(color: Colors.amber, fontSize: 15),
+                          ),
+                          AutoSizeText(
+                            '\$${budget.remainingAmount}',
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 18),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(
