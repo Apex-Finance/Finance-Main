@@ -73,9 +73,9 @@ class _CategoryListTileState extends State<CategoryListTile> {
                             ),
                           ),
                         );
-                        budgets.setCategoryAmount(
-                            widget.category, double.parse(_controller.text));
                       }
+                      budgets.setCategoryAmount(
+                          widget.category, double.parse(_controller.text));
                       // MAY NOT NEED SINCE THE USER WILL RECEIVE THE OTHER ERROR IF CATEGORY_AMOUNT > BUDGET_AMOUNT
                       // if (double.parse(double.parse(_controller.text)
                       //         .toStringAsFixed(2)) >
