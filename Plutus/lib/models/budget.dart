@@ -109,6 +109,9 @@ class Budgets with ChangeNotifier {
       monthlyBudget.categoryAmount[category] = amount;
       notifyListeners();
     }
+    if (amount == 0) {
+      monthlyBudget.categoryAmount.remove(category);
+    }
   }
 
   void addBudget(Budget budget) {
