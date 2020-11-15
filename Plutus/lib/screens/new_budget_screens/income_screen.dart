@@ -36,8 +36,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
               key: _formKey,
               child: Column(
                 children: [
-                  Text("Monthly Income",
-                      style: Theme.of(context).textTheme.bodyText1),
+                  Text(
+                    "Monthly Income",
+                    style: TextStyle(
+                      color: Colors.amber,
+                      fontSize: 35,
+                    ),
+                  ),
                   SizedBox(
                     height: 50,
                   ),

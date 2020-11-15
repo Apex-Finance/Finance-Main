@@ -92,24 +92,25 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           image: _buildImage('lets get started.jpg'),
           decoration: pageDecoration,
         ),
-        PageViewModel(
-          title: "Want to manually create a budget?",
-          bodyWidget: RaisedButton(
-            onPressed: () {
-              Navigator.of(context).popAndPushNamed(IncomeScreen.routeName);
-            },
-            child: const Text(
-              'Create a Budget',
-              style: TextStyle(color: Colors.black),
-            ),
-            color: Colors.amber,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-          image: _buildImage('Budgeting Methods_Banner.png'),
-          decoration: pageDecoration,
-        ),
+        // NOT NEEDED IN INITIAL WALKTHROUGH
+        // PageViewModel(
+        //   title: "Want to manually create a budget?",
+        //   bodyWidget: RaisedButton(
+        //     onPressed: () {
+        //       Navigator.of(context).popAndPushNamed(IncomeScreen.routeName);
+        //     },
+        //     child: const Text(
+        //       'Create a Budget',
+        //       style: TextStyle(color: Colors.black),
+        //     ),
+        //     color: Colors.amber,
+        //     shape: RoundedRectangleBorder(
+        //       borderRadius: BorderRadius.circular(8.0),
+        //     ),
+        //   ),
+        //   image: _buildImage('Budgeting Methods_Banner.png'),
+        //   decoration: pageDecoration,
+        // ),
       ],
       onDone: () => Navigator.of(context).pushNamed(AuthScreen.routeName),
       onSkip: () => introKey.currentState?.animateScroll(
