@@ -61,7 +61,6 @@ class _CategoryListTileState extends State<CategoryListTile> {
                           '0.00'; // Is currently working on Juan's phone  ¯\_(ツ)_/¯
                     if (_controller.text
                         .contains(new RegExp(r'^\d*(\.\d+)?$'))) {
-                      //TODO Not displaying for some reason (tried -500 and 0.88888)
                       if (double.parse(double.parse(_controller.text)
                               .toStringAsFixed(2)) <
                           0.00) {
@@ -73,8 +72,6 @@ class _CategoryListTileState extends State<CategoryListTile> {
                             ),
                           ),
                         );
-                        budgets.setCategoryAmount(
-                            widget.category, double.parse(_controller.text));
                       }
                       // MAY NOT NEED SINCE THE USER WILL RECEIVE THE OTHER ERROR IF CATEGORY_AMOUNT > BUDGET_AMOUNT
                       // if (double.parse(double.parse(_controller.text)
@@ -90,6 +87,8 @@ class _CategoryListTileState extends State<CategoryListTile> {
                       //   );
                       // }
                       // set the category amount if validation checks pass
+                      budget.setCategoryAmount(
+                          widget.category, double.parse(_controller.text));
                     }
                   } else if (_controller.text == '0.00') _controller.text = '';
                 },
@@ -98,6 +97,11 @@ class _CategoryListTileState extends State<CategoryListTile> {
                   // autofocus: true, (probably not needed)
                   keyboardType: TextInputType.number,
                   controller: _controller,
+                  // Also allow the user to edit the textfield as much as he wants
+                  // onEditingComplete: () {
+                  //   print('onEditingComplete');
+                  //   setCategoryAmount();
+                  // },
                   onFieldSubmitted: (val) {
                     //TODO GO TO NEXT FIELD
                     // need to outsource function to Provider to notifyListeners
