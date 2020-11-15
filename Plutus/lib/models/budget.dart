@@ -106,7 +106,6 @@ class Budgets with ChangeNotifier {
 
   void setCategoryAmount(MainCategory category, double amount) {
     if (amount > 0) {
-      print('actuallyset');
       monthlyBudget.categoryAmount[category] = amount;
       notifyListeners();
     }
