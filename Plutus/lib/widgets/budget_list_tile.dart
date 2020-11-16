@@ -48,7 +48,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                     height: 20,
                   ),
                   new LinearPercentIndicator(
-                    width: MediaQuery.of(context).size.width * .85,
+                    width: MediaQuery.of(context).size.width * .8,
                     lineHeight: 12.0,
                     percent: monthlyBudget.transactions == null
                         ? 0.0
@@ -81,7 +81,8 @@ class _BudgetListTileState extends State<BudgetListTile> {
                 child: monthlyBudget.getCategoryTransactions(
                             monthlyBudget, widget.category) ==
                         []
-                    ? Text( // TODO DOES NOT WORK...WHY? same with color of container too
+                    ? Text(
+                        // TODO DOES NOT WORK...WHY? same with color of container too
                         'No transaction has been added yet',
                         style: TextStyle(
                             color: Theme.of(context).primaryColor,
