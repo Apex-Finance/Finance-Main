@@ -117,11 +117,7 @@ class _AuthCardState extends State<AuthCard> {
         actions: <Widget>[
           FlatButton(
             child: Text('Okay'),
-            onPressed: () {
-              Navigator.of(ctx).push(
-                MaterialPageRoute(builder: (_) => TabScreen()),
-              );
-            },
+            onPressed: () => Navigator.pop(context),
           )
         ],
       ),
@@ -147,21 +143,16 @@ class _AuthCardState extends State<AuthCard> {
         }
       } on FirebaseAuthException catch (error) {
         var errorMessage = 'Authentication failed';
-        if (error.toString().contains('EMAIL_EXISTS')) {
-          errorMessage = 'This email address is already in use.';
-        } else if (error.toString().contains('INVALID_EMAIL')) {
+        if (error.code == 'invalid-email') {
           errorMessage = 'This is not a valid email address';
-        } else if (error.toString().contains('WEAK_PASSWORD')) {
-          errorMessage = 'This password is too weak.';
-        } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
-          errorMessage = 'Could not find a user with that email.';
-        } else if (error.toString().contains('INVALID_PASSWORD')) {
-          errorMessage = 'Invalid password.';
+        } else if (error.code == 'user-not-found') {
+          errorMessage = 'This user is not found.';
+        } else if (error.code == 'wrong-password') {
+          errorMessage = 'Incorrect password';
         }
         _showErrorDialog(errorMessage);
       } catch (error) {
-        const errorMessage =
-            'Could not authenticate you. Please try again later.';
+        const errorMessage = 'Could not sign in. Please try again later.';
         _showErrorDialog(errorMessage);
       }
     } else {
@@ -174,21 +165,17 @@ class _AuthCardState extends State<AuthCard> {
         }
       } on FirebaseAuthException catch (error) {
         var errorMessage = 'Authentication failed';
-        if (error.toString().contains('EMAIL_EXISTS')) {
+        if (error.code == 'email-already-in-use') {
           errorMessage = 'This email address is already in use.';
-        } else if (error.toString().contains('INVALID_EMAIL')) {
+        } else if (error.code == 'invalid-email') {
           errorMessage = 'This is not a valid email address';
-        } else if (error.toString().contains('WEAK_PASSWORD')) {
+        } else if (error.code == 'weak-password') {
           errorMessage = 'This password is too weak.';
-        } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
-          errorMessage = 'Could not find a user with that email.';
-        } else if (error.toString().contains('INVALID_PASSWORD')) {
-          errorMessage = 'Invalid password.';
         }
         _showErrorDialog(errorMessage);
       } catch (error) {
         const errorMessage =
-            'Could not authenticate you. Please try again later.';
+            'Could not create an account. Please try again later.';
         _showErrorDialog(errorMessage);
       }
     }
