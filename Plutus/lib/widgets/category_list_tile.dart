@@ -19,11 +19,6 @@ class CategoryListTile extends StatefulWidget {
 }
 
 class _CategoryListTileState extends State<CategoryListTile> {
-  // Saves the current inputed category amount
-  // void setCategoryAmount(String val) {
-  //   widget.budget.categoryAmount[widget.category] = double.parse(val);
-  // }
-
   @override
   Widget build(BuildContext context) {
     Budgets budgets = Provider.of<Budgets>(
@@ -57,10 +52,10 @@ class _CategoryListTileState extends State<CategoryListTile> {
                     if (_controller.text ==
                         '') // if field left empty, set it to 0.00
                       _controller.text =
-                          '0.00'; // Is currently working on Juan's phone  ¯\_(ツ)_/¯
+                          '0.00'; // Only works sometimes; is random ¯\_(ツ)_/¯
                     if (_controller.text
                         .contains(new RegExp(r'^\d*(\.\d+)?$'))) {
-                      //TODO Not displaying for some reason (tried -500 and 0.88888)
+                      //TODO Not displaying for some reason (tried -500)
                       if (double.parse(double.parse(_controller.text)
                               .toStringAsFixed(2)) <
                           0.00) {
@@ -75,26 +70,12 @@ class _CategoryListTileState extends State<CategoryListTile> {
                       }
                       budgets.setCategoryAmount(
                           widget.category, double.parse(_controller.text));
-                      // MAY NOT NEED SINCE THE USER WILL RECEIVE THE OTHER ERROR IF CATEGORY_AMOUNT > BUDGET_AMOUNT
-                      // if (double.parse(double.parse(_controller.text)
-                      //         .toStringAsFixed(2)) >
-                      //     999999999.99) {
-                      //   Scaffold.of(context).showSnackBar(
-                      //     SnackBar(
-                      //       content: Padding(
-                      //         padding: const EdgeInsets.only(top: 5.0),
-                      //         child: Text('Max amount is \$999,999,999.99'),
-                      //       ),
-                      //     ),
-                      //   );
-                      // }
-                      // set the category amount if validation checks pass
+                      print(_controller.text);
                     }
                   } else if (_controller.text == '0.00') _controller.text = '';
                 },
                 child: TextFormField(
                   style: Theme.of(context).textTheme.bodyText1,
-                  // autofocus: true, (probably not needed)
                   keyboardType: TextInputType.number,
                   controller: _controller,
                   onFieldSubmitted: (val) {

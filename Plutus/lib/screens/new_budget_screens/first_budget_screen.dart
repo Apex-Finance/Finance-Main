@@ -16,7 +16,6 @@ class FirstBudgetScreen extends StatefulWidget {
 
 class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   final _formKey = GlobalKey<FormState>();
-  var errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
       body: Padding(
         padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
         child: Container(
-          //height: 400,
           child: Form(
             key: _formKey,
             child: Column(
@@ -91,11 +89,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                     itemCount: MainCategory.values.length,
                     itemBuilder: (context, index) => CategoryListTile(
                       MainCategory.values[index],
-                      //budget.categoryAmount != null
                       //?
-                      //: 0
                     ),
-                    //Navigator.of(context).pushNamed(CategoryListTile.routeName, arguments: budget),//.then((budgets) => function_to_subtract_budgets.categoryData['category_name']_from_totalprice);
                   ),
                 ),
                 SizedBox(
@@ -103,37 +98,52 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                 ),
                 Container(
                   alignment: Alignment.bottomRight,
-                  child: FloatingActionButton.extended(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    onPressed: () {
-                      //TODO UPDATE WHATEVER FIELD THEY WERE ENTERING WHEN TAPPED..would need the list of focusnodes first
-                      setState(() {
-                        if (budget.remainingAmount < 0.00)
-                          errorMessage =
-                              'You have budgeted more money than is available this month.';
-                        else if (budget.remainingAmount > 0.00) {
-                          errorMessage =
-                              'You have some money that still needs to be budgeted.';
-                        } else {
-                          errorMessage = '';
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              '/tab', (Route<dynamic> route) => false);
-                        }
-                      });
-                    }, // removes all screens besides tab (useful after intro or just normal budget creation)
-                    label: Text('Add Budget'),
-                  ),
-                ),
-                if (errorMessage != '')
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      errorMessage,
-                      style: Theme.of(context).textTheme.bodyText1,
+                  child: Builder(
+                    builder: (context) => FloatingActionButton.extended(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      onPressed: () {
+                        //TODO UPDATE WHATEVER FIELD THEY WERE ENTERING WHEN TAPPED..would need the list of focusnodes first
+                        setState(() {
+                          if (budget.remainingAmount < 0.00)
+                            Scaffold.of(context).showSnackBar(
+                              SnackBar(
+                                content: Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: Text(
+                                    'You have budgeted more money than is available this month.',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                ),
+                              ),
+                            );
+                          else if (budget.remainingAmount > 0.00) {
+                            Scaffold.of(context).showSnackBar(
+                              SnackBar(
+                                content: Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: Text(
+                                    'You have some money that still needs to be budgeted.',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/tab', (Route<dynamic> route) => false);
+                          }
+                        });
+                      }, // removes all screens besides tab (useful after intro or just normal budget creation)
+                      label: Text('Add Budget'),
                     ),
                   ),
+                ),
+                //TODO needs to be removed whent the keyboard pops up, takes up too much space
+                // Looks bad when the kebyoard is open
                 SizedBox(
-                  height: 25,
+                  height: 70,
                 ),
               ],
             ),
