@@ -41,6 +41,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
         width: 50,
         child: Row(
           children: [
+            // This somehow has to change to red if it's wrong
             Text('\$', style: Theme.of(context).textTheme.bodyText1),
             Expanded(
               child: Focus(
@@ -70,7 +71,6 @@ class _CategoryListTileState extends State<CategoryListTile> {
                       }
                       budgets.setCategoryAmount(
                           widget.category, double.parse(_controller.text));
-                      print(_controller.text);
                     }
                   } else if (_controller.text == '0.00') _controller.text = '';
                 },
@@ -85,6 +85,15 @@ class _CategoryListTileState extends State<CategoryListTile> {
                   onEditingComplete: () {
                     FocusScope.of(context)
                         .nextFocus(); //TODO NOT WORKING--NEED A LIST OF FOCUSNODES PASSED IN...
+                  },
+
+                  // TESTING RN
+                  onSaved: (val) =>
+                      _controller.text = double.parse(val) as String,
+                  validator: (val) {
+                    if (double.parse(double.parse(val).toStringAsFixed(2)) <=
+                        0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
+                      return '0';
                   },
                 ),
               ),
