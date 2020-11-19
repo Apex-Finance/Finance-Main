@@ -73,7 +73,10 @@ class _IncomeScreenState extends State<IncomeScreen> {
                           },
                           onSaved: (val) => _budget.amount = double.parse(val),
                           validator: (val) {
-                            if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
+                            if (val
+                                .contains(new RegExp(r'-?[0-9]\d*(\.\d+)?$'))) {
+                              print(val);
+                              // TODO Restrict the decimal place to hundreths
                               // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
                               if (double.parse(
                                       double.parse(val).toStringAsFixed(2)) <=

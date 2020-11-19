@@ -38,7 +38,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
         style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 15),
       ),
       trailing: Container(
-        width: 50,
+        width: 52,
         child: Row(
           children: [
             // This somehow has to change to red if it's wrong
@@ -55,8 +55,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                       _controller.text =
                           '0.00'; // Only works sometimes; is random ¯\_(ツ)_/¯
                     if (_controller.text
-                        .contains(new RegExp(r'^\d*(\.\d+)?$'))) {
-                      //TODO Not displaying for some reason (tried -500)
+                        .contains(new RegExp(r'-?[0-9]\d*(\.\d+)?$'))) {
                       if (double.parse(double.parse(_controller.text)
                               .toStringAsFixed(2)) <
                           0.00) {
@@ -91,9 +90,10 @@ class _CategoryListTileState extends State<CategoryListTile> {
                   onSaved: (val) =>
                       _controller.text = double.parse(val) as String,
                   validator: (val) {
-                    if (double.parse(double.parse(val).toStringAsFixed(2)) <=
+                    if (double.parse(double.parse(val).toStringAsFixed(2)) <
                         0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
-                      return '0';
+                      return 'hi';
+                    return null;
                   },
                 ),
               ),
