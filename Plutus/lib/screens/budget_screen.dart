@@ -176,6 +176,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   new LinearPercentIndicator(
+                                    alignment: MainAxisAlignment.center,
                                     width: 310.0,
                                     lineHeight: 14.0,
                                     percent: monthlyTransactions
