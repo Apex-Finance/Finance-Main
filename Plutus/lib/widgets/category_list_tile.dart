@@ -35,7 +35,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
         stringToUserString(enumValueToString(widget.category)),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 18),
+        style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 15),
       ),
       trailing: Container(
         width: 50,

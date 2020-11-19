@@ -11,7 +11,7 @@ Map<MainCategory, IconData> categoryIcon = {
   MainCategory.travel: Icons.airplanemode_active,
   //MainCategory.transportation: Icons.directions_car,
   MainCategory.life_and_entertainment: Icons.sports_esports,
-  MainCategory.health_and_fitness: Icons.run_circle,
+  //MainCategory.health_and_fitness: Icons.run_circle,
   //MainCategory.investments: Icons.attach_money,
   //MainCategory.fees_and_charges: Icons.credit_card,
   //MainCategory.gifts_and_donations: Icons.cake,

@@ -10,7 +10,7 @@ enum MainCategory {
   travel,
   //transportation,
   life_and_entertainment,
-  health_and_fitness,
+  //health_and_fitness,
   //investments,
   //fees_and_charges,
   //gifts_and_donations,

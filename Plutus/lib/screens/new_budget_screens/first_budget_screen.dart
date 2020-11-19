@@ -40,7 +40,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                   "New Monthly Budget",
                   style: TextStyle(
                     color: Colors.amber,
-                    fontSize: 35,
+                    fontSize: 30,
                   ),
                 ),
                 Padding(
@@ -60,7 +60,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             maxLines: 1,
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor,
-                                fontSize: 18),
+                                fontSize: 15),
                           ),
                         ],
                       ),
@@ -76,7 +76,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             maxLines: 1,
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor,
-                                fontSize: 18),
+                                fontSize: 15),
                           ),
                         ],
                       ),
@@ -93,10 +93,11 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 25,
-                ),
+                // SizedBox(
+                //   height: 25,
+                // ),
                 Container(
+                  padding: EdgeInsets.fromLTRB(30, 30, 0, 50),
                   alignment: Alignment.bottomRight,
                   child: Builder(
                     builder: (context) => FloatingActionButton.extended(
@@ -107,6 +108,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           if (budget.remainingAmount < 0.00)
                             Scaffold.of(context).showSnackBar(
                               SnackBar(
+                                behavior: SnackBarBehavior.floating,
                                 content: Padding(
                                   padding: const EdgeInsets.only(top: 5.0),
                                   child: Text(
@@ -120,6 +122,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           else if (budget.remainingAmount > 0.00) {
                             Scaffold.of(context).showSnackBar(
                               SnackBar(
+                                behavior: SnackBarBehavior.floating,
                                 content: Padding(
                                   padding: const EdgeInsets.only(top: 5.0),
                                   child: Text(
@@ -142,9 +145,9 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                 ),
                 //TODO needs to be removed whent the keyboard pops up, takes up too much space
                 // Looks bad when the kebyoard is open
-                SizedBox(
-                  height: 70,
-                ),
+                // SizedBox(
+                //   height: 50,
+                // ),
               ],
             ),
           ),

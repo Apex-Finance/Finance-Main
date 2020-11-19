@@ -14,12 +14,12 @@ List<Transaction> dummyTransactions = [
     amount: 10.96,
     category: MainCategory.bills_and_utilities,
   ),
-  Transaction(
-    id: 't3',
-    title: 'Water Bill',
-    amount: 50.00,
-    category: MainCategory.health_and_fitness,
-  ),
+  // Transaction(
+  //   id: 't3',
+  //   title: 'Water Bill',
+  //   amount: 50.00,
+  //   category: MainCategory.health_and_fitness,
+  // ),
   Transaction(
     id: 't4',
     title: 'Movies',
