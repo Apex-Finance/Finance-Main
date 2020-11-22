@@ -56,7 +56,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             style: TextStyle(color: Colors.amber, fontSize: 15),
                           ),
                           AutoSizeText(
-                            '\$${budget.amount}',
+                            '\$${budget.amount.toStringAsFixed(2)}',
                             maxLines: 1,
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor,
@@ -72,7 +72,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             style: TextStyle(color: Colors.amber, fontSize: 15),
                           ),
                           AutoSizeText(
-                            '\$${budget.remainingAmount}',
+                            '\$${budget.remainingAmount.toStringAsFixed(2)}',
                             maxLines: 1,
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor,
