@@ -41,19 +41,17 @@ class _CategoryListTileState extends State<CategoryListTile> {
         width: 52,
         child: Row(
           children: [
-            // This somehow has to change to red if it's wrong
             Text('\$', style: Theme.of(context).textTheme.bodyText1),
             Expanded(
               child: Focus(
                 key: ValueKey(widget.category),
                 onFocusChange: (hasFocus) {
                   if (!hasFocus) {
-                    // TODO have error text for individual fields ? or at least change underline to red
                     // if just lost focus, update remaining amount (workaround for tapping out of field instead of hitting next)
                     if (_controller.text ==
                         '') // if field left empty, set it to 0.00
                       _controller.text =
-                          '0.00'; // Only works sometimes; is random ¯\_(ツ)_/¯
+                          '0.00'; // TODO Only works if you enter in an amount; won't work if you tap out and select a different category
                     if (_controller.text
                         .contains(new RegExp(r'-?[0-9]\d*(\.\d+)?$'))) {
                       if (double.parse(double.parse(_controller.text)
@@ -61,9 +59,13 @@ class _CategoryListTileState extends State<CategoryListTile> {
                           0.00) {
                         Scaffold.of(context).showSnackBar(
                           SnackBar(
+                            behavior: SnackBarBehavior.floating,
                             content: Padding(
                               padding: const EdgeInsets.only(top: 5.0),
-                              child: Text('Amount must be greater than 0'),
+                              child: Text(
+                                'Amount must be greater than 0',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
                             ),
                           ),
                         );

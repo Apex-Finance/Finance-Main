@@ -93,9 +93,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                     ),
                   ),
                 ),
-                // SizedBox(
-                //   height: 25,
-                // ),
                 Container(
                   padding: EdgeInsets.fromLTRB(30, 30, 0, 50),
                   alignment: Alignment.bottomRight,
@@ -104,6 +101,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                       backgroundColor: Theme.of(context).primaryColor,
                       onPressed: () {
                         //TODO UPDATE WHATEVER FIELD THEY WERE ENTERING WHEN TAPPED..would need the list of focusnodes first
+                        //TODO Add a Budget (BUG: If you don't hit this button but have added a monthly income and have hit the
+                        //TODO button, it adds the budget anyway.)
                         setState(() {
                           if (budget.remainingAmount < 0.00)
                             Scaffold.of(context).showSnackBar(
@@ -143,11 +142,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                     ),
                   ),
                 ),
-                //TODO needs to be removed whent the keyboard pops up, takes up too much space
-                // Looks bad when the kebyoard is open
-                // SizedBox(
-                //   height: 50,
-                // ),
               ],
             ),
           ),
