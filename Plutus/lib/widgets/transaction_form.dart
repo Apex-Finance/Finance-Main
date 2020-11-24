@@ -82,6 +82,7 @@ class _TransactionFormState extends State<TransactionForm> {
       child: Container(
         height: 380, // large enough to accommodate all errors
         child: Card(
+          color: Colors.grey[850],
           child: Padding(
             padding: const EdgeInsets.fromLTRB(
               10,
@@ -130,7 +131,10 @@ class _TransactionFormState extends State<TransactionForm> {
           width: 125,
           child: Text(
             'Date: ${DateFormat.MMMd().format(_date)}',
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.white,
+            ),
           ),
         ),
         RaisedButton(
@@ -163,21 +167,53 @@ class _TransactionFormState extends State<TransactionForm> {
       children: [
         Text(
           'Category: ',
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.white,
+          ),
         ),
         GestureDetector(
           onTap: () => showDialog(
             context: context,
             builder: (bctx) => SimpleDialog(
-              title: Text('Choose Category'),
+              backgroundColor: Colors.amber,
+              title: Text(
+                'Choose Category',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontFamily: 'Anton',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               children: [
                 ...MainCategory.values
-                    .map((category) => ListTile(
-                        title: Text(
-                            '${stringToUserString(enumValueToString(category))}'),
-                        onTap: () {
-                          Navigator.of(context).pop(category);
-                        }))
+                    .map(
+                      (category) => Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          ListTile(
+                            tileColor: Colors.black,
+                            leading: Icon(
+                              categoryIcon[category],
+                              size: 30,
+                              color: Colors.amber,
+                            ),
+                            title: Text(
+                              '${stringToUserString(enumValueToString(category))}',
+                              style: TextStyle(
+                                color: Colors.amber,
+                                fontSize: 18,
+                                fontFamily: 'Anton',
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.of(context).pop(category);
+                            },
+                          ),
+                        ],
+                      ),
+                    )
                     .toList(),
               ],
             ),
