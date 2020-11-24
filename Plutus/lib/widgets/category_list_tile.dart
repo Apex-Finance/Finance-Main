@@ -27,7 +27,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
         text: budgets.monthlyBudget.categoryAmount[widget.category] != null
             ? budgets.monthlyBudget.categoryAmount[widget.category]
                 .toStringAsFixed(2)
-            : '0.00');
+            : '');
     return ListTile(
       tileColor: Colors.grey[850],
       leading: CircleAvatar(child: Icon(categoryIcon[widget.category])),
@@ -47,11 +47,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                 key: ValueKey(widget.category),
                 onFocusChange: (hasFocus) {
                   if (!hasFocus) {
-                    // if just lost focus, update remaining amount (workaround for tapping out of field instead of hitting next)
-                    if (_controller.text ==
-                        '') // if field left empty, set it to 0.00
-                      _controller.text =
-                          '0.00'; // TODO Only works if you enter in an amount; won't work if you tap out and select a different category
+                    //TODO add validation for copy/paste text
                     if (_controller.text
                         .contains(new RegExp(r'-?[0-9]\d*(\.\d+)?$'))) {
                       if (double.parse(double.parse(_controller.text)
@@ -73,30 +69,16 @@ class _CategoryListTileState extends State<CategoryListTile> {
                       budgets.setCategoryAmount(
                           widget.category, double.parse(_controller.text));
                     }
-                  } else if (_controller.text == '0.00') _controller.text = '';
+                  }
                 },
                 child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: '0.00',
+                    hintStyle: TextStyle(color: Colors.amber.withOpacity(0.6)),
+                  ),
                   style: Theme.of(context).textTheme.bodyText1,
                   keyboardType: TextInputType.number,
                   controller: _controller,
-                  onFieldSubmitted: (val) {
-                    //TODO GO TO NEXT FIELD
-                    // need to outsource function to Provider to notifyListeners
-                  },
-                  onEditingComplete: () {
-                    FocusScope.of(context)
-                        .nextFocus(); //TODO NOT WORKING--NEED A LIST OF FOCUSNODES PASSED IN...
-                  },
-
-                  // TESTING RN
-                  onSaved: (val) =>
-                      _controller.text = double.parse(val) as String,
-                  validator: (val) {
-                    if (double.parse(double.parse(val).toStringAsFixed(2)) <
-                        0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
-                      return 'hi';
-                    return null;
-                  },
                 ),
               ),
             ),
