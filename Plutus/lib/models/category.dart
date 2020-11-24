@@ -1,11 +1,11 @@
-import 'package:flutter/foundation.dart';
+import 'package:Plutus/models/categories.dart';
+
+import './categories.dart';
 
 class Category {
   String id;
-  String title;
+  MainCategory categoryName;
+  double amount;
 
-  Category({
-    @required this.id,
-    @required this.title,
-  });
+  Category({this.id, this.categoryName, this.amount});
 }
