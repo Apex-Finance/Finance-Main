@@ -19,11 +19,6 @@ class CategoryListTile extends StatefulWidget {
 }
 
 class _CategoryListTileState extends State<CategoryListTile> {
-  // Saves the current inputed category amount
-  // void setCategoryAmount(String val) {
-  //   widget.budget.categoryAmount[widget.category] = double.parse(val);
-  // }
-
   @override
   Widget build(BuildContext context) {
     Budgets budgets = Provider.of<Budgets>(
@@ -32,7 +27,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
         text: budgets.monthlyBudget.categoryAmount[widget.category] != null
             ? budgets.monthlyBudget.categoryAmount[widget.category]
                 .toStringAsFixed(2)
-            : '0.00');
+            : '');
     return ListTile(
       tileColor: Colors.grey[850],
       leading: CircleAvatar(child: Icon(categoryIcon[widget.category])),
@@ -40,10 +35,10 @@ class _CategoryListTileState extends State<CategoryListTile> {
         stringToUserString(enumValueToString(widget.category)),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 18),
+        style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 15),
       ),
       trailing: Container(
-        width: 50,
+        width: 52,
         child: Row(
           children: [
             Text('\$', style: Theme.of(context).textTheme.bodyText1),
@@ -52,59 +47,38 @@ class _CategoryListTileState extends State<CategoryListTile> {
                 key: ValueKey(widget.category),
                 onFocusChange: (hasFocus) {
                   if (!hasFocus) {
-                    // TODO have error text for individual fields ? or at least change underline to red
-                    // if just lost focus, update remaining amount (workaround for tapping out of field instead of hitting next)
-                    if (_controller.text ==
-                        '') // if field left empty, set it to 0.00
-                      _controller.text =
-                          '0.00'; // Is currently working on Juan's phone  ¯\_(ツ)_/¯
+                    //TODO add validation for copy/paste text
                     if (_controller.text
-                        .contains(new RegExp(r'^\d*(\.\d+)?$'))) {
-                      //TODO Not displaying for some reason (tried -500 and 0.88888)
+                        .contains(new RegExp(r'-?[0-9]\d*(\.\d+)?$'))) {
                       if (double.parse(double.parse(_controller.text)
                               .toStringAsFixed(2)) <
                           0.00) {
                         Scaffold.of(context).showSnackBar(
                           SnackBar(
+                            behavior: SnackBarBehavior.floating,
                             content: Padding(
                               padding: const EdgeInsets.only(top: 5.0),
-                              child: Text('Amount must be greater than 0'),
+                              child: Text(
+                                'Amount must be greater than 0',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
                             ),
                           ),
                         );
                       }
                       budgets.setCategoryAmount(
                           widget.category, double.parse(_controller.text));
-                      // MAY NOT NEED SINCE THE USER WILL RECEIVE THE OTHER ERROR IF CATEGORY_AMOUNT > BUDGET_AMOUNT
-                      // if (double.parse(double.parse(_controller.text)
-                      //         .toStringAsFixed(2)) >
-                      //     999999999.99) {
-                      //   Scaffold.of(context).showSnackBar(
-                      //     SnackBar(
-                      //       content: Padding(
-                      //         padding: const EdgeInsets.only(top: 5.0),
-                      //         child: Text('Max amount is \$999,999,999.99'),
-                      //       ),
-                      //     ),
-                      //   );
-                      // }
-                      // set the category amount if validation checks pass
                     }
-                  } else if (_controller.text == '0.00') _controller.text = '';
+                  }
                 },
                 child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: '0.00',
+                    hintStyle: TextStyle(color: Colors.amber.withOpacity(0.6)),
+                  ),
                   style: Theme.of(context).textTheme.bodyText1,
-                  // autofocus: true, (probably not needed)
                   keyboardType: TextInputType.number,
                   controller: _controller,
-                  onFieldSubmitted: (val) {
-                    //TODO GO TO NEXT FIELD
-                    // need to outsource function to Provider to notifyListeners
-                  },
-                  onEditingComplete: () {
-                    FocusScope.of(context)
-                        .nextFocus(); //TODO NOT WORKING--NEED A LIST OF FOCUSNODES PASSED IN...
-                  },
                 ),
               ),
             ),
