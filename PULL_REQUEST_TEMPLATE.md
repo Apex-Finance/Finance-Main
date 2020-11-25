@@ -1,8 +1,8 @@
-# Description
+# Description:
 
 Add a description here explaining in a consise manner the reason for the PR(PULL REQUEST).
 
-# Type of Change
+# Type of Change:
 
 Select only the ones that apply:
 
