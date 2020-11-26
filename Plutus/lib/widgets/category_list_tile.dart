@@ -68,7 +68,20 @@ class _CategoryListTileState extends State<CategoryListTile> {
                       }
                       budgets.setCategoryAmount(
                           widget.category, double.parse(_controller.text));
-                    }
+                    } else {
+                      Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          content: Padding(
+                            padding: const EdgeInsets.only(top: 5.0),
+                            child: Text(
+                              'Please enter a number',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                        ),
+                      );
+                    } // check for copy/paste; test later
                   }
                 },
                 child: TextFormField(
