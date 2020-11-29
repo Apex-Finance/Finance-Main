@@ -47,7 +47,6 @@ class _CategoryListTileState extends State<CategoryListTile> {
                 key: ValueKey(widget.category),
                 onFocusChange: (hasFocus) {
                   if (!hasFocus) {
-                    //TODO add validation for copy/paste text
                     if (_controller.text
                         .contains(new RegExp(r'-?[0-9]\d*(\.\d+)?$'))) {
                       if (double.parse(double.parse(_controller.text)
@@ -68,7 +67,8 @@ class _CategoryListTileState extends State<CategoryListTile> {
                       }
                       budgets.setCategoryAmount(
                           widget.category, double.parse(_controller.text));
-                    } else {
+                    } // validates for numbers < 0
+                    else if (_controller.text.isNotEmpty) {
                       Scaffold.of(context).showSnackBar(
                         SnackBar(
                           behavior: SnackBarBehavior.floating,
@@ -81,7 +81,8 @@ class _CategoryListTileState extends State<CategoryListTile> {
                           ),
                         ),
                       );
-                    } // check for copy/paste; test later
+                      _controller.text = '';
+                    } // valides for text that is copy/pasted in
                   }
                 },
                 child: TextFormField(

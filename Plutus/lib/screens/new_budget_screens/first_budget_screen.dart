@@ -100,7 +100,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                     builder: (context) => FloatingActionButton.extended(
                       backgroundColor: Theme.of(context).primaryColor,
                       onPressed: () {
-                        //TODO UPDATE WHATEVER FIELD THEY WERE ENTERING WHEN TAPPED..would need the list of focusnodes first
                         //TODO Add a Budget (BUG: If you don't hit this button but have added a monthly income and have hit the
                         //TODO button, it adds the budget anyway.)
                         setState(() {
