@@ -1,5 +1,7 @@
 // import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'tab_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -125,6 +127,7 @@ class _AuthCardState extends State<AuthCard> {
   }
 
   Future<void> _submit() async {
+    UserCredential credentialResult;
     if (!_formKey.currentState.validate()) {
       // Invalid!
       return;
@@ -133,53 +136,42 @@ class _AuthCardState extends State<AuthCard> {
     setState(() {
       _isLoading = true;
     });
-    if (_authMode == AuthMode.Login) {
-      try {
+    try {
+      if (_authMode == AuthMode.Login) {
         // Log user in
-        final user = await _auth.signInWithEmailAndPassword(
+        credentialResult = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
-        if (user != null) {
-          Navigator.pushNamed(context, TabScreen.routeName);
-        }
-      } on FirebaseAuthException catch (error) {
-        var errorMessage = 'Authentication failed';
-        if (error.code == 'invalid-email') {
-          errorMessage = 'This is not a valid email address';
-        } else if (error.code == 'user-not-found') {
-          errorMessage = 'This user is not found.';
-        } else if (error.code == 'wrong-password') {
-          errorMessage = 'Incorrect password';
-        }
-        _showErrorDialog(errorMessage);
-      } catch (error) {
-        const errorMessage = 'Could not sign in. Please try again later.';
-        _showErrorDialog(errorMessage);
-      }
-    } else {
-      try {
-        // Sign user up
-        final newUser = await _auth.createUserWithEmailAndPassword(
+      } else {
+        credentialResult = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
-        if (newUser != null) {
-          Navigator.pushNamed(context, TabScreen.routeName);
-        }
-      } on FirebaseAuthException catch (error) {
-        var errorMessage = 'Authentication failed';
-        if (error.code == 'email-already-in-use') {
-          errorMessage = 'This email address is already in use.';
-        } else if (error.code == 'invalid-email') {
-          errorMessage = 'This is not a valid email address';
-        } else if (error.code == 'weak-password') {
-          errorMessage = 'This password is too weak.';
-        }
-        _showErrorDialog(errorMessage);
-      } catch (error) {
-        const errorMessage =
-            'Could not create an account. Please try again later.';
-        _showErrorDialog(errorMessage);
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(credentialResult.user.uid)
+            .set({
+          'email': email,
+          'password': password,
+        });
       }
+      if (credentialResult != null) {
+        Navigator.pushNamed(context, TabScreen.routeName);
+      }
+    } on FirebaseAuthException catch (error) {
+      var errorMessage = 'Authentication failed';
+      if (error.code == 'invalid-email') {
+        errorMessage = 'This is not a valid email address';
+      } else if (error.code == 'user-not-found') {
+        errorMessage = 'This user is not found.';
+      } else if (error.code == 'wrong-password') {
+        errorMessage = 'Incorrect password';
+      } else if (error.code == 'email-already-in-use') {
+        errorMessage = 'This email address is already in use.';
+      } else if (error.code == 'invalid-email') {
+        errorMessage = 'This is not a valid email address';
+      } else if (error.code == 'weak-password') {
+        errorMessage = 'This password is too weak.';
+      }
+      _showErrorDialog(errorMessage);
     }
-
     setState(() {
       _isLoading = false;
     });
@@ -216,6 +208,114 @@ class _AuthCardState extends State<AuthCard> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                Row(
+                  children: [
+                    RaisedButton(
+                      child: Text('Hunter Login'),
+                      onPressed: () {
+                        email = 'hunter@apex.com';
+                        password = '123456';
+                        _submit();
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+                      color: Theme.of(context).primaryColor,
+                      textColor:
+                          Theme.of(context).primaryTextTheme.button.color,
+                    ),
+                    RaisedButton(
+                      child: Text('Juan Login'),
+                      onPressed: () {
+                        email = 'jaun@apex.com';
+                        password = '123456';
+                        _submit();
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+                      color: Theme.of(context).primaryColor,
+                      textColor:
+                          Theme.of(context).primaryTextTheme.button.color,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    RaisedButton(
+                      child: Text('Tzuriel Login'),
+                      onPressed: () {
+                        email = 'tzuriel@apex.com';
+                        password = '123456';
+                        _submit();
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+                      color: Theme.of(context).primaryColor,
+                      textColor:
+                          Theme.of(context).primaryTextTheme.button.color,
+                    ),
+                    RaisedButton(
+                      child: Text('Adam Login'),
+                      onPressed: () {
+                        email = 'adam@apex.com';
+                        password = '123456';
+                        _submit();
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+                      color: Theme.of(context).primaryColor,
+                      textColor:
+                          Theme.of(context).primaryTextTheme.button.color,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    RaisedButton(
+                      child: Text('Alex Login'),
+                      onPressed: () {
+                        email = 'alex@apex.com';
+                        password = '123456';
+                        _submit();
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+                      color: Theme.of(context).primaryColor,
+                      textColor:
+                          Theme.of(context).primaryTextTheme.button.color,
+                    ),
+                    RaisedButton(
+                      child: Text('Team Login'),
+                      onPressed: () {
+                        email = 'team@apex.com';
+                        password = '123456';
+                        _submit();
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+                      color: Theme.of(context).primaryColor,
+                      textColor:
+                          Theme.of(context).primaryTextTheme.button.color,
+                    ),
+                  ],
+                ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'E-Mail'),
                   keyboardType: TextInputType.emailAddress,
@@ -226,7 +326,7 @@ class _AuthCardState extends State<AuthCard> {
                     return null;
                   },
                   onSaved: (value) {
-                    email = value;
+                    email = value.trim();
                   },
                 ),
                 TextFormField(
@@ -240,7 +340,7 @@ class _AuthCardState extends State<AuthCard> {
                     }
                   },
                   onSaved: (value) {
-                    password = value;
+                    password = value.trim();
                   },
                 ),
                 if (_authMode == AuthMode.Signup)
