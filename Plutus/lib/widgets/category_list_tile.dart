@@ -9,9 +9,11 @@ import '../models/budget.dart';
 // ignore: must_be_immutable
 class CategoryListTile extends StatefulWidget {
   MainCategory category;
+  Function categoryHandler;
 
   CategoryListTile(
     this.category,
+    this.categoryHandler,
   );
 
   @override
@@ -93,6 +95,8 @@ class _CategoryListTileState extends State<CategoryListTile> {
                   style: Theme.of(context).textTheme.bodyText1,
                   keyboardType: TextInputType.number,
                   controller: _controller,
+                  onChanged: (_) => widget.categoryHandler(
+                      widget.category, double.tryParse(_controller.text)),
                 ),
               ),
             ),
