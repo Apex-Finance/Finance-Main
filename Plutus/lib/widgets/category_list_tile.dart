@@ -85,6 +85,12 @@ class _CategoryListTileState extends State<CategoryListTile> {
                       );
                       _controller.text = '';
                     } // valides for text that is copy/pasted in
+                    // TODO find a way to make this less redundant
+                    else if (_controller.text.isEmpty) {
+                      _controller.text = '0.00';
+                      budgets.setCategoryAmount(
+                          widget.category, double.parse(_controller.text));
+                    } // if amount is cleared, set to 0 so that remainingBudget can update
                   }
                 },
                 child: TextFormField(
