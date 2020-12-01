@@ -114,7 +114,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                         //TODO Add a Budget (BUG: If you don't hit this button but have added a monthly income and have hit the
                         //TODO button, it adds the budget anyway.)
                         setState(() {
-                          if (budget.remainingAmount < 0.00)
+                          if (budget.remainingAmount < -0.001)
                             Scaffold.of(context).showSnackBar(
                               SnackBar(
                                 behavior: SnackBarBehavior.floating,
@@ -128,7 +128,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                 ),
                               ),
                             );
-                          else if (budget.remainingAmount > 0.00) {
+                          else if (budget.remainingAmount > 0.001) {
                             Scaffold.of(context).showSnackBar(
                               SnackBar(
                                 behavior: SnackBarBehavior.floating,
