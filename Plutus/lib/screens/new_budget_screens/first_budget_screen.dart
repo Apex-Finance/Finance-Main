@@ -32,9 +32,14 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
     budget.categoryAmount =
         budget.categoryAmount == null ? {} : budget.categoryAmount;
 
+    // TODO perhaps this needs to be moved somewhere else?
+    // Removes the budget if user has not entered any category amounts
     void isBudgetEmpty() {
-      if (budget.categoryAmount.isEmpty)
+      if (budget.categoryAmount.isEmpty ||
+          budget.amount == budget.remainingAmount) {
+        setActiveCategory(MainCategory.uncategorized, 0);
         Provider.of<Budgets>(context, listen: false).deleteBudget(budget.id);
+      }
     }
 
     return WillPopScope(
