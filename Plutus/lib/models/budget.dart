@@ -19,8 +19,6 @@ class Budget with ChangeNotifier {
       categoryAmount.forEach((key, value) {
         tempAmount -= value;
       });
-    // tempAmount = num.parse(tempAmount.toStringAsFixed(2));
-    // if (tempAmount.isNegative) tempAmount *= -1; //temp fix for -0.00
     return tempAmount;
   }
 
