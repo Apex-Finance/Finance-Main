@@ -37,6 +37,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
     void isBudgetEmpty() {
       if (budget.categoryAmount.isEmpty ||
           budget.amount == budget.remainingAmount) {
+        //TODO calls MainCategory and returns null (displays red error code for half a second)
         Provider.of<Budgets>(context, listen: false).deleteBudget(budget.id);
       }
     }
@@ -127,8 +128,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           Provider.of<Budgets>(context, listen: false)
                               .setCategoryAmount(activeCategory, activeAmount);
                           //TODO UPDATE WHATEVER FIELD THEY WERE ENTERING WHEN TAPPED..would need the list of focusnodes first
-                          //TODO Add a Budget (BUG: If you don't hit this button but have added a monthly income and have hit the
-                          //TODO button, it adds the budget anyway.)
                           setState(() {
                             if (budget.remainingAmount < -0.001)
                               Scaffold.of(context).showSnackBar(
