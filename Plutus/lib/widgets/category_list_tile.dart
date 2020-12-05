@@ -10,10 +10,14 @@ import '../models/budget.dart';
 class CategoryListTile extends StatefulWidget {
   MainCategory category;
   Function categoryHandler;
+  List<FocusNode> focusNode;
+  int index;
 
   CategoryListTile(
     this.category,
     this.categoryHandler,
+    this.focusNode,
+    this.index,
   );
 
   @override
@@ -94,6 +98,15 @@ class _CategoryListTileState extends State<CategoryListTile> {
                   }
                 },
                 child: TextFormField(
+                  focusNode: widget.focusNode[widget.index],
+                  //TODO UPDATE WHATEVER FIELD THEY WERE ENTERING WHEN TAPPED..would need the list of focusnodes first
+                  onFieldSubmitted: (value) {
+                    widget.focusNode[widget.index].unfocus();
+                    if (widget.index < MainCategory.values.length) {
+                      widget.focusNode[widget.index + 1].requestFocus();
+                      widget.focusNode[widget.index].unfocus();
+                    }
+                  }, // go to next textfield
                   decoration: InputDecoration(
                     hintText: '0.00',
                     hintStyle: TextStyle(color: Colors.amber.withOpacity(0.6)),

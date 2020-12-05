@@ -27,6 +27,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<FocusNode> catAmountFocusNodes = List<FocusNode>.generate(
+        MainCategory.values.length, (index) => FocusNode());
     final Budget budget = Provider.of<Budgets>(context)
         .monthlyBudget; // budget contains the amounts; rest are null on first run of build
     budget.categoryAmount =
@@ -113,9 +115,12 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                       shrinkWrap: true,
                       itemCount: MainCategory.values.length,
                       itemBuilder: (context, index) => CategoryListTile(
-                          MainCategory.values[index], setActiveCategory
-                          //?
-                          ),
+                        MainCategory.values[index],
+                        setActiveCategory,
+                        catAmountFocusNodes,
+                        index,
+                        //?
+                      ),
                     ),
                   ),
                   Container(
@@ -127,7 +132,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                         onPressed: () {
                           Provider.of<Budgets>(context, listen: false)
                               .setCategoryAmount(activeCategory, activeAmount);
-                          //TODO UPDATE WHATEVER FIELD THEY WERE ENTERING WHEN TAPPED..would need the list of focusnodes first
                           setState(() {
                             if (budget.remainingAmount < -0.001)
                               Scaffold.of(context).showSnackBar(
