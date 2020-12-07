@@ -99,13 +99,10 @@ class _CategoryListTileState extends State<CategoryListTile> {
                 },
                 child: TextFormField(
                   focusNode: widget.focusNode[widget.index],
-                  //TODO UPDATE WHATEVER FIELD THEY WERE ENTERING WHEN TAPPED..would need the list of focusnodes first
-                  // TODO Does not unfocus the previous text field for some reason
                   onFieldSubmitted: (value) {
-                    widget.focusNode[widget.index].unfocus();
+                    //widget.focusNode[widget.index].unfocus();
                     if (widget.index < MainCategory.values.length) {
                       widget.focusNode[widget.index + 1].requestFocus();
-                      widget.focusNode[widget.index].unfocus();
                     }
                   }, // go to next textfield
                   decoration: InputDecoration(

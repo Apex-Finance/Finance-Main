@@ -16,6 +16,8 @@ class FirstBudgetScreen extends StatefulWidget {
 
 class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   final _formKey = GlobalKey<FormState>();
+  List<FocusNode> catAmountFocusNodes = List<FocusNode>.generate(
+      MainCategory.values.length, (index) => FocusNode());
   MainCategory activeCategory = MainCategory.values[0];
   double activeAmount = 0;
 
@@ -27,8 +29,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<FocusNode> catAmountFocusNodes = List<FocusNode>.generate(
-        MainCategory.values.length, (index) => FocusNode());
     final Budget budget = Provider.of<Budgets>(context)
         .monthlyBudget; // budget contains the amounts; rest are null on first run of build
     budget.categoryAmount =
