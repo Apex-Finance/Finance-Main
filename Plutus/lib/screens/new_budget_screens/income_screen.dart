@@ -1,4 +1,6 @@
 import 'package:Plutus/models/budget.dart';
+import 'package:Plutus/screens/budget_screen.dart';
+import 'package:Plutus/screens/tab_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
@@ -66,87 +68,142 @@ class _IncomeScreenState extends State<IncomeScreen> {
   final _formKey = GlobalKey<FormState>();
 
   // Validates the budget amount and pushes to First Budget Screen
-
   @override
   Widget build(BuildContext context) {
     var _budget = Provider.of<Budgets>(context)
         .monthlyBudget; // budget initialized to all nulls and subsequent changes will update Provider
     var monthData = Provider.of<MonthChanger>(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('New Budget', style: Theme.of(context).textTheme.bodyText1),
-      ),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(20, 50, 20, 0),
-        child: KeyboardAvoider(
-          child: Container(
-            height: 400,
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
+
+    // Alerts the user of discarding his budget changes. User may discard or keeping editing.
+    Future<void> _showDiscardBudgetDialog() async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.grey[
+                800], // may want to use this as a secondary color, Looks 👌
+            title: Text(
+              'Cancel',
+              style: Theme.of(context).textTheme.headline1,
+            ),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
                   Text(
-                    "Monthly Income",
-                    style: TextStyle(
-                      color: Colors.amber,
-                      fontSize: 35,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Row(
-                    children: [
-                      Text('\$', style: Theme.of(context).textTheme.bodyText1),
-                      Expanded(
-                        child: TextFormField(
-                          inputFormatters: [
-                            DecimalTextInputFormatter(decimalRange: 2)
-                          ],
-                          style: Theme.of(context).textTheme.bodyText1,
-                          autofocus: true,
-                          keyboardType: TextInputType.number,
-                          //initialValue: '0.00', // Since autofocus == true, not needed
-                          onEditingComplete: () {
-                            if (_formKey.currentState.validate()) {
-                              _formKey.currentState.save();
-                              // perhaps we need to call addBudget here?
-                              _budget.id = DateTime(monthData.selectedYear,
-                                      monthData.selectedMonth)
-                                  .toIso8601String();
-                              _budget.title = DateTime(monthData.selectedYear,
-                                      monthData.selectedMonth)
-                                  .toIso8601String();
-                              Provider.of<Budgets>(context, listen: false)
-                                  .addBudget(_budget);
-                              Navigator.of(context)
-                                  .pushNamed(FirstBudgetScreen.routeName);
-                            }
-                          },
-                          onSaved: (val) => _budget.amount = double.parse(val),
-                          validator: (val) {
-                            if (val
-                                .contains(new RegExp(r'^-?\d+(\.\d{1,2})?$'))) {
-                              // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
-                              // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
-                              if (double.parse(
-                                      double.parse(val).toStringAsFixed(2)) <=
-                                  0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
-                                return 'Please enter an amount greater than 0.';
-                              if (double.parse(
-                                      double.parse(val).toStringAsFixed(2)) >
-                                  999999999.99)
-                                return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
-                              return null;
-                            } else {
-                              return 'Please enter a number.';
-                            }
-                          },
-                        ),
-                      ),
-                    ],
+                    'Would you like to discard these changes?',
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Yes'),
+                onPressed: () {
+                  print(_budget.id);
+                  Provider.of<Budgets>(context, listen: false)
+                      .deleteBudget(_budget.id);
+                  print(_budget.id);
+                  Navigator.of(context).pushNamed(TabScreen.routeName);
+                },
+              ),
+              TextButton(
+                child: Text('No'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    return WillPopScope(
+      onWillPop: () async {
+        if (_budget.amount != null) _showDiscardBudgetDialog();
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title:
+              Text('New Budget', style: Theme.of(context).textTheme.bodyText1),
+        ),
+        body: Padding(
+          padding: EdgeInsets.fromLTRB(20, 50, 20, 0),
+          child: KeyboardAvoider(
+            child: Container(
+              height: 400,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    Text(
+                      "Monthly Income",
+                      style: TextStyle(
+                        color: Colors.amber,
+                        fontSize: 35,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Row(
+                      children: [
+                        Text('\$',
+                            style: Theme.of(context).textTheme.bodyText1),
+                        Expanded(
+                          child: TextFormField(
+                            inputFormatters: [
+                              DecimalTextInputFormatter(decimalRange: 2)
+                            ],
+                            style: Theme.of(context).textTheme.bodyText1,
+                            autofocus: true,
+                            keyboardType: TextInputType.number,
+                            //initialValue: '0.00', // Since autofocus == true, not needed
+                            onEditingComplete: () {
+                              if (_formKey.currentState.validate()) {
+                                _formKey.currentState.save();
+                                // perhaps we need to call addBudget here?
+                                _budget.id = DateTime(monthData.selectedYear,
+                                        monthData.selectedMonth)
+                                    .toIso8601String();
+                                _budget.title = DateTime(monthData.selectedYear,
+                                        monthData.selectedMonth)
+                                    .toIso8601String();
+                                Provider.of<Budgets>(context, listen: false)
+                                    .addBudget(_budget);
+                                Navigator.of(context)
+                                    .pushNamed(FirstBudgetScreen.routeName);
+                              }
+                            },
+                            onSaved: (val) =>
+                                _budget.amount = double.parse(val),
+                            validator: (val) {
+                              if (val.contains(
+                                  new RegExp(r'^-?\d+(\.\d{1,2})?$'))) {
+                                // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
+                                // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
+                                if (double.parse(
+                                        double.parse(val).toStringAsFixed(2)) <=
+                                    0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
+                                  return 'Please enter an amount greater than 0.';
+                                if (double.parse(
+                                        double.parse(val).toStringAsFixed(2)) >
+                                    999999999.99)
+                                  return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
+                                return null;
+                              } else {
+                                return 'Please enter a number.';
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

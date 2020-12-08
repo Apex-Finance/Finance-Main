@@ -63,6 +63,7 @@ class MyApp extends StatelessWidget {
                 bodyText1: TextStyle(
                   color: Colors.amber,
                 ),
+                headline1: TextStyle(color: Colors.amber, fontSize: 20),
               ),
             ),
           ),
