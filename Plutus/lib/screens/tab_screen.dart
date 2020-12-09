@@ -91,8 +91,38 @@ class _TabScreenState extends State<TabScreen> {
       drawer: Drawer(
         child: ListView(
           children: [
-            ListTile(title: Text('Settings', style: TextTheme().bodyText1)),
-            ListTile(title: Text('Account', style: TextTheme().bodyText1)),
+            // settings
+            ListTile(
+              onTap: () {
+                Navigator.of(context).pushNamed('/settings');
+              },
+              leading: Icon(
+                Icons.settings,
+                size: 30,
+                color: Theme.of(context).primaryColor,
+              ),
+              title: Text(
+                'Settings',
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor, fontSize: 18),
+              ),
+            ),
+            // acount
+            ListTile(
+              onTap: () {
+                Navigator.of(context).pushNamed('/account');
+              },
+              leading: Icon(
+                Icons.account_circle,
+                size: 30,
+                color: Theme.of(context).primaryColor,
+              ),
+              title: Text(
+                'Account',
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor, fontSize: 18),
+              ),
+            ),
           ],
         ),
       ),
