@@ -133,7 +133,7 @@ class _TransactionFormState extends State<TransactionForm> {
             'Date: ${DateFormat.MMMd().format(_date)}',
             style: TextStyle(
               fontSize: 16,
-              color: Colors.white,
+              color: Theme.of(context).primaryColor,
             ),
           ),
         ),
@@ -169,14 +169,14 @@ class _TransactionFormState extends State<TransactionForm> {
           'Category: ',
           style: TextStyle(
             fontSize: 16,
-            color: Colors.white,
+            color: Theme.of(context).primaryColor,
           ),
         ),
         GestureDetector(
           onTap: () => showDialog(
             context: context,
             builder: (bctx) => SimpleDialog(
-              backgroundColor: Colors.amber,
+              backgroundColor: Theme.of(context).primaryColor,
               title: Text(
                 'Choose Category',
                 style: TextStyle(
@@ -192,16 +192,16 @@ class _TransactionFormState extends State<TransactionForm> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           ListTile(
-                            tileColor: Colors.black,
+                            tileColor: Theme.of(context).canvasColor,
                             leading: Icon(
                               categoryIcon[category],
                               size: 30,
-                              color: Colors.amber,
+                              color: Theme.of(context).primaryColor,
                             ),
                             title: Text(
                               '${stringToUserString(enumValueToString(category))}',
                               style: TextStyle(
-                                color: Colors.amber,
+                                color: Theme.of(context).primaryColor,
                                 fontSize: 18,
                                 fontFamily: 'Anton',
                                 fontWeight: FontWeight.bold,
@@ -253,7 +253,10 @@ class AmountTFF extends StatelessWidget {
           _transaction.amount == null ? '' : _transaction.amount.toString(),
       decoration: InputDecoration(
         labelText: 'Amount',
+        labelStyle: new TextStyle(
+            color: Theme.of(context).primaryColor, fontSize: 16.0),
       ),
+      style: TextStyle(fontSize: 20.0, color: Theme.of(context).primaryColor),
       keyboardType: TextInputType.number,
       maxLength: null,
       onEditingComplete: () => FocusScope.of(context).unfocus(),
@@ -291,7 +294,10 @@ class DescriptionTFF extends StatelessWidget {
       initialValue: _transaction.title ?? '',
       decoration: InputDecoration(
         labelText: 'Description',
+        labelStyle: new TextStyle(
+            color: Theme.of(context).primaryColor, fontSize: 16.0),
       ),
+      style: TextStyle(fontSize: 20.0, color: Theme.of(context).primaryColor),
       autofocus: true,
       inputFormatters: [
         LengthLimitingTextInputFormatter(15),
