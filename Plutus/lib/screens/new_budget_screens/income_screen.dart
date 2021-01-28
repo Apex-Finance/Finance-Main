@@ -1,5 +1,4 @@
 import 'package:Plutus/models/budget.dart';
-import 'package:Plutus/screens/budget_screen.dart';
 import 'package:Plutus/screens/tab_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +10,7 @@ import '../../models/budget.dart';
 import '../../models/month_changer.dart';
 import 'dart:math' as math;
 
+// Asks the user for his monthly income and creates the budget based on that amount
 class IncomeScreen extends StatefulWidget {
   static const routeName = '/income';
   @override
@@ -161,7 +161,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             style: Theme.of(context).textTheme.bodyText1,
                             autofocus: true,
                             keyboardType: TextInputType.number,
-                            //initialValue: '0.00', // Since autofocus == true, not needed
                             onEditingComplete: () {
                               if (_formKey.currentState.validate()) {
                                 _formKey.currentState.save();

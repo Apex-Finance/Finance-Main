@@ -102,7 +102,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                       setActiveCategory,
                       catAmountFocusNodes,
                       index,
-                      //?
                     ),
                   ),
                 ),
