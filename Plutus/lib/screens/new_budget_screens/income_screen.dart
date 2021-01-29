@@ -24,45 +24,6 @@ class IncomeScreen extends StatefulWidget {
 
 /* USE CASE: User inputs 34.56293 but only sees 34.56. User can hit "Done" and be taken to first_budget_screen.dart where total budget == $34.56
    To change 34.56 to 34.57 however, user MUST hit backspace 4 times (only happens while he is on the same screen). This action deletes the 6293.*/
-class DecimalTextInputFormatter extends TextInputFormatter {
-  DecimalTextInputFormatter({this.decimalRange})
-      : assert(decimalRange == null || decimalRange > 0);
-
-  final int decimalRange;
-
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue, // unused.
-    TextEditingValue newValue,
-  ) {
-    TextSelection newSelection = newValue.selection;
-    String truncated = newValue.text;
-
-    if (decimalRange != null) {
-      String value = newValue.text;
-
-      if (value.contains(".") &&
-          value.substring(value.indexOf(".") + 1).length > decimalRange) {
-        truncated = oldValue.text;
-        newSelection = oldValue.selection;
-      } else if (value == ".") {
-        truncated = "0.";
-
-        newSelection = newValue.selection.copyWith(
-          baseOffset: math.min(truncated.length, truncated.length + 1),
-          extentOffset: math.min(truncated.length, truncated.length + 1),
-        );
-      }
-
-      return TextEditingValue(
-        text: truncated,
-        selection: newSelection,
-        composing: TextRange.empty,
-      );
-    }
-    return newValue;
-  }
-}
 
 class _IncomeScreenState extends State<IncomeScreen> {
   final _formKey = GlobalKey<FormState>();
@@ -155,12 +116,15 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             style: Theme.of(context).textTheme.bodyText1),
                         Expanded(
                           child: TextFormField(
+                            keyboardType:
+                                TextInputType.numberWithOptions(decimal: true),
                             inputFormatters: [
-                              DecimalTextInputFormatter(decimalRange: 2)
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d+\.?\d{0,2}')),
                             ],
                             style: Theme.of(context).textTheme.bodyText1,
                             autofocus: true,
-                            keyboardType: TextInputType.number,
+                            // keyboardType: TextInputType.number,
                             onEditingComplete: () {
                               if (_formKey.currentState.validate()) {
                                 _formKey.currentState.save();
