@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
 import './first_budget_screen.dart';
 import '../../models/budget.dart';
 import '../../models/month_changer.dart';
-import 'dart:math' as math;
 
 // Asks the user for his monthly income and creates the budget based on that amount
 class IncomeScreen extends StatefulWidget {
@@ -116,11 +116,12 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             style: Theme.of(context).textTheme.bodyText1),
                         Expanded(
                           child: TextFormField(
-                            keyboardType:
-                                TextInputType.numberWithOptions(decimal: true),
+                            keyboardType: TextInputType.numberWithOptions(
+                                decimal: false, signed: false),
                             inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'^\d+\.?\d{0,2}')),
+                              CurrencyTextInputFormatter(decimalDigits: 2),
+                              //FilteringTextInputFormatter.allow(
+                              //RegExp(r'^\d+\.?\d{0,2}')),
                             ],
                             style: Theme.of(context).textTheme.bodyText1,
                             autofocus: true,
@@ -144,22 +145,26 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             onSaved: (val) =>
                                 _budget.amount = double.parse(val),
                             validator: (val) {
-                              if (val.contains(
-                                  new RegExp(r'^-?\d+(\.\d{1,2})?$'))) {
-                                // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
-                                // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
-                                if (double.parse(
-                                        double.parse(val).toStringAsFixed(2)) <=
-                                    0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
-                                  return 'Please enter an amount greater than 0.';
-                                if (double.parse(
-                                        double.parse(val).toStringAsFixed(2)) >
-                                    999999999.99)
-                                  return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
-                                return null;
-                              } else {
-                                return 'Please enter a number.';
-                              }
+                              print(val);
+                              val = val.replaceAll(",", "");
+                              print(val);
+                              // if (val.contains(new RegExp(r'^[0-9]*$'))) {
+                              //   // ^[0-9]*$
+                              //   // ^-?\d+(\.\d{1,2})?$
+                              //   // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
+                              //   // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
+                              //   if (double.parse(
+                              //           double.parse(val).toStringAsFixed(2)) <=
+                              //       0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
+                              //     return 'Please enter an amount greater than 0.';
+                              //   if (double.parse(
+                              //           double.parse(val).toStringAsFixed(2)) >
+                              //       999999999.99)
+                              //     return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
+                              //   return null;
+                              // } else {
+                              //   return 'Please enter a number.';
+                              // }
                             },
                           ),
                         ),
