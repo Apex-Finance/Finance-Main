@@ -25,25 +25,6 @@ class _TabScreenState extends State<TabScreen> {
   @override
   void initState() {
     super.initState();
-
-    getUser();
-  }
-
-  void getUser() {
-    try {
-      final userChanges = _auth.userChanges();
-      userChanges.listen(
-        (User user) {
-          if (user == null) {
-            print('User is currently signed out!');
-          } else {
-            print('User is signed in!');
-          }
-        },
-      );
-    } catch (e) {
-      print(e);
-    }
   }
 
   List<Transaction> transactions = [];
