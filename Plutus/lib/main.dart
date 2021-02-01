@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
           title: 'Plutus',
           theme: ThemeData(
             primarySwatch: Colors.amber,
-            primaryColor: Colors.amber,
+            primaryColor: Colors.blue,
             primaryColorLight: Colors.amberAccent,
             accentColor: Colors.white,
             canvasColor: Colors.black,
