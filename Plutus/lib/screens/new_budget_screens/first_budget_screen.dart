@@ -16,6 +16,14 @@ class FirstBudgetScreen extends StatefulWidget {
 
 class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   final _formKey = GlobalKey<FormState>();
+  MainCategory activeCategory = MainCategory.values[0];
+  double activeAmount = 0;
+
+  void setActiveCategory(MainCategory category, double amount) {
+    activeCategory = category;
+    activeAmount = amount ?? 0;
+    return;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,9 +96,9 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                     shrinkWrap: true,
                     itemCount: MainCategory.values.length,
                     itemBuilder: (context, index) => CategoryListTile(
-                      MainCategory.values[index],
-                      //?
-                    ),
+                        MainCategory.values[index], setActiveCategory
+                        //?
+                        ),
                   ),
                 ),
                 Container(
@@ -100,6 +108,9 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                     builder: (context) => FloatingActionButton.extended(
                       backgroundColor: Theme.of(context).primaryColor,
                       onPressed: () {
+                        Provider.of<Budgets>(context, listen: false)
+                            .setCategoryAmount(
+                                activeCategory, activeAmount, context);
                         //TODO UPDATE WHATEVER FIELD THEY WERE ENTERING WHEN TAPPED..would need the list of focusnodes first
                         //TODO Add a Budget (BUG: If you don't hit this button but have added a monthly income and have hit the
                         //TODO button, it adds the budget anyway.)
