@@ -116,16 +116,14 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             style: Theme.of(context).textTheme.bodyText1),
                         Expanded(
                           child: TextFormField(
-                            keyboardType: TextInputType.numberWithOptions(
-                                decimal: false, signed: false),
+                            initialValue: '0.00',
                             inputFormatters: [
-                              CurrencyTextInputFormatter(decimalDigits: 2),
-                              //FilteringTextInputFormatter.allow(
-                              //RegExp(r'^\d+\.?\d{0,2}')),
+                              CurrencyTextInputFormatter(),
                             ],
                             style: Theme.of(context).textTheme.bodyText1,
                             autofocus: true,
-                            // keyboardType: TextInputType.number,
+                            keyboardType:
+                                TextInputType.numberWithOptions(decimal: false),
                             onEditingComplete: () {
                               if (_formKey.currentState.validate()) {
                                 _formKey.currentState.save();
@@ -142,29 +140,29 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                     .pushNamed(FirstBudgetScreen.routeName);
                               }
                             },
-                            onSaved: (val) =>
-                                _budget.amount = double.parse(val),
+                            onSaved: (val) => _budget.amount =
+                                double.parse(val.replaceAll(",", "")),
                             validator: (val) {
-                              print(val);
-                              val = val.replaceAll(",", "");
-                              print(val);
-                              // if (val.contains(new RegExp(r'^[0-9]*$'))) {
-                              //   // ^[0-9]*$
-                              //   // ^-?\d+(\.\d{1,2})?$
-                              //   // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
-                              //   // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
-                              //   if (double.parse(
-                              //           double.parse(val).toStringAsFixed(2)) <=
-                              //       0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
-                              //     return 'Please enter an amount greater than 0.';
-                              //   if (double.parse(
-                              //           double.parse(val).toStringAsFixed(2)) >
-                              //       999999999.99)
-                              //     return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
-                              //   return null;
-                              // } else {
-                              //   return 'Please enter a number.';
-                              // }
+                              //print(val);
+                              if (val.contains(new RegExp(
+                                  r'^\d{1,3}(,\d{3}){0,3}(.\d+)?$'))) {
+                                // ^-?\d+(\.\d{1,2})?$
+                                // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
+                                // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
+                                if (double.parse(
+                                        double.parse(val.replaceAll(",", ""))
+                                            .toStringAsFixed(2)) <=
+                                    0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
+                                  return 'Please enter an amount greater than 0.';
+                                if (double.parse(
+                                        double.parse(val.replaceAll(",", ""))
+                                            .toStringAsFixed(2)) >
+                                    999999999.99)
+                                  return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
+                                return null;
+                              } else {
+                                return 'Please enter a number.';
+                              }
                             },
                           ),
                         ),
