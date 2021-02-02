@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 import '../screens/tab_screen.dart';
+import '../providers/auth.dart';
 
 class AuthForm extends StatefulWidget {
   @override
@@ -63,6 +65,9 @@ class _AuthFormState extends State<AuthForm> {
           'password': password,
         });
       }
+      Provider.of<Auth>(context, listen: false)
+          .setUserId(credentialResult.user.uid);
+      Provider.of<Auth>(context, listen: false).setPassword(password);
       if (credentialResult != null) {
         Navigator.pushNamed(context, TabScreen.routeName);
       }
@@ -247,6 +252,7 @@ class _AuthFormState extends State<AuthForm> {
                 TextFormField(
                   decoration: InputDecoration(labelText: 'E-Mail'),
                   keyboardType: TextInputType.emailAddress,
+                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
                   controller: _emailController,
                   validator: (value) {
                     if (value.isEmpty || !value.contains('@')) {
@@ -260,6 +266,12 @@ class _AuthFormState extends State<AuthForm> {
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Password'),
+                  onEditingComplete: () => {
+                    if (_authMode == AuthMode.Signup)
+                      {FocusScope.of(context).nextFocus()}
+                    else
+                      {FocusScope.of(context).unfocus()}
+                  },
                   obscureText: true,
                   controller: _passwordController,
                   // ignore: missing_return
@@ -276,6 +288,7 @@ class _AuthFormState extends State<AuthForm> {
                   TextFormField(
                     enabled: _authMode == AuthMode.Signup,
                     decoration: InputDecoration(labelText: 'Confirm Password'),
+                    onEditingComplete: () => FocusScope.of(context).unfocus(),
                     obscureText: true,
                     validator: _authMode == AuthMode.Signup
                         // ignore: missing_return

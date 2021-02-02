@@ -1,16 +1,19 @@
 import 'package:flutter/foundation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
-import './transaction.dart';
+import './transaction.dart' as Transaction;
 import './categories.dart';
 import './month_changer.dart';
+import '../providers/auth.dart';
 
 class Budget with ChangeNotifier {
   String id;
   String title;
   double amount;
-  List<Transaction> transactions;
+  List<Transaction.Transaction> transactions;
   Map<MainCategory, double> categoryAmount;
-
   double remainingMonthlyAmount;
 
   double get remainingAmount {
@@ -22,7 +25,7 @@ class Budget with ChangeNotifier {
     return tempAmount;
   }
 
-  List<Transaction> getCategoryTransactions(
+  List<Transaction.Transaction> getCategoryTransactions(
       Budget budget, MainCategory category) {
     return budget.transactions == null
         ? null
@@ -32,7 +35,7 @@ class Budget with ChangeNotifier {
   }
 
   double getCategoryTransactionsAmount(Budget budget, MainCategory category) {
-    List<Transaction> categoryTransactions =
+    List<Transaction.Transaction> categoryTransactions =
         getCategoryTransactions(budget, category);
     if (categoryTransactions == null)
       return 0.00;
@@ -76,8 +79,9 @@ class Budget with ChangeNotifier {
 class Budgets with ChangeNotifier {
   List<Budget> _budgets = [];
   MonthChanger monthChanger;
-  Transactions transactions;
-  List<Transaction> get monthlyTransactions => transactions.monthlyTransactions;
+  Transaction.Transactions transactions;
+  List<Transaction.Transaction> get monthlyTransactions =>
+      transactions.monthlyTransactions;
 
   Budgets(this.monthChanger, this.transactions, this._budgets);
   List<Budget> get budgets => [..._budgets];
@@ -103,7 +107,9 @@ class Budgets with ChangeNotifier {
     return budgetWithTransactions;
   }
 
-  void setCategoryAmount(MainCategory category, double amount) {
+  void setCategoryAmount(
+      MainCategory category, double amount, BuildContext context) async {
+    String categoryId = category.toString().split('.').last;
     if (amount > 0) {
       monthlyBudget.categoryAmount[category] = amount;
     }
@@ -111,10 +117,31 @@ class Budgets with ChangeNotifier {
       monthlyBudget.categoryAmount.remove(category);
     }
     notifyListeners();
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('budgets')
+        .doc(monthlyBudget.id)
+        .collection('categories')
+        .doc(categoryId)
+        .set({
+      'amount': amount,
+      'remaining amount': amount,
+    }, SetOptions(merge: true));
   }
 
-  void addBudget(Budget budget) {
+  void addBudget(Budget budget, BuildContext context) async {
     _budgets.add(budget);
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('budgets')
+        .doc(budget.id)
+        .set({
+      'title': budget.title,
+      'amount': budget.amount,
+      'remainingMonthlyAmount': budget.remainingAmount,
+    });
     notifyListeners();
   }
 

@@ -68,8 +68,8 @@ class _CategoryListTileState extends State<CategoryListTile> {
                           ),
                         );
                       }
-                      budgets.setCategoryAmount(
-                          widget.category, double.parse(_controller.text));
+                      budgets.setCategoryAmount(widget.category,
+                          double.parse(_controller.text), context);
                     }
                   }
                 },
