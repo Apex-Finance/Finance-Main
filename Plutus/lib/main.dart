@@ -64,7 +64,9 @@ class MyApp extends StatelessWidget {
             textTheme: GoogleFonts.latoTextTheme(
               TextTheme(
                 bodyText1: TextStyle(color: Colors.amber),
-                bodyText2: TextStyle(color: Colors.amber, fontSize: 18),
+                bodyText2: TextStyle(color: Colors.amber, fontSize: 12),
+                subtitle1: TextStyle(color: Colors.amber, fontSize: 17),
+                headline1: TextStyle(color: Colors.amber, fontSize: 25),
               ),
             ),
           ),
