@@ -62,30 +62,30 @@ class Budget with ChangeNotifier {
     notifyListeners();
   }
 
-  static Budget getMonthlyBudget() {
-    MonthChanger monthChanger;
-    Transaction.Transactions transactions;
-    List<Transaction.Transaction> monthlyTransactions =
-        transactions.monthlyTransactions;
-    var budgetWithTransactions = budgets.firstWhere(
-      (budget) =>
-          DateTime.parse(budget.title).month == monthChanger.selectedMonth &&
-          DateTime.parse(budget.title).year == monthChanger.selectedYear,
-      orElse: () => Budget(
-          id: null,
-          title: null,
-          amount: null,
-          transactions: null,
-          categoryAmount: null),
-    );
-    if (budgetWithTransactions.amount != null) {
-      //b/c of the way data is set up, initializing properties here, but should eventually be getters in Budget Provider
-      budgetWithTransactions.transactions = monthlyTransactions;
-      budgetWithTransactions.remainingMonthlyAmount =
-          budgetWithTransactions.amount - transactions.monthlyExpenses;
-    }
-    return budgetWithTransactions;
-  }
+  // static Budget getMonthlyBudget() {
+  //   MonthChanger monthChanger;
+  //   Transaction.Transactions transactions;
+  //   List<Transaction.Transaction> monthlyTransactions =
+  //       transactions.monthlyTransactions;
+  //   var budgetWithTransactions = budgets.firstWhere(
+  //     (budget) =>
+  //         DateTime.parse(budget.title).month == monthChanger.selectedMonth &&
+  //         DateTime.parse(budget.title).year == monthChanger.selectedYear,
+  //     orElse: () => Budget(
+  //         id: null,
+  //         title: null,
+  //         amount: null,
+  //         transactions: null,
+  //         categoryAmount: null),
+  //   );
+  //   if (budgetWithTransactions.amount != null) {
+  //     //b/c of the way data is set up, initializing properties here, but should eventually be getters in Budget Provider
+  //     budgetWithTransactions.transactions = monthlyTransactions;
+  //     budgetWithTransactions.remainingMonthlyAmount =
+  //         budgetWithTransactions.amount - transactions.monthlyExpenses;
+  //   }
+  //   return budgetWithTransactions;
+  // }
 
   List<MainCategory> get budgetedAndUnbudgetedCategories {
     setUnbudgetedCategory();
@@ -146,6 +146,20 @@ class Budgets with ChangeNotifier {
     notifyListeners();
   }
 
+  void editBudget(String id, Budget updatedBudget) {
+    final budgetIndex = _budgets.indexWhere((budget) => budget.id == id);
+    if (budgetIndex >= 0) {
+      _budgets[budgetIndex] = updatedBudget;
+      notifyListeners();
+    }
+  }
+
+  void deleteBudget(String id) {
+    final budgetIndex = _budgets.indexWhere((budget) => budget.id == id);
+    _budgets.removeAt(budgetIndex);
+    notifyListeners();
+  }
+
   void addBudget(Budget budget, BuildContext context) async {
     _budgets.add(budget);
     await FirebaseFirestore.instance
@@ -158,20 +172,6 @@ class Budgets with ChangeNotifier {
       'amount': budget.amount,
       'remainingMonthlyAmount': budget.remainingAmount,
     });
-    notifyListeners();
-  }
-
-  void editBudget(String id, Budget updatedBudget) {
-    final budgetIndex = _budgets.indexWhere((budget) => budget.id == id);
-    if (budgetIndex >= 0) {
-      _budgets[budgetIndex] = updatedBudget;
-      notifyListeners();
-    }
-  }
-
-  void deleteBudget(String id) {
-    final budgetIndex = _budgets.indexWhere((budget) => budget.id == id);
-    _budgets.removeAt(budgetIndex);
     notifyListeners();
   }
 

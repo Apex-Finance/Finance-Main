@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 import '../providers/auth.dart';
 
 class Goal {
-  int id; // will be random (how? figure this out)
+  String id; // (db will generate primary key; just need to obtain it from db)
   String title;
   double amount;
   double goalAmount;
@@ -16,6 +16,13 @@ class Goal {
     this.amount,
     this.goalAmount,
   });
+
+  // will need to add databse code to obtain id from document
+  void setID() {}
+
+  String getID() {
+    return id;
+  }
 
   String getTitle() {
     return title;
@@ -28,17 +35,42 @@ class Goal {
   double getGoalAmount() {
     return goalAmount;
   }
+}
 
-  void addGoalToDB(BuildContext context) async {
+// This class will be handling all database code; it will essentially be acting like the provider we used for budgets
+class GoalDataProvider {
+  void addGoal(Goal goal, BuildContext context) async {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .collection('Goals')
         .doc()
         .set({
-      'title': getTitle(),
-      'amount': getAmount(),
-      'goalAmount': getGoalAmount(),
+      'title': goal.getTitle(),
+      'amount': goal.getAmount(),
+      'goalAmount': goal.getGoalAmount(),
     });
+  }
+
+  void updateGoal(Goal goal, BuildContext context) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('Goals')
+        .doc(goal.getID())
+        .set({
+      'title': goal.getTitle(),
+      'amount': goal.getAmount(),
+      'goalAmount': goal.getGoalAmount(),
+    }, SetOptions(merge: true));
+  }
+
+  void removeGoal(Goal goal, BuildContext context) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('Goals')
+        .doc(goal.getID())
+        .delete();
   }
 }
