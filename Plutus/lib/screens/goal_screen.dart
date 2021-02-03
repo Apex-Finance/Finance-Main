@@ -1,9 +1,20 @@
+import 'package:Plutus/widgets/goals_form.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../models/goals.dart';
 import '../widgets/goals_list_tile.dart';
 
 class GoalScreen extends StatelessWidget {
   static const routeName = '/goal';
+
+  void _enterGoal(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: null,
+      builder: (_) => GoalsForm(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,11 +23,24 @@ class GoalScreen extends StatelessWidget {
     return Container(
       child: goalID == null
           ? Center(
-              child: Text(
-                'No goals yet. Ready to add one?',
-                style: TextStyle(
-                    fontSize: 18, color: Theme.of(context).primaryColor),
-                textAlign: TextAlign.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'No goals yet. Ready to add one?',
+                    style: TextStyle(
+                        fontSize: 18, color: Theme.of(context).primaryColor),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  RaisedButton(
+                    child: Text('Add Goal'),
+                    color: Theme.of(context).primaryColor,
+                    textColor: Theme.of(context).canvasColor,
+                    onPressed: () => _enterGoal(context),
+                  ),
+                ],
               ),
             )
           : Column(
