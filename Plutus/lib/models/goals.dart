@@ -18,7 +18,9 @@ class Goal {
   });
 
   // will need to add databse code to obtain id from document
-  void setID() {}
+  void setID(String idValue) {
+    id = idValue;
+  }
 
   String getID() {
     return id;
@@ -38,7 +40,7 @@ class Goal {
 }
 
 // This class will be handling all database code; it will essentially be acting like the provider we used for budgets
-class GoalDataProvider {
+class GoalDataProvider with ChangeNotifier {
   void addGoal(Goal goal, BuildContext context) async {
     await FirebaseFirestore.instance
         .collection('users')
