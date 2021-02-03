@@ -18,8 +18,8 @@ class Goal {
   });
 
   // will need to add databse code to obtain id from document
-  void setID(String Id) {
-    id = Id;
+  void setID(String idValue) {
+    id = idValue;
   }
 
   String getID() {

@@ -1,52 +1,53 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/goals_list_tile.dart';
+import '../models/goals.dart';
+import '../providers/auth.dart';
 
 class GoalScreen extends StatelessWidget {
   static const routeName = '/goal';
 
   @override
   Widget build(BuildContext context) {
-    var goalID; // will change to reflect DB
+    Goal goal; // will change to reflect DB
+    var dbRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('Goals');
+    return StreamBuilder<QuerySnapshot>(
+        stream: dbRef.snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) return Text('Error: ${snapshot.error}');
 
-    return Container(
-      child: goalID == null
-          ? Center(
-              child: Text(
-                'No goals yet. Ready to add one?',
-                style: TextStyle(
-                    fontSize: 18, color: Theme.of(context).primaryColor),
-                textAlign: TextAlign.center,
-              ),
-            )
-          : Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Container(
-                    width: 250,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    bottom: 20,
-                  ),
-                  child: Text(
-                    "Goals & Wishes",
-                    style: TextStyle(
-                      color: Colors.amber,
-                      fontSize: 30,
-                    ),
-                  ),
-                ),
-                // Expanded(
-                //   child: ListView.builder(
-                //       shrinkWrap: true,
-                //       itemCount: 5,
-                //       itemBuilder: (context, index) => GoalsListTile()),
-                // ),
-              ],
-            ),
-    );
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return Text('Loading...');
+            default:
+              switch (snapshot.data.docs.isEmpty) {
+                case true:
+                  return Text('You have no goals yet...');
+                default:
+                  print(snapshot.hasData);
+                  return ListView(
+                    padding: EdgeInsets.all(12.0),
+                    children: snapshot.data.docs.map((doc) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5.0, vertical: 8.0),
+                        child: Container(child: ListTile(
+                          onLongPress: () {
+                            /*capture info from this document into the goal object provided above
+                            and offer them to either update or delete possibly*/
+                          },
+                        )),
+                      );
+                    }).toList(),
+                  );
+              }
+          }
+        });
   }
 }
