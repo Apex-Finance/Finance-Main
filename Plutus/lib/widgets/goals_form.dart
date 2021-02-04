@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
+import 'package:provider/provider.dart';
 
 import '../models/goals.dart';
 
@@ -30,6 +31,15 @@ class _GoalsFormState extends State<GoalsForm> {
     });
   }
 
+  void _submitGoalForm() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      Navigator.of(context).pop(
+        _goal,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return KeyboardAvoider(
@@ -55,11 +65,30 @@ class _GoalsFormState extends State<GoalsForm> {
                     goal: _goal,
                   ),
                   buildDateChanger(context),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  buildSubmitButton(context),
                 ],
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Container buildSubmitButton(BuildContext context) {
+    return Container(
+      alignment: Alignment.bottomRight,
+      child: FloatingActionButton.extended(
+        backgroundColor: Theme.of(context).primaryColor,
+        onPressed: () {
+          Provider.of<GoalDataProvider>(context, listen: false)
+              .addGoal(_goal, context);
+          _submitGoalForm();
+        },
+        label: Text("Add Goal"),
       ),
     );
   }
