@@ -42,8 +42,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            backgroundColor: Colors.grey[
-                800], // may want to use this as a secondary color, Looks 👌
+            backgroundColor: Colors.grey[800],
             title: Text(
               'Cancel',
               style: Theme.of(context).textTheme.headline1,
@@ -116,14 +115,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             style: Theme.of(context).textTheme.bodyText1),
                         Expanded(
                           child: TextFormField(
-                            initialValue: '0.00',
                             inputFormatters: [
                               CurrencyTextInputFormatter(),
                             ],
                             style: Theme.of(context).textTheme.bodyText1,
                             autofocus: true,
-                            keyboardType:
-                                TextInputType.numberWithOptions(decimal: false),
+                            keyboardType: TextInputType.numberWithOptions(
+                                decimal: false, signed: true),
                             onEditingComplete: () {
                               if (_formKey.currentState.validate()) {
                                 _formKey.currentState.save();
@@ -140,12 +138,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                     .pushNamed(FirstBudgetScreen.routeName);
                               }
                             },
+                            maxLength:
+                                14, // Prevents users from entering budgets >= $1billion
                             onSaved: (val) => _budget.amount =
                                 double.parse(val.replaceAll(",", "")),
                             validator: (val) {
-                              //print(val);
                               if (val.contains(new RegExp(
-                                  r'^\d{1,3}(,\d{3}){0,3}(.\d+)?$'))) {
+                                  r'^-?\d{0,3}(,\d{3}){0,3}(.\d+)?$'))) {
                                 // ^-?\d+(\.\d{1,2})?$
                                 // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
                                 // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
@@ -154,11 +153,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                             .toStringAsFixed(2)) <=
                                     0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
                                   return 'Please enter an amount greater than 0.';
-                                if (double.parse(
-                                        double.parse(val.replaceAll(",", ""))
-                                            .toStringAsFixed(2)) >
-                                    999999999.99)
-                                  return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
                                 return null;
                               } else {
                                 return 'Please enter a number.';
