@@ -18,7 +18,6 @@ class Transaction {
   DateTime date;
 
   Transaction({
-    this.id,
     @required this.title,
     @required this.amount,
     @required this.date,
