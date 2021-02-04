@@ -30,19 +30,20 @@ class GoalScreen extends StatelessWidget {
                 case true:
                   return Text('You have no goals yet...');
                 default:
-                  print(snapshot.hasData);
                   return ListView(
                     padding: EdgeInsets.all(12.0),
                     children: snapshot.data.docs.map((doc) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 5.0, vertical: 8.0),
-                        child: Container(child: ListTile(
-                          onLongPress: () {
-                            /*capture info from this document into the goal object provided above
+                        child: Container(
+                          child: ListTile(
+                            onLongPress: () {
+                              /*capture info from this document into the goal object provided above
                             and offer them to either update or delete possibly*/
-                          },
-                        )),
+                            },
+                          ),
+                        ),
                       );
                     }).toList(),
                   );
