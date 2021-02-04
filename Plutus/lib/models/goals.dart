@@ -6,15 +6,17 @@ import '../providers/auth.dart';
 
 class Goal {
   String id; // (db will generate primary key; just need to obtain it from db)
-  String title;
-  double amount;
-  double goalAmount;
+  String title; // Goal title
+  double amountSaved; // Amount currently saved up
+  double goalAmount; // Total amount of goal
+  DateTime dateOfGoal; // Date goal was set
 
   // Call this function to set the data when you have gathered all the value for creating a goal
   Goal({
     this.title,
-    this.amount,
+    this.amountSaved,
     this.goalAmount,
+    this.dateOfGoal,
   });
 
   // will need to add databse code to obtain id from document
@@ -31,7 +33,7 @@ class Goal {
   }
 
   double getAmount() {
-    return amount;
+    return amountSaved;
   }
 
   double getGoalAmount() {

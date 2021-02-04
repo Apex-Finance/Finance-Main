@@ -1,12 +1,10 @@
 import 'package:Plutus/widgets/goals_form.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
 import '../models/goals.dart';
-import '../widgets/goals_list_tile.dart';
-import '../models/goals.dart';
+import '../widgets/goals_list_tile.dart'; // do not remove, will be used
 import '../providers/auth.dart';
 
 class GoalScreen extends StatelessWidget {
@@ -15,7 +13,7 @@ class GoalScreen extends StatelessWidget {
   void _enterGoal(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,
-      context: null,
+      context: context,
       builder: (_) => GoalsForm(),
     );
   }
@@ -34,14 +32,25 @@ class GoalScreen extends StatelessWidget {
 
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
+            // Do we need this? It appears everytime you switch to the Goal tab -Juan
             return Text('Loading...');
           default:
             switch (snapshot.data.docs.isEmpty) {
               case true:
                 return Center(
-                  child: Text(
-                    'No goals yet. Ready to add one?',
-                    style: Theme.of(context).textTheme.headline1,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('No goals yet. Ready to add one?',
+                          style: Theme.of(context).textTheme.bodyText1),
+                      RaisedButton(
+                          color: Theme.of(context).primaryColor,
+                          textColor: Theme.of(context).canvasColor,
+                          child: Text(
+                            "Add Goal",
+                          ),
+                          onPressed: () => _enterGoal(context)),
+                    ],
                   ),
                 );
               default:
