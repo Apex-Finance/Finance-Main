@@ -17,14 +17,6 @@ class IncomeScreen extends StatefulWidget {
   _IncomeScreenState createState() => _IncomeScreenState();
 }
 
-// Prevents user from inputting numbers in the thousandths+
-// TODO Currently this class allows the user to input past the hundreths place; those numbers will not be visible
-// TODO to the user. Any data passed the hundreths is still there, however. The user can change the data, but will have to backspace several times
-// TODO (depending on how many numbers past the decimal point he inputted) to see any changes.
-
-/* USE CASE: User inputs 34.56293 but only sees 34.56. User can hit "Done" and be taken to first_budget_screen.dart where total budget == $34.56
-   To change 34.56 to 34.57 however, user MUST hit backspace 4 times (only happens while he is on the same screen). This action deletes the 6293.*/
-
 class _IncomeScreenState extends State<IncomeScreen> {
   final _formKey = GlobalKey<FormState>();
 
@@ -125,7 +117,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             onEditingComplete: () {
                               if (_formKey.currentState.validate()) {
                                 _formKey.currentState.save();
-                                // perhaps we need to call addBudget here?
                                 _budget.id = DateTime(monthData.selectedYear,
                                         monthData.selectedMonth)
                                     .toIso8601String();
@@ -138,8 +129,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                     .pushNamed(FirstBudgetScreen.routeName);
                               }
                             },
-                            maxLength:
-                                14, // Prevents users from entering budgets >= $1billion
+                            // Prevents users from entering budgets >= $1billion
+                            maxLength: 14,
                             onSaved: (val) => _budget.amount =
                                 double.parse(val.replaceAll(",", "")),
                             validator: (val) {
