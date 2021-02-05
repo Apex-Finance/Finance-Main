@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../providers/auth.dart';
 
 class AccountScreen extends StatelessWidget {
   static const routeName = '/account';
@@ -6,7 +7,13 @@ class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(
+          'Account Screen',
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+      ),
+
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {
       //     Navigator.of(context).pushNamed('/dashboard');
@@ -26,29 +33,16 @@ class AccountScreen extends StatelessWidget {
               height: 20,
             ),
             Text(
-              'Account Screen',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            SizedBox(
-              height: 20,
+              'User name',
+              style: Theme.of(context).textTheme.bodyText2,
             ),
             Icon(
               Icons.account_circle,
               size: 200,
               color: Theme.of(context).primaryColor,
             ),
-            SizedBox(
-              height: 20,
-            ),
             Text(
-              'User name',
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Password',
+              'Change Password',
               style: Theme.of(context).textTheme.bodyText2,
             ),
           ],
