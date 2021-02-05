@@ -65,6 +65,7 @@ class _AuthFormState extends State<AuthForm> {
           'password': password,
         });
       }
+      Provider.of<Auth>(context, listen: false).setEmail(email);
       Provider.of<Auth>(context, listen: false)
           .setUserId(credentialResult.user.uid);
       Provider.of<Auth>(context, listen: false).setPassword(password);
