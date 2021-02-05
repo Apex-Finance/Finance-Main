@@ -14,6 +14,14 @@ class Auth with ChangeNotifier {
   String email;
   String password;
 
+  void setEmail(String emailValue) {
+    email = emailValue;
+  }
+
+  String getEmail() {
+    return email;
+  }
+
   setPassword(String passwordEntered) {
     password = passwordEntered;
   }

@@ -27,7 +27,7 @@ class _TransactionListTileState extends State<TransactionListTile> {
     ).then((newTransaction) {
       if (newTransaction == null) return;
       Provider.of<Transactions>(context, listen: false)
-          .editTransaction(newTransaction);
+          .editTransaction(newTransaction, context);
     });
   }
 
@@ -81,7 +81,7 @@ class _TransactionListTileState extends State<TransactionListTile> {
           },
           onDismissed: (direction) {
             Provider.of<Transactions>(context, listen: false)
-                .deleteTransaction(widget.transaction.id);
+                .deleteTransaction(widget.transaction, context);
             Scaffold.of(context)
               ..removeCurrentSnackBar()
               ..showSnackBar(

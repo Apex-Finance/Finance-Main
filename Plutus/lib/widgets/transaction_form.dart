@@ -20,7 +20,6 @@ class _TransactionFormState extends State<TransactionForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime _date = DateTime.now();
   Transaction _transaction = Transaction(
-    id: null,
     title: null,
     category: null,
     amount: null,
@@ -32,17 +31,22 @@ class _TransactionFormState extends State<TransactionForm> {
   void _setDate(DateTime value) {
     if (value == null) return; // if user cancels datepicker
     setState(() {
-      _transaction.date =
-          _date = value; // update date if date changes since no onsave property
+      _transaction.setDate(value);
+      // _transaction.date =
+      //     _date = value;
+      // update date if date changes since no onsave property
     });
   }
 
   // Change the category of the transaction
+  //TODO this may need to be heavily revised after we set up the stream for
+  //TODO categories
   void _setCategory(MainCategory value) {
     if (value == null) return; // if user taps out of popup
     setState(() {
-      _transaction.category = category =
-          value; // update category if category changes since no onsave property
+      _transaction.setCategory(value);
+      // _transaction.category = category =
+      //     value; // update category if category changes since no onsave property
     });
   }
 
@@ -60,17 +64,23 @@ class _TransactionFormState extends State<TransactionForm> {
 
   @override
   void initState() {
-    _transaction.category =
-        category; // initialize date and category since no onsave property
-    _transaction.date = _date;
+    _transaction.setCategory(category);
+    _transaction.setDate(_date);
+    // _transaction.category =
+    //     category; // initialize date and category since no onsave property
+    // _transaction.date = _date;
 
     if (widget.transaction != null) {
       // if editing, store previous values in transaction to display previous values and submit them later
-      _transaction.id = widget.transaction.id;
-      _transaction.title = widget.transaction.title;
-      _transaction.category = category = widget.transaction.category;
-      _transaction.amount = widget.transaction.amount;
-      _transaction.date = _date = widget.transaction.date;
+      _transaction.setTitle(widget.transaction.title);
+      _transaction.setCategory(widget.transaction.category);
+      _transaction.setAmount(widget.transaction.amount);
+      _transaction.setDate(widget.transaction.date);
+      // _transaction.id = widget.transaction.id;
+      // _transaction.title = widget.transaction.title;
+      // _transaction.category = category = widget.transaction.category;
+      // _transaction.amount = widget.transaction.amount;
+      // _transaction.date = _date = widget.transaction.date;
     }
     super.initState();
   }
@@ -162,6 +172,9 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   Row buildCategoryChanger(BuildContext context) {
+    //TODO this will need to be rebuilt to stream the default categories in the
+    //TODO database so we can tie the title and id to the transaction; this will
+    //TODO eventually help with custom categories
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
