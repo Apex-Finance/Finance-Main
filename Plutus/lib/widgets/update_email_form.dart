@@ -5,21 +5,16 @@ import 'package:provider/provider.dart';
 
 import '../providers/auth.dart';
 
-class UpdateCredentialsForm extends StatefulWidget {
+class UpdateEmailForm extends StatefulWidget {
   @override
-  _UpdateCredentialsFormState createState() => _UpdateCredentialsFormState();
+  _UpdateEmailFormState createState() => _UpdateEmailFormState();
 }
 
-enum CredentialUpdate { Password, Email }
-
-class _UpdateCredentialsFormState extends State<UpdateCredentialsForm> {
+class _UpdateEmailFormState extends State<UpdateEmailForm> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  CredentialUpdate _credentialUpdate = CredentialUpdate.Email;
   final User authInfo = FirebaseAuth.instance.currentUser;
   final FirebaseFirestore userInfo = FirebaseFirestore.instance;
   String newEmail;
-  String newPassword;
-  final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
 
   void _showErrorDialog(String message) {
@@ -48,18 +43,6 @@ class _UpdateCredentialsFormState extends State<UpdateCredentialsForm> {
     });
   }
 
-  updatePassword() async {
-    authInfo.updatePassword(newPassword);
-    userInfo
-        .collection('users')
-        .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .set({'password': newPassword}, SetOptions(merge: true)).catchError(
-            (error) {
-      print(error);
-    });
-    Provider.of<Auth>(context, listen: false).setPassword(newPassword);
-  }
-
   void _submit() async {
     if (!_formKey.currentState.validate()) {
       // Invalid!
@@ -73,11 +56,7 @@ class _UpdateCredentialsFormState extends State<UpdateCredentialsForm> {
           password: Provider.of<Auth>(context, listen: false).getPassword(),
         ),
       );
-      if (_credentialUpdate == CredentialUpdate.Email) {
-        updateEmail();
-      } else {
-        updatePassword();
-      }
+      updateEmail();
     } on FirebaseAuthException catch (error) {
       var errorMessage = 'Authentication failed.';
       if (error.code == 'user-mismatch') {
@@ -101,14 +80,6 @@ class _UpdateCredentialsFormState extends State<UpdateCredentialsForm> {
     }
   }
 
-  void _switchCredentialUpdate() {
-    if (_credentialUpdate == CredentialUpdate.Email) {
-      _credentialUpdate = CredentialUpdate.Password;
-    } else {
-      _credentialUpdate = CredentialUpdate.Email;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
@@ -127,50 +98,26 @@ class _UpdateCredentialsFormState extends State<UpdateCredentialsForm> {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  if (_credentialUpdate == CredentialUpdate.Email)
-                    TextFormField(
-                      decoration: InputDecoration(labelText: 'E-Mail'),
-                      keyboardType: TextInputType.emailAddress,
-                      onEditingComplete: () =>
-                          FocusScope.of(context).nextFocus(),
-                      controller: _emailController,
-                      validator: (value) {
-                        if (value.isEmpty || !value.contains('@')) {
-                          return 'Invalid email!';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        newEmail = value.trim();
-                      },
-                    ),
-                  if (_credentialUpdate == CredentialUpdate.Password)
-                    TextFormField(
-                      decoration: InputDecoration(labelText: 'Password'),
-                      onEditingComplete: () => {
-                        if (_credentialUpdate == CredentialUpdate.Password)
-                          {FocusScope.of(context).nextFocus()}
-                        else
-                          {FocusScope.of(context).unfocus()}
-                      },
-                      obscureText: true,
-                      controller: _passwordController,
-                      // ignore: missing_return
-                      validator: (value) {
-                        if (value.isEmpty || value.length < 5) {
-                          return 'Password is too short!';
-                        }
-                      },
-                      onSaved: (value) {
-                        newPassword = value.trim();
-                      },
-                    ),
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'E-Mail'),
+                    keyboardType: TextInputType.emailAddress,
+                    onEditingComplete: () => FocusScope.of(context).unfocus(),
+                    controller: _emailController,
+                    validator: (value) {
+                      if (value.isEmpty || !value.contains('@')) {
+                        return 'Invalid email!';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      newEmail = value.trim();
+                    },
+                  ),
                   SizedBox(
                     height: 20,
                   ),
                   RaisedButton(
-                    child: Text(
-                        'Change ${_credentialUpdate == CredentialUpdate.Email ? 'Email' : 'Password'}'),
+                    child: Text('Change Email'),
                     onPressed: _submit,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
@@ -179,15 +126,6 @@ class _UpdateCredentialsFormState extends State<UpdateCredentialsForm> {
                         EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
                     color: Theme.of(context).primaryColor,
                     textColor: Theme.of(context).primaryTextTheme.button.color,
-                  ),
-                  FlatButton(
-                    child: Text(
-                        '${_credentialUpdate == CredentialUpdate.Email ? 'CHANGE EMAIL' : 'CHANGE PASSWORD'} INSTEAD'),
-                    onPressed: _switchCredentialUpdate,
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    textColor: Theme.of(context).primaryColor,
                   ),
                 ],
               ),
