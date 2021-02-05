@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import '../providers/auth.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AccountScreen extends StatelessWidget {
   static const routeName = '/account';
+  Future<String> returnEmail(BuildContext context) async {
+    var dbRef = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .get();
+    return dbRef.data()['email'];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,16 +43,25 @@ class AccountScreen extends StatelessWidget {
               height: 20,
             ),
             Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '${Provider.of<Auth>(context, listen: false).getEmail()}',
+                  '$returnEmail',
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
+                SizedBox(
+                  width: 10,
+                ),
+                // IconButton(
+                //icon:
                 Icon(
                   Icons.create_sharp,
-                  size: 20,
+                  size: 25,
                   color: Theme.of(context).primaryColor,
+                  //onPressed: () {},
                 ),
+                // ),
               ],
             ),
             Icon(
@@ -52,12 +69,19 @@ class AccountScreen extends StatelessWidget {
               size: 200,
               color: Theme.of(context).primaryColor,
             ),
-            Card(
-              color: Colors.grey[800],
+            RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20),
+                  bottom: Radius.circular(20),
+                ),
+              ),
+              color: Theme.of(context).primaryColor,
               child: Text(
                 'Change Password',
                 style: Theme.of(context).textTheme.bodyText2,
               ),
+              onPressed: () {},
             ),
           ],
         ),
