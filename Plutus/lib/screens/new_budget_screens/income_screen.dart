@@ -53,10 +53,10 @@ class _IncomeScreenState extends State<IncomeScreen> {
               TextButton(
                 child: Text('Yes'),
                 onPressed: () {
-                  print(_budget.id);
+                  // TODO Any changes made to this budget (does not include first creation) will be saved as a brand new budget
+                  // TODO Will need to be addressed once the DB is incorporated into budget.dart
                   Provider.of<Budgets>(context, listen: false)
                       .deleteBudget(_budget.id);
-                  print(_budget.id);
                   Navigator.of(context).pushNamed(TabScreen.routeName);
                 },
               ),
