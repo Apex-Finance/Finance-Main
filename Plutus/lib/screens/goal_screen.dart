@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/goals.dart';
-import '../widgets/goals_list_tile.dart'; // do not remove, will be used
+import '../widgets/goals_list_tile.dart';
 import '../providers/auth.dart';
 
 class GoalScreen extends StatelessWidget {
@@ -57,18 +57,32 @@ class GoalScreen extends StatelessWidget {
                 print(snapshot.hasData);
                 return ListView(
                   padding: EdgeInsets.all(12.0),
-                  children: snapshot.data.docs.map((doc) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5.0, vertical: 8.0),
-                      child: Container(child: ListTile(
-                        onLongPress: () {
-                          /*capture info from this document into the goal object provided above
+                  children: snapshot.data.docs.map(
+                    (doc) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5.0, vertical: 8.0),
+                        child: Column(
+                          children: [
+                            GoalsListTile(
+                                //onLongPress: () {
+                                /*capture info from this document into the goal object provided above
                             and offer them to either update or delete possibly*/
-                        },
-                      )),
-                    );
-                  }).toList(),
+                                //},
+                                ),
+                            // TODO This is temporary. Allows me to test adding a goal
+                            RaisedButton(
+                                color: Theme.of(context).primaryColor,
+                                textColor: Theme.of(context).canvasColor,
+                                child: Text(
+                                  "Add Goal",
+                                ),
+                                onPressed: () => _enterGoal(context)),
+                          ],
+                        ),
+                      );
+                    },
+                  ).toList(),
                 );
             }
         }

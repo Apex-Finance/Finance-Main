@@ -31,9 +31,11 @@ class _GoalsFormState extends State<GoalsForm> {
     });
   }
 
-  void _submitGoalForm() {
+  void _submitGoalForm(BuildContext context) {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+      Provider.of<GoalDataProvider>(context, listen: false)
+          .addGoal(_goal, context);
       Navigator.of(context).pop(
         _goal,
       );
@@ -84,9 +86,7 @@ class _GoalsFormState extends State<GoalsForm> {
       child: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {
-          Provider.of<GoalDataProvider>(context, listen: false)
-              .addGoal(_goal, context);
-          _submitGoalForm();
+          _submitGoalForm(context);
         },
         label: Text("Add Goal"),
       ),
@@ -193,7 +193,10 @@ class GoalAmountField extends StatelessWidget {
       ),
       keyboardType: TextInputType
           .number, // May want to use Currency_Input_Formatter like income.dart
-      // TODO Add validation
+      onSaved: (val) => _goal.amountSaved = double.parse(val),
+      validator: (val) {
+        return null;
+      },
     );
   }
 }
