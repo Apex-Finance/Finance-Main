@@ -28,9 +28,12 @@ class _GoalsFormState extends State<GoalsForm> {
     setState(() {
       _goal.dateOfGoal =
           _date = value; // update date if date changes since no onsave property
-    });
+    }
+        // TODO call GoalDataProvider to update date attribute; will need a date attribute in Firestore
+        );
   }
 
+  // Validates the goal object then pushes its data to the DB
   void _submitGoalForm(BuildContext context) {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -157,14 +160,13 @@ class GoalTitleField extends StatelessWidget {
       inputFormatters: [
         LengthLimitingTextInputFormatter(15),
       ],
-      maxLength: 15,
+      maxLength: 50,
       onEditingComplete: () {
-        // TODO Validate before moving to next FocusScope
         FocusScope.of(context).nextFocus();
       },
       onSaved: (val) => _goal.title = val.trim(),
       validator: (val) {
-        if (val.trim().length > 15) return 'Title is too long.';
+        if (val.trim().length > 50) return 'Title is too long.';
         if (val.isEmpty) return 'Please enter a title.';
         return null;
       },
@@ -193,9 +195,20 @@ class GoalAmountField extends StatelessWidget {
       ),
       keyboardType: TextInputType
           .number, // May want to use Currency_Input_Formatter like income.dart
-      onSaved: (val) => _goal.amountSaved = double.parse(val),
+      onSaved: (val) => _goal.goalAmount = double.parse(val),
       validator: (val) {
-        return null;
+        if (val.isEmpty) return 'Please enter an amount.';
+        if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
+          // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
+          if (double.parse(double.parse(val).toStringAsFixed(2)) <=
+              0.00) // seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
+            return 'Please enter an amount greater than 0.';
+          if (double.parse(double.parse(val).toStringAsFixed(2)) > 999999999.99)
+            return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
+          return null;
+        } else {
+          return 'Please enter a number.';
+        }
       },
     );
   }
