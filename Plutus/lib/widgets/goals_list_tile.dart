@@ -12,17 +12,11 @@ class _GoalsListTileState extends State<GoalsListTile> {
   DateTime _date = DateTime.now();
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 150,
-      child: Card(
-        // TODO Round these edges
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(20),
-          ),
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
         child: ListTile(
-          contentPadding: EdgeInsets.all(5),
           tileColor: Colors.grey[850],
           leading: Image.network(
             'https://2p2bboli8d61fqhjiqzb8p1a-wpengine.netdna-ssl.com/wp-content/uploads/2018/07/1.jpg',
@@ -59,7 +53,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
               new LinearPercentIndicator(
                 padding: EdgeInsets.fromLTRB(0, 10, 5, 10),
                 alignment: MainAxisAlignment.center,
-                width: MediaQuery.of(context).size.width * .6,
+                width: MediaQuery.of(context).size.width * .8,
                 lineHeight: 12.0,
                 backgroundColor: Colors.black,
                 progressColor: Colors.amber,

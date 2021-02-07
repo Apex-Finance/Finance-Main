@@ -115,9 +115,10 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 : Card(
                     color: Colors.grey[900],
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    )),
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                    ),
                     child: Column(children: [
                       ClipRRect(
                         borderRadius:

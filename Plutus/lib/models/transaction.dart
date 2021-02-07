@@ -75,6 +75,8 @@ class Transactions with ChangeNotifier {
   List<Transaction> get transactions => [..._transactions];
 
   void addTransaction(Transaction transaction, BuildContext context) async {
+    _transactions.add(transaction);
+    notifyListeners();
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
@@ -86,9 +88,6 @@ class Transactions with ChangeNotifier {
       'date': transaction.getDate(),
       'category': transaction.getCategory(),
     });
-
-    _transactions.add(transaction);
-    notifyListeners();
   }
 
   void editTransaction(Transaction transaction, BuildContext context) async {

@@ -57,16 +57,20 @@ class GoalScreen extends StatelessWidget {
                             height: screenHeight * 0.73, //height of TabBarView
                             child: TabBarView(
                               children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount: 5,
-                                          itemBuilder: (context, index) =>
-                                              GoalsListTile()),
+                                Card(
+                                  color: Colors.grey[900],
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20),
                                     ),
-                                  ],
+                                  ),
+                                  child: Expanded(
+                                    child: ListView.builder(
+                                        //shrinkWrap: true,
+                                        itemCount: 5,
+                                        itemBuilder: (context, index) =>
+                                            GoalsListTile()),
+                                  ),
                                 ),
                                 Column(
                                   children: <Widget>[
