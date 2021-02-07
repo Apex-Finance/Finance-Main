@@ -54,16 +54,40 @@ class Budget with ChangeNotifier {
         .toList();
   }
 
-  void setUnbudgetedCategory() {
-    // adds categories that were not budgeted but expenses were made
-    for (var transaction in transactions)
-      if (categoryAmount[transaction.category] == null)
-        categoryAmount[transaction.category] = 0.00;
-    notifyListeners();
-  }
+  // void setUnbudgetedCategory() {
+  //   // adds categories that were not budgeted but expenses were made
+  //   for (var transaction in transactions)
+  //     if (categoryAmount[transaction.category] == null)
+  //       categoryAmount[transaction.category] = 0.00;
+  //   notifyListeners();
+  // }
+
+  // static Budget getMonthlyBudget() {
+  //   MonthChanger monthChanger;
+  //   Transaction.Transactions transactions;
+  //   List<Transaction.Transaction> monthlyTransactions =
+  //       transactions.monthlyTransactions;
+  //   var budgetWithTransactions = budgets.firstWhere(
+  //     (budget) =>
+  //         DateTime.parse(budget.title).month == monthChanger.selectedMonth &&
+  //         DateTime.parse(budget.title).year == monthChanger.selectedYear,
+  //     orElse: () => Budget(
+  //         id: null,
+  //         title: null,
+  //         amount: null,
+  //         transactions: null,
+  //         categoryAmount: null),
+  //   );
+  //   if (budgetWithTransactions.amount != null) {
+  //     //b/c of the way data is set up, initializing properties here, but should eventually be getters in Budget Provider
+  //     budgetWithTransactions.transactions = monthlyTransactions;
+  //     budgetWithTransactions.remainingMonthlyAmount =
+  //         budgetWithTransactions.amount - transactions.monthlyExpenses;
+  //   }
+  //   return budgetWithTransactions;
+  // }
 
   List<MainCategory> get budgetedAndUnbudgetedCategories {
-    setUnbudgetedCategory();
     return budgetedCategory;
   }
 
@@ -111,23 +135,28 @@ class Budgets with ChangeNotifier {
       MainCategory category, double amount, BuildContext context) async {
     String categoryId = category.toString().split('.').last;
     if (amount > 0) {
+      setCategoryToDB(categoryId, amount, context);
       monthlyBudget.categoryAmount[category] = amount;
     }
     if (amount == 0) {
       monthlyBudget.categoryAmount.remove(category);
+      removeCategoryFromDB(categoryId, amount, context);
     }
     notifyListeners();
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('budgets')
-        .doc(monthlyBudget.id)
-        .collection('categories')
-        .doc(categoryId)
-        .set({
-      'amount': amount,
-      'remaining amount': amount,
-    }, SetOptions(merge: true));
+  }
+
+  void editBudget(String id, Budget updatedBudget) {
+    final budgetIndex = _budgets.indexWhere((budget) => budget.id == id);
+    if (budgetIndex >= 0) {
+      _budgets[budgetIndex] = updatedBudget;
+      notifyListeners();
+    }
+  }
+
+  void deleteBudget(String id) {
+    final budgetIndex = _budgets.indexWhere((budget) => budget.id == id);
+    _budgets.removeAt(budgetIndex);
+    notifyListeners();
   }
 
   void addBudget(Budget budget, BuildContext context) async {
@@ -145,17 +174,30 @@ class Budgets with ChangeNotifier {
     notifyListeners();
   }
 
-  void editBudget(String id, Budget updatedBudget) {
-    final budgetIndex = _budgets.indexWhere((budget) => budget.id == id);
-    if (budgetIndex >= 0) {
-      _budgets[budgetIndex] = updatedBudget;
-      notifyListeners();
-    }
+  void setCategoryToDB(
+      String categoryId, double amount, BuildContext context) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('budgets')
+        .doc(monthlyBudget.id)
+        .collection('categories')
+        .doc(categoryId)
+        .set({
+      'amount': amount,
+      'remaining amount': amount,
+    }, SetOptions(merge: true));
   }
 
-  void deleteBudget(String id) {
-    final budgetIndex = _budgets.indexWhere((budget) => budget.id == id);
-    _budgets.removeAt(budgetIndex);
-    notifyListeners();
+  void removeCategoryFromDB(
+      String categoryId, double amount, BuildContext context) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('budgets')
+        .doc(monthlyBudget.id)
+        .collection('categories')
+        .doc(categoryId)
+        .delete();
   }
 }
