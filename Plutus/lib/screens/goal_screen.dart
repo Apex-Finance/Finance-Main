@@ -20,6 +20,7 @@ class GoalScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GoalDataProvider goalDataProvider;
     Goal goal; // will change to reflect DB
     var dbRef = FirebaseFirestore.instance
         .collection('users')
@@ -54,21 +55,43 @@ class GoalScreen extends StatelessWidget {
                   ),
                 );
               default:
-                print(snapshot.hasData);
-                return ListView(
+                return ListView.builder(
                   padding: EdgeInsets.all(12.0),
-                  children: snapshot.data.docs.map((doc) {
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (context, index) {
+                    snapshot.data.docs.map(
+                      (doc) {
+                        // initialize the goal with the document data
+                        goal = goalDataProvider.initializeGoal(doc);
+                      },
+                    );
                     return Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 5.0, vertical: 8.0),
-                      child: Container(child: ListTile(
-                        onLongPress: () {
-                          /*capture info from this document into the goal object provided above
-                            and offer them to either update or delete possibly*/
-                        },
-                      )),
+                      child: Container(
+                        child: ListTile(
+                          onLongPress: () {},
+                        ),
+                      ),
                     );
-                  }).toList(),
+
+                    //   return ListView(
+                    //     padding: EdgeInsets.all(12.0),
+                    //     children: snapshot.data.docs.map((doc) {
+                    //       return Padding(
+                    //         padding: const EdgeInsets.symmetric(
+                    //             horizontal: 5.0, vertical: 8.0),
+                    //         child: Container(child: ListTile(
+                    //           onLongPress: () {
+                    //             /*capture info from this document into the goal object provided above
+                    //               and offer them to either update or delete possibly*/
+                    //           },
+                    //         )),
+                    //       );
+                    //     }).toList(),
+                    //   );
+                    // });
+                  },
                 );
             }
         }

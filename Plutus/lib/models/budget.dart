@@ -54,13 +54,13 @@ class Budget with ChangeNotifier {
         .toList();
   }
 
-  void setUnbudgetedCategory() {
-    // adds categories that were not budgeted but expenses were made
-    for (var transaction in transactions)
-      if (categoryAmount[transaction.category] == null)
-        categoryAmount[transaction.category] = 0.00;
-    notifyListeners();
-  }
+  // void setUnbudgetedCategory() {
+  //   // adds categories that were not budgeted but expenses were made
+  //   for (var transaction in transactions)
+  //     if (categoryAmount[transaction.category] == null)
+  //       categoryAmount[transaction.category] = 0.00;
+  //   notifyListeners();
+  // }
 
   // static Budget getMonthlyBudget() {
   //   MonthChanger monthChanger;
@@ -88,7 +88,6 @@ class Budget with ChangeNotifier {
   // }
 
   List<MainCategory> get budgetedAndUnbudgetedCategories {
-    setUnbudgetedCategory();
     return budgetedCategory;
   }
 
