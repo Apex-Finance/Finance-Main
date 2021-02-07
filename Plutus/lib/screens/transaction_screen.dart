@@ -132,8 +132,6 @@ class TransactionsCard extends StatelessWidget {
       : super(key: key);
 
   AsyncSnapshot<QuerySnapshot> transactionsSnapshot;
-  final double monthlyExpenses;
-  final List<Transaction.Transaction> monthlyTransactions;
   Transaction.Transaction transaction;
 
   @override
