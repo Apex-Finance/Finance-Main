@@ -62,11 +62,14 @@ class GoalDataProvider with ChangeNotifier {
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .collection('Goals')
         .doc(goal.getID())
-        .set({
-      'title': goal.getTitle(),
-      'amount': goal.getAmount(),
-      'goalAmount': goal.getGoalAmount(),
-    }, SetOptions(merge: true));
+        .set(
+      {
+        'title': goal.getTitle(),
+        'amount': goal.getAmount(),
+        'goalAmount': goal.getGoalAmount(),
+      },
+      SetOptions(merge: true),
+    );
   }
 
   void removeGoal(Goal goal, BuildContext context) async {
