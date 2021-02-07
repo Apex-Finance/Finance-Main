@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:percent_indicator/percent_indicator.dart';
+import '../models/goals.dart';
 
 class GoalsListTile extends StatefulWidget {
   @override
   _GoalsListTileState createState() => _GoalsListTileState();
+  GoalsListTile(Goal goal);
 }
 
 class _GoalsListTileState extends State<GoalsListTile> {

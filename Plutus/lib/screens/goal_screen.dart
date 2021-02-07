@@ -13,6 +13,8 @@ class GoalScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    GoalDataProvider goalDataProvider;
+
     Goal goal; // will change to reflect DB
     var dbRef = FirebaseFirestore.instance
         .collection('users')
@@ -66,20 +68,41 @@ class GoalScreen extends StatelessWidget {
                                   ),
                                   child: Expanded(
                                     child: ListView.builder(
-                                        //shrinkWrap: true,
-                                        itemCount: 5,
-                                        itemBuilder: (context, index) =>
-                                            GoalsListTile()),
+                                      //shrinkWrap: true,
+                                      itemCount: snapshot.data.docs.length,
+                                      itemBuilder: (context, index) {
+                                        snapshot.data.docs.map(
+                                          (doc) {
+                                            // initialize the goal with the document data
+                                            goal = goalDataProvider
+                                                .initializeGoal(doc);
+                                          },
+                                        );
+
+                                        return GoalsListTile(goal);
+                                      },
+                                    ),
                                   ),
                                 ),
+                                //TODO build Debt list tile
                                 Column(
                                   children: <Widget>[
                                     Expanded(
                                       child: ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount: 5,
-                                          itemBuilder: (context, index) =>
-                                              GoalsListTile()),
+                                        shrinkWrap: true,
+                                        itemCount: snapshot.data.docs.length,
+                                        itemBuilder: (context, index) {
+                                          snapshot.data.docs.map(
+                                            (doc) {
+                                              // initialize the goal with the document data
+                                              goal = goalDataProvider
+                                                  .initializeGoal(doc);
+                                            },
+                                          );
+
+                                          return GoalsListTile(goal);
+                                        },
+                                      ),
                                     ),
                                   ],
                                 ),
