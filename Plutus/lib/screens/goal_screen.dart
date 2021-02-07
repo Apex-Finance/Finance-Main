@@ -70,14 +70,6 @@ class GoalScreen extends StatelessWidget {
                             and offer them to either update or delete possibly*/
                                 //},
                                 ),
-                            // TODO This is temporary. Allows me to test adding a goal
-                            RaisedButton(
-                                color: Theme.of(context).primaryColor,
-                                textColor: Theme.of(context).canvasColor,
-                                child: Text(
-                                  "Add Goal",
-                                ),
-                                onPressed: () => _enterGoal(context)),
                           ],
                         ),
                       );
