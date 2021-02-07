@@ -5,12 +5,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AccountScreen extends StatelessWidget {
   static const routeName = '/account';
+
   Future<String> returnEmail(BuildContext context) async {
     var dbRef = await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .get();
-    return dbRef.data()['email'];
+    return await dbRef.data()['email'];
   }
 
   @override
@@ -22,6 +23,17 @@ class AccountScreen extends StatelessWidget {
           'Account Screen',
           style: Theme.of(context).textTheme.bodyText1,
         ),
+        // IconButton(
+        //icon:
+        actions: [
+          Icon(
+            Icons.logout,
+            size: 25,
+            color: Theme.of(context).accentColor,
+            //onPressed: () {},
+          ),
+        ],
+        // ),
       ),
 
       // floatingActionButton: FloatingActionButton(
@@ -47,7 +59,7 @@ class AccountScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '$returnEmail',
+                  '$email',
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 SizedBox(
