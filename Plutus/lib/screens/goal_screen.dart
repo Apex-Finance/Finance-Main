@@ -29,7 +29,6 @@ class GoalScreen extends StatelessWidget {
       stream: dbRef.snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
             // Do we need this? It appears everytime you switch to the Goal tab -Juan
