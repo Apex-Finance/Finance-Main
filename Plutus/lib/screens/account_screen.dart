@@ -6,13 +6,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class AccountScreen extends StatelessWidget {
   static const routeName = '/account';
 
-  Future<String> returnEmail(BuildContext context) async {
-    var dbRef = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .get();
-    return await dbRef.data()['email'];
-  }
+  // String returnEmail(BuildContext context) async {
+  //   var dbRef = await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(Provider.of<Auth>(context, listen: false).getUserId())
+  //       .get();
+  //   var email = await dbRef.data()['email'];
+  //   return email;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +60,8 @@ class AccountScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '$email',
+                  //'$email',
+                  'name',
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 SizedBox(
