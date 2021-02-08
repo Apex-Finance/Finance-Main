@@ -14,19 +14,14 @@ class GoalsForm extends StatefulWidget {
 class _GoalsFormState extends State<GoalsForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime _date = DateTime.now();
-  Goal _goal = Goal(
-    title: null,
-    amountSaved: null,
-    goalAmount: null,
-    dateOfGoal: null,
-  );
+  Goal _goal;
 
   // TODO May need to change to update to DB
   void _setDate(DateTime value) {
     if (value == null) return; // if user cancels datepicker
     setState(() {
-      _goal.dateOfGoal =
-          _date = value; // update date if date changes since no onsave property
+      _goal.setDate(
+          value); // update date if date changes since no onsave property
     });
   }
 
@@ -117,7 +112,7 @@ class GoalTitleField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue: _goal.title ?? '',
+      initialValue: _goal.getTitle() ?? '',
       decoration: InputDecoration(
         labelStyle: new TextStyle(
             color: Theme.of(context).primaryColor, fontSize: 16.0),
@@ -133,7 +128,7 @@ class GoalTitleField extends StatelessWidget {
         // TODO Validate before moving to next FocusScope
         FocusScope.of(context).nextFocus();
       },
-      onSaved: (val) => _goal.title = val.trim(),
+      onSaved: (val) => _goal.setTitle(val.trim()),
       validator: (val) {
         if (val.trim().length > 15) return 'Title is too long.';
         if (val.isEmpty) return 'Please enter a title.';
@@ -156,7 +151,8 @@ class GoalAmountField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue: _goal.goalAmount == null ? '' : _goal.goalAmount.toString(),
+      initialValue:
+          _goal.getGoalAmount() == null ? '' : _goal.getGoalAmount().toString(),
       decoration: InputDecoration(
         labelStyle: new TextStyle(
             color: Theme.of(context).primaryColor, fontSize: 16.0),
