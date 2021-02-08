@@ -2,6 +2,7 @@ import 'package:Plutus/models/categories.dart';
 import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:circular_menu/circular_menu.dart';
 
 import './budget_screen.dart';
 import './transaction_screen.dart';
@@ -107,10 +108,19 @@ class _TabScreenState extends State<TabScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () => _enterTransaction(context),
+      floatingActionButton: CircularMenu(
+        radius: 70,
+        alignment:
+            Alignment.bottomCenter, // this is default, so may not be needed
+        items: [
+          CircularMenuItem(
+              margin: 65, icon: Icons.account_balance, onTap: () {}),
+          CircularMenuItem(icon: Icons.shopping_cart, onTap: () {}),
+          CircularMenuItem(margin: 65, icon: Icons.star, onTap: () {}),
+        ],
+        //child: Icon(Icons.add),
+        //backgroundColor: Theme.of(context).primaryColor,
+        //onPressed: () => _enterTransaction(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: _pages[_selectedPageIndex],

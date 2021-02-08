@@ -128,7 +128,11 @@ class _TransactionScreenState extends State<TransactionScreen> {
 }
 
 class TransactionsCard extends StatelessWidget {
-  const TransactionsCard({Key key, @required this.transactionsSnapshot})
+  TransactionsCard(
+      {Key key,
+      @required this.transactionsSnapshot,
+      this.monthlyExpenses,
+      this.monthlyTransactions})
       : super(key: key);
 
   AsyncSnapshot<QuerySnapshot> transactionsSnapshot;
