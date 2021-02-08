@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
-import 'package:provider/provider.dart';
 
 import '../models/goals.dart';
 
@@ -15,34 +14,15 @@ class GoalsForm extends StatefulWidget {
 class _GoalsFormState extends State<GoalsForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime _date = DateTime.now();
-  Goal _goal = Goal(
-    title: null,
-    amountSaved: null,
-    goalAmount: null,
-    dateOfGoal: null,
-  );
+  Goal _goal;
 
   // TODO May need to change to update to DB
   void _setDate(DateTime value) {
     if (value == null) return; // if user cancels datepicker
     setState(() {
-      _goal.dateOfGoal =
-          _date = value; // update date if date changes since no onsave property
-    }
-        // TODO call GoalDataProvider to update date attribute; will need a date attribute in Firestore
-        );
-  }
-
-  // Validates the goal object then pushes its data to the DB
-  void _submitGoalForm(BuildContext context) {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      Provider.of<GoalDataProvider>(context, listen: false)
-          .addGoal(_goal, context);
-      Navigator.of(context).pop(
-        _goal,
-      );
-    }
+      _goal.setDate(
+          value); // update date if date changes since no onsave property
+    });
   }
 
   @override
@@ -70,28 +50,11 @@ class _GoalsFormState extends State<GoalsForm> {
                     goal: _goal,
                   ),
                   buildDateChanger(context),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  buildSubmitButton(context),
                 ],
               ),
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Container buildSubmitButton(BuildContext context) {
-    return Container(
-      alignment: Alignment.bottomRight,
-      child: FloatingActionButton.extended(
-        backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () {
-          _submitGoalForm(context);
-        },
-        label: Text("Add Goal"),
       ),
     );
   }
@@ -149,7 +112,7 @@ class GoalTitleField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue: _goal.title ?? '',
+      initialValue: _goal.getTitle() ?? '',
       decoration: InputDecoration(
         labelStyle: new TextStyle(
             color: Theme.of(context).primaryColor, fontSize: 16.0),
@@ -160,13 +123,14 @@ class GoalTitleField extends StatelessWidget {
       inputFormatters: [
         LengthLimitingTextInputFormatter(15),
       ],
-      maxLength: 50,
+      maxLength: 15,
       onEditingComplete: () {
+        // TODO Validate before moving to next FocusScope
         FocusScope.of(context).nextFocus();
       },
-      onSaved: (val) => _goal.title = val.trim(),
+      onSaved: (val) => _goal.setTitle(val.trim()),
       validator: (val) {
-        if (val.trim().length > 50) return 'Title is too long.';
+        if (val.trim().length > 15) return 'Title is too long.';
         if (val.isEmpty) return 'Please enter a title.';
         return null;
       },
@@ -187,7 +151,8 @@ class GoalAmountField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue: _goal.goalAmount == null ? '' : _goal.goalAmount.toString(),
+      initialValue:
+          _goal.getGoalAmount() == null ? '' : _goal.getGoalAmount().toString(),
       decoration: InputDecoration(
         labelStyle: new TextStyle(
             color: Theme.of(context).primaryColor, fontSize: 16.0),
@@ -195,21 +160,7 @@ class GoalAmountField extends StatelessWidget {
       ),
       keyboardType: TextInputType
           .number, // May want to use Currency_Input_Formatter like income.dart
-      onSaved: (val) => _goal.goalAmount = double.parse(val),
-      validator: (val) {
-        if (val.isEmpty) return 'Please enter an amount.';
-        if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
-          // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
-          if (double.parse(double.parse(val).toStringAsFixed(2)) <=
-              0.00) // seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
-            return 'Please enter an amount greater than 0.';
-          if (double.parse(double.parse(val).toStringAsFixed(2)) > 999999999.99)
-            return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
-          return null;
-        } else {
-          return 'Please enter a number.';
-        }
-      },
+      // TODO Add validation
     );
   }
 }
