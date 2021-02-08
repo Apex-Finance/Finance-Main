@@ -37,9 +37,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => Auth(),
         ),
-        ChangeNotifierProvider(
-          create: (context) => MonthChanger(),
-        ),
+        ChangeNotifierProvider(create: (context) => MonthChanger()),
         ChangeNotifierProxyProvider<MonthChanger, Transactions>(
           update: (buildContext, monthChanger, previousTransactions) =>
               Transactions(

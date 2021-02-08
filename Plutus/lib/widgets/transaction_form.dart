@@ -41,7 +41,7 @@ class _TransactionFormState extends State<TransactionForm> {
   // Change the category of the transaction
   //TODO this may need to be heavily revised after we set up the stream for
   //TODO categories
-  void _setCategory(String value) {
+  void _setCategory(MainCategory value) {
     if (value == null) return; // if user taps out of popup
     setState(() {
       _transaction.setCategory(value);
@@ -52,10 +52,6 @@ class _TransactionFormState extends State<TransactionForm> {
 
   // If each textformfield passes the validation, save it's value to the transaction, and return the transaction to the previous screen
   void _submitTransactionForm() {
-    categoryIcon.forEach((key, value) {
-      print('$key, ${value.codePoint}');
-    });
-
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       if (_transaction.id == null) // assign new id if not editing
@@ -68,7 +64,7 @@ class _TransactionFormState extends State<TransactionForm> {
 
   @override
   void initState() {
-    // _transaction.setCategory(category);
+    _transaction.setCategory(category);
     _transaction.setDate(_date);
     // _transaction.category =
     //     category; // initialize date and category since no onsave property

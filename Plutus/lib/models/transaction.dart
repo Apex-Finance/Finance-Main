@@ -10,7 +10,7 @@ import '../providers/auth.dart';
 class Transaction {
   String id;
   String title;
-  String category;
+  MainCategory category;
   /* this will be treated like an id to 
      compare to the actual category id and
      a budget with the same category id */
@@ -40,11 +40,11 @@ class Transaction {
     return title;
   }
 
-  void setCategory(String categoryValue) {
+  void setCategory(MainCategory categoryValue) {
     category = categoryValue;
   }
 
-  String getCategory() {
+  MainCategory getCategory() {
     return category;
   }
 
@@ -73,19 +73,6 @@ class Transactions with ChangeNotifier {
 
   List<Transaction> get transactions => [..._transactions];
 
-  Transaction initializeTransaction(DocumentSnapshot doc) {
-    // Initialize a transaction with document data
-    Transaction transaction;
-
-    transaction.setID(doc.id);
-    transaction.setTitle(doc.data()['title']);
-    transaction.setDate(doc.data()['date']);
-    transaction.setCategory(doc.data()['category codepoint']);
-    transaction.setAmount(doc.data()['amount']);
-
-    return transaction;
-  }
-
   void addTransaction(Transaction transaction, BuildContext context) async {
     await FirebaseFirestore.instance
         .collection('users')
@@ -96,7 +83,7 @@ class Transactions with ChangeNotifier {
       'title': transaction.getTitle(),
       'amount': transaction.getAmount(),
       'date': transaction.getDate(),
-      'category codepoint': transaction.getCategory(),
+      'category': transaction.getCategory(),
     });
 
     _transactions.add(transaction);
@@ -108,7 +95,7 @@ class Transactions with ChangeNotifier {
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .collection('Transactions')
-        .doc(transaction.getID())
+        .doc()
         .set(
       {
         'title': transaction.getTitle(),

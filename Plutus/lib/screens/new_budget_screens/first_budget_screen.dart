@@ -16,8 +16,6 @@ class FirstBudgetScreen extends StatefulWidget {
 
 class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   final _formKey = GlobalKey<FormState>();
-  List<FocusNode> catAmountFocusNodes = List<FocusNode>.generate(
-      MainCategory.values.length, (index) => FocusNode());
   MainCategory activeCategory = MainCategory.values[0];
   double activeAmount = 0;
 
@@ -66,7 +64,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             style: TextStyle(color: Colors.amber, fontSize: 15),
                           ),
                           AutoSizeText(
-                            '\$${budget.amount}', // .toStringAsFixed(2)
+                            '\$${budget.amount.toStringAsFixed(2)}',
                             maxLines: 1,
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor,
@@ -98,11 +96,9 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                     shrinkWrap: true,
                     itemCount: MainCategory.values.length,
                     itemBuilder: (context, index) => CategoryListTile(
-                      MainCategory.values[index],
-                      setActiveCategory,
-                      catAmountFocusNodes,
-                      index,
-                    ),
+                        MainCategory.values[index], setActiveCategory
+                        //?
+                        ),
                   ),
                 ),
                 Container(
@@ -115,8 +111,11 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                         Provider.of<Budgets>(context, listen: false)
                             .setCategoryAmount(
                                 activeCategory, activeAmount, context);
+                        //TODO UPDATE WHATEVER FIELD THEY WERE ENTERING WHEN TAPPED..would need the list of focusnodes first
+                        //TODO Add a Budget (BUG: If you don't hit this button but have added a monthly income and have hit the
+                        //TODO button, it adds the budget anyway.)
                         setState(() {
-                          if (budget.remainingAmount < -0.001)
+                          if (budget.remainingAmount < 0.00)
                             Scaffold.of(context).showSnackBar(
                               SnackBar(
                                 behavior: SnackBarBehavior.floating,
@@ -130,7 +129,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                 ),
                               ),
                             );
-                          else if (budget.remainingAmount > 0.001) {
+                          else if (budget.remainingAmount > 0.00) {
                             Scaffold.of(context).showSnackBar(
                               SnackBar(
                                 behavior: SnackBarBehavior.floating,
