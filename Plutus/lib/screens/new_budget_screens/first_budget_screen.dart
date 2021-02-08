@@ -47,7 +47,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                 Text(
                   "New Monthly Budget",
                   style: TextStyle(
-                    color: Colors.amber,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 30,
                   ),
                 ),
@@ -61,7 +61,9 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                         children: [
                           Text(
                             'Total Budget:',
-                            style: TextStyle(color: Colors.amber, fontSize: 15),
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 15),
                           ),
                           AutoSizeText(
                             '\$${budget.amount.toStringAsFixed(2)}',
@@ -77,7 +79,9 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                         children: [
                           Text(
                             'Remaining Budget:',
-                            style: TextStyle(color: Colors.amber, fontSize: 15),
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 15),
                           ),
                           AutoSizeText(
                             '\$${budget.remainingAmount.toStringAsFixed(2)}',
@@ -109,7 +113,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                       backgroundColor: Theme.of(context).primaryColor,
                       onPressed: () {
                         Provider.of<Budgets>(context, listen: false)
-                            .setCategoryAmount(activeCategory, activeAmount);
+                            .setCategoryAmount(
+                                activeCategory, activeAmount, context);
                         //TODO UPDATE WHATEVER FIELD THEY WERE ENTERING WHEN TAPPED..would need the list of focusnodes first
                         //TODO Add a Budget (BUG: If you don't hit this button but have added a monthly income and have hit the
                         //TODO button, it adds the budget anyway.)

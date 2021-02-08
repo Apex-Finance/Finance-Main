@@ -1,11 +1,13 @@
 import 'package:Plutus/models/month_changer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../models/transaction.dart';
+import '../models/transaction.dart' as Transaction;
 import '../widgets/transaction_list_tile.dart';
 import 'package:provider/provider.dart';
 import '../models/month_changer.dart';
+import '../providers/auth.dart';
 
 class TransactionScreen extends StatefulWidget {
   static const routeName = '/transaction';
@@ -17,37 +19,75 @@ class TransactionScreen extends StatefulWidget {
 class _TransactionScreenState extends State<TransactionScreen> {
   @override
   Widget build(BuildContext context) {
-    final transactionsData = Provider.of<Transactions>(context);
+    var authData = Provider.of<Auth>(context, listen: false);
+    var dbRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(authData.getUserId())
+        .collection('Transactions');
+    final transactionData = Provider.of<Transaction.Transactions>(context);
     var monthData = Provider.of<MonthChanger>(context);
+    return StreamBuilder<QuerySnapshot>(
+      stream: dbRef.snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) return Text('Error: ${snapshot.error}');
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 20.0),
-          child: Container(
-            width: 250,
-            child: buildMonthChanger(context, monthData),
-          ),
-        ),
-        Expanded(
-          child: Container(
-            margin: EdgeInsets.only(top: 25),
-            child: transactionsData.monthlyTransactions.isEmpty
-                ? NoTransactionsYetText()
-                : Card(
-                    color: Colors.grey[900],
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    )),
-                    child: TransactionsCard(
-                        monthlyExpenses: transactionsData.monthlyExpenses,
-                        monthlyTransactions:
-                            transactionsData.monthlyTransactions),
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            // Do we need this? It appears everytime you switch to the Goal tab -Juan
+            return Text('Loading...');
+          default:
+            switch (snapshot.data.docs.isEmpty) {
+              case true:
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('No transactions yet. Ready to add one?',
+                          style: Theme.of(context).textTheme.bodyText1),
+                      RaisedButton(
+                        color: Theme.of(context).primaryColor,
+                        textColor: Theme.of(context).canvasColor,
+                        child: Text(
+                          "Add Goal",
+                        ),
+                        onPressed: () {},
+                      ),
+                    ],
                   ),
-          ),
-        ),
-      ],
+                );
+              default:
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Container(
+                        width: 250,
+                        child: buildMonthChanger(context, monthData),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(top: 25),
+                        child: transactionData.monthlyTransactions.isEmpty
+                            ? NoTransactionsYetText()
+                            : Card(
+                                color: Colors.grey[900],
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20),
+                                  ),
+                                ),
+                                child: TransactionsCard(
+                                  transactionsSnapshot: snapshot,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ],
+                );
+            }
+        }
+      },
     );
   }
 
@@ -88,31 +128,43 @@ class _TransactionScreenState extends State<TransactionScreen> {
 }
 
 class TransactionsCard extends StatelessWidget {
-  const TransactionsCard({
-    Key key,
-    @required this.monthlyExpenses,
-    @required this.monthlyTransactions,
-  }) : super(key: key);
+  TransactionsCard({Key key, @required this.transactionsSnapshot})
+      : super(key: key);
 
-  final double monthlyExpenses;
-  final List<Transaction> monthlyTransactions;
+  AsyncSnapshot<QuerySnapshot> transactionsSnapshot;
+  Transaction.Transaction transaction;
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      ClipRRect(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        child: TotalExpenses(monthlyExpenses: monthlyExpenses),
-      ),
-      Divider(height: 10),
-      Expanded(
-        child: ListView.builder(
-          itemCount: monthlyTransactions.length,
-          itemBuilder: (context, index) =>
-              TransactionListTile(monthlyTransactions[index]),
+    final transactionData = Provider.of<Transaction.Transactions>(context);
+
+    return Column(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          // TODO grab all transactions amount and enter them into total expenses here
+          child: TotalExpenses(
+            monthlyExpenses:
+                transactionData.getTransactionExpenses(transactionsSnapshot),
+          ),
         ),
-      ),
-    ]);
+        Divider(height: 10),
+        Expanded(
+          child: ListView.builder(
+            itemCount: transactionsSnapshot.data.docs.length,
+            itemBuilder: (context, index) {
+              transactionsSnapshot.data.docs.map(
+                (doc) {
+                  // initialize the transaction document into a transaction object
+                  transaction = transactionData.initializeTransaction(doc);
+                },
+              );
+              return TransactionListTile(transaction);
+            },
+          ),
+        ),
+      ],
+    );
   }
 }
 

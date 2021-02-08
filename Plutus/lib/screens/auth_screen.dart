@@ -17,8 +17,8 @@ class AuthScreen extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Colors.black,
-                  Colors.amber,
+                  Theme.of(context).canvasColor,
+                  Theme.of(context).primaryColor,
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -44,7 +44,7 @@ class AuthScreen extends StatelessWidget {
                       // ..translate(-10.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
+                        color: Theme.of(context).accentColor,
                         boxShadow: [
                           BoxShadow(
                             blurRadius: 8,

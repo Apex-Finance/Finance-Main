@@ -25,25 +25,6 @@ class _TabScreenState extends State<TabScreen> {
   @override
   void initState() {
     super.initState();
-
-    getUser();
-  }
-
-  void getUser() {
-    try {
-      final userChanges = _auth.userChanges();
-      userChanges.listen(
-        (User user) {
-          if (user == null) {
-            print('User is currently signed out!');
-          } else {
-            print('User is signed in!');
-          }
-        },
-      );
-    } catch (e) {
-      print(e);
-    }
   }
 
   List<Transaction> transactions = [];
@@ -71,7 +52,7 @@ class _TabScreenState extends State<TabScreen> {
     ).then((newTransaction) {
       if (newTransaction == null) return;
       Provider.of<Transactions>(context, listen: false)
-          .addTransaction(newTransaction);
+          .addTransaction(newTransaction, context);
     });
   }
 
@@ -91,8 +72,38 @@ class _TabScreenState extends State<TabScreen> {
       drawer: Drawer(
         child: ListView(
           children: [
-            ListTile(title: Text('Settings', style: TextTheme().bodyText1)),
-            ListTile(title: Text('Account', style: TextTheme().bodyText1)),
+            // settings
+            ListTile(
+              onTap: () {
+                Navigator.of(context).pushNamed('/settings');
+              },
+              leading: Icon(
+                Icons.settings,
+                size: 30,
+                color: Theme.of(context).primaryColor,
+              ),
+              title: Text(
+                'Settings',
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor, fontSize: 18),
+              ),
+            ),
+            // acount
+            ListTile(
+              onTap: () {
+                Navigator.of(context).pushNamed('/account');
+              },
+              leading: Icon(
+                Icons.account_circle,
+                size: 30,
+                color: Theme.of(context).primaryColor,
+              ),
+              title: Text(
+                'Account',
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor, fontSize: 18),
+              ),
+            ),
           ],
         ),
       ),

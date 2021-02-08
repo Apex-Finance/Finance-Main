@@ -6,7 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import '../models/budget.dart';
 import 'new_budget_screens/income_screen.dart';
 import '../widgets/budget_list_tile.dart';
-
+import 'new_budget_screens/first_budget_screen.dart';
 import 'package:provider/provider.dart';
 import '../models/month_changer.dart';
 
@@ -26,7 +26,19 @@ class _BudgetScreenState extends State<BudgetScreen> {
     ).then((newBudget) {
       if (newBudget == null) return;
       Provider.of<Budgets>(context, listen: false)
-          .addBudget(newBudget); //TODO check if needed
+          .addBudget(newBudget, context); //TODO check if needed
+    });
+  }
+
+  void _updateBudget() {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (_) => IncomeScreen(),
+    ).then((newBudget) {
+      if (newBudget == null) return;
+      Provider.of<Budget>(context, listen: false);
+      //.editBudget(newBudget);
     });
   }
 
@@ -103,14 +115,16 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 : Card(
                     color: Colors.grey[900],
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    )),
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                    ),
                     child: Column(children: [
                       ClipRRect(
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(20)),
                         child: ListTile(
+                          onTap: () => _updateBudget(),
                           tileColor: Colors.grey[850],
                           title: Column(
                             children: [

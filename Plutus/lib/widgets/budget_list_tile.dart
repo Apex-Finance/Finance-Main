@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../models/budget.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
+import '../models/category_icon.dart';
 
 class BudgetListTile extends StatefulWidget {
   final MainCategory category;
@@ -35,12 +36,37 @@ class _BudgetListTileState extends State<BudgetListTile> {
                 });
               },
               tileColor: Colors.grey[850],
-              title: AutoSizeText(
-                stringToUserString(enumValueToString(widget.category)),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 18),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(
+                    categoryIcon[widget.category],
+                    size: 20,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  AutoSizeText(
+                    stringToUserString(enumValueToString(widget.category)),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor, fontSize: 18),
+                  ),
+                  // category budget allocated
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '\$${monthlyBudget.categoryAmount[widget.category]}',
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 18),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               subtitle: Column(
                 children: [
@@ -67,7 +93,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                     height: 20,
                   ),
                   Text(
-                    '\$${monthlyBudget.getCategoryTransactionsAmount(monthlyBudget, widget.category)} of \$${monthlyBudget.categoryAmount[widget.category]}',
+                    '\$${monthlyBudget.categoryAmount[widget.category] - monthlyBudget.getCategoryTransactionsAmount(monthlyBudget, widget.category)} remaining',
                     style: TextStyle(
                         color: Theme.of(context).primaryColor, fontSize: 18),
                   ),
@@ -79,42 +105,76 @@ class _BudgetListTileState extends State<BudgetListTile> {
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
                 color: Colors.grey[550],
                 height: 100,
-                child: monthlyBudget.getCategoryTransactionsAmount(
-                            monthlyBudget, widget.category) ==
-                        0
-                    ? Text(
-                        'No transaction has been added yet',
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 18),
-                        textAlign: TextAlign.center,
-                      )
-                    : ListView(
-                        children: monthlyBudget
-                            .getCategoryTransactions(
-                                monthlyBudget, widget.category)
-                            .map(
-                              (trans) => Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    trans.title,
-                                    style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontSize: 18),
-                                  ),
-                                  Text(
-                                    '\$${trans.amount}',
-                                    style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontSize: 18),
-                                  )
-                                ],
-                              ),
-                            )
-                            .toList(),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Total',
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 18,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '\$${monthlyBudget.getCategoryTransactionsAmount(monthlyBudget, widget.category)}',
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 18),
+                          ),
+                        ],
                       ),
+                      Divider(
+                        color: Theme.of(context).primaryColor,
+                        height: 10,
+                        thickness: 2,
+                        indent: 0,
+                        endIndent: 0,
+                      ),
+                      monthlyBudget.getCategoryTransactionsAmount(
+                                  monthlyBudget, widget.category) ==
+                              0
+                          ? Text(
+                              'No transaction has been added yet',
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 18),
+                              textAlign: TextAlign.center,
+                            )
+                          : Column(
+                              children: monthlyBudget
+                                  .getCategoryTransactions(
+                                      monthlyBudget, widget.category)
+                                  .map(
+                                    (trans) => Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          trans.title,
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 18),
+                                        ),
+                                        Text(
+                                          '\$${trans.amount}',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 18),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                    ],
+                  ),
+                ),
               ),
           ],
         ),

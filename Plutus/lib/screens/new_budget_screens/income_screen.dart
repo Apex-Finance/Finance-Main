@@ -39,7 +39,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                   Text(
                     "Monthly Income",
                     style: TextStyle(
-                      color: Colors.amber,
+                      color: Theme.of(context).primaryColor,
                       fontSize: 35,
                     ),
                   ),
@@ -66,7 +66,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                       monthData.selectedMonth)
                                   .toIso8601String();
                               Provider.of<Budgets>(context, listen: false)
-                                  .addBudget(_budget);
+                                  .addBudget(_budget, context);
                               Navigator.of(context)
                                   .pushNamed(FirstBudgetScreen.routeName);
                             }

@@ -1,54 +1,41 @@
 import 'dart:convert';
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Auth with ChangeNotifier {
-  final _auth = FirebaseAuth.instance;
-  final Map<String, Object> currentUser = {
-    'id': null,
-    'email': null,
-  };
+  User authInfo = FirebaseAuth.instance.currentUser;
+  FirebaseFirestore userInfo = FirebaseFirestore.instance;
+  String id;
+  String email;
+  String password;
 
-  void getUser() {
-    try {
-      final userChanges = _auth.userChanges();
-      userChanges.listen(
-        (User user) {
-          if (user != null) {
-            currentUser['email'] = user.email;
-            currentUser['id'] = user.tenantId;
-          } else {
-            print('User is currently signed in!');
-          }
-        },
-      );
-    } catch (e) {
-      print(e);
-    }
+  void setEmail(String emailValue) {
+    email = emailValue;
   }
 
-  String _token;
-  DateTime _expiryDate;
-  String _userId;
-
-  bool get isAuth {
-    return token != null;
+  String getEmail() {
+    return email;
   }
 
-  String get token {
-    if (_expiryDate != null &&
-        _expiryDate.isAfter(DateTime.now()) &&
-        _token != null) {
-      return _token;
-    }
-    return null;
+  setPassword(String passwordEntered) {
+    password = passwordEntered;
   }
 
-  String get userId {
-    return _userId;
+  String getPassword() {
+    return password;
+  }
+
+  void setUserId(String userId) {
+    id = userId;
+  }
+
+  String getUserId() {
+    return id;
   }
 
   Future<bool> tryAutoLogin() async {
@@ -63,18 +50,12 @@ class Auth with ChangeNotifier {
     if (expiryDate.isBefore(DateTime.now())) {
       return false;
     }
-    _token = extractedUserData['token'];
-    _userId = extractedUserData['userId'];
-    _expiryDate = expiryDate;
     notifyListeners();
-    _autoLogout();
     return true;
   }
 
   Future<void> logout() async {
-    await _auth.signOut();
+    // await _auth.signOut();
     notifyListeners();
   }
-
-  void _autoLogout() async {}
 }
