@@ -58,16 +58,17 @@ class MyApp extends StatelessWidget {
         builder: (context) => MaterialApp(
           title: 'Plutus',
           theme: ThemeData(
-            // Theme.of(context).
-            primarySwatch: Colors.green,
-            primaryColor: Colors.red,
+            primarySwatch: Colors.amber,
+            primaryColor: Colors.amber,
             primaryColorLight: Colors.amberAccent,
             accentColor: Colors.white,
             canvasColor: Colors.black,
             textTheme: GoogleFonts.latoTextTheme(
               TextTheme(
-                bodyText1: TextStyle(color: Colors.purple),
-                bodyText2: TextStyle(color: Colors.blue, fontSize: 18),
+                bodyText1: TextStyle(color: Colors.amber),
+                bodyText2: TextStyle(color: Colors.amber, fontSize: 12),
+                subtitle1: TextStyle(color: Colors.amber, fontSize: 17),
+                headline1: TextStyle(color: Colors.amber, fontSize: 25),
               ),
             ),
           ),

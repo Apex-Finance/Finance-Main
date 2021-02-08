@@ -19,13 +19,13 @@ class TransactionScreen extends StatefulWidget {
 class _TransactionScreenState extends State<TransactionScreen> {
   @override
   Widget build(BuildContext context) {
-    var authData = Provider.of<Auth>(context, listen: false);
+    final transactionData = Provider.of<Transaction.Transactions>(context);
+    var monthData = Provider.of<MonthChanger>(context);
+    var authData = Provider.of<Auth>(context);
     var dbRef = FirebaseFirestore.instance
         .collection('users')
         .doc(authData.getUserId())
         .collection('Transactions');
-    final transactionData = Provider.of<Transaction.Transactions>(context);
-    var monthData = Provider.of<MonthChanger>(context);
     return StreamBuilder<QuerySnapshot>(
       stream: dbRef.snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -128,43 +128,41 @@ class _TransactionScreenState extends State<TransactionScreen> {
 }
 
 class TransactionsCard extends StatelessWidget {
-  TransactionsCard({Key key, @required this.transactionsSnapshot})
+  TransactionsCard(
+      {Key key,
+      @required this.transactionsSnapshot,
+      this.monthlyExpenses,
+      this.monthlyTransactions})
       : super(key: key);
 
   AsyncSnapshot<QuerySnapshot> transactionsSnapshot;
+  final double monthlyExpenses;
+  final List<Transaction.Transaction> monthlyTransactions;
   Transaction.Transaction transaction;
 
   @override
   Widget build(BuildContext context) {
     final transactionData = Provider.of<Transaction.Transactions>(context);
 
-    return Column(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          // TODO grab all transactions amount and enter them into total expenses here
-          child: TotalExpenses(
-            monthlyExpenses:
-                transactionData.getTransactionExpenses(transactionsSnapshot),
-          ),
+    return Column(children: [
+      ClipRRect(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        child: TotalExpenses(monthlyExpenses: monthlyExpenses),
+      ),
+      Divider(height: 10),
+      Expanded(
+        child: ListView.builder(
+          itemCount: transactionsSnapshot.data.docs.length,
+          itemBuilder: (context, index) {
+            transactionsSnapshot.data.docs.map((doc) {
+              // initialize the transaction document into a transaction object
+              transaction = transactionData.initializeTransaction(doc);
+            });
+            return TransactionListTile(transaction);
+          },
         ),
-        Divider(height: 10),
-        Expanded(
-          child: ListView.builder(
-            itemCount: transactionsSnapshot.data.docs.length,
-            itemBuilder: (context, index) {
-              transactionsSnapshot.data.docs.map(
-                (doc) {
-                  // initialize the transaction document into a transaction object
-                  transaction = transactionData.initializeTransaction(doc);
-                },
-              );
-              return TransactionListTile(transaction);
-            },
-          ),
-        ),
-      ],
-    );
+      ),
+    ]);
   }
 }
 
