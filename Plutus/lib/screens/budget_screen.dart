@@ -41,7 +41,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
     if (monthData.selectedMonth == DateTime.now().month &&
         monthData.selectedYear == DateTime.now().year) {
       //current month (currently spending)
-      daysLeft = daysInMonth.day - DateTime.now().day;
+      daysLeft = daysInMonth.day - DateTime.now().day + 1;
       remainingAmountPerDay = remainingAmount / daysLeft;
     } else if (monthData.selectedYear > DateTime.now().year ||
         (monthData.selectedMonth > DateTime.now().month &&

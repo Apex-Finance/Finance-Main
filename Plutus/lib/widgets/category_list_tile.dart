@@ -10,10 +10,14 @@ import '../models/budget.dart';
 class CategoryListTile extends StatefulWidget {
   MainCategory category;
   Function categoryHandler;
+  List<FocusNode> focusNode;
+  int index;
 
   CategoryListTile(
     this.category,
     this.categoryHandler,
+    this.focusNode,
+    this.index,
   );
 
   @override
@@ -49,7 +53,6 @@ class _CategoryListTileState extends State<CategoryListTile> {
                 key: ValueKey(widget.category),
                 onFocusChange: (hasFocus) {
                   if (!hasFocus) {
-                    //TODO add validation for copy/paste text
                     if (_controller.text
                         .contains(new RegExp(r'-?[0-9]\d*(\.\d+)?$'))) {
                       if (double.parse(double.parse(_controller.text)
@@ -70,10 +73,38 @@ class _CategoryListTileState extends State<CategoryListTile> {
                       }
                       budgets.setCategoryAmount(widget.category,
                           double.parse(_controller.text), context);
-                    }
+                    } // validates for numbers < 0
+                    else if (_controller.text.isNotEmpty) {
+                      Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          content: Padding(
+                            padding: const EdgeInsets.only(top: 5.0),
+                            child: Text(
+                              'Please enter a number',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                        ),
+                      );
+                      _controller.text = '';
+                    } // valides for text that is copy/pasted in
+                    // TODO find a way to make this less redundant
+                    else if (_controller.text.isEmpty) {
+                      _controller.text = '0.00';
+                      budgets.setCategoryAmount(widget.category,
+                          double.parse(_controller.text), context);
+                    } // if amount is cleared, set to 0 so that remainingBudget can update
                   }
                 },
                 child: TextFormField(
+                  focusNode: widget.focusNode[widget.index],
+                  onFieldSubmitted: (value) {
+                    //widget.focusNode[widget.index].unfocus();
+                    if (widget.index < MainCategory.values.length) {
+                      widget.focusNode[widget.index + 1].requestFocus();
+                    }
+                  }, // go to next textfield
                   decoration: InputDecoration(
                     hintText: '0.00',
                     hintStyle: TextStyle(color: Colors.amber.withOpacity(0.6)),
