@@ -68,45 +68,60 @@ class _TabScreenState extends State<TabScreen> {
     ];
 
     return Scaffold(
-      appBar: AppBar(),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            // settings
-            ListTile(
-              onTap: () {
-                Navigator.of(context).pushNamed('/settings');
-              },
-              leading: Icon(
-                Icons.settings,
-                size: 30,
-                color: Theme.of(context).primaryColor,
-              ),
-              title: Text(
-                'Settings',
-                style: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 18),
-              ),
-            ),
-            // acount
-            ListTile(
-              onTap: () {
-                Navigator.of(context).pushNamed('/account');
-              },
-              leading: Icon(
-                Icons.account_circle,
-                size: 30,
-                color: Theme.of(context).primaryColor,
-              ),
-              title: Text(
-                'Account',
-                style: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 18),
-              ),
-            ),
-          ],
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.settings),
+          onPressed: () {
+            Navigator.of(context).pushNamed('/settings');
+          },
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.account_circle),
+            onPressed: () {
+              Navigator.of(context).pushNamed('/account');
+            },
+          ),
+        ],
       ),
+      // drawer: Drawer(
+      //   child: ListView(
+      //     children: [
+      //       // settings
+      //       ListTile(
+      //         onTap: () {
+      //           Navigator.of(context).pushNamed('/settings');
+      //         },
+      //         leading: Icon(
+      //           Icons.settings,
+      //           size: 30,
+      //           color: Theme.of(context).primaryColor,
+      //         ),
+      //         title: Text(
+      //           'Settings',
+      //           style: TextStyle(
+      //               color: Theme.of(context).primaryColor, fontSize: 18),
+      //         ),
+      //       ),
+      //       // acount
+      //       ListTile(
+      //         onTap: () {
+      //           Navigator.of(context).pushNamed('/account');
+      //         },
+      //         leading: Icon(
+      //           Icons.account_circle,
+      //           size: 30,
+      //           color: Theme.of(context).primaryColor,
+      //         ),
+      //         title: Text(
+      //           'Account',
+      //           style: TextStyle(
+      //               color: Theme.of(context).primaryColor, fontSize: 18),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: Theme.of(context).primaryColor,
