@@ -31,11 +31,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => Budget()),
+        ChangeNotifierProvider(
+          create: (context) => Budget(),
+        ),
         ChangeNotifierProvider(
           create: (_) => Auth(),
         ),
-        ChangeNotifierProvider(create: (context) => MonthChanger()),
+        ChangeNotifierProvider(
+          create: (context) => MonthChanger(),
+        ),
         ChangeNotifierProxyProvider<MonthChanger, Transactions>(
           update: (buildContext, monthChanger, previousTransactions) =>
               Transactions(

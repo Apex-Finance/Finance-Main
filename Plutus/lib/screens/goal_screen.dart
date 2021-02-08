@@ -1,3 +1,4 @@
+import 'package:Plutus/widgets/debts_tab.dart';
 import 'package:Plutus/widgets/goals_tab.dart';
 import 'package:flutter/material.dart';
 
@@ -34,9 +35,7 @@ class GoalScreen extends StatelessWidget {
                   child: TabBarView(
                     children: <Widget>[
                       GoalTab(),
-
-                      //TODO build Debt list tile
-                      Text("whatever"),
+                      DebtTab(),
                     ],
                   ),
                 ),
