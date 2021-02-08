@@ -1,6 +1,12 @@
 import 'package:Plutus/widgets/debts_tab.dart';
 import 'package:Plutus/widgets/goals_tab.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../providers/auth.dart';
+import '../models/goals.dart';
+import '../widgets/goals_list_tile.dart';
 
 class GoalScreen extends StatelessWidget {
   static const routeName = '/goal';
@@ -14,6 +20,8 @@ class GoalScreen extends StatelessWidget {
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .collection('Goals');
+    var goalDataProvider =
+        Provider.of<GoalDataProvider>(context, listen: false);
     return StreamBuilder<QuerySnapshot>(
         stream: dbRef.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
