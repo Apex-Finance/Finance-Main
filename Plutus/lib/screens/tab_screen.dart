@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:Plutus/models/categories.dart';
 import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +36,7 @@ class _TabScreenState extends State<TabScreen> {
   List<Budget> budgets = [];
 
   int _selectedPageIndex = 0;
+  bool isButtonPressed;
 
   // Select a screen from the list of screens; manages tabs
   void _selectPage(int index) {
@@ -108,19 +111,28 @@ class _TabScreenState extends State<TabScreen> {
           ],
         ),
       ),
-      floatingActionButton: CircularMenu(
-        radius: 70,
-        alignment:
-            Alignment.bottomCenter, // this is default, so may not be needed
-        items: [
-          CircularMenuItem(
-              margin: 65, icon: Icons.account_balance, onTap: () {}),
-          CircularMenuItem(icon: Icons.shopping_cart, onTap: () {}),
-          CircularMenuItem(margin: 65, icon: Icons.star, onTap: () {}),
-        ],
-        //child: Icon(Icons.add),
-        //backgroundColor: Theme.of(context).primaryColor,
-        //onPressed: () => _enterTransaction(context),
+      // TODO Toggle blur effect when button is pressed
+      floatingActionButton: BackdropFilter(
+        filter: isButtonPressed == null
+            ? null
+            : ImageFilter.blur(
+                sigmaX: 2,
+                sigmaY: 2,
+              ),
+        child: CircularMenu(
+          radius: 70,
+          alignment:
+              Alignment.bottomCenter, // this is default, so may not be needed
+          items: [
+            CircularMenuItem(
+                margin: 65, icon: Icons.account_balance, onTap: () {}),
+            CircularMenuItem(icon: Icons.shopping_cart, onTap: () {}),
+            CircularMenuItem(margin: 65, icon: Icons.star, onTap: () {}),
+          ],
+          //child: Icon(Icons.add),
+          //backgroundColor: Theme.of(context).primaryColor,
+          toggleButtonOnPressed: () => isButtonPressed = true,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: _pages[_selectedPageIndex],
