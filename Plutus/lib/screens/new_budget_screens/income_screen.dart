@@ -1,4 +1,3 @@
-import 'package:Plutus/models/budget.dart';
 import 'package:Plutus/screens/tab_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,8 +42,63 @@ class _IncomeScreenState extends State<IncomeScreen> {
               child: ListBody(
                 children: <Widget>[
                   Text(
-                    'Would you like to discard these changes?',
-                    style: Theme.of(context).textTheme.bodyText1,
+                    "Monthly Income",
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 35,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Row(
+                    children: [
+                      Text('\$', style: Theme.of(context).textTheme.bodyText1),
+                      Expanded(
+                        child: TextFormField(
+                          style: Theme.of(context).textTheme.bodyText1,
+                          autofocus: true,
+                          keyboardType: TextInputType.number,
+                          //initialValue: '0.00', // Since autofocus == true, not needed
+                          onEditingComplete: () {
+                            if (_formKey.currentState.validate()) {
+                              _formKey.currentState.save();
+                              // perhaps we need to call addBudget here?
+                              _budget.id = DateTime(monthData.selectedYear,
+                                      monthData.selectedMonth)
+                                  .toIso8601String();
+                              _budget.title = DateTime(monthData.selectedYear,
+                                      monthData.selectedMonth)
+                                  .toIso8601String();
+                              Provider.of<Budgets>(context, listen: false)
+                                  .addBudget(_budget, context);
+                              Navigator.of(context)
+                                  .pushNamed(FirstBudgetScreen.routeName);
+                            }
+                          },
+                          onSaved: (val) => _budget.amount = double.parse(val),
+                          validator: (val) {
+                            if (val
+                                .contains(new RegExp(r'-?[0-9]\d*(\.\d+)?$'))) {
+                              print(val);
+                              // TODO Restrict the decimal place to hundreths
+                              // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
+                              if (double.parse(
+                                      double.parse(val).toStringAsFixed(2)) <=
+                                  0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
+                                return 'Please enter an amount greater than 0.';
+                              if (double.parse(
+                                      double.parse(val).toStringAsFixed(2)) >
+                                  999999999.99)
+                                return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
+                              return null;
+                            } else {
+                              return 'Please enter a number.';
+                            }
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
