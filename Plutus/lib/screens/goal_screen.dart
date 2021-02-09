@@ -3,18 +3,15 @@ import 'package:Plutus/widgets/goals_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../providers/auth.dart';
 import '../models/goals.dart';
 import '../widgets/goals_list_tile.dart';
 
 class GoalScreen extends StatelessWidget {
   static const routeName = '/goal';
-
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-
     Goal goal; // will change to reflect DB
     var dbRef = FirebaseFirestore.instance
         .collection('users')
@@ -80,7 +77,6 @@ class GoalScreen extends StatelessWidget {
                                                 .initializeGoal(doc);
                                           },
                                         );
-
                                         return GoalsListTile(goal);
                                       },
                                     ),
@@ -101,7 +97,6 @@ class GoalScreen extends StatelessWidget {
                                                   .initializeGoal(doc);
                                             },
                                           );
-
                                           return GoalsListTile(goal);
                                         },
                                       ),

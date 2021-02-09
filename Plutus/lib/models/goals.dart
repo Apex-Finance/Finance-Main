@@ -1,7 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../providers/auth.dart';
 
 class Goal {
@@ -28,12 +27,32 @@ class Goal {
     return id;
   }
 
+  void setDate(DateTime dateValue) {
+    dateOfGoal = dateValue;
+  }
+
+  DateTime getDate() {
+    return dateOfGoal;
+  }
+
+  void setTitle(String titleValue) {
+    title = titleValue;
+  }
+
   String getTitle() {
     return title;
   }
 
+  void setAmountSaved(double amountValue) {
+    amountSaved = amountValue;
+  }
+
   double getAmount() {
     return amountSaved;
+  }
+
+  void setGoalAmount(double amountValue) {
+    goalAmount = amountValue;
   }
 
   double getGoalAmount() {
@@ -43,6 +62,19 @@ class Goal {
 
 // This class will be handling all database code; it will essentially be acting like the provider we used for budgets
 class GoalDataProvider with ChangeNotifier {
+  // Initialize a goal with the document data
+  Goal initializeGoal(DocumentSnapshot doc) {
+    Goal goal;
+
+    goal.setID(doc.id);
+    goal.setAmountSaved(doc.data()['amountSaved']);
+    goal.setTitle(doc.data()['title']);
+    goal.setGoalAmount(doc.data()['goalAmount']);
+    goal.setDate(doc.data()['date']);
+
+    return goal;
+  }
+
   void addGoal(Goal goal, BuildContext context) async {
     await FirebaseFirestore.instance
         .collection('users')
