@@ -25,11 +25,37 @@ class GoalScreen extends StatelessWidget {
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return Text('Loading...');
+            return Center(
+              child: Text(
+                'Loading...',
+                style: TextStyle(
+                    fontSize: 18, color: Theme.of(context).primaryColor),
+                textAlign: TextAlign.center,
+              ),
+            );
           default:
             switch (snapshot.data.docs.isEmpty) {
               case true:
-                return Text('You have no goals yet...');
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'You have no goals yet.',
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Theme.of(context).primaryColor),
+                        textAlign: TextAlign.center,
+                      ),
+                      RaisedButton(
+                          child: Text('Add Goal'),
+                          color: Theme.of(context).primaryColor,
+                          textColor: Theme.of(context).canvasColor,
+                          onPressed: () => null //_enterGoal(context),
+                          ),
+                    ],
+                  ),
+                );
               default:
                 return Card(
                   color: Colors.grey[900],
