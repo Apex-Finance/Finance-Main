@@ -2,13 +2,24 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
-
+import '../widgets/goals_form.dart';
 import '../widgets/goals_list_tile.dart';
 import '../models/goals.dart';
 import '../providers/auth.dart';
 
 class GoalScreen extends StatelessWidget {
   static const routeName = '/goal';
+  void _enterGoal(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (_) => GoalsForm(),
+    ).then((newGoal) {
+      if (newGoal == null) return;
+      Provider.of<GoalDataProvider>(context, listen: false)
+          .addGoal(newGoal, context); //TODO check if needed
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +59,11 @@ class GoalScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       RaisedButton(
-                          child: Text('Add Goal'),
-                          color: Theme.of(context).primaryColor,
-                          textColor: Theme.of(context).canvasColor,
-                          onPressed: () => null //_enterGoal(context),
-                          ),
+                        child: Text('Add Goal'),
+                        color: Theme.of(context).primaryColor,
+                        textColor: Theme.of(context).canvasColor,
+                        onPressed: () => _enterGoal(context),
+                      ),
                     ],
                   ),
                 );
