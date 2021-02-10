@@ -1,57 +1,62 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../providers/auth.dart';
 
 class Goal {
-  String _id; // (db will generate primary key; just need to obtain it from db)
-  String _title; // Goal title
-  double _amountSaved; // Amount currently saved up
-  double _goalAmount; // Total amount of goal
-  DateTime _dateOfGoal; // Date goal was set
+  String id; // (db will generate primary key; just need to obtain it from db)
+  String title; // Goal title
+  double amountSaved; // Amount currently saved up
+  double goalAmount; // Total amount of goal
+  DateTime dateOfGoal; // Date goal was set
 
   // Call this function to set the data when you have gathered all the value for creating a goal
+  Goal({
+    this.title,
+    this.amountSaved,
+    this.goalAmount,
+    this.dateOfGoal,
+  });
 
   // will need to add databse code to obtain id from document
   void setID(String idValue) {
-    _id = idValue;
+    id = idValue;
   }
 
   String getID() {
-    return _id;
-  }
-
-  void setTitle(String titleValue) {
-    _title = titleValue;
-  }
-
-  String getTitle() {
-    return _title;
-  }
-
-  void setAmountSaved(double amountValue) {
-    _amountSaved = amountValue;
-  }
-
-  double getAmountSaved() {
-    return _amountSaved;
-  }
-
-  void setGoalAmount(double amountValue) {
-    _goalAmount = amountValue;
-  }
-
-  double getGoalAmount() {
-    return _goalAmount;
+    return id;
   }
 
   void setDate(DateTime dateValue) {
-    _dateOfGoal = dateValue;
+    dateOfGoal = dateValue;
   }
 
   DateTime getDate() {
-    return _dateOfGoal;
+    return dateOfGoal;
+  }
+
+  void setTitle(String titleValue) {
+    title = titleValue;
+  }
+
+  String getTitle() {
+    return title;
+  }
+
+  void setAmountSaved(double amountValue) {
+    amountSaved = amountValue;
+  }
+
+  double getAmount() {
+    return amountSaved;
+  }
+
+  void setGoalAmount(double amountValue) {
+    goalAmount = amountValue;
+  }
+
+  double getGoalAmount() {
+    return goalAmount;
   }
 }
 
@@ -78,9 +83,8 @@ class GoalDataProvider with ChangeNotifier {
         .doc()
         .set({
       'title': goal.getTitle(),
-      'amountSaved': goal.getAmountSaved(),
+      'amount': goal.getAmount(),
       'goalAmount': goal.getGoalAmount(),
-      'date': goal.getDate(),
     });
   }
 
@@ -93,7 +97,7 @@ class GoalDataProvider with ChangeNotifier {
         .set(
       {
         'title': goal.getTitle(),
-        'amount': goal.getAmountSaved(),
+        'amount': goal.getAmount(),
         'goalAmount': goal.getGoalAmount(),
       },
       SetOptions(merge: true),

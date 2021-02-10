@@ -1,3 +1,9 @@
+/* ******************************************************** */
+// Purpose: Dummy Data for budgets to create list
+// Description: This file is to give categories for the
+// budget selection
+// Current "TODO" task:
+/* ******************************************************** */
 enum home {
   furnishings,
   homeImprovement,

@@ -1,23 +1,14 @@
-import 'package:Plutus/widgets/goals_form.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:Plutus/widgets/debts_tab.dart';
+import 'package:Plutus/widgets/goals_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../models/goals.dart';
-import '../widgets/goals_list_tile.dart'; // do not remove, will be used
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../providers/auth.dart';
+import '../models/goals.dart';
+import '../widgets/goals_list_tile.dart';
 
 class GoalScreen extends StatelessWidget {
   static const routeName = '/goal';
-
-  void _enterGoal(BuildContext context) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (_) => GoalsForm(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -29,6 +20,8 @@ class GoalScreen extends StatelessWidget {
         .collection('users')
         .doc(authDataProvider.getUserId())
         .collection('Goals');
+    var goalDataProvider =
+        Provider.of<GoalDataProvider>(context, listen: false);
     return StreamBuilder<QuerySnapshot>(
         stream: dbRef.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -87,7 +80,6 @@ class GoalScreen extends StatelessWidget {
                                                 .initializeGoal(doc);
                                           },
                                         );
-
                                         return GoalsListTile(goal);
                                       },
                                     ),
@@ -108,7 +100,6 @@ class GoalScreen extends StatelessWidget {
                                                   .initializeGoal(doc);
                                             },
                                           );
-
                                           return GoalsListTile(goal);
                                         },
                                       ),
