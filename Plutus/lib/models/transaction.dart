@@ -8,60 +8,53 @@ import 'package:provider/provider.dart';
 import '../providers/auth.dart';
 
 class Transaction {
-  String id;
-  String title;
-  String category;
+  String _id;
+  String _title;
+  String _category;
   /* this will be treated like an id to 
      compare to the actual category id and
      a budget with the same category id */
-  double amount;
-  DateTime date;
-
-  Transaction({
-    @required this.title,
-    @required this.amount,
-    @required this.date,
-    @required this.category,
-  });
+  double _amount;
+  DateTime _date;
 
   void setID(String idValue) {
-    id = idValue;
+    _id = idValue;
   }
 
   String getID() {
-    return id;
+    return _id;
   }
 
   void setTitle(String titleValue) {
-    title = titleValue;
+    _title = titleValue;
   }
 
   String getTitle() {
-    return title;
+    return _title;
   }
 
   void setCategory(String categoryValue) {
-    category = categoryValue;
+    _category = categoryValue;
   }
 
   String getCategory() {
-    return category;
+    return _category;
   }
 
   void setAmount(double amountValue) {
-    amount = amountValue;
+    _amount = amountValue;
   }
 
   double getAmount() {
-    return amount;
+    return _amount;
   }
 
   void setDate(DateTime dateValue) {
-    date = dateValue;
+    _date = dateValue;
   }
 
   DateTime getDate() {
-    return date;
+    return _date;
   }
 }
 
@@ -153,10 +146,10 @@ class Transactions with ChangeNotifier {
   List<Transaction> get monthlyTransactions {
     var unsorted = _transactions
         .where((transaction) =>
-            transaction.date.month == monthChanger.selectedMonth &&
-            transaction.date.year == monthChanger.selectedYear)
+            transaction.getDate().month == monthChanger.selectedMonth &&
+            transaction.getDate().year == monthChanger.selectedYear)
         .toList();
-    unsorted.sort((a, b) => (b.date).compareTo(a.date));
+    unsorted.sort((a, b) => (b.getDate()).compareTo(a.getDate()));
     return unsorted;
   }
 
@@ -164,7 +157,7 @@ class Transactions with ChangeNotifier {
   double get monthlyExpenses {
     var sum = 0.00;
     for (var transaction in monthlyTransactions) {
-      sum += transaction.amount;
+      sum += transaction.getAmount();
     }
     return sum;
   }

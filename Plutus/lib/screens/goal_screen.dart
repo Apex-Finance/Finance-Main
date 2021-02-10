@@ -24,9 +24,12 @@ class GoalScreen extends StatelessWidget {
     GoalDataProvider goalDataProvider;
 
     Goal goal; // will change to reflect DB
+    var goalDataProvider =
+        Provider.of<GoalDataProvider>(context, listen: false);
+    var authDataProvider = Provider.of<Auth>(context);
     var dbRef = FirebaseFirestore.instance
         .collection('users')
-        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .doc(authDataProvider.getUserId())
         .collection('Goals');
     return StreamBuilder<QuerySnapshot>(
         stream: dbRef.snapshots(),
