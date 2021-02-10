@@ -20,8 +20,6 @@ class GoalScreen extends StatelessWidget {
         .collection('users')
         .doc(authDataProvider.getUserId())
         .collection('Goals');
-    var goalDataProvider =
-        Provider.of<GoalDataProvider>(context, listen: false);
     return StreamBuilder<QuerySnapshot>(
         stream: dbRef.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {

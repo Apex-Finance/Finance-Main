@@ -10,7 +10,7 @@ import '../providers/auth.dart';
 class Transaction {
   String _id;
   String _title;
-  String _category;
+  String _categoryId;
   /* this will be treated like an id to 
      compare to the actual category id and
      a budget with the same category id */
@@ -33,12 +33,12 @@ class Transaction {
     return _title;
   }
 
-  void setCategory(String categoryValue) {
-    _category = categoryValue;
+  void setCategoryId(String categoryIdValue) {
+    _categoryId = categoryIdValue;
   }
 
-  String getCategory() {
-    return _category;
+  String getCategoryId() {
+    return _categoryId;
   }
 
   void setAmount(double amountValue) {
@@ -73,7 +73,7 @@ class Transactions with ChangeNotifier {
     transaction.setID(doc.id);
     transaction.setTitle(doc.data()['title']);
     transaction.setDate(doc.data()['date']);
-    transaction.setCategory(doc.data()['category codepoint']);
+    transaction.setCategoryId(doc.data()['category id']);
     transaction.setAmount(doc.data()['amount']);
 
     return transaction;
@@ -89,11 +89,8 @@ class Transactions with ChangeNotifier {
       'title': transaction.getTitle(),
       'amount': transaction.getAmount(),
       'date': transaction.getDate(),
-      'category codepoint': transaction.getCategory(),
+      'category id': transaction.getCategoryId(),
     });
-
-    _transactions.add(transaction);
-    notifyListeners();
   }
 
   void editTransaction(Transaction transaction, BuildContext context) async {
@@ -107,7 +104,7 @@ class Transactions with ChangeNotifier {
         'title': transaction.getTitle(),
         'amount': transaction.getAmount(),
         'date': transaction.getDate(),
-        'category': transaction.getCategory(),
+        'category id': transaction.getCategoryId(),
       },
       SetOptions(merge: true),
     );

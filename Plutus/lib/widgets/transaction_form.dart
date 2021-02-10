@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../models/categories.dart';
 import '../models/category_icon.dart';
 
@@ -39,22 +40,26 @@ class _TransactionFormState extends State<TransactionForm> {
   void _setCategory(String value) {
     if (value == null) return; // if user taps out of popup
     setState(() {
-      _transaction.setCategory(value);
+      _transaction.setCategoryId(value);
       // _transaction.category = category =
       //     value; // update category if category changes since no onsave property
     });
   }
 
   // If each textformfield passes the validation, save it's value to the transaction, and return the transaction to the previous screen
-  void _submitTransactionForm() {
+  void _submitTransactionForm(BuildContext context) {
+    var transactionDataProvider = Provider.of<Transactions>(context);
     categoryIcon.forEach((key, value) {
       print('$key, ${value.codePoint}');
     });
 
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      if (_transaction.getID() == null) // assign new id if not editing
-        _transaction.setID(DateTime.now().toIso8601String());
+      if (_transaction.getID() == null) {
+        transactionDataProvider.addTransaction(_transaction, context);
+      } else {
+        transactionDataProvider.editTransaction(_transaction, context);
+      }
       Navigator.of(context).pop(
         _transaction,
       );
@@ -72,7 +77,7 @@ class _TransactionFormState extends State<TransactionForm> {
     if (widget.transaction != null) {
       // if editing, store previous values in transaction to display previous values and submit them later
       _transaction.setTitle(widget.transaction.getTitle());
-      _transaction.setCategory(widget.transaction.getCategory());
+      _transaction.setCategoryId(widget.transaction.getCategoryId());
       _transaction.setAmount(widget.transaction.getAmount());
       _transaction.setDate(widget.transaction.getDate());
       // _transaction.id = widget.transaction.id;
@@ -125,7 +130,9 @@ class _TransactionFormState extends State<TransactionForm> {
       alignment: Alignment.bottomRight,
       child: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).primaryColor,
-        onPressed: _submitTransactionForm,
+        onPressed: () {
+          _submitTransactionForm(context);
+        },
         label: Text(
             transactionId == null ? 'Add Transaction' : 'Edit Transaction'),
       ),
