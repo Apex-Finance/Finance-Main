@@ -21,8 +21,6 @@ class GoalScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    GoalDataProvider goalDataProvider;
-
     Goal goal; // will change to reflect DB
     var goalDataProvider =
         Provider.of<GoalDataProvider>(context, listen: false);

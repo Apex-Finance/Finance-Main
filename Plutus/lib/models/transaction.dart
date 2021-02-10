@@ -111,8 +111,8 @@ class Transactions with ChangeNotifier {
       SetOptions(merge: true),
     );
 
-    final transactionIndex = _transactions
-        .indexWhere((transaction) => transaction.id == transaction.id);
+    final transactionIndex = _transactions.indexWhere(
+        (transaction) => transaction.getID() == transaction.getID());
     if (transactionIndex >= 0) {
       _transactions[transactionIndex] = transaction;
       notifyListeners();
