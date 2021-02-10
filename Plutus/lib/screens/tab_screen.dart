@@ -24,6 +24,7 @@ class TabScreen extends StatefulWidget {
 
 class _TabScreenState extends State<TabScreen> {
   final _auth = FirebaseAuth.instance;
+  final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
 
   @override
   void initState() {
@@ -36,6 +37,7 @@ class _TabScreenState extends State<TabScreen> {
   List<Budget> budgets = [];
 
   int _selectedPageIndex = 0;
+  bool isOpen = false;
 
   // Select a screen from the list of screens; manages tabs
   void _selectPage(int index) {
@@ -111,17 +113,72 @@ class _TabScreenState extends State<TabScreen> {
         ),
       ),
       // TODO Toggle blur effect when button is pressed
-      floatingActionButton: FabCircularMenu(
-        alignment: Alignment.bottomCenter,
-        children: <Widget>[
-          IconButton(icon: Icon(Icons.add), onPressed: () {}),
-          IconButton(icon: Icon(Icons.search), onPressed: () {})
-        ],
-        fabMargin: EdgeInsets.fromLTRB(0, 0, 40, 30),
-        fabOpenIcon: Icon(Icons.add),
-        // child: Icon(Icons.add),
-        // backgroundColor: Theme.of(context).primaryColor,
-        // onPressed: () => _enterTransaction(context),
+      floatingActionButton: BackdropFilter(
+        filter: isOpen
+            ? ImageFilter.blur(
+                sigmaX: 3,
+                sigmaY: 3,
+              )
+            : ImageFilter.blur(
+                sigmaX: 0,
+                sigmaY: 0,
+              ),
+        child: GestureDetector(
+          // TODO onTap changes the value if you tap ANYWHERE BUT the + button
+          onTap: () => {
+            setState(() {
+              isOpen = !isOpen;
+              print(isOpen);
+            })
+          },
+          child: FabCircularMenu(
+            // key: fabKey,
+            alignment: Alignment.bottomCenter,
+            animationDuration: Duration(milliseconds: 500),
+            children: <Widget>[
+              Ink(
+                decoration: const ShapeDecoration(
+                  color: Color(0xFF212121), // basically Colors.grey[900]
+                  shape: CircleBorder(),
+                ),
+                child: IconButton(
+                  color: Theme.of(context).primaryColor,
+                  icon: Icon(Icons.account_balance),
+                  onPressed: () {},
+                ),
+              ),
+              Ink(
+                decoration: const ShapeDecoration(
+                  color: Color(0xFF212121), // basically Colors.grey[900]
+                  shape: CircleBorder(),
+                ),
+                child: IconButton(
+                  color: Theme.of(context).primaryColor,
+                  icon: Icon(Icons.shopping_cart),
+                  onPressed: () => _enterTransaction(context),
+                ),
+              ),
+              Ink(
+                decoration: const ShapeDecoration(
+                  color: Color(0xFF212121), // basically Colors.grey[900]
+                  shape: CircleBorder(),
+                ),
+                child: IconButton(
+                  color: Theme.of(context).primaryColor,
+                  icon: Icon(Icons.star),
+                  onPressed: () {},
+                ),
+              ),
+            ],
+            ringDiameter: 300,
+            fabMargin: EdgeInsets.fromLTRB(0, 0, 40, 30),
+            fabOpenIcon: Icon(Icons.add),
+            ringColor: Colors.amber.withOpacity(0),
+            // child: Icon(Icons.add),
+            // backgroundColor: Theme.of(context).primaryColor,
+            // onPressed: () => _enterTransaction(context),
+          ),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: _pages[_selectedPageIndex],
