@@ -14,7 +14,11 @@ class GoalsForm extends StatefulWidget {
 class _GoalsFormState extends State<GoalsForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime _date = DateTime.now();
-  Goal _goal;
+  Goal _goal = Goal(
+    title: null,
+    goalAmount: null,
+    dateOfGoal: null,
+  );
 
   // TODO May need to change to update to DB
   void _setDate(DateTime value) {
