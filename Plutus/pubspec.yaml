@@ -36,7 +36,7 @@ dependencies:
   cloud_firestore: ^0.14.3
   provider: ^4.3.2+2
   currency_text_input_formatter: ^1.0.3
-  circular_menu : ^1.1.2
+  fab_circular_menu: ^1.0.1
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -4,7 +4,7 @@ import 'package:Plutus/models/categories.dart';
 import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:circular_menu/circular_menu.dart';
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 
 import './budget_screen.dart';
 import './transaction_screen.dart';
@@ -36,7 +36,6 @@ class _TabScreenState extends State<TabScreen> {
   List<Budget> budgets = [];
 
   int _selectedPageIndex = 0;
-  bool isButtonPressed;
 
   // Select a screen from the list of screens; manages tabs
   void _selectPage(int index) {
@@ -112,27 +111,17 @@ class _TabScreenState extends State<TabScreen> {
         ),
       ),
       // TODO Toggle blur effect when button is pressed
-      floatingActionButton: BackdropFilter(
-        filter: isButtonPressed == null
-            ? null
-            : ImageFilter.blur(
-                sigmaX: 2,
-                sigmaY: 2,
-              ),
-        child: CircularMenu(
-          radius: 70,
-          alignment:
-              Alignment.bottomCenter, // this is default, so may not be needed
-          items: [
-            CircularMenuItem(
-                margin: 65, icon: Icons.account_balance, onTap: () {}),
-            CircularMenuItem(icon: Icons.shopping_cart, onTap: () {}),
-            CircularMenuItem(margin: 65, icon: Icons.star, onTap: () {}),
-          ],
-          //child: Icon(Icons.add),
-          //backgroundColor: Theme.of(context).primaryColor,
-          toggleButtonOnPressed: () => isButtonPressed = true,
-        ),
+      floatingActionButton: FabCircularMenu(
+        alignment: Alignment.bottomCenter,
+        children: <Widget>[
+          IconButton(icon: Icon(Icons.add), onPressed: () {}),
+          IconButton(icon: Icon(Icons.search), onPressed: () {})
+        ],
+        fabMargin: EdgeInsets.fromLTRB(0, 0, 40, 30),
+        fabOpenIcon: Icon(Icons.add),
+        // child: Icon(Icons.add),
+        // backgroundColor: Theme.of(context).primaryColor,
+        // onPressed: () => _enterTransaction(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: _pages[_selectedPageIndex],
