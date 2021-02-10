@@ -1,7 +1,7 @@
 import 'package:Plutus/models/month_changer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'categories.dart';
+import 'package:Plutus/models/categories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
@@ -87,8 +87,6 @@ class Transactions with ChangeNotifier {
   }
 
   void addTransaction(Transaction transaction, BuildContext context) async {
-    _transactions.add(transaction);
-    notifyListeners();
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
@@ -100,6 +98,9 @@ class Transactions with ChangeNotifier {
       'date': transaction.getDate(),
       'category codepoint': transaction.getCategory(),
     });
+
+    _transactions.add(transaction);
+    notifyListeners();
   }
 
   void editTransaction(Transaction transaction, BuildContext context) async {

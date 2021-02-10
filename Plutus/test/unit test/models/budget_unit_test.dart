@@ -7,31 +7,31 @@ void main() {
   Transaction t1, t2, t3, t4;
 
   t1 = Transaction(
-    id: 't1',
     title: 'Coffee',
     amount: 3.45,
-    category: MainCategory.home,
+    date: DateTime.now(),
+    category: 'home',
   );
 
   t2 = Transaction(
-    id: 't2',
     title: 'Shirt',
+    date: DateTime.now(),
     amount: 10.96,
-    category: MainCategory.bills_and_utilities,
+    category: 'bills_and_utilities',
   );
 
   t3 = Transaction(
-    id: 't4',
+    date: DateTime.now(),
     title: 'Movies',
     amount: 25.35,
-    category: MainCategory.home,
+    category: 'home',
   );
 
   t4 = Transaction(
-    id: 't5',
+    date: DateTime.now(),
     title: 'Shoes',
     amount: 35.85,
-    category: MainCategory.food_and_drinks,
+    category: 'food_and_drinks',
   );
 
   group('getRemainingAmount', () {
