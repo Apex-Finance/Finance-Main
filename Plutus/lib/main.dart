@@ -1,3 +1,4 @@
+import 'package:Plutus/models/goals.dart';
 import 'package:Plutus/screens/new_budget_screens/income_screen.dart';
 import 'package:Plutus/models/month_changer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => Budget()),
+        ChangeNotifierProvider(create: (context) => GoalDataProvider()),
         ChangeNotifierProvider(
           create: (_) => Auth(),
         ),

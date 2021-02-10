@@ -1,7 +1,4 @@
-// import 'dart:math';
-
 import '../widgets/auth_form.dart';
-
 import 'package:flutter/material.dart';
 
 class AuthScreen extends StatelessWidget {
