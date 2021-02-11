@@ -4,7 +4,6 @@ import 'package:Plutus/models/categories.dart';
 import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fab_circular_menu/fab_circular_menu.dart';
 
 import './budget_screen.dart';
 import './transaction_screen.dart';
@@ -12,6 +11,7 @@ import './dashboard_screen.dart';
 import './goal_screen.dart';
 import '../widgets/transaction_form.dart';
 import '../models/transaction.dart';
+import '../widgets/TappableFabCircularMenu.dart';
 
 import 'package:provider/provider.dart';
 
@@ -24,7 +24,6 @@ class TabScreen extends StatefulWidget {
 
 class _TabScreenState extends State<TabScreen> {
   final _auth = FirebaseAuth.instance;
-  final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
 
   @override
   void initState() {
@@ -113,72 +112,17 @@ class _TabScreenState extends State<TabScreen> {
         ),
       ),
       // TODO Toggle blur effect when button is pressed
-      floatingActionButton: BackdropFilter(
-        filter: isOpen
-            ? ImageFilter.blur(
-                sigmaX: 3,
-                sigmaY: 3,
-              )
-            : ImageFilter.blur(
-                sigmaX: 0,
-                sigmaY: 0,
-              ),
-        child: GestureDetector(
-          // TODO onTap changes the value if you tap ANYWHERE BUT the + button
-          onTap: () => {
-            setState(() {
-              isOpen = !isOpen;
-              print(isOpen);
-            })
-          },
-          child: FabCircularMenu(
-            // key: fabKey,
-            alignment: Alignment.bottomCenter,
-            animationDuration: Duration(milliseconds: 500),
-            children: <Widget>[
-              Ink(
-                decoration: const ShapeDecoration(
-                  color: Color(0xFF212121), // basically Colors.grey[900]
-                  shape: CircleBorder(),
-                ),
-                child: IconButton(
-                  color: Theme.of(context).primaryColor,
-                  icon: Icon(Icons.account_balance),
-                  onPressed: () {},
-                ),
-              ),
-              Ink(
-                decoration: const ShapeDecoration(
-                  color: Color(0xFF212121), // basically Colors.grey[900]
-                  shape: CircleBorder(),
-                ),
-                child: IconButton(
-                  color: Theme.of(context).primaryColor,
-                  icon: Icon(Icons.shopping_cart),
-                  onPressed: () => _enterTransaction(context),
-                ),
-              ),
-              Ink(
-                decoration: const ShapeDecoration(
-                  color: Color(0xFF212121), // basically Colors.grey[900]
-                  shape: CircleBorder(),
-                ),
-                child: IconButton(
-                  color: Theme.of(context).primaryColor,
-                  icon: Icon(Icons.star),
-                  onPressed: () {},
-                ),
-              ),
-            ],
-            ringDiameter: 300,
-            fabMargin: EdgeInsets.fromLTRB(0, 0, 40, 30),
-            fabOpenIcon: Icon(Icons.add),
-            ringColor: Colors.amber.withOpacity(0),
-            // child: Icon(Icons.add),
-            // backgroundColor: Theme.of(context).primaryColor,
-            // onPressed: () => _enterTransaction(context),
-          ),
-        ),
+      floatingActionButton: TappableFabCircularMenu(
+        alignment: Alignment.bottomCenter,
+        children: <Widget>[
+          IconButton(icon: Icon(Icons.add), onPressed: () {}),
+          IconButton(icon: Icon(Icons.search), onPressed: () {})
+        ],
+        fabMargin: EdgeInsets.fromLTRB(0, 0, 40, 30),
+        fabOpenIcon: Icon(Icons.add),
+        // child: Icon(Icons.add),
+        // backgroundColor: Theme.of(context).primaryColor,
+        // onPressed: () => _enterTransaction(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: _pages[_selectedPageIndex],
