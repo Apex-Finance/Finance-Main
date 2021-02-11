@@ -4,7 +4,6 @@ import 'package:Plutus/models/categories.dart';
 import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fab_circular_menu/fab_circular_menu.dart';
 
 import './budget_screen.dart';
 import './transaction_screen.dart';
@@ -12,6 +11,7 @@ import './dashboard_screen.dart';
 import './goal_screen.dart';
 import '../widgets/transaction_form.dart';
 import '../models/transaction.dart';
+import '../widgets/TappableFabCircularMenu.dart';
 
 import 'package:provider/provider.dart';
 
@@ -111,7 +111,7 @@ class _TabScreenState extends State<TabScreen> {
         ),
       ),
       // TODO Toggle blur effect when button is pressed
-      floatingActionButton: FabCircularMenu(
+      floatingActionButton: TappableFabCircularMenu(
         alignment: Alignment.bottomCenter,
         children: <Widget>[
           IconButton(icon: Icon(Icons.add), onPressed: () {}),
