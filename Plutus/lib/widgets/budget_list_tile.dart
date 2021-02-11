@@ -154,14 +154,14 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          trans.title,
+                                          trans.getTitle(),
                                           style: TextStyle(
                                               color: Theme.of(context)
                                                   .primaryColor,
                                               fontSize: 18),
                                         ),
                                         Text(
-                                          '\$${trans.amount}',
+                                          '\$${trans.getAmount()}',
                                           style: TextStyle(
                                               color: Theme.of(context)
                                                   .primaryColor,

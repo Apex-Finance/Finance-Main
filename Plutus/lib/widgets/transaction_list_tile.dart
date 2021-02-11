@@ -38,7 +38,7 @@ class _TransactionListTileState extends State<TransactionListTile> {
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(20)),
         child: Dismissible(
-          key: ValueKey(widget.transaction.id),
+          key: ValueKey(widget.transaction.getID()),
           background: Container(
             color: Theme.of(context).errorColor,
             child: Icon(
@@ -94,19 +94,19 @@ class _TransactionListTileState extends State<TransactionListTile> {
             onTap: () => _updateTransaction(context, widget.transaction),
             tileColor: Colors.grey[850],
             leading: CircleAvatar(
-                child: Icon(categoryIcon[widget.transaction.category])),
+                child: Icon(categoryIcon[widget.transaction.getCategoryId()])),
             title: AutoSizeText(
-              '${widget.transaction.title}',
+              '${widget.transaction.getTitle()}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                   color: Theme.of(context).primaryColor, fontSize: 18),
             ),
             subtitle: Text(
-                '${stringToUserString(enumValueToString(widget.transaction.category))} | ${DateFormat.MMMd().format(widget.transaction.date)}',
+                '${stringToUserString(enumValueToString(widget.transaction.getCategoryId()))} | ${DateFormat.MMMd().format(widget.transaction.getDate())}',
                 style: TextStyle(color: Theme.of(context).primaryColorLight)),
             trailing: Text(
-              '\$${widget.transaction.amount.toStringAsFixed(2)}',
+              '\$${widget.transaction.getAmount().toStringAsFixed(2)}',
               style: TextStyle(
                   color: Theme.of(context).primaryColor, fontSize: 18),
             ),

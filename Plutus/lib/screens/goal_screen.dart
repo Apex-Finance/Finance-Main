@@ -13,12 +13,13 @@ class GoalScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     Goal goal; // will change to reflect DB
-    var dbRef = FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('Goals');
     var goalDataProvider =
         Provider.of<GoalDataProvider>(context, listen: false);
+    var authDataProvider = Provider.of<Auth>(context);
+    var dbRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(authDataProvider.getUserId())
+        .collection('Goals');
     return StreamBuilder<QuerySnapshot>(
         stream: dbRef.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {

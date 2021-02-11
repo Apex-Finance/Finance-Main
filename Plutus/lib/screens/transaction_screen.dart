@@ -36,56 +36,35 @@ class _TransactionScreenState extends State<TransactionScreen> {
             // Do we need this? It appears everytime you switch to the Goal tab -Juan
             return Text('Loading...');
           default:
-            switch (snapshot.data.docs.isEmpty) {
-              case true:
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('No transactions yet. Ready to add one?',
-                          style: Theme.of(context).textTheme.bodyText1),
-                      RaisedButton(
-                        color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).canvasColor,
-                        child: Text(
-                          "Add Goal",
-                        ),
-                        onPressed: () {},
-                      ),
-                    ],
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Container(
+                    width: 250,
+                    child: buildMonthChanger(context, monthData),
                   ),
-                );
-              default:
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: Container(
-                        width: 250,
-                        child: buildMonthChanger(context, monthData),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(top: 25),
-                        child: transactionData.monthlyTransactions.isEmpty
-                            ? NoTransactionsYetText()
-                            : Card(
-                                color: Colors.grey[900],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20),
-                                  ),
-                                ),
-                                child: TransactionsCard(
-                                  transactionsSnapshot: snapshot,
-                                ),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 25),
+                    child: snapshot.data.docs.isEmpty
+                        ? NoTransactionsYetText()
+                        : Card(
+                            color: Colors.grey[900],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
                               ),
-                      ),
-                    ),
-                  ],
-                );
-            }
+                            ),
+                            child: TransactionsCard(
+                              transactionsSnapshot: snapshot,
+                            ),
+                          ),
+                  ),
+                ),
+              ],
+            );
         }
       },
     );
