@@ -20,14 +20,14 @@ class TransactionForm extends StatefulWidget {
 class _TransactionFormState extends State<TransactionForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime _date = DateTime.now();
-  Transaction _transaction;
+  Transaction _transaction = new Transaction();
   MainCategory category = MainCategory.uncategorized;
 
   // Change the date of the transaction
   void _setDate(DateTime value) {
     if (value == null) return; // if user cancels datepicker
     setState(() {
-      _transaction.setDate(value);
+      _transaction.setDate(_date = value);
       // _transaction.date =
       //     _date = value;
       // update date if date changes since no onsave property
@@ -48,7 +48,8 @@ class _TransactionFormState extends State<TransactionForm> {
 
   // If each textformfield passes the validation, save it's value to the transaction, and return the transaction to the previous screen
   void _submitTransactionForm(BuildContext context) {
-    var transactionDataProvider = Provider.of<Transactions>(context);
+    var transactionDataProvider =
+        Provider.of<Transactions>(context, listen: false);
     categoryIcon.forEach((key, value) {
       print('$key, ${value.codePoint}');
     });

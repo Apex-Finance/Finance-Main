@@ -51,8 +51,6 @@ class _TabScreenState extends State<TabScreen> {
       builder: (_) => TransactionForm(),
     ).then((newTransaction) {
       if (newTransaction == null) return;
-      Provider.of<Transactions>(context, listen: false)
-          .addTransaction(newTransaction, context);
     });
   }
 

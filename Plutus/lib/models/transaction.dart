@@ -14,6 +14,8 @@ class Transaction {
   /* this will be treated like an id to 
      compare to the actual category id and
      a budget with the same category id */
+  String _categoryTitle; // retrieve from corresponding category in db
+  int _categoryCodePoint; // Int value to display icon for category
   double _amount;
   DateTime _date;
 
@@ -39,6 +41,22 @@ class Transaction {
 
   String getCategoryId() {
     return _categoryId;
+  }
+
+  void setCategoryTitle(String categoryTitleValue) async {
+    _categoryTitle = categoryTitleValue;
+  }
+
+  String getCategoryTitle() {
+    return _categoryTitle;
+  }
+
+  void setCategoryCodePoint(int codepoint) {
+    _categoryCodePoint = codepoint;
+  }
+
+  int getCategoryCodePoint() {
+    return _categoryCodePoint;
   }
 
   void setAmount(double amountValue) {

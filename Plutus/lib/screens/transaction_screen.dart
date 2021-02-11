@@ -26,16 +26,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
         .collection('Transactions');
     final transactionData = Provider.of<Transaction.Transactions>(context);
     var monthData = Provider.of<MonthChanger>(context);
-    return StreamBuilder<QuerySnapshot>(
-      stream: dbRef.snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            // Do we need this? It appears everytime you switch to the Goal tab -Juan
-            return Text('Loading...');
-          default:
             return Column(
               children: [
                 Padding(
@@ -45,23 +35,34 @@ class _TransactionScreenState extends State<TransactionScreen> {
                     child: buildMonthChanger(context, monthData),
                   ),
                 ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 25),
-                    child: snapshot.data.docs.isEmpty
-                        ? NoTransactionsYetText()
-                        : Card(
-                            color: Colors.grey[900],
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(20),
+                StreamBuilder<QuerySnapshot>(
+                  stream: dbRef.snapshots(),
+                  builder:(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            // Do we need this? It appears everytime you switch to the Goal tab -Juan
+            return Text('Loading...');
+            default:
+                                  return Expanded(
+                    child: Container(
+                      margin: EdgeInsets.only(top: 25),
+                      child: snapshot.data.docs.isEmpty
+                          ? NoTransactionsYetText()
+                          : Card(
+                              color: Colors.grey[900],
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20),
+                                ),
+                              ),
+                              child: TransactionsCard(
+                                transactionsSnapshot: snapshot,
                               ),
                             ),
-                            child: TransactionsCard(
-                              transactionsSnapshot: snapshot,
-                            ),
-                          ),
-                  ),
+                    ),
+                  );}
                 ),
               ],
             );
@@ -104,14 +105,14 @@ class _TransactionScreenState extends State<TransactionScreen> {
             onPressed: () => monthData.changeMonth('forward')),
     ]);
   }
-}
+
 
 class TransactionsCard extends StatelessWidget {
   TransactionsCard({Key key, @required this.transactionsSnapshot})
       : super(key: key);
 
   AsyncSnapshot<QuerySnapshot> transactionsSnapshot;
-  Transaction.Transaction transaction;
+  Transaction.Transaction transaction = Transaction.Transaction();
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +122,6 @@ class TransactionsCard extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          // TODO grab all transactions amount and enter them into total expenses here
           child: TotalExpenses(
             monthlyExpenses:
                 transactionData.getTransactionExpenses(transactionsSnapshot),
