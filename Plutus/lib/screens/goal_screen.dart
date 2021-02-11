@@ -75,18 +75,28 @@ class GoalScreen extends StatelessWidget {
                       top: Radius.circular(20),
                     ),
                   ),
-                  child: Expanded(
-                    child: ListView.builder(
-                      itemCount: snapshot.data.docs.length,
-                      itemBuilder: (context, index) {
-                        snapshot.data.docs.map(
-                          (doc) {
-                            goal = goalDataProvider.initializeGoal(doc);
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: snapshot.data.docs.length,
+                          itemBuilder: (context, index) {
+                            snapshot.data.docs.map(
+                              (doc) {
+                                goal = goalDataProvider.initializeGoal(doc);
+                              },
+                            );
+                            return GoalsListTile(goal);
                           },
-                        );
-                        return GoalsListTile(goal);
-                      },
-                    ),
+                        ),
+                      ),
+                      RaisedButton(
+                        child: Text('Add Goal'),
+                        color: Theme.of(context).primaryColor,
+                        textColor: Theme.of(context).canvasColor,
+                        onPressed: () => _enterGoal(context),
+                      ),
+                    ],
                   ),
                 );
             }
