@@ -20,7 +20,8 @@ class TransactionForm extends StatefulWidget {
 class _TransactionFormState extends State<TransactionForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime _date = DateTime.now();
-  Transaction _transaction;
+  Transaction _transaction = Transaction();
+
   MainCategory category = MainCategory.uncategorized;
 
   // Change the date of the transaction
