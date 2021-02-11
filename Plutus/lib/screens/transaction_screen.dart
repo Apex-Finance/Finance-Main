@@ -24,7 +24,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
         .collection('users')
         .doc(authData.getUserId())
         .collection('Transactions');
-    final transactionData = Provider.of<Transaction.Transactions>(context);
     var monthData = Provider.of<MonthChanger>(context);
     return StreamBuilder<QuerySnapshot>(
       stream: dbRef.snapshots(),

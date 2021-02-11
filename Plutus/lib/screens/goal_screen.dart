@@ -1,5 +1,3 @@
-import 'package:Plutus/widgets/debts_tab.dart';
-import 'package:Plutus/widgets/goals_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
