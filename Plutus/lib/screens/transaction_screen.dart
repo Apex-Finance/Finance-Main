@@ -26,86 +26,86 @@ class _TransactionScreenState extends State<TransactionScreen> {
         .collection('Transactions');
     final transactionData = Provider.of<Transaction.Transactions>(context);
     var monthData = Provider.of<MonthChanger>(context);
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Container(
-                    width: 250,
-                    child: buildMonthChanger(context, monthData),
-                  ),
-                ),
-                StreamBuilder<QuerySnapshot>(
-                  stream: dbRef.snapshots(),
-                  builder:(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 20.0),
+          child: Container(
+            width: 250,
+            child: buildMonthChanger(context, monthData),
+          ),
+        ),
+        StreamBuilder<QuerySnapshot>(
+          stream: dbRef.snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) return Text('Error: ${snapshot.error}');
 
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            // Do we need this? It appears everytime you switch to the Goal tab -Juan
-            return Text('Loading...');
-            default:
-                                  return Expanded(
-                    child: Container(
-                      margin: EdgeInsets.only(top: 25),
-                      child: snapshot.data.docs.isEmpty
-                          ? NoTransactionsYetText()
-                          : Card(
-                              color: Colors.grey[900],
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(20),
-                                ),
-                              ),
-                              child: TransactionsCard(
-                                transactionsSnapshot: snapshot,
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                // Do we need this? It appears everytime you switch to the Goal tab -Juan
+                return Text('Loading...');
+              default:
+                return Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 25),
+                    child: snapshot.data.docs.isEmpty
+                        ? NoTransactionsYetText()
+                        : Card(
+                            color: Colors.grey[900],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
                               ),
                             ),
-                    ),
-                  );}
-                ),
-              ],
-            );
-        }
-      },
+                            child: TransactionsCard(
+                              transactionsSnapshot: snapshot,
+                            ),
+                          ),
+                  ),
+                );
+            }
+          },
+        ),
+      ],
     );
   }
+}
 
-  Row buildMonthChanger(BuildContext context, MonthChanger monthData) {
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      if (monthData.selectedMonth > DateTime.now().month ||
-          monthData.selectedYear >= DateTime.now().year)
-        IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Theme.of(context).primaryColor,
-            ),
-            onPressed: () => monthData.changeMonth('back')),
-      Expanded(
-        child: Center(
-          child: Text(
-            '${MonthChanger.months[monthData.selectedMonth - 1]}' +
-                (monthData.selectedYear == DateTime.now().year
-                    ? ''
-                    : ' ${monthData.selectedYear}'),
-            style: TextStyle(
-              color: Theme.of(context).primaryColor,
-              fontSize: 16,
-            ),
+Row buildMonthChanger(BuildContext context, MonthChanger monthData) {
+  return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+    if (monthData.selectedMonth > DateTime.now().month ||
+        monthData.selectedYear >= DateTime.now().year)
+      IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Theme.of(context).primaryColor,
+          ),
+          onPressed: () => monthData.changeMonth('back')),
+    Expanded(
+      child: Center(
+        child: Text(
+          '${MonthChanger.months[monthData.selectedMonth - 1]}' +
+              (monthData.selectedYear == DateTime.now().year
+                  ? ''
+                  : ' ${monthData.selectedYear}'),
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+            fontSize: 16,
           ),
         ),
       ),
-      if (monthData.selectedMonth < DateTime.now().month ||
-          monthData.selectedYear <= DateTime.now().year)
-        IconButton(
-            icon: Icon(
-              Icons.arrow_forward,
-              color: Theme.of(context).primaryColor,
-            ),
-            onPressed: () => monthData.changeMonth('forward')),
-    ]);
-  }
-
+    ),
+    if (monthData.selectedMonth < DateTime.now().month ||
+        monthData.selectedYear <= DateTime.now().year)
+      IconButton(
+          icon: Icon(
+            Icons.arrow_forward,
+            color: Theme.of(context).primaryColor,
+          ),
+          onPressed: () => monthData.changeMonth('forward')),
+  ]);
+}
 
 class TransactionsCard extends StatelessWidget {
   TransactionsCard({Key key, @required this.transactionsSnapshot})
