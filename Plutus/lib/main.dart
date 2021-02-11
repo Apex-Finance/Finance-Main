@@ -19,6 +19,7 @@ import './screens/settings_screen.dart';
 import './models/transaction.dart';
 import './models/budget.dart';
 import './providers/auth.dart';
+import 'models/goals.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => GoalDataProvider()),
         ChangeNotifierProvider(
           create: (context) => Budget(),
         ),
