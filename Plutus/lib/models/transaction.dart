@@ -90,7 +90,7 @@ class Transactions with ChangeNotifier {
 
     transaction.setID(doc.id);
     transaction.setTitle(doc.data()['title']);
-    transaction.setDate(doc.data()['date']);
+    transaction.setDate(doc.data()['date'].toDate());
     transaction.setCategoryId(doc.data()['category id']);
     transaction.setAmount(doc.data()['amount']);
 

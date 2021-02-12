@@ -2,6 +2,7 @@ import 'package:Plutus/models/month_changer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/transaction.dart' as Transaction;
 import '../widgets/transaction_list_tile.dart';
@@ -17,14 +18,24 @@ class TransactionScreen extends StatefulWidget {
 }
 
 class _TransactionScreenState extends State<TransactionScreen> {
-  @override
-  Widget build(BuildContext context) {
-    var authData = Provider.of<Auth>(context, listen: false);
+  var user = FirebaseAuth.instance.currentUser;
+
+  CollectionReference getDbRef(
+      {category, // add other parameters to filter by or orderBy
+      filterByCategory = false,
+      orderByPrice = false}) {
     var dbRef = FirebaseFirestore.instance
         .collection('users')
-        .doc(authData.getUserId())
+        .doc(user.uid)
         .collection('Transactions');
-    final transactionData = Provider.of<Transaction.Transactions>(context);
+    dbRef = filterByCategory
+        ? dbRef.where('categoryId', isEqualTo: category)
+        : dbRef;
+    return dbRef = orderByPrice ? dbRef.orderBy('amount') : dbRef;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     var monthData = Provider.of<MonthChanger>(context);
     return Column(
       children: [
@@ -36,7 +47,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
           ),
         ),
         StreamBuilder<QuerySnapshot>(
-          stream: dbRef.snapshots(),
+          stream: getDbRef().snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) return Text('Error: ${snapshot.error}');
@@ -130,17 +141,13 @@ class TransactionsCard extends StatelessWidget {
         Divider(height: 10),
         Expanded(
           child: ListView.builder(
-            itemCount: transactionsSnapshot.data.docs.length,
-            itemBuilder: (context, index) {
-              transactionsSnapshot.data.docs.map(
-                (doc) {
-                  // initialize the transaction document into a transaction object
-                  transaction = transactionData.initializeTransaction(doc);
-                },
-              );
-              return TransactionListTile(transaction);
-            },
-          ),
+              itemCount: transactionsSnapshot.data.docs.length,
+              itemBuilder: (context, index) {
+                // initialize the transaction document into a transaction object
+                transaction = transactionData.initializeTransaction(
+                    transactionsSnapshot.data.docs[index]);
+                return TransactionListTile(transaction);
+              }),
         ),
       ],
     );
