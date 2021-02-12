@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 class SettingsScreen extends StatelessWidget {
   static const routeName = '/settings';
@@ -30,6 +31,33 @@ class SettingsScreen extends StatelessWidget {
                     Text(
                       'Change colors',
                       style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Dark mode',
+                            style: Theme.of(context).textTheme.bodyText2,
+                          ),
+                        ),
+                        ToggleSwitch(
+                          minWidth: 90.0,
+                          cornerRadius: 20.0,
+                          activeBgColor: Theme.of(context).primaryColor,
+                          activeFgColor: Colors.black,
+                          inactiveBgColor: Colors.grey,
+                          inactiveFgColor: Colors.black,
+                          labels: ['YES', 'NO'],
+                          icons: [
+                            Icons.check,
+                            Icons.highlight_off,
+                          ],
+                          onToggle: (index) {
+                            print('switched to: $index');
+                          },
+                        ),
+                      ],
                     ),
                     RaisedButton(
                       shape: RoundedRectangleBorder(
