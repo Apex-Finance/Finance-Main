@@ -86,11 +86,11 @@ class Transactions with ChangeNotifier {
 
   Transaction initializeTransaction(DocumentSnapshot doc) {
     // Initialize a transaction with document data
-    Transaction transaction;
+    Transaction transaction = Transaction();
 
     transaction.setID(doc.id);
     transaction.setTitle(doc.data()['title']);
-    transaction.setDate(doc.data()['date']);
+    transaction.setDate(doc.data()['date'].toDate());
     transaction.setCategoryId(doc.data()['category id']);
     transaction.setAmount(doc.data()['amount']);
 

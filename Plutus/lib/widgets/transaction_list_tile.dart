@@ -103,7 +103,7 @@ class _TransactionListTileState extends State<TransactionListTile> {
                   color: Theme.of(context).primaryColor, fontSize: 18),
             ),
             subtitle: Text(
-                '${stringToUserString(enumValueToString(widget.transaction.getCategoryId()))} | ${DateFormat.MMMd().format(widget.transaction.getDate())}',
+                '${widget.transaction.getCategoryTitle()} | ${DateFormat.MMMd().format(widget.transaction.getDate())}',
                 style: TextStyle(color: Theme.of(context).primaryColorLight)),
             trailing: Text(
               '\$${widget.transaction.getAmount().toStringAsFixed(2)}',
