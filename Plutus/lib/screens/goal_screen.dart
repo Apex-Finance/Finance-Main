@@ -75,72 +75,23 @@ class GoalScreen extends StatelessWidget {
                       top: Radius.circular(20),
                     ),
                   ),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: snapshot.data.docs.length,
-                          itemBuilder: (context, index) {
-                            snapshot.data.docs.map(
-                              (doc) {
-                                goal = goalDataProvider.initializeGoal(doc);
-                              },
-                            );
-                            return GoalsListTile(goal);
+                  child: Expanded(
+                    child: ListView.builder(
+                      itemCount: snapshot.data.docs.length + 1,
+                      itemBuilder: (context, index) {
+                        snapshot.data.docs.map(
+                          (doc) {
+                            goal = goalDataProvider.initializeGoal(doc);
                           },
-                        ),
-                      ),
-                      RaisedButton(
-                        child: Text('Add Goal'),
-                        color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).canvasColor,
-                        onPressed: () => _enterGoal(context),
-                      ),
-                    ],
+                        );
+                        return GoalsListTile(goal);
+                      },
+                    ),
                   ),
                 );
             }
         }
       },
     );
-    /*Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          DefaultTabController(
-            length: 2,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Container(
-                  child: TabBar(
-                    indicatorColor: Theme.of(context).primaryColor,
-                    labelColor: Theme.of(context).primaryColor,
-                    unselectedLabelColor: Theme.of(context).primaryColor,
-                    labelStyle: Theme.of(context).textTheme.headline1,
-                    tabs: [
-                      Tab(text: 'Goals'),
-                      Tab(text: 'Debt'),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: screenHeight * 0.73, //height of TabBarView
-                  child: TabBarView(
-                    children: <Widget>[
-                      GoalTab(),
-                      DebtTab(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );*/
   }
 }
