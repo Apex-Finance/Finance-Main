@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:Plutus/models/categories.dart';
 import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 import './budget_screen.dart';
@@ -22,8 +21,6 @@ class TabScreen extends StatefulWidget {
 }
 
 class _TabScreenState extends State<TabScreen> {
-  final _auth = FirebaseAuth.instance;
-
   @override
   void initState() {
     super.initState();
