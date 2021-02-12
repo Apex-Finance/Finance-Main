@@ -14,18 +14,18 @@ class GoalScreen extends StatelessWidget {
       isScrollControlled: true,
       context: context,
       builder: (_) => GoalsForm(),
-    ).then((newGoal) {
-      if (newGoal == null) return;
-      Provider.of<GoalDataProvider>(context, listen: false)
-          .addGoal(newGoal, context); //TODO check if needed
-    });
+      // ).then((newGoal) {
+      //   if (newGoal == null) return;
+      //   Provider.of<GoalDataProvider>(context, listen: false)
+      //       .addGoal(newGoal, context); //TODO check if needed
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    GoalDataProvider goalDataProvider;
+    var goalDataProvider = Provider.of<GoalDataProvider>(context);
 
-    Goal goal;
+    Goal goal = Goal();
     var dbRef = FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
@@ -77,13 +77,10 @@ class GoalScreen extends StatelessWidget {
                   ),
                   child: Expanded(
                     child: ListView.builder(
-                      itemCount: snapshot.data.docs.length + 1,
+                      itemCount: snapshot.data.docs.length,
                       itemBuilder: (context, index) {
-                        snapshot.data.docs.map(
-                          (doc) {
-                            goal = goalDataProvider.initializeGoal(doc);
-                          },
-                        );
+                        goal = goalDataProvider
+                            .initializeGoal(snapshot.data.docs[index]);
                         return GoalsListTile(goal);
                       },
                     ),

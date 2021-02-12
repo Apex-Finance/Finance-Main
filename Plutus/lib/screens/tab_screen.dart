@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:Plutus/models/categories.dart';
 import 'package:Plutus/models/budget.dart';
+import 'package:Plutus/widgets/goals_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -67,6 +68,18 @@ class _TabScreenState extends State<TabScreen> {
       Provider.of<Transactions>(context, listen: false)
           .addTransaction(newTransaction, context);
     });
+  }
+
+  void _enterGoal(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (_) => GoalsForm(),
+      // ).then((newGoal) {
+      //   if (newGoal == null) return;
+      //   Provider.of<GoalDataProvider>(context, listen: false)
+      //       .addGoal(newGoal, context); //TODO check if needed
+    );
   }
 
   @override
@@ -154,7 +167,7 @@ class _TabScreenState extends State<TabScreen> {
             child: IconButton(
               color: Theme.of(context).primaryColor,
               icon: Icon(Icons.star),
-              onPressed: () {},
+              onPressed: () => _enterGoal(context),
             ),
           ),
         ],
