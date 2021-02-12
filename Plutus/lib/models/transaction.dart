@@ -116,16 +116,6 @@ class Transactions with ChangeNotifier {
     }
   }
 
-  double getTransactionExpenses(AsyncSnapshot<QuerySnapshot> snapshot) {
-    double totalExpenses = 0;
-
-    snapshot.data.docs.forEach((doc) {
-      totalExpenses += doc.data()['amount'];
-    });
-
-    return totalExpenses;
-  }
-
   void deleteTransaction(Transaction transaction, BuildContext context) async {
     await FirebaseFirestore.instance
         .collection('users')
