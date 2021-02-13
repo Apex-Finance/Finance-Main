@@ -1,6 +1,9 @@
+import 'dart:ui';
 import 'package:Plutus/models/categories.dart';
 import 'package:Plutus/models/budget.dart';
+import 'package:Plutus/widgets/goals_form.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import './budget_screen.dart';
 import './transaction_screen.dart';
@@ -8,8 +11,8 @@ import './dashboard_screen.dart';
 import './goal_screen.dart';
 import '../widgets/transaction_form.dart';
 import '../models/transaction.dart';
-
-import 'package:provider/provider.dart';
+import '../widgets/tappable_fab_circular_menu.dart';
+import 'new_budget_screens/income_screen.dart';
 
 // Our Main Screen that controls the other screens; necessary to implement this way because of the FAB managing transaction
 class TabScreen extends StatefulWidget {
@@ -30,6 +33,7 @@ class _TabScreenState extends State<TabScreen> {
   List<Budget> budgets = [];
 
   int _selectedPageIndex = 0;
+  bool isOpen = false;
 
   // Select a screen from the list of screens; manages tabs
   void _selectPage(int index) {
@@ -37,6 +41,19 @@ class _TabScreenState extends State<TabScreen> {
       return; // if blank "tab" is selected, ignore it; a workaround to give FAB more space
     setState(() {
       _selectedPageIndex = index;
+    });
+  }
+
+  // Pull up budget form when FAB is tapped; add the returned budget to the list of budgets (?)
+  void _enterBudget(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (_) => IncomeScreen(),
+    ).then((newBudget) {
+      if (newBudget == null) return;
+      Provider.of<Budgets>(context, listen: false)
+          .addBudget(newBudget, context); //TODO check if needed
     });
   }
 
@@ -49,6 +66,18 @@ class _TabScreenState extends State<TabScreen> {
     ).then((newTransaction) {
       if (newTransaction == null) return;
     });
+  }
+
+  void _enterGoal(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (_) => GoalsForm(),
+      // ).then((newGoal) {
+      //   if (newGoal == null) return;
+      //   Provider.of<GoalDataProvider>(context, listen: false)
+      //       .addGoal(newGoal, context); //TODO check if needed
+    );
   }
 
   @override
@@ -102,10 +131,48 @@ class _TabScreenState extends State<TabScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () => _enterTransaction(context),
+      floatingActionButton: TappableFabCircularMenu(
+        alignment: Alignment.bottomCenter,
+        animationDuration: Duration(milliseconds: 500),
+        children: <Widget>[
+          Ink(
+            decoration: const ShapeDecoration(
+              color: Color(0xFF212121), // basically Colors.grey[900]
+              shape: CircleBorder(),
+            ),
+            child: IconButton(
+              color: Theme.of(context).primaryColor,
+              icon: Icon(Icons.account_balance),
+              onPressed: () => _enterBudget(context),
+            ),
+          ),
+          Ink(
+            decoration: const ShapeDecoration(
+              color: Color(0xFF212121), // basically Colors.grey[900]
+              shape: CircleBorder(),
+            ),
+            child: IconButton(
+              color: Theme.of(context).primaryColor,
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () => _enterTransaction(context),
+            ),
+          ),
+          Ink(
+            decoration: const ShapeDecoration(
+              color: Color(0xFF212121), // basically Colors.grey[900]
+              shape: CircleBorder(),
+            ),
+            child: IconButton(
+              color: Theme.of(context).primaryColor,
+              icon: Icon(Icons.star),
+              onPressed: () => _enterGoal(context),
+            ),
+          ),
+        ],
+        ringDiameter: 300,
+        fabMargin: EdgeInsets.fromLTRB(0, 0, 40, 30),
+        fabOpenIcon: Icon(Icons.add),
+        ringColor: Colors.amber.withOpacity(0),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: _pages[_selectedPageIndex],
