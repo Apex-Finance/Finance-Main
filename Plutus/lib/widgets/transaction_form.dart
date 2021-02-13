@@ -35,8 +35,7 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   // Change the category of the transaction
-  //TODO this may need to be heavily revised after we set up the stream for
-  //TODO categories
+  //TODO this may need to be heavily revised after we set up the stream for categories
   void _setCategory(String value) {
     if (value == null) return; // if user taps out of popup
     setState(() {
@@ -179,9 +178,7 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   Row buildCategoryChanger(BuildContext context) {
-    //TODO this will need to be rebuilt to stream the default categories in the
-    //TODO database so we can tie the title and id to the transaction; this will
-    //TODO eventually help with custom categories
+    //TODO this will need to be rebuilt to stream the default categories in the database so we can tie the title and id to the transaction; this will eventually help with custom categories
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
