@@ -139,7 +139,7 @@ class Transactions with ChangeNotifier {
     double totalExpenses = 0;
 
     snapshot.data.docs.forEach((doc) {
-      totalExpenses += doc.data()['amount'];
+      totalExpenses += doc.data()['amount'].toDouble();
     });
 
     return totalExpenses;
