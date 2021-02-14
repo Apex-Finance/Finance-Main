@@ -24,11 +24,7 @@ class _TransactionListTileState extends State<TransactionListTile> {
       isScrollControlled: true,
       context: context,
       builder: (_) => TransactionForm(transaction: transaction),
-    ).then((newTransaction) {
-      if (newTransaction == null) return;
-      Provider.of<Transactions>(context, listen: false)
-          .editTransaction(newTransaction, context);
-    });
+    );
   }
 
   @override
@@ -103,7 +99,7 @@ class _TransactionListTileState extends State<TransactionListTile> {
                   color: Theme.of(context).primaryColor, fontSize: 18),
             ),
             subtitle: Text(
-                '${stringToUserString(enumValueToString(widget.transaction.getCategoryId()))} | ${DateFormat.MMMd().format(widget.transaction.getDate())}',
+                '${widget.transaction.getCategoryTitle()} | ${DateFormat.MMMd().format(widget.transaction.getDate())}',
                 style: TextStyle(color: Theme.of(context).primaryColorLight)),
             trailing: Text(
               '\$${widget.transaction.getAmount().toStringAsFixed(2)}',
