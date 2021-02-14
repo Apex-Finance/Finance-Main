@@ -24,11 +24,7 @@ class _TransactionListTileState extends State<TransactionListTile> {
       isScrollControlled: true,
       context: context,
       builder: (_) => TransactionForm(transaction: transaction),
-    ).then((newTransaction) {
-      if (newTransaction == null) return;
-      Provider.of<Transactions>(context, listen: false)
-          .editTransaction(newTransaction, context);
-    });
+    );
   }
 
   @override

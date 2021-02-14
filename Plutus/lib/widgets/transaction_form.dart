@@ -1,4 +1,6 @@
-import 'package:Plutus/models/transaction.dart';
+import 'package:Plutus/models/transaction.dart' as Transaction;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
@@ -6,10 +8,11 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../models/categories.dart';
 import '../models/category_icon.dart';
+import '../providers/auth.dart';
 
 // Form to add a new transaction
 class TransactionForm extends StatefulWidget {
-  final Transaction transaction;
+  final Transaction.Transaction transaction;
   TransactionForm(
       {this.transaction}); //optional constructor for editing transaction
 
@@ -20,7 +23,7 @@ class TransactionForm extends StatefulWidget {
 class _TransactionFormState extends State<TransactionForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime _date = DateTime.now();
-  Transaction _transaction = new Transaction();
+  Transaction.Transaction _transaction = new Transaction.Transaction();
   MainCategory category = MainCategory.uncategorized;
 
   // Change the date of the transaction
@@ -48,7 +51,7 @@ class _TransactionFormState extends State<TransactionForm> {
   // If each textformfield passes the validation, save it's value to the transaction, and return the transaction to the previous screen
   void _submitTransactionForm(BuildContext context) {
     var transactionDataProvider =
-        Provider.of<Transactions>(context, listen: false);
+        Provider.of<Transaction.Transactions>(context, listen: false);
     categoryIcon.forEach((key, value) {
       print('$key, ${value.codePoint}');
     });
@@ -177,91 +180,143 @@ class _TransactionFormState extends State<TransactionForm> {
     );
   }
 
-  Row buildCategoryChanger(BuildContext context) {
+  Widget buildCategoryChanger(BuildContext context) {
     //TODO this will need to be rebuilt to stream the default categories in the database so we can tie the title and id to the transaction; this will eventually help with custom categories
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Text(
-          'Category: ',
-          style: TextStyle(
-            fontSize: 16,
-            color: Theme.of(context).primaryColor,
-          ),
-        ),
-        GestureDetector(
-          onTap: () => showDialog(
-            context: context,
-            builder: (bctx) => SimpleDialog(
-              backgroundColor: Theme.of(context).primaryColor,
-              title: Text(
-                'Choose Category',
-                style: TextStyle(
-                  fontSize: 25,
-                  fontFamily: 'Anton',
-                  fontWeight: FontWeight.bold,
-                ),
+    var categoryRef = getCategoryCollection(context);
+    return FutureBuilder(
+      future: categoryRef,
+      builder: (context, snapshot) {
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(
+              'Category: ',
+              style: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).primaryColor,
               ),
-              children: [
-                ...MainCategory.values
-                    .map(
-                      (category) => Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          ListTile(
-                            tileColor: Theme.of(context).canvasColor,
-                            leading: Icon(
-                              categoryIcon[category],
-                              size: 30,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            title: Text(
-                              '${stringToUserString(enumValueToString(category))}',
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 18,
-                                fontFamily: 'Anton',
-                                fontWeight: FontWeight.bold,
+            ),
+            GestureDetector(
+              onTap: () => showDialog(
+                context: context,
+                builder: (bctx) => SimpleDialog(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  title: Text(
+                    'Choose Category',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontFamily: 'Anton',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  children: [
+                    ...MainCategory.values
+                        .map(
+                          (category) => Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              ListTile(
+                                tileColor: Theme.of(context).canvasColor,
+                                leading: Icon(
+                                  categoryIcon[category],
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                title: Text(
+                                  '${stringToUserString(enumValueToString(category))}',
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: 18,
+                                    fontFamily: 'Anton',
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                onTap: () {
+                                  Navigator.of(context).pop(category);
+                                },
                               ),
-                            ),
-                            onTap: () {
-                              Navigator.of(context).pop(category);
-                            },
+                            ],
                           ),
-                        ],
-                      ),
-                    )
-                    .toList(),
-              ],
-            ),
-          ).then((chosenCategory) => _setCategory(chosenCategory)),
-          child: Chip(
-            avatar: CircleAvatar(
-              backgroundColor: Colors.black,
-              child: Icon(
-                categoryIcon[category],
+                        )
+                        .toList(),
+                  ],
+                ),
+              ).then((chosenCategory) => _setCategory(chosenCategory)),
+              child: Chip(
+                avatar: CircleAvatar(
+                  backgroundColor: Colors.black,
+                  child: Icon(
+                    categoryIcon[category],
+                  ),
+                ),
+                label: Text(
+                  '${stringToUserString(enumValueToString(category.toString()))}',
+                  style: TextStyle(color: Colors.black),
+                ),
+                backgroundColor: Theme.of(context).primaryColorLight,
               ),
             ),
-            label: Text(
-              '${stringToUserString(enumValueToString(category.toString()))}',
-              style: TextStyle(color: Colors.black),
-            ),
-            backgroundColor: Theme.of(context).primaryColorLight,
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
+  }
+
+  // will return the collection of default categories or categories for the bduget if a corresponding budget exists
+  Future<QuerySnapshot> getCategoryCollection(BuildContext context) async {
+    // return default categories if there is no budget with the same date as the transaction
+    if ((await FirebaseFirestore.instance
+            .collection('users')
+            .doc(Provider.of<Auth>(context).getUserId())
+            .collection('budgets')
+            .where('date', isEqualTo: _transaction.getDate())
+            .get())
+        .docs
+        .isEmpty) {
+      return FirebaseFirestore.instance.collection('DefaultCategories').get();
+      // otherwise return that budgets colleciton of categories
+    } else {
+      var budgetID = (await FirebaseFirestore.instance
+              .collection('users')
+              .doc(Provider.of<Auth>(context).getUserId())
+              .collection('budgets')
+              .where(
+                'date',
+                isGreaterThanOrEqualTo: new DateTime(
+                  _transaction.getDate().year,
+                  _transaction.getDate().month,
+                  1,
+                ),
+                isLessThan: new DateTime(
+                  _transaction.getDate().year,
+                  _transaction.getDate().month + 1,
+                  1,
+                ),
+              )
+              .get())
+          .docs
+          .single
+          .id;
+
+      return FirebaseFirestore.instance
+          .collection('users')
+          .doc(Provider.of<Auth>(context).getUserId())
+          .collection('budgets')
+          .doc(budgetID)
+          .collection('categories')
+          .get();
+    }
   }
 }
 
 class AmountTFF extends StatelessWidget {
   const AmountTFF({
     Key key,
-    @required Transaction transaction,
+    @required Transaction.Transaction transaction,
   })  : _transaction = transaction,
         super(key: key);
 
-  final Transaction _transaction;
+  final Transaction.Transaction _transaction;
 
   @override
   Widget build(BuildContext context) {
@@ -300,11 +355,11 @@ class AmountTFF extends StatelessWidget {
 class DescriptionTFF extends StatelessWidget {
   const DescriptionTFF({
     Key key,
-    @required Transaction transaction,
+    @required Transaction.Transaction transaction,
   })  : _transaction = transaction,
         super(key: key);
 
-  final Transaction _transaction;
+  final Transaction.Transaction _transaction;
 
   @override
   Widget build(BuildContext context) {
