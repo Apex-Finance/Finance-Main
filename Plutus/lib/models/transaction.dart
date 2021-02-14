@@ -1,7 +1,6 @@
 import 'package:Plutus/models/month_changer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:Plutus/models/categories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +13,8 @@ class Transaction {
   /* this will be treated like an id to 
      compare to the actual category id and
      a budget with the same category id */
+  String _categoryTitle; // retrieve from corresponding category in db
+  int _categoryCodePoint; // Int value to display icon for category
   double _amount;
   DateTime _date;
 
@@ -39,6 +40,22 @@ class Transaction {
 
   String getCategoryId() {
     return _categoryId;
+  }
+
+  void setCategoryTitle(String categoryTitleValue) async {
+    _categoryTitle = categoryTitleValue;
+  }
+
+  String getCategoryTitle() {
+    return _categoryTitle;
+  }
+
+  void setCategoryCodePoint(int codepoint) {
+    _categoryCodePoint = codepoint;
+  }
+
+  int getCategoryCodePoint() {
+    return _categoryCodePoint;
   }
 
   void setAmount(double amountValue) {
@@ -68,11 +85,11 @@ class Transactions with ChangeNotifier {
 
   Transaction initializeTransaction(DocumentSnapshot doc) {
     // Initialize a transaction with document data
-    Transaction transaction;
+    Transaction transaction = Transaction();
 
     transaction.setID(doc.id);
     transaction.setTitle(doc.data()['title']);
-    transaction.setDate(doc.data()['date']);
+    transaction.setDate(doc.data()['date'].toDate());
     transaction.setCategoryId(doc.data()['category id']);
     transaction.setAmount(doc.data()['amount']);
 
@@ -121,7 +138,7 @@ class Transactions with ChangeNotifier {
     double totalExpenses = 0;
 
     snapshot.data.docs.forEach((doc) {
-      totalExpenses += doc.data()['amount'];
+      totalExpenses += doc.data()['amount'].toDouble();
     });
 
     return totalExpenses;
