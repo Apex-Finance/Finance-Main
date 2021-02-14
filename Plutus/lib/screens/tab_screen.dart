@@ -33,7 +33,7 @@ class _TabScreenState extends State<TabScreen> {
   List<Budget> budgets = [];
 
   int _selectedPageIndex = 0;
-  bool isOpen = false;
+  bool _isOpen = false;
 
   // Select a screen from the list of screens; manages tabs
   void _selectPage(int index) {
@@ -75,10 +75,6 @@ class _TabScreenState extends State<TabScreen> {
       isScrollControlled: true,
       context: context,
       builder: (_) => GoalsForm(),
-      // ).then((newGoal) {
-      //   if (newGoal == null) return;
-      //   Provider.of<GoalDataProvider>(context, listen: false)
-      //       .addGoal(newGoal, context); //TODO check if needed
     );
   }
 
@@ -171,6 +167,11 @@ class _TabScreenState extends State<TabScreen> {
             ),
           ),
         ],
+        onDisplayChange: (isOpen) {
+          setState(() {
+            _isOpen = !_isOpen;
+          });
+        },
         ringDiameter: 300,
         fabMargin: EdgeInsets.fromLTRB(0, 0, 40, 30),
         fabOpenIcon: Icon(Icons.add),
@@ -178,7 +179,9 @@ class _TabScreenState extends State<TabScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: _pages[_selectedPageIndex],
-      bottomNavigationBar: buildTabBar(context),
+      bottomNavigationBar: AbsorbPointer(
+          absorbing: _isOpen == true ? true : false,
+          child: buildTabBar(context)),
     );
   }
 
