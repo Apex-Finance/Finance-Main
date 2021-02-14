@@ -178,7 +178,9 @@ class _TabScreenState extends State<TabScreen> {
         ringColor: Colors.amber.withOpacity(0),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: _pages[_selectedPageIndex],
+      body: AbsorbPointer(
+          absorbing: _isOpen == true ? true : false,
+          child: _pages[_selectedPageIndex]),
       bottomNavigationBar: AbsorbPointer(
           absorbing: _isOpen == true ? true : false,
           child: buildTabBar(context)),
