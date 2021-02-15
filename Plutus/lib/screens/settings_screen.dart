@@ -69,17 +69,28 @@ class SettingsScreen extends StatelessWidget {
                       color: Colors.grey[500],
                       child: Row(
                         children: [
+                          Icon(Icons.circle),
+                          SizedBox(
+                            width: 10,
+                          ),
                           Expanded(
                             child: Text(
-                              'text',
+                              'black',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                           ),
-                          SizedBox(width: 10),
-                          Icon(
-                            Icons.circle,
-                            size: 20,
-                            color: Theme.of(context).primaryColor,
+                          SizedBox(
+                            width: 30,
+                          ),
+                          Container(
+                            width: 30,
+                            height: 20,
+                            color: Colors.grey[900],
+                          ),
+                          Container(
+                            width: 30,
+                            height: 20,
+                            color: Colors.black,
                           ),
                         ],
                       ),
@@ -95,17 +106,28 @@ class SettingsScreen extends StatelessWidget {
                       color: Colors.grey[500],
                       child: Row(
                         children: [
+                          Icon(Icons.circle),
+                          SizedBox(
+                            width: 10,
+                          ),
                           Expanded(
                             child: Text(
-                              'titles',
+                              'Dark Blue',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                           ),
-                          SizedBox(width: 10),
-                          Icon(
-                            Icons.circle,
-                            size: 20,
-                            color: Theme.of(context).primaryColor,
+                          SizedBox(
+                            width: 30,
+                          ),
+                          Container(
+                            width: 30,
+                            height: 20,
+                            color: Colors.blue[900],
+                          ),
+                          Container(
+                            width: 30,
+                            height: 20,
+                            color: Colors.indigo[900],
                           ),
                         ],
                       ),
@@ -121,17 +143,28 @@ class SettingsScreen extends StatelessWidget {
                       color: Colors.grey[500],
                       child: Row(
                         children: [
+                          Icon(Icons.circle),
+                          SizedBox(
+                            width: 10,
+                          ),
                           Expanded(
                             child: Text(
-                              'icons',
+                              'Amber',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                           ),
-                          SizedBox(width: 10),
-                          Icon(
-                            Icons.circle,
-                            size: 20,
-                            color: Theme.of(context).primaryColor,
+                          SizedBox(
+                            width: 30,
+                          ),
+                          Container(
+                            width: 30,
+                            height: 20,
+                            color: Colors.amber,
+                          ),
+                          Container(
+                            width: 30,
+                            height: 20,
+                            color: Colors.amber[50],
                           ),
                         ],
                       ),
@@ -147,17 +180,139 @@ class SettingsScreen extends StatelessWidget {
                       color: Colors.grey[500],
                       child: Row(
                         children: [
+                          Icon(Icons.circle),
+                          SizedBox(
+                            width: 10,
+                          ),
                           Expanded(
                             child: Text(
-                              'backgrounds',
+                              'Light Blue',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                           ),
-                          SizedBox(width: 10),
-                          Icon(
-                            Icons.circle,
-                            size: 20,
-                            color: Theme.of(context).primaryColor,
+                          SizedBox(
+                            width: 30,
+                          ),
+                          Container(
+                            width: 30,
+                            height: 20,
+                            color: Colors.blue[700],
+                          ),
+                          Container(
+                            width: 30,
+                            height: 20,
+                            color: Colors.blue[50],
+                          ),
+                        ],
+                      ),
+                      onPressed: () {},
+                    ),
+                    RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                          bottom: Radius.circular(20),
+                        ),
+                      ),
+                      color: Colors.grey[500],
+                      child: Row(
+                        children: [
+                          Icon(Icons.circle),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Light Green',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 30,
+                          ),
+                          Container(
+                            width: 30,
+                            height: 20,
+                            color: Colors.green,
+                          ),
+                          Container(
+                            width: 30,
+                            height: 20,
+                            color: Colors.green[50],
+                          ),
+                        ],
+                      ),
+                      onPressed: () {},
+                    ),
+                    RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                          bottom: Radius.circular(20),
+                        ),
+                      ),
+                      color: Colors.grey[500],
+                      child: Row(
+                        children: [
+                          Icon(Icons.circle),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Pink',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 30,
+                          ),
+                          Container(
+                            width: 30,
+                            height: 20,
+                            color: Colors.pink,
+                          ),
+                          Container(
+                            width: 30,
+                            height: 20,
+                            color: Colors.pink[50],
+                          ),
+                        ],
+                      ),
+                      onPressed: () {},
+                    ),
+                    RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                          bottom: Radius.circular(20),
+                        ),
+                      ),
+                      color: Colors.grey[500],
+                      child: Row(
+                        children: [
+                          Icon(Icons.circle),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Purple',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 30,
+                          ),
+                          Container(
+                            width: 30,
+                            height: 20,
+                            color: Colors.purple,
+                          ),
+                          Container(
+                            width: 30,
+                            height: 20,
+                            color: Colors.purple[900],
                           ),
                         ],
                       ),
