@@ -1,4 +1,7 @@
+// import 'dart:math';
+
 import '../widgets/auth_form.dart';
+
 import 'package:flutter/material.dart';
 
 class AuthScreen extends StatelessWidget {
@@ -17,8 +20,8 @@ class AuthScreen extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Theme.of(context).canvasColor,
-                  Theme.of(context).primaryColor,
+                  Colors.black,
+                  Colors.amber,
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -44,7 +47,7 @@ class AuthScreen extends StatelessWidget {
                       // ..translate(-10.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Theme.of(context).accentColor,
+                        color: Colors.white,
                         boxShadow: [
                           BoxShadow(
                             blurRadius: 8,

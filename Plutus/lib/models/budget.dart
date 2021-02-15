@@ -30,7 +30,7 @@ class Budget with ChangeNotifier {
     return budget.transactions == null
         ? null
         : budget.transactions
-            .where((transaction) => transaction.category == category)
+            .where((transaction) => transaction.getCategoryId() == category)
             .toList();
   }
 
@@ -42,7 +42,7 @@ class Budget with ChangeNotifier {
     else {
       var sum = 0.0;
       for (var transaction in categoryTransactions) {
-        sum += transaction.amount;
+        sum += transaction.getAmount();
       }
       return sum;
     }

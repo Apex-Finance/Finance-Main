@@ -64,7 +64,7 @@ class Goal {
 class GoalDataProvider with ChangeNotifier {
   // Initialize a goal with the document data
   Goal initializeGoal(DocumentSnapshot doc) {
-    Goal goal;
+    Goal goal = Goal();
 
     goal.setID(doc.id);
     goal.setAmountSaved(doc.data()['amountSaved']);

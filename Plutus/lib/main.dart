@@ -1,7 +1,5 @@
-import 'package:Plutus/models/goals.dart';
 import 'package:Plutus/screens/new_budget_screens/income_screen.dart';
 import 'package:Plutus/models/month_changer.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,6 +18,7 @@ import './screens/settings_screen.dart';
 import './models/transaction.dart';
 import './models/budget.dart';
 import './providers/auth.dart';
+import 'models/goals.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,12 +31,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => Budget()),
         ChangeNotifierProvider(create: (context) => GoalDataProvider()),
+        ChangeNotifierProvider(
+          create: (context) => Budget(),
+        ),
         ChangeNotifierProvider(
           create: (_) => Auth(),
         ),
-        ChangeNotifierProvider(create: (context) => MonthChanger()),
+        ChangeNotifierProvider(
+          create: (context) => MonthChanger(),
+        ),
         ChangeNotifierProxyProvider<MonthChanger, Transactions>(
           update: (buildContext, monthChanger, previousTransactions) =>
               Transactions(
@@ -58,16 +61,17 @@ class MyApp extends StatelessWidget {
         builder: (context) => MaterialApp(
           title: 'Plutus',
           theme: ThemeData(
-            // Theme.of(context).
-            primarySwatch: Colors.green,
-            primaryColor: Colors.red,
+            primarySwatch: Colors.amber,
+            primaryColor: Colors.amber,
             primaryColorLight: Colors.amberAccent,
             accentColor: Colors.white,
             canvasColor: Colors.black,
             textTheme: GoogleFonts.latoTextTheme(
               TextTheme(
-                bodyText1: TextStyle(color: Colors.purple, fontSize: 20),
-                bodyText2: TextStyle(color: Colors.blue, fontSize: 18),
+                bodyText1: TextStyle(color: Colors.amber),
+                bodyText2: TextStyle(color: Colors.amber, fontSize: 12),
+                subtitle1: TextStyle(color: Colors.amber, fontSize: 17),
+                headline1: TextStyle(color: Colors.amber, fontSize: 25),
               ),
             ),
           ),
