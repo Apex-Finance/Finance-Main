@@ -3,7 +3,6 @@ import 'package:Plutus/models/categories.dart';
 import 'package:Plutus/models/budget.dart';
 import 'package:Plutus/widgets/goals_form.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import './budget_screen.dart';
 import './transaction_screen.dart';
