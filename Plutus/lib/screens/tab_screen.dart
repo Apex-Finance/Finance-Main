@@ -22,6 +22,7 @@ class TabScreen extends StatefulWidget {
 }
 
 class _TabScreenState extends State<TabScreen> {
+  final GlobalKey<TappableFabCircularMenuState> fabKey = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -44,17 +45,17 @@ class _TabScreenState extends State<TabScreen> {
     });
   }
 
-  // Pull up budget form when FAB is tapped; add the returned budget to the list of budgets (?)
+  // Pull up budget form when FAB is tapped; add the returned budget to the list of budgets
   void _enterBudget(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (_) => IncomeScreen(),
-    ).then((newBudget) {
-      if (newBudget == null) return;
-      Provider.of<Budgets>(context, listen: false)
-          .addBudget(newBudget, context); //TODO check if needed
-    });
+    ).then(
+      (newBudget) {
+        if (newBudget == null) return;
+      },
+    );
   }
 
   // Pull up transaction form when FAB is tapped; add the returned transaction to the list of transactions
@@ -66,6 +67,7 @@ class _TabScreenState extends State<TabScreen> {
     ).then((newTransaction) {
       if (newTransaction == null) return;
     });
+    fabKey.currentState.close();
   }
 
   void _enterGoal(BuildContext context) {
@@ -73,7 +75,10 @@ class _TabScreenState extends State<TabScreen> {
       isScrollControlled: true,
       context: context,
       builder: (_) => GoalsForm(),
-    );
+    ).then((newGoal) {
+      if (newGoal == null) return;
+    });
+    fabKey.currentState.close();
   }
 
   @override
@@ -170,6 +175,7 @@ class _TabScreenState extends State<TabScreen> {
             _isOpen = !_isOpen;
           });
         },
+        key: fabKey,
         ringDiameter: 300,
         fabMargin: EdgeInsets.fromLTRB(0, 0, 40, 30),
         fabOpenIcon: Icon(Icons.add),
