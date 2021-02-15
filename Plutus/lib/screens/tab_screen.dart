@@ -35,6 +35,47 @@ class _TabScreenState extends State<TabScreen> {
   int _selectedPageIndex = 0;
   bool _isOpen = false;
 
+  Widget _openDrawer() {
+    return Drawer(
+      child: ListView(
+        children: [
+          // settings
+          ListTile(
+            onTap: () {
+              Navigator.of(context).pushNamed('/settings');
+            },
+            leading: Icon(
+              Icons.settings,
+              size: 30,
+              color: Theme.of(context).primaryColor,
+            ),
+            title: Text(
+              'Settings',
+              style: TextStyle(
+                  color: Theme.of(context).primaryColor, fontSize: 18),
+            ),
+          ),
+          // acount
+          ListTile(
+            onTap: () {
+              Navigator.of(context).pushNamed('/account');
+            },
+            leading: Icon(
+              Icons.account_circle,
+              size: 30,
+              color: Theme.of(context).primaryColor,
+            ),
+            title: Text(
+              'Account',
+              style: TextStyle(
+                  color: Theme.of(context).primaryColor, fontSize: 18),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   // Select a screen from the list of screens; manages tabs
   void _selectPage(int index) {
     if (index == 2)
@@ -93,44 +134,14 @@ class _TabScreenState extends State<TabScreen> {
 
     return Scaffold(
       appBar: AppBar(),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            // settings
-            ListTile(
-              onTap: () {
-                Navigator.of(context).pushNamed('/settings');
-              },
-              leading: Icon(
-                Icons.settings,
-                size: 30,
-                color: Theme.of(context).primaryColor,
-              ),
-              title: Text(
-                'Settings',
-                style: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 18),
-              ),
-            ),
-            // acount
-            ListTile(
-              onTap: () {
-                Navigator.of(context).pushNamed('/account');
-              },
-              leading: Icon(
-                Icons.account_circle,
-                size: 30,
-                color: Theme.of(context).primaryColor,
-              ),
-              title: Text(
-                'Account',
-                style: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 18),
-              ),
-            ),
-          ],
-        ),
-      ),
+      drawer: _isOpen
+          // TODO if _isOpen == true, then it darkens the screen briefly
+          // Like it's opening an invisible Drawer
+          ? IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: null,
+            )
+          : _openDrawer(),
       floatingActionButton: TappableFabCircularMenu(
         alignment: Alignment.bottomCenter,
         animationDuration: Duration(milliseconds: 500),
