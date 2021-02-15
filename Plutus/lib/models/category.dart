@@ -64,11 +64,16 @@ class Category {
   }
 }
 
-class CategoryDataProvider {
+class CategoryDataProvider with ChangeNotifier {
   Category initializeCategory(DocumentSnapshot doc) {
     Category category = Category();
 
     category.setID(doc.id);
+    if (doc.data()['amount'].toDouble() == null) {
+      category.setAmount(0.00);
+    } else {
+      category.setAmount(doc.data()['amount'].toDouble());
+    }
     category.setAmount(doc.data()['amount'].toDouble());
     category.setTitle(doc.data()['title']);
     category.setCodepoint(doc.data()['codepoint'].toInt());

@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import '../models/category.dart' as Category;
 import '../models/categories.dart';
 import '../models/category_icon.dart';
 import '../providers/auth.dart';
@@ -39,10 +40,12 @@ class _TransactionFormState extends State<TransactionForm> {
 
   // Change the category of the transaction
   //TODO this may need to be heavily revised after we set up the stream for categories
-  void _setCategory(String value) {
-    if (value == null) return; // if user taps out of popup
+  void _setCategory(Category.Category category) {
+    if (category.getTitle() == null) return; // if user taps out of popup
     setState(() {
-      _transaction.setCategoryId(value);
+      _transaction.setCategoryId(category.getID());
+      _transaction.setCategoryCodePoint(category.getCodepoint());
+      _transaction.setCategoryTitle(category.getTitle());
       // _transaction.category = category =
       //     value; // update category if category changes since no onsave property
     });
@@ -181,6 +184,9 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   Widget buildCategoryChanger(BuildContext context) {
+    Category.Category category = new Category.Category();
+    Category.CategoryDataProvider categoryDataProvider =
+        Provider.of<Category.CategoryDataProvider>(context);
     //TODO this will need to be rebuilt to stream the default categories in the database so we can tie the title and id to the transaction; this will eventually help with custom categories
     var categoryRef = getCategoryCollection(context);
     return FutureBuilder(
@@ -210,47 +216,56 @@ class _TransactionFormState extends State<TransactionForm> {
                     ),
                   ),
                   children: [
-                    ...MainCategory.values
-                        .map(
-                          (category) => Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              ListTile(
-                                tileColor: Theme.of(context).canvasColor,
-                                leading: Icon(
-                                  categoryIcon[category],
-                                  size: 30,
-                                  color: Theme.of(context).primaryColor,
+                    ...snapshot.data.docs.map(
+                      (doc) {
+                        print('lll');
+                        category = categoryDataProvider.initializeCategory(doc);
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            ListTile(
+                              tileColor: Theme.of(context).canvasColor,
+                              leading: Icon(
+                                IconData(
+                                  category.getCodepoint(),
+                                  fontFamily: 'MaterialIcons',
                                 ),
-                                title: Text(
-                                  '${stringToUserString(enumValueToString(category))}',
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: 18,
-                                    fontFamily: 'Anton',
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                onTap: () {
-                                  Navigator.of(context).pop(category);
-                                },
+                                size: 30,
+                                color: Theme.of(context).primaryColor,
                               ),
-                            ],
-                          ),
-                        )
-                        .toList(),
+                              title: Text(
+                                '${category.getTitle()}',
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 18,
+                                  fontFamily: 'Anton',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              onTap: () {
+                                _setCategory(category);
+                                Navigator.of(context).pop(category);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    ).toList(),
                   ],
                 ),
-              ).then((chosenCategory) => _setCategory(chosenCategory)),
+              ),
               child: Chip(
                 avatar: CircleAvatar(
                   backgroundColor: Colors.black,
                   child: Icon(
-                    categoryIcon[category],
+                    IconData(
+                      _transaction.getCategoryCodePoint(),
+                      fontFamily: 'MaterialIcons',
+                    ),
                   ),
                 ),
                 label: Text(
-                  '${stringToUserString(enumValueToString(category.toString()))}',
+                  '${_transaction.getCategoryTitle()}',
                   style: TextStyle(color: Colors.black),
                 ),
                 backgroundColor: Theme.of(context).primaryColorLight,
@@ -273,7 +288,14 @@ class _TransactionFormState extends State<TransactionForm> {
             .get())
         .docs
         .isEmpty) {
-      return FirebaseFirestore.instance.collection('DefaultCategories').get();
+      print((await FirebaseFirestore.instance
+              .collection('DefaultCategories')
+              .get())
+          .docs
+          .isEmpty);
+      return await FirebaseFirestore.instance
+          .collection('DefaultCategories')
+          .get();
       // otherwise return that budgets colleciton of categories
     } else {
       var budgetID = (await FirebaseFirestore.instance
@@ -298,7 +320,7 @@ class _TransactionFormState extends State<TransactionForm> {
           .single
           .id;
 
-      return FirebaseFirestore.instance
+      return await FirebaseFirestore.instance
           .collection('users')
           .doc(Provider.of<Auth>(context).getUserId())
           .collection('budgets')
