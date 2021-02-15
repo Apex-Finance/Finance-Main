@@ -1,14 +1,18 @@
-import 'package:Plutus/models/transaction.dart';
+import 'package:Plutus/models/transaction.dart' as Transaction;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../models/categories.dart';
 import '../models/category_icon.dart';
+import '../providers/auth.dart';
 
 // Form to add a new transaction
 class TransactionForm extends StatefulWidget {
-  final Transaction transaction;
+  final Transaction.Transaction transaction;
   TransactionForm(
       {this.transaction}); //optional constructor for editing transaction
 
@@ -19,19 +23,14 @@ class TransactionForm extends StatefulWidget {
 class _TransactionFormState extends State<TransactionForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime _date = DateTime.now();
-  Transaction _transaction = Transaction(
-    title: null,
-    category: null,
-    amount: null,
-    date: null,
-  );
+  Transaction.Transaction _transaction = new Transaction.Transaction();
   MainCategory category = MainCategory.uncategorized;
 
   // Change the date of the transaction
   void _setDate(DateTime value) {
     if (value == null) return; // if user cancels datepicker
     setState(() {
-      _transaction.setDate(value);
+      _transaction.setDate(_date = value);
       // _transaction.date =
       //     _date = value;
       // update date if date changes since no onsave property
@@ -39,27 +38,31 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   // Change the category of the transaction
-  //TODO this may need to be heavily revised after we set up the stream for
-  //TODO categories
+  //TODO this may need to be heavily revised after we set up the stream for categories
   void _setCategory(String value) {
     if (value == null) return; // if user taps out of popup
     setState(() {
-      _transaction.setCategory(value);
+      _transaction.setCategoryId(value);
       // _transaction.category = category =
       //     value; // update category if category changes since no onsave property
     });
   }
 
   // If each textformfield passes the validation, save it's value to the transaction, and return the transaction to the previous screen
-  void _submitTransactionForm() {
+  void _submitTransactionForm(BuildContext context) {
+    var transactionDataProvider =
+        Provider.of<Transaction.Transactions>(context, listen: false);
     categoryIcon.forEach((key, value) {
       print('$key, ${value.codePoint}');
     });
 
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      if (_transaction.id == null) // assign new id if not editing
-        _transaction.id = DateTime.now().toIso8601String();
+      if (_transaction.getID() == null) {
+        transactionDataProvider.addTransaction(_transaction, context);
+      } else {
+        transactionDataProvider.editTransaction(_transaction, context);
+      }
       Navigator.of(context).pop(
         _transaction,
       );
@@ -76,10 +79,10 @@ class _TransactionFormState extends State<TransactionForm> {
 
     if (widget.transaction != null) {
       // if editing, store previous values in transaction to display previous values and submit them later
-      _transaction.setTitle(widget.transaction.title);
-      _transaction.setCategory(widget.transaction.category);
-      _transaction.setAmount(widget.transaction.amount);
-      _transaction.setDate(widget.transaction.date);
+      _transaction.setTitle(widget.transaction.getTitle());
+      _transaction.setCategoryId(widget.transaction.getCategoryId());
+      _transaction.setAmount(widget.transaction.getAmount());
+      _transaction.setDate(widget.transaction.getDate());
       // _transaction.id = widget.transaction.id;
       // _transaction.title = widget.transaction.title;
       // _transaction.category = category = widget.transaction.category;
@@ -115,7 +118,7 @@ class _TransactionFormState extends State<TransactionForm> {
                   SizedBox(
                     height: 25,
                   ),
-                  buildSubmitButton(context, _transaction.id),
+                  buildSubmitButton(context, _transaction.getID()),
                 ],
               ),
             ),
@@ -130,7 +133,9 @@ class _TransactionFormState extends State<TransactionForm> {
       alignment: Alignment.bottomRight,
       child: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).primaryColor,
-        onPressed: _submitTransactionForm,
+        onPressed: () {
+          _submitTransactionForm(context);
+        },
         label: Text(
             transactionId == null ? 'Add Transaction' : 'Edit Transaction'),
       ),
@@ -175,99 +180,150 @@ class _TransactionFormState extends State<TransactionForm> {
     );
   }
 
-  Row buildCategoryChanger(BuildContext context) {
-    //TODO this will need to be rebuilt to stream the default categories in the
-    //TODO database so we can tie the title and id to the transaction; this will
-    //TODO eventually help with custom categories
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Text(
-          'Category: ',
-          style: TextStyle(
-            fontSize: 16,
-            color: Theme.of(context).primaryColor,
-          ),
-        ),
-        GestureDetector(
-          onTap: () => showDialog(
-            context: context,
-            builder: (bctx) => SimpleDialog(
-              backgroundColor: Theme.of(context).primaryColor,
-              title: Text(
-                'Choose Category',
-                style: TextStyle(
-                  fontSize: 25,
-                  fontFamily: 'Anton',
-                  fontWeight: FontWeight.bold,
-                ),
+  Widget buildCategoryChanger(BuildContext context) {
+    //TODO this will need to be rebuilt to stream the default categories in the database so we can tie the title and id to the transaction; this will eventually help with custom categories
+    var categoryRef = getCategoryCollection(context);
+    return FutureBuilder(
+      future: categoryRef,
+      builder: (context, snapshot) {
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(
+              'Category: ',
+              style: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).primaryColor,
               ),
-              children: [
-                ...MainCategory.values
-                    .map(
-                      (category) => Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          ListTile(
-                            tileColor: Theme.of(context).canvasColor,
-                            leading: Icon(
-                              categoryIcon[category],
-                              size: 30,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            title: Text(
-                              '${stringToUserString(enumValueToString(category))}',
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 18,
-                                fontFamily: 'Anton',
-                                fontWeight: FontWeight.bold,
+            ),
+            GestureDetector(
+              onTap: () => showDialog(
+                context: context,
+                builder: (bctx) => SimpleDialog(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  title: Text(
+                    'Choose Category',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontFamily: 'Anton',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  children: [
+                    ...MainCategory.values
+                        .map(
+                          (category) => Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              ListTile(
+                                tileColor: Theme.of(context).canvasColor,
+                                leading: Icon(
+                                  categoryIcon[category],
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                title: Text(
+                                  '${stringToUserString(enumValueToString(category))}',
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: 18,
+                                    fontFamily: 'Anton',
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                onTap: () {
+                                  Navigator.of(context).pop(category);
+                                },
                               ),
-                            ),
-                            onTap: () {
-                              Navigator.of(context).pop(category);
-                            },
+                            ],
                           ),
-                        ],
-                      ),
-                    )
-                    .toList(),
-              ],
-            ),
-          ).then((chosenCategory) => _setCategory(chosenCategory)),
-          child: Chip(
-            avatar: CircleAvatar(
-              backgroundColor: Colors.black,
-              child: Icon(
-                categoryIcon[category],
+                        )
+                        .toList(),
+                  ],
+                ),
+              ).then((chosenCategory) => _setCategory(chosenCategory)),
+              child: Chip(
+                avatar: CircleAvatar(
+                  backgroundColor: Colors.black,
+                  child: Icon(
+                    categoryIcon[category],
+                  ),
+                ),
+                label: Text(
+                  '${stringToUserString(enumValueToString(category.toString()))}',
+                  style: TextStyle(color: Colors.black),
+                ),
+                backgroundColor: Theme.of(context).primaryColorLight,
               ),
             ),
-            label: Text(
-              '${stringToUserString(enumValueToString(category.toString()))}',
-              style: TextStyle(color: Colors.black),
-            ),
-            backgroundColor: Theme.of(context).primaryColorLight,
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
+  }
+
+  // will return the collection of default categories or categories for the bduget if a corresponding budget exists
+  Future<QuerySnapshot> getCategoryCollection(BuildContext context) async {
+    // return default categories if there is no budget with the same date as the transaction
+    if ((await FirebaseFirestore.instance
+            .collection('users')
+            .doc(Provider.of<Auth>(context).getUserId())
+            .collection('budgets')
+            .where('date', isEqualTo: _transaction.getDate())
+            .get())
+        .docs
+        .isEmpty) {
+      return FirebaseFirestore.instance.collection('DefaultCategories').get();
+      // otherwise return that budgets colleciton of categories
+    } else {
+      var budgetID = (await FirebaseFirestore.instance
+              .collection('users')
+              .doc(Provider.of<Auth>(context).getUserId())
+              .collection('budgets')
+              .where(
+                'date',
+                isGreaterThanOrEqualTo: new DateTime(
+                  _transaction.getDate().year,
+                  _transaction.getDate().month,
+                  1,
+                ),
+                isLessThan: new DateTime(
+                  _transaction.getDate().year,
+                  _transaction.getDate().month + 1,
+                  1,
+                ),
+              )
+              .get())
+          .docs
+          .single
+          .id;
+
+      return FirebaseFirestore.instance
+          .collection('users')
+          .doc(Provider.of<Auth>(context).getUserId())
+          .collection('budgets')
+          .doc(budgetID)
+          .collection('categories')
+          .get();
+    }
   }
 }
 
 class AmountTFF extends StatelessWidget {
   const AmountTFF({
     Key key,
-    @required Transaction transaction,
+    @required Transaction.Transaction transaction,
   })  : _transaction = transaction,
         super(key: key);
 
-  final Transaction _transaction;
+  final Transaction.Transaction _transaction;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue:
-          _transaction.amount == null ? '' : _transaction.amount.toString(),
+      initialValue: _transaction.getAmount() == null
+          ? ''
+          : _transaction.getAmount().toString(),
       decoration: InputDecoration(
         labelText: 'Amount',
         labelStyle: new TextStyle(
@@ -277,7 +333,7 @@ class AmountTFF extends StatelessWidget {
       keyboardType: TextInputType.number,
       maxLength: null,
       onEditingComplete: () => FocusScope.of(context).unfocus(),
-      onSaved: (val) => _transaction.amount = double.parse(val),
+      onSaved: (val) => _transaction.setAmount(double.parse(val)),
       validator: (val) {
         if (val.isEmpty) return 'Please enter an amount.';
         if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
@@ -299,16 +355,16 @@ class AmountTFF extends StatelessWidget {
 class DescriptionTFF extends StatelessWidget {
   const DescriptionTFF({
     Key key,
-    @required Transaction transaction,
+    @required Transaction.Transaction transaction,
   })  : _transaction = transaction,
         super(key: key);
 
-  final Transaction _transaction;
+  final Transaction.Transaction _transaction;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue: _transaction.title ?? '',
+      initialValue: _transaction.getTitle() ?? '',
       decoration: InputDecoration(
         labelText: 'Description',
         labelStyle: new TextStyle(
@@ -321,7 +377,7 @@ class DescriptionTFF extends StatelessWidget {
       ],
       maxLength: 15,
       onEditingComplete: () => FocusScope.of(context).nextFocus(),
-      onSaved: (val) => _transaction.title = val.trim(),
+      onSaved: (val) => _transaction.setTitle(val.trim()),
       validator: (val) {
         if (val.trim().length > 15) return 'Description is too long.';
         if (val.isEmpty) return 'Please enter a description.';

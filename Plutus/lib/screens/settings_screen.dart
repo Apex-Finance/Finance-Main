@@ -6,9 +6,9 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
+      appBar: AppBar(),
+      body: Center(
+        child: Text(
           'Settings Screen',
           style: Theme.of(context).textTheme.bodyText1,
         ),
