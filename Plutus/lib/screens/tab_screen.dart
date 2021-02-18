@@ -155,6 +155,7 @@ class _TabScreenState extends State<TabScreen> {
               color: Theme.of(context).primaryColor,
               icon: Icon(Icons.account_balance),
               onPressed: () => _enterBudget(context),
+              splashRadius: 23,
             ),
           ),
           Ink(
@@ -166,6 +167,7 @@ class _TabScreenState extends State<TabScreen> {
               color: Theme.of(context).primaryColor,
               icon: Icon(Icons.shopping_cart),
               onPressed: () => _enterTransaction(context),
+              splashRadius: 23,
             ),
           ),
           Ink(
@@ -177,6 +179,7 @@ class _TabScreenState extends State<TabScreen> {
               color: Theme.of(context).primaryColor,
               icon: Icon(Icons.star),
               onPressed: () => _enterGoal(context),
+              splashRadius: 23,
             ),
           ),
         ],
