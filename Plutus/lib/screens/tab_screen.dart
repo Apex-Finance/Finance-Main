@@ -132,90 +132,77 @@ class _TabScreenState extends State<TabScreen> {
       GoalScreen(),
     ];
 
-    return Scaffold(
-      appBar: AppBar(),
-      drawer: _isOpen
-          // TODO if _isOpen == true, then it darkens the screen briefly
-          // Like it's opening an invisible Drawer
-          ? IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: null,
-            )
-          : _openDrawer(),
-      floatingActionButton: GestureDetector(
-        onTap: () {
-          if (_isOpen) fabKey.currentState.close();
-        },
-        child: TappableFabCircularMenu(
-          alignment: Alignment.bottomCenter,
-          animationDuration: Duration(milliseconds: 500),
-          children: <Widget>[
-            Ink(
-              decoration: const ShapeDecoration(
-                color: Color(0xFF212121), // basically Colors.grey[900]
-                shape: CircleBorder(),
-              ),
-              child: IconButton(
-                color: Theme.of(context).primaryColor,
-                icon: Icon(Icons.account_balance),
-                onPressed: () => _enterBudget(context),
-                splashRadius: 23,
-              ),
+    return GestureDetector(
+      onTap: () {
+        if (_isOpen) fabKey.currentState.close();
+      },
+      child: AbsorbPointer(
+        absorbing: _isOpen == true ? true : false,
+        child: Scaffold(
+          appBar: AppBar(),
+          drawer: _openDrawer(),
+          floatingActionButton: GestureDetector(
+            onTap: () {
+              if (_isOpen) fabKey.currentState.close();
+            },
+            child: TappableFabCircularMenu(
+              alignment: Alignment.bottomCenter,
+              animationDuration: Duration(milliseconds: 500),
+              children: <Widget>[
+                Ink(
+                  decoration: const ShapeDecoration(
+                    color: Color(0xFF212121), // basically Colors.grey[900]
+                    shape: CircleBorder(),
+                  ),
+                  child: IconButton(
+                    color: Theme.of(context).primaryColor,
+                    icon: Icon(Icons.account_balance),
+                    onPressed: () => _enterBudget(context),
+                    splashRadius: 23,
+                  ),
+                ),
+                Ink(
+                  decoration: const ShapeDecoration(
+                    color: Color(0xFF212121), // basically Colors.grey[900]
+                    shape: CircleBorder(),
+                  ),
+                  child: IconButton(
+                    color: Theme.of(context).primaryColor,
+                    icon: Icon(Icons.shopping_cart),
+                    onPressed: () => _enterTransaction(context),
+                    splashRadius: 23,
+                  ),
+                ),
+                Ink(
+                  decoration: const ShapeDecoration(
+                    color: Color(0xFF212121), // basically Colors.grey[900]
+                    shape: CircleBorder(),
+                  ),
+                  child: IconButton(
+                    color: Theme.of(context).primaryColor,
+                    icon: Icon(Icons.star),
+                    onPressed: () => _enterGoal(context),
+                    splashRadius: 23,
+                  ),
+                ),
+              ],
+              onDisplayChange: (isOpen) {
+                setState(() {
+                  _isOpen = !_isOpen;
+                });
+              },
+              key: fabKey,
+              ringDiameter: 300,
+              fabMargin: EdgeInsets.fromLTRB(0, 0, 40, 30),
+              fabOpenIcon: Icon(Icons.add),
+              ringColor: Colors.amber.withOpacity(0),
             ),
-            Ink(
-              decoration: const ShapeDecoration(
-                color: Color(0xFF212121), // basically Colors.grey[900]
-                shape: CircleBorder(),
-              ),
-              child: IconButton(
-                color: Theme.of(context).primaryColor,
-                icon: Icon(Icons.shopping_cart),
-                onPressed: () => _enterTransaction(context),
-                splashRadius: 23,
-              ),
-            ),
-            Ink(
-              decoration: const ShapeDecoration(
-                color: Color(0xFF212121), // basically Colors.grey[900]
-                shape: CircleBorder(),
-              ),
-              child: IconButton(
-                color: Theme.of(context).primaryColor,
-                icon: Icon(Icons.star),
-                onPressed: () => _enterGoal(context),
-                splashRadius: 23,
-              ),
-            ),
-          ],
-          onDisplayChange: (isOpen) {
-            setState(() {
-              _isOpen = !_isOpen;
-            });
-          },
-          key: fabKey,
-          ringDiameter: 300,
-          fabMargin: EdgeInsets.fromLTRB(0, 0, 40, 30),
-          fabOpenIcon: Icon(Icons.add),
-          ringColor: Colors.amber.withOpacity(0),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          body: _pages[_selectedPageIndex],
+          bottomNavigationBar: buildTabBar(context),
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: GestureDetector(
-        onTap: () {
-          if (_isOpen) fabKey.currentState.close();
-        },
-        child: AbsorbPointer(
-            absorbing: _isOpen == true ? true : false,
-            child: _pages[_selectedPageIndex]),
-      ),
-      bottomNavigationBar: GestureDetector(
-        onTap: () {
-          print("hi");
-          if (_isOpen) fabKey.currentState.close();
-        },
-        child: AbsorbPointer(
-            absorbing: _isOpen == true ? true : false,
-            child: buildTabBar(context)),
       ),
     );
   }
