@@ -34,7 +34,10 @@ void main() {
     test('Test accurate totals', () {
       double testTotalExpenses = 0;
 
-      Transaction t1, t2, t3, t4;
+      Transaction t1 = Transaction();
+      Transaction t2 = Transaction();
+      Transaction t3 = Transaction();
+      Transaction t4 = Transaction();
 
       t1.setAmount(1.00);
       t2.setAmount(5.00);
