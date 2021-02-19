@@ -1,86 +1,143 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:percent_indicator/percent_indicator.dart';
 import '../models/goals.dart';
+import '../widgets/goals_form.dart';
 
 class GoalsListTile extends StatefulWidget {
+  final Goal goal;
+
+  GoalsListTile(this.goal);
+
   @override
   _GoalsListTileState createState() => _GoalsListTileState();
-  GoalsListTile(Goal goal);
 }
 
 class _GoalsListTileState extends State<GoalsListTile> {
-  DateTime _date = DateTime.now();
+  void _updateGoal(BuildContext context, Goal goal) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (_) => GoalsForm(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(20)),
-        child: ListTile(
-          tileColor: Colors.grey[850],
-          leading: Image.network(
-            'https://2p2bboli8d61fqhjiqzb8p1a-wpengine.netdna-ssl.com/wp-content/uploads/2018/07/1.jpg',
-            alignment: Alignment.center,
+        child: Dismissible(
+          key: ValueKey(widget.goal.getID()),
+          background: Container(
+            color: Theme.of(context).errorColor,
+            child: Icon(
+              Icons.delete,
+              color: Colors.white,
+              size: 40,
+            ),
+            alignment: Alignment.centerRight,
+            padding: EdgeInsets.only(right: 20),
+            margin: EdgeInsets.symmetric(
+              horizontal: 15,
+              vertical: 4,
+            ),
           ),
-
-          // leading: ClipRRect(
-          //   borderRadius: BorderRadius.all(Radius.circular(20)),
-          //   // TODO this may need to be a constrained box
-          //   // max height and width should be 256 x 256 (icon dimensions)
-          //   child: ConstrainedBox(
-          //     constraints: BoxConstraints(
-          //       minWidth: 44,
-          //       minHeight: 44,
-          //       maxWidth: 70,
-          //       maxHeight: 70,
-          //     ),
-          //     // TODO Make this image icon bigger!
-          //     child: Image.network(
-          //         'https://cdn.carbuzz.com/gallery-images/840x560/243000/300/243339.jpg'),
-          //   ),
-          // ),
-          title: Text(
-            "Lambroghini Reventon",
-            style: Theme.of(context).textTheme.headline1,
-          ),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "\$10,000",
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              new LinearPercentIndicator(
-                alignment: MainAxisAlignment.center,
-                width: MediaQuery.of(context).size.width * .57,
-                lineHeight: 12.0,
-                backgroundColor: Colors.black,
-                progressColor: Colors.amber,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    "${DateFormat.yMMMd().format(_date)}",
-                    style: Theme.of(context).textTheme.bodyText2,
+          direction: DismissDirection.endToStart,
+          confirmDismiss: (direction) {
+            return showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: Text('Do you want to remove this goal?'),
+                content: Text(
+                  'This cannot be undone later.',
+                ),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('No'),
+                    onPressed: () {
+                      Navigator.of(ctx).pop(false);
+                    },
                   ),
-                  Text(
-                    "\$1,400,000",
-                    style: Theme.of(context).textTheme.bodyText2,
+                  FlatButton(
+                    child: Text('Yes'),
+                    onPressed: () {
+                      Navigator.of(ctx).pop(true);
+                    },
                   ),
                 ],
               ),
-            ],
+            );
+          },
+          onDismissed: (direction) {
+            Provider.of<GoalDataProvider>(context, listen: false)
+                .removeGoal(widget.goal, context);
+            Scaffold.of(context)
+              ..removeCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text('Goal deleted.'),
+                ),
+              );
+          },
+          child: ListTile(
+            onTap: () => _updateGoal(context, widget.goal),
+            tileColor: Colors.grey[850],
+            leading: Image.network(
+              'https://2p2bboli8d61fqhjiqzb8p1a-wpengine.netdna-ssl.com/wp-content/uploads/2018/07/1.jpg',
+              alignment: Alignment.center,
+            ),
+            title: AutoSizeText(
+              '${widget.goal.getTitle()}',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  color: Theme.of(context).primaryColor, fontSize: 18),
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AutoSizeText(
+                  '${widget.goal.getGoalAmount()}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: Theme.of(context).primaryColor, fontSize: 18),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                new LinearPercentIndicator(
+                  alignment: MainAxisAlignment.center,
+                  width: MediaQuery.of(context).size.width * .57,
+                  lineHeight: 12.0,
+                  backgroundColor: Colors.black,
+                  progressColor: Colors.amber,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      "${DateFormat.MMMd().format(widget.goal.getDate())}",
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                    Text(
+                      "\$1,400,000",
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            isThreeLine: true,
           ),
-          isThreeLine: true,
         ),
       ),
     );
