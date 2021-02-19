@@ -31,13 +31,13 @@ void main() {
     });
   });
   group('getTransactionExpenses', () {
+    Transaction t1 = Transaction();
+    Transaction t2 = Transaction();
+    Transaction t3 = Transaction();
+    Transaction t4 = Transaction();
+
     test('Test accurate totals', () {
       double testTotalExpenses = 0;
-
-      Transaction t1 = Transaction();
-      Transaction t2 = Transaction();
-      Transaction t3 = Transaction();
-      Transaction t4 = Transaction();
 
       t1.setAmount(1.00);
       t2.setAmount(5.00);
@@ -49,6 +49,21 @@ void main() {
 
       expect(testTotalExpenses, 36.00);
       expect(testTotalExpenses, isNot(0.00));
+    });
+    test('Test double type convert', () {
+      double testDouble;
+      int value;
+
+      value = 4;
+      value.toDouble();
+
+      t1.setAmount(1);
+      t2.setAmount(3);
+
+      testDouble = t1.getAmount() + t2.getAmount();
+
+      expect(testDouble, 4.00);
+      expect(testDouble, value);
     });
   });
 }
