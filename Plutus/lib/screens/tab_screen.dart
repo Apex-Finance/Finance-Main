@@ -132,6 +132,7 @@ class _TabScreenState extends State<TabScreen> {
       GoalScreen(),
     ];
 
+    // TODO Prevent users from pressing other buttons if + button menu isOpen
     return GestureDetector(
       onTap: () {
         if (_isOpen) fabKey.currentState.close();
@@ -157,7 +158,7 @@ class _TabScreenState extends State<TabScreen> {
             ),
             Ink(
               decoration: const ShapeDecoration(
-                color: Color(0xFF212121), // basically Colors.grey[900]
+                color: Color(0xFF212121),
                 shape: CircleBorder(),
               ),
               child: IconButton(
@@ -169,7 +170,7 @@ class _TabScreenState extends State<TabScreen> {
             ),
             Ink(
               decoration: const ShapeDecoration(
-                color: Color(0xFF212121), // basically Colors.grey[900]
+                color: Color(0xFF212121),
                 shape: CircleBorder(),
               ),
               child: IconButton(
