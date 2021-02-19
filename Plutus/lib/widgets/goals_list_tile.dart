@@ -50,7 +50,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
             children: [
               Text(
                 "\$10,000",
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.bodyText1,
               ),
               SizedBox(
                 height: 10,
@@ -60,7 +60,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
                 width: MediaQuery.of(context).size.width * .57,
                 lineHeight: 12.0,
                 backgroundColor: Colors.black,
-                progressColor: Colors.amber,
+                progressColor: Theme.of(context).primaryColor,
               ),
               SizedBox(
                 height: 10,
@@ -70,11 +70,11 @@ class _GoalsListTileState extends State<GoalsListTile> {
                 children: <Widget>[
                   Text(
                     "${DateFormat.yMMMd().format(_date)}",
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                   Text(
                     "\$1,400,000",
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
               ),

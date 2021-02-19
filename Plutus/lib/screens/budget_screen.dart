@@ -185,8 +185,10 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                         ? 1
                                         : monthlyTransactions.monthlyExpenses /
                                             monthlyBudget.amount,
-                                    backgroundColor: Colors.black,
-                                    progressColor: Colors.amber,
+                                    backgroundColor:
+                                        Theme.of(context).canvasColor,
+                                    progressColor:
+                                        Theme.of(context).primaryColor,
                                   ),
                                 ],
                               ),

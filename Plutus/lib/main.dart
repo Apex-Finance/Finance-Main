@@ -68,9 +68,9 @@ class MyApp extends StatelessWidget {
             canvasColor: Colors.black,
             textTheme: GoogleFonts.latoTextTheme(
               TextTheme(
-                bodyText1: TextStyle(color: Colors.amber),
-                bodyText2: TextStyle(color: Colors.amber, fontSize: 12),
-                subtitle1: TextStyle(color: Colors.amber, fontSize: 17),
+                bodyText1: TextStyle(color: Colors.amber, fontSize: 17),
+                bodyText2: TextStyle(color: Colors.black, fontSize: 17),
+                subtitle1: TextStyle(color: Colors.white, fontSize: 17),
                 headline1: TextStyle(color: Colors.amber, fontSize: 25),
               ),
             ),
