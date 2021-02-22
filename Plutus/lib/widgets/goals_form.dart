@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../models/goals.dart';
 
@@ -15,6 +17,7 @@ class GoalsForm extends StatefulWidget {
 class _GoalsFormState extends State<GoalsForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime _date = DateTime.now();
+  File _goalImage; // Image selected from the phone gallery
   Goal _goal = Goal(
     title: null,
     amountSaved: null,
@@ -26,23 +29,36 @@ class _GoalsFormState extends State<GoalsForm> {
   void _setDate(DateTime value) {
     if (value == null) return; // if user cancels datepicker
     setState(() {
-      _goal.dateOfGoal =
-          _date = value; // update date if date changes since no onsave property
-    }
-        // TODO call GoalDataProvider to update date attribute; will need a date attribute in Firestore
-        );
+      _goal.setDate(_date =
+          value); // update date if date changes since no onsave property
+    });
   }
 
   // Validates the goal object then pushes its data to the DB
   void _submitGoalForm(BuildContext context) {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+      // TODO save image into DB
       Provider.of<GoalDataProvider>(context, listen: false)
           .addGoal(_goal, context);
       Navigator.of(context).pop(
         _goal,
       );
     }
+  }
+
+  Future getImage() async {
+    final pickedFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _goalImage = File(pickedFile.path);
+      }
+      // } else {
+      //   print('No image selected.');
+      // }
+    });
   }
 
   @override
@@ -70,9 +86,10 @@ class _GoalsFormState extends State<GoalsForm> {
                     goal: _goal,
                   ),
                   buildDateChanger(context),
-                  SizedBox(
-                    height: 25,
-                  ),
+                  // SizedBox(
+                  //   height: 25,
+                  // ),
+                  buildImageSelector(context),
                   buildSubmitButton(context),
                 ],
               ),
@@ -83,11 +100,31 @@ class _GoalsFormState extends State<GoalsForm> {
     );
   }
 
+  Row buildImageSelector(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        GestureDetector(
+          onTap: () => getImage(),
+          child: Container(
+              color: Theme.of(context).primaryColorLight,
+              width: 85,
+              height: 85,
+              child: _goalImage == null
+                  ? Icon(Icons.camera_alt)
+                  : Image.file(_goalImage)),
+        ),
+        Padding(
+            padding: EdgeInsets.all(15),
+            child: Text("(Optional) Click to enter an Image")),
+      ],
+    );
+  }
+
   Container buildSubmitButton(BuildContext context) {
     return Container(
       alignment: Alignment.bottomRight,
       child: FloatingActionButton.extended(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).primaryColorLight,
         onPressed: () {
           _submitGoalForm(context);
         },
