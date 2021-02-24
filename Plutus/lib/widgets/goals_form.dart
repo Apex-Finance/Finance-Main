@@ -101,12 +101,16 @@ class _GoalsFormState extends State<GoalsForm> {
         GestureDetector(
           onTap: () => getImage(),
           child: Container(
-              color: Theme.of(context).primaryColorLight,
-              width: 85,
-              height: 85,
-              child: _goalImage == null
-                  ? Icon(Icons.camera_alt)
-                  : Image.file(_goalImage)),
+            color: Theme.of(context).primaryColorLight,
+            width: 85,
+            height: 85,
+            child: _goalImage == null
+                ? Icon(Icons.camera_alt)
+                : FittedBox(
+                    fit: BoxFit.cover,
+                    child: Image.file(_goalImage),
+                  ),
+          ),
         ),
         Padding(
             padding: EdgeInsets.all(15),
