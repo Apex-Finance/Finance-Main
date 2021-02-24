@@ -47,17 +47,14 @@ class _GoalsFormState extends State<GoalsForm> {
     }
   }
 
+  // Gets the image from the phone gallery and displays it as an image preview
   Future getImage() async {
     final pickedFile =
         await ImagePicker().getImage(source: ImageSource.gallery);
-
     setState(() {
       if (pickedFile != null) {
         _goalImage = File(pickedFile.path);
       }
-      // } else {
-      //   print('No image selected.');
-      // }
     });
   }
 
@@ -86,9 +83,6 @@ class _GoalsFormState extends State<GoalsForm> {
                     goal: _goal,
                   ),
                   buildDateChanger(context),
-                  // SizedBox(
-                  //   height: 25,
-                  // ),
                   buildImageSelector(context),
                   buildSubmitButton(context),
                 ],
@@ -100,6 +94,7 @@ class _GoalsFormState extends State<GoalsForm> {
     );
   }
 
+  // Selects an image to add to a goal
   Row buildImageSelector(BuildContext context) {
     return Row(
       children: <Widget>[
@@ -120,6 +115,7 @@ class _GoalsFormState extends State<GoalsForm> {
     );
   }
 
+  // Validates required fields and sends goal data to DB
   Container buildSubmitButton(BuildContext context) {
     return Container(
       alignment: Alignment.bottomRight,
