@@ -26,8 +26,8 @@ class _GoalsFormState extends State<GoalsForm> {
   void _setDate(DateTime value) {
     if (value == null) return; // if user cancels datepicker
     setState(() {
-      _goal.dateOfGoal =
-          _date = value; // update date if date changes since no onsave property
+      // update date if date changes since no onsave property
+      _goal.setDate(_date = value);
     }
         // TODO call GoalDataProvider to update date attribute; will need a date attribute in Firestore
         );
