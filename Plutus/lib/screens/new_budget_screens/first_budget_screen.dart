@@ -7,6 +7,7 @@ import '../../widgets/category_list_tile.dart';
 import '../../models/categories.dart';
 import '../../models/budget.dart';
 
+// Form to allocate budget into categories
 class FirstBudgetScreen extends StatefulWidget {
   static const routeName = '/first_budget';
 
