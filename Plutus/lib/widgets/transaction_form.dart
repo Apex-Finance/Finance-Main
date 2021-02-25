@@ -1,6 +1,5 @@
 import 'package:Plutus/models/transaction.dart' as Transaction;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
@@ -188,147 +187,157 @@ class _TransactionFormState extends State<TransactionForm> {
     Category.CategoryDataProvider categoryDataProvider =
         Provider.of<Category.CategoryDataProvider>(context);
     //TODO this will need to be rebuilt to stream the default categories in the database so we can tie the title and id to the transaction; this will eventually help with custom categories
-    var categoryRef = getCategoryCollection(context);
-    return FutureBuilder(
-      future: categoryRef,
-      builder: (context, snapshot) {
-        return Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Text(
-              'Category: ',
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).primaryColor,
+    List<Category.Category> categories = new List<Category.Category>();
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Text(
+          'Category: ',
+          style: TextStyle(
+            fontSize: 16,
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+        GestureDetector(
+          onTap: () => showDialog(
+            context: context,
+            builder: (bctx) => SimpleDialog(
+              backgroundColor: Theme.of(context).primaryColor,
+              title: Text(
+                'Choose Category',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontFamily: 'Anton',
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            GestureDetector(
-              onTap: () => showDialog(
-                context: context,
-                builder: (bctx) => SimpleDialog(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  title: Text(
-                    'Choose Category',
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontFamily: 'Anton',
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    ...snapshot.data.docs.map(
-                      (doc) {
-                        print('lll');
-                        category = categoryDataProvider.initializeCategory(doc);
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            ListTile(
-                              tileColor: Theme.of(context).canvasColor,
-                              leading: Icon(
-                                IconData(
-                                  category.getCodepoint(),
-                                  fontFamily: 'MaterialIcons',
-                                ),
-                                size: 30,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              title: Text(
-                                '${category.getTitle()}',
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontSize: 18,
-                                  fontFamily: 'Anton',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              onTap: () {
-                                _setCategory(category);
-                                Navigator.of(context).pop(category);
+                    Container(
+                      height: 600,
+                      width: 400,
+                      child: FutureBuilder(
+                        future: getCategories(context),
+                        builder:
+                            (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            categories = convertQuerytoList(
+                                snapshot, categoryDataProvider);
+                            // print(categories.length);
+                            return ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (context, index) {
+                                category =
+                                    categoryDataProvider.initializeCategory(
+                                        snapshot.data.docs[index]);
+                                return ListTile(
+                                  tileColor: Theme.of(context).canvasColor,
+                                  leading: Icon(
+                                    IconData(
+                                      category.getCodepoint(),
+                                      fontFamily: 'MaterialIcons',
+                                    ),
+                                    size: 30,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  title: Text(
+                                    '${category.getTitle()}',
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: 18,
+                                      fontFamily: 'Anton',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    _setCategory(category);
+
+                                    Navigator.of(context).pop(category);
+                                  },
+                                );
                               },
-                            ),
-                          ],
-                        );
-                      },
-                    ).toList(),
+                            );
+                          } else {
+                            print('done first');
+                            return CircularProgressIndicator();
+                          }
+                        },
+                      ),
+                    ),
                   ],
                 ),
-              ),
-              child: Chip(
-                avatar: CircleAvatar(
-                  backgroundColor: Colors.black,
-                  child: Icon(
-                    IconData(
-                      _transaction.getCategoryCodePoint(),
-                      fontFamily: 'MaterialIcons',
-                    ),
-                  ),
+              ],
+            ),
+          ),
+          child: Chip(
+            avatar: CircleAvatar(
+              backgroundColor: Colors.black,
+              child: Icon(
+                IconData(
+                  _transaction.getCategoryCodePoint(),
+                  fontFamily: 'MaterialIcons',
                 ),
-                label: Text(
-                  '${_transaction.getCategoryTitle()}',
-                  style: TextStyle(color: Colors.black),
-                ),
-                backgroundColor: Theme.of(context).primaryColorLight,
+                size: 150,
               ),
             ),
-          ],
-        );
-      },
+            label: Text(
+              '${_transaction.getCategoryTitle()}',
+              style: TextStyle(color: Colors.black),
+            ),
+            backgroundColor: Theme.of(context).primaryColorLight,
+          ),
+        ),
+      ],
     );
   }
+}
 
-  // will return the collection of default categories or categories for the bduget if a corresponding budget exists
-  Future<QuerySnapshot> getCategoryCollection(BuildContext context) async {
-    // return default categories if there is no budget with the same date as the transaction
-    if ((await FirebaseFirestore.instance
-            .collection('users')
-            .doc(Provider.of<Auth>(context).getUserId())
-            .collection('budgets')
-            .where('date', isEqualTo: _transaction.getDate())
-            .get())
-        .docs
-        .isEmpty) {
-      print((await FirebaseFirestore.instance
-              .collection('DefaultCategories')
-              .get())
-          .docs
-          .isEmpty);
-      return await FirebaseFirestore.instance
-          .collection('DefaultCategories')
-          .get();
-      // otherwise return that budgets colleciton of categories
-    } else {
-      var budgetID = (await FirebaseFirestore.instance
-              .collection('users')
-              .doc(Provider.of<Auth>(context).getUserId())
-              .collection('budgets')
-              .where(
-                'date',
-                isGreaterThanOrEqualTo: new DateTime(
-                  _transaction.getDate().year,
-                  _transaction.getDate().month,
-                  1,
-                ),
-                isLessThan: new DateTime(
-                  _transaction.getDate().year,
-                  _transaction.getDate().month + 1,
-                  1,
-                ),
-              )
-              .get())
-          .docs
-          .single
-          .id;
+// will return the collection of default categories or categories for the bduget if a corresponding budget exists
+Future<QuerySnapshot> getCategories(BuildContext context) async {
+  var categoryQuery =
+      await FirebaseFirestore.instance.collection('DefaultCategories').where(
+    'userID',
+    whereIn: [
+      'default',
+      Provider.of<Auth>(context).getUserId(),
+    ],
+  ).get();
+  // var defaultCategories = getDefaultCategories();
+  // var customCategories = getCustomCategories(context);
 
-      return await FirebaseFirestore.instance
-          .collection('users')
-          .doc(Provider.of<Auth>(context).getUserId())
-          .collection('budgets')
-          .doc(budgetID)
-          .collection('categories')
-          .get();
-    }
-  }
+  return categoryQuery;
+}
+
+List<Category.Category> convertQuerytoList(
+    AsyncSnapshot<QuerySnapshot> snapshot,
+    Category.CategoryDataProvider categoryDataProvider) {
+  var categories = new List<Category.Category>();
+  snapshot.data.docs.map((doc) {
+    print('category added');
+    categories.add(categoryDataProvider.initializeCategory(doc));
+  });
+  print('all categories added pt. 2');
+  return categories;
+}
+
+Stream<QuerySnapshot> getDefaultCategories() {
+  var defaultCategories =
+      FirebaseFirestore.instance.collection('DefaultCategories').snapshots();
+  return defaultCategories;
+}
+
+Stream<QuerySnapshot> getCustomCategories(BuildContext context) {
+  var customCategories = FirebaseFirestore.instance
+      .collection('users')
+      .doc(Provider.of<Auth>(context).getUserId())
+      .collection('CustomCategories')
+      .snapshots();
+
+  return customCategories;
 }
 
 class AmountTFF extends StatelessWidget {
