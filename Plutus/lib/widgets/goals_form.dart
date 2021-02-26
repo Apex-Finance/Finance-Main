@@ -37,8 +37,11 @@ class _GoalsFormState extends State<GoalsForm> {
   void _submitGoalForm(BuildContext context) {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+      if (_goal.getID() == null)
+        Provider.of<GoalDataProvider>(context, listen: false)
+            .addGoal(_goal, context);
       Provider.of<GoalDataProvider>(context, listen: false)
-          .addGoal(_goal, context);
+          .updateGoal(_goal, context);
       Navigator.of(context).pop(
         _goal,
       );
