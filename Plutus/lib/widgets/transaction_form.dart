@@ -42,6 +42,8 @@ class _TransactionFormState extends State<TransactionForm> {
   void _setCategory(Category.Category category) {
     if (category.getTitle() == null) return; // if user taps out of popup
     setState(() {
+      print(category.getTitle() + " chosen");
+      print(category.getID());
       _transaction.setCategoryId(category.getID());
       _transaction.setCategoryCodePoint(category.getCodepoint());
       _transaction.setCategoryTitle(category.getTitle());
@@ -224,28 +226,36 @@ class _TransactionFormState extends State<TransactionForm> {
                             (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.done) {
-                            categories = convertQuerytoList(
-                                snapshot, categoryDataProvider);
+                            snapshot.data.docs.forEach((element) {
+                              categories.add(categoryDataProvider
+                                  .initializeCategory(element));
+                            });
+                            print("${categories.length} number of categories");
+                            // categories = convertQuerytoList(
+                            //     snapshot, categoryDataProvider);
                             // print(categories.length);
                             return ListView.builder(
                               scrollDirection: Axis.vertical,
                               itemCount: snapshot.data.docs.length,
                               itemBuilder: (context, index) {
+                                print("$index index");
                                 category =
                                     categoryDataProvider.initializeCategory(
                                         snapshot.data.docs[index]);
+                                print(categories[index].getTitle() +
+                                    " initializd");
                                 return ListTile(
                                   tileColor: Theme.of(context).canvasColor,
                                   leading: Icon(
                                     IconData(
-                                      category.getCodepoint(),
+                                      categories[index].getCodepoint(),
                                       fontFamily: 'MaterialIcons',
                                     ),
                                     size: 30,
                                     color: Theme.of(context).primaryColor,
                                   ),
                                   title: Text(
-                                    '${category.getTitle()}',
+                                    '${categories[index].getTitle()}',
                                     style: TextStyle(
                                       color: Theme.of(context).primaryColor,
                                       fontSize: 18,
@@ -254,7 +264,7 @@ class _TransactionFormState extends State<TransactionForm> {
                                     ),
                                   ),
                                   onTap: () {
-                                    _setCategory(category);
+                                    _setCategory(categories[index]);
 
                                     Navigator.of(context).pop(category);
                                   },
@@ -262,7 +272,6 @@ class _TransactionFormState extends State<TransactionForm> {
                               },
                             );
                           } else {
-                            print('done first');
                             return CircularProgressIndicator();
                           }
                         },
@@ -274,16 +283,16 @@ class _TransactionFormState extends State<TransactionForm> {
             ),
           ),
           child: Chip(
-            avatar: CircleAvatar(
-              backgroundColor: Colors.black,
-              child: Icon(
-                IconData(
-                  _transaction.getCategoryCodePoint(),
-                  fontFamily: 'MaterialIcons',
-                ),
-                size: 150,
-              ),
-            ),
+            // avatar: CircleAvatar(
+            //   backgroundColor: Colors.black,
+            //   child: Icon(
+            //     IconData(
+            //       _transaction.getCategoryCodePoint(),
+            //       fontFamily: 'MaterialIcons',
+            //     ),
+            //     size: 50,
+            //   ),
+            // ),
             label: Text(
               '${_transaction.getCategoryTitle()}',
               style: TextStyle(color: Colors.black),
@@ -312,14 +321,13 @@ Future<QuerySnapshot> getCategories(BuildContext context) async {
   return categoryQuery;
 }
 
-List<Category.Category> convertQuerytoList(
-    AsyncSnapshot<QuerySnapshot> snapshot,
+List<Category.Category> convertQuerytoList(QueryDocumentSnapshot doc,
     Category.CategoryDataProvider categoryDataProvider) {
   var categories = new List<Category.Category>();
-  snapshot.data.docs.map((doc) {
-    print('category added');
-    categories.add(categoryDataProvider.initializeCategory(doc));
-  });
+
+  print('category convertor called');
+  categories.add(categoryDataProvider.initializeCategory(doc));
+
   print('all categories added pt. 2');
   return categories;
 }

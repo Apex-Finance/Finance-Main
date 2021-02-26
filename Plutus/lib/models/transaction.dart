@@ -91,6 +91,7 @@ class Transactions with ChangeNotifier {
     transaction.setTitle(doc.data()['title']);
     transaction.setDate(doc.data()['date'].toDate());
     transaction.setCategoryId(doc.data()['category id']);
+    transaction.setCategoryTitle(doc.data()['category title']);
     transaction.setAmount(doc.data()['amount']);
 
     return transaction;
@@ -107,6 +108,7 @@ class Transactions with ChangeNotifier {
       'amount': transaction.getAmount(),
       'date': transaction.getDate(),
       'category id': transaction.getCategoryId(),
+      'category title': transaction.getCategoryTitle(),
     });
   }
 
@@ -122,6 +124,7 @@ class Transactions with ChangeNotifier {
         'amount': transaction.getAmount(),
         'date': transaction.getDate(),
         'category id': transaction.getCategoryId(),
+        'category title': transaction.getCategoryTitle(),
       },
       SetOptions(merge: true),
     );

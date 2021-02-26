@@ -76,7 +76,6 @@ class CategoryDataProvider with ChangeNotifier {
     category.setAmount(doc.data()['amount'].toDouble());
     category.setTitle(doc.data()['title']);
     category.setCodepoint(doc.data()['codepoint'].toInt());
-    print('category initialized');
 
     return category;
   }
