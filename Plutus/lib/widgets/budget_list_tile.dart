@@ -21,7 +21,8 @@ class _BudgetListTileState extends State<BudgetListTile> {
 
   @override
   Widget build(BuildContext context) {
-    final monthlyBudget = Provider.of<Budgets>(context).monthlyBudget;
+    final monthlyBudget =
+        Provider.of<BudgetDataProvider>(context).monthlyBudget;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ClipRRect(
