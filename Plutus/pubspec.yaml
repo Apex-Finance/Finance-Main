@@ -37,7 +37,8 @@ dependencies:
   provider: ^4.3.2+2
   currency_text_input_formatter: ^1.0.3
   fab_circular_menu: ^1.0.1
-
+  toggle_switch: "^0.1.8"
+  image_picker: ^0.6.7+22
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

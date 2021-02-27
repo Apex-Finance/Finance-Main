@@ -14,10 +14,10 @@ class GoalScreen extends StatelessWidget {
       isScrollControlled: true,
       context: context,
       builder: (_) => GoalsForm(),
-      // ).then((newGoal) {
-      //   if (newGoal == null) return;
-      //   Provider.of<GoalDataProvider>(context, listen: false)
-      //       .addGoal(newGoal, context); //TODO check if needed
+    ).then(
+      (newGoal) {
+        if (newGoal == null) return;
+      },
     );
   }
 
