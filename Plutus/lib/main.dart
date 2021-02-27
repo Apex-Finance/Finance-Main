@@ -1,3 +1,4 @@
+import 'package:Plutus/screens/individual_goal_screen.dart';
 import 'package:Plutus/screens/new_budget_screens/income_screen.dart';
 import 'package:Plutus/models/month_changer.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ import './models/transaction.dart';
 import './models/budget.dart';
 import './providers/auth.dart';
 import 'models/goals.dart';
+import './screens/individual_goal_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -88,6 +90,7 @@ class MyApp extends StatelessWidget {
             AccountScreen.routeName: (context) => AccountScreen(),
             SettingsScreen.routeName: (context) => SettingsScreen(),
             TabScreen.routeName: (context) => TabScreen(),
+            IndividualGoalScreen.routeName: (context) => IndividualGoalScreen(),
           },
         ),
       ),

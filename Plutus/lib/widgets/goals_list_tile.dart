@@ -1,3 +1,4 @@
+import 'package:Plutus/screens/individual_goal_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -19,6 +20,8 @@ class _GoalsListTileState extends State<GoalsListTile> {
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(20)),
         child: ListTile(
+          onTap: () =>
+              Navigator.pushNamed(context, IndividualGoalScreen.routeName),
           tileColor: Colors.grey[850],
           leading: Image.network(
             'https://2p2bboli8d61fqhjiqzb8p1a-wpengine.netdna-ssl.com/wp-content/uploads/2018/07/1.jpg',
