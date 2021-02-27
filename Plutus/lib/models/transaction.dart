@@ -9,14 +9,14 @@ import '../providers/auth.dart';
 class Transaction {
   String _id;
   String _title;
+  double _amount;
+  DateTime _date;
   String _categoryId;
   /* this will be treated like an id to 
      compare to the actual category id and
      a budget with the same category id */
   String _categoryTitle; // retrieve from corresponding category in db
   int _categoryCodePoint; // Int value to display icon for category
-  double _amount;
-  DateTime _date;
 
   void setID(String idValue) {
     _id = idValue;
