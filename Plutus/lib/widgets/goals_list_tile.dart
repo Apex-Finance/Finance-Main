@@ -89,28 +89,40 @@ class _GoalsListTileState extends State<GoalsListTile> {
             tileColor: Colors.grey[850],
             leading: Image.network(
               'https://2p2bboli8d61fqhjiqzb8p1a-wpengine.netdna-ssl.com/wp-content/uploads/2018/07/1.jpg',
-              alignment: Alignment.center,
             ),
-            title: AutoSizeText(
-              '${widget.goal.getTitle()}',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  color: Theme.of(context).primaryColor, fontSize: 18),
-            ),
-            subtitle: Column(
+            title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AutoSizeText(
-                  '${widget.goal.getGoalAmount()}',
+                  '${widget.goal.getTitle()}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       color: Theme.of(context).primaryColor, fontSize: 18),
                 ),
-                SizedBox(
-                  height: 10,
+              ],
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    AutoSizeText(
+                      '02/22/2021',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                    AutoSizeText(
+                      '\$20 left',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ],
                 ),
+
                 new LinearPercentIndicator(
                   alignment: MainAxisAlignment.center,
                   width: MediaQuery.of(context).size.width * .57,
@@ -118,22 +130,19 @@ class _GoalsListTileState extends State<GoalsListTile> {
                   backgroundColor: Colors.black,
                   progressColor: Colors.amber,
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      "${DateFormat.MMMd().format(widget.goal.getDate())}",
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
-                    Text(
-                      "\$1,400,000",
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
-                  ],
-                ),
+
+                //Text(
+                //"Due Date: ${DateFormat.MMMd().format(widget.goal.getDate())}",
+                //style: Theme.of(context).textTheme.bodyText2,
+                //),
+                Center(
+                  child: AutoSizeText(
+                    '\$20 of \$${widget.goal.getGoalAmount()}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                )
               ],
             ),
             isThreeLine: true,
