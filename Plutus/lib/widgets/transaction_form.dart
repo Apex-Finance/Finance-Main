@@ -23,6 +23,7 @@ class TransactionForm extends StatefulWidget {
 class _TransactionFormState extends State<TransactionForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime _date = DateTime.now();
+
   Transaction.Transaction _transaction = new Transaction.Transaction();
   MainCategory category = MainCategory.uncategorized;
 
@@ -60,13 +61,13 @@ class _TransactionFormState extends State<TransactionForm> {
       print('$key, ${value.codePoint}');
     });
 
+    if (_transaction.getID() == null) {
+      transactionDataProvider.addTransaction(_transaction, context);
+    } else {
+      transactionDataProvider.editTransaction(_transaction, context);
+    }
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      if (_transaction.getID() == null) {
-        transactionDataProvider.addTransaction(_transaction, context);
-      } else {
-        transactionDataProvider.editTransaction(_transaction, context);
-      }
       Navigator.of(context).pop(
         _transaction,
       );
@@ -83,15 +84,14 @@ class _TransactionFormState extends State<TransactionForm> {
 
     if (widget.transaction != null) {
       // if editing, store previous values in transaction to display previous values and submit them later
+      _transaction.setID(widget.transaction.getID());
       _transaction.setTitle(widget.transaction.getTitle());
-      _transaction.setCategoryId(widget.transaction.getCategoryId());
       _transaction.setAmount(widget.transaction.getAmount());
       _transaction.setDate(widget.transaction.getDate());
-      // _transaction.id = widget.transaction.id;
-      // _transaction.title = widget.transaction.title;
-      // _transaction.category = category = widget.transaction.category;
-      // _transaction.amount = widget.transaction.amount;
-      // _transaction.date = _date = widget.transaction.date;
+      _transaction.setCategoryId(widget.transaction.getCategoryId());
+      _transaction.setCategoryTitle(widget.transaction.getCategoryTitle());
+      _transaction
+          .setCategoryCodePoint(widget.transaction.getCategoryCodePoint());
     }
     super.initState();
   }
@@ -140,8 +140,9 @@ class _TransactionFormState extends State<TransactionForm> {
         onPressed: () {
           _submitTransactionForm(context);
         },
-        label: Text(
-            transactionId == null ? 'Add Transaction' : 'Edit Transaction'),
+        label: Text(_transaction.getID() == null
+            ? 'Add Transaction'
+            : 'Edit Transaction'),
       ),
     );
   }
