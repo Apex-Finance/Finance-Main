@@ -87,8 +87,11 @@ class _GoalsListTileState extends State<GoalsListTile> {
           child: ListTile(
             onTap: () => _updateGoal(context, widget.goal),
             tileColor: Colors.grey[850],
-            leading: Image.network(
-              'https://2p2bboli8d61fqhjiqzb8p1a-wpengine.netdna-ssl.com/wp-content/uploads/2018/07/1.jpg',
+            leading: CircleAvatar(
+              radius: 35,
+              backgroundImage: NetworkImage(
+                'https://2p2bboli8d61fqhjiqzb8p1a-wpengine.netdna-ssl.com/wp-content/uploads/2018/07/1.jpg',
+              ),
             ),
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
