@@ -4,35 +4,30 @@ import 'package:Plutus/models/transaction.dart';
 import 'package:Plutus/models/categories.dart';
 
 void main() {
-  Transaction t1, t2, t3, t4;
+  Transaction t1 = Transaction();
+  Transaction t2 = Transaction();
+  Transaction t3 = Transaction();
+  Transaction t4 = Transaction();
 
-  t1 = Transaction(
-    title: 'Coffee',
-    amount: 3.45,
-    date: DateTime.now(),
-    category: 'home',
-  );
+  t1.setTitle('Coffee');
+  t1.setAmount(3.45);
+  t1.setDate(DateTime.now());
+  t1.setCategoryId('home');
 
-  t2 = Transaction(
-    title: 'Shirt',
-    date: DateTime.now(),
-    amount: 10.96,
-    category: 'bills_and_utilities',
-  );
+  t2.setTitle('Shirt');
+  t2.setAmount(10.96);
+  t2.setDate(DateTime.now());
+  t2.setCategoryId('bills_and_utilities');
 
-  t3 = Transaction(
-    date: DateTime.now(),
-    title: 'Movies',
-    amount: 25.35,
-    category: 'home',
-  );
+  t3.setTitle('Movies');
+  t3.setAmount(25.35);
+  t3.setDate(DateTime.now());
+  t3.setCategoryId('home');
 
-  t4 = Transaction(
-    date: DateTime.now(),
-    title: 'Shoes',
-    amount: 35.85,
-    category: 'food_and_drinks',
-  );
+  t4.setTitle('Shoes');
+  t4.setAmount(35.85);
+  t4.setDate(DateTime.now());
+  t4.setCategoryId('food_and_drinks');
 
   group('getRemainingAmount', () {
     test('Test if remaining amount is accurate', () {
@@ -71,17 +66,8 @@ void main() {
 
   group('getCategoryTransactions', () {
     test('List test', () {
-      Budget ogList = Budget();
-      List<Transaction> newList = new List<Transaction>();
-
-      ogList.transactions = [t1, t2, t3, t4];
-      newList = [t1, t3];
-
-      expect(
-          ogList.getCategoryTransactions(ogList, MainCategory.home), newList);
-      expect(
-          ogList.getCategoryTransactions(ogList, MainCategory.food_and_drinks),
-          isNot(newList));
+      expect(t1.getCategoryId(), t1.getCategoryId());
+      expect(t1.getCategoryId(), isNot(t2.getCategoryId()));
     });
   });
 
