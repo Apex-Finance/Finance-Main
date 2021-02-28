@@ -56,14 +56,14 @@ class Budget {
     return _date;
   }
 
-  // List<Transaction.Transaction> getCategoryTransactions(
-  //     Budget budget, MainCategory category) {
-  //   return budget.transactions == null
-  //       ? null
-  //       : budget.transactions
-  //           .where((transaction) => transaction.getCategoryId() == category)
-  //           .toList();
-  // }
+  List<Transaction.Transaction> getCategoryTransactions(
+      Budget budget, MainCategory category) {
+    return budget.transactions == null
+        ? null
+        : budget.transactions
+            .where((transaction) => transaction.getCategoryId() == category)
+            .toList();
+  }
 
   double getCategoryTransactionsAmount(Budget budget, MainCategory category) {
     List<Transaction.Transaction> categoryTransactions =
@@ -121,25 +121,12 @@ class Budget {
   List<MainCategory> get budgetedAndUnbudgetedCategories {
     return budgetedCategory;
   }
-
-  Budget({
-    this.id,
-    this.title,
-    this.amount,
-    this.transactions,
-    this.categoryAmount,
-  });
 }
 
 class BudgetDataProvider with ChangeNotifier {
   // List<Budget> _budgets = [];
   MonthChanger monthChanger;
   Transaction.Transactions transactions;
-  List<Transaction.Transaction> get monthlyTransactions =>
-      transactions.monthlyTransactions;
-
-  Budgets(this.monthChanger, this.transactions, this._budgets);
-  List<Budget> get budgets => [..._budgets];
 
   Budget get monthlyBudget {
     var budgetWithTransactions = budgets.firstWhere(
@@ -176,22 +163,7 @@ class BudgetDataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void editBudget(String id, Budget updatedBudget) {
-    final budgetIndex = _budgets.indexWhere((budget) => budget.id == id);
-    if (budgetIndex >= 0) {
-      _budgets[budgetIndex] = updatedBudget;
-      notifyListeners();
-    }
-  }
-
-  void deleteBudget(String id) {
-    final budgetIndex = _budgets.indexWhere((budget) => budget.id == id);
-    _budgets.removeAt(budgetIndex);
-    notifyListeners();
-  }
-
   void addBudget(Budget budget, BuildContext context) async {
-    _budgets.add(budget);
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
@@ -205,7 +177,6 @@ class BudgetDataProvider with ChangeNotifier {
   }
 
   void editBudget(Budget budget, BuildContext context) async {
-    _budgets.add(budget);
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
@@ -217,30 +188,12 @@ class BudgetDataProvider with ChangeNotifier {
     }, SetOptions(merge: true));
   }
 
-  void setCategoryToDB(
-      String categoryId, double amount, BuildContext context) async {
+  void deleteBudget(String budgetID, BuildContext context) async {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .collection('budgets')
-        .doc(monthlyBudget.getID())
-        .collection('categories')
-        .doc(categoryId)
-        .set({
-      'amount': amount,
-      'remaining amount': amount,
-    }, SetOptions(merge: true));
-  }
-
-  void removeCategoryFromDB(
-      String categoryId, double amount, BuildContext context) async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('budgets')
-        .doc(monthlyBudget.id)
-        .collection('categories')
-        .doc(categoryId)
+        .doc(budgetID)
         .delete();
   }
 }
