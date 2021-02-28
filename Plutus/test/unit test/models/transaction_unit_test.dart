@@ -30,8 +30,8 @@ void main() {
       expect(newTransaction.getID(), isNot(null));
     });
   });
-  group('getTransactionExpenses', (){
-    test('Test accurate totals', (){
+  group('getTransactionExpenses', () {
+    test('Test accurate totals', () {
       double testTotalExpenses = 0;
 
       Transaction t1, t2, t3, t4;
@@ -41,11 +41,11 @@ void main() {
       t3.setAmount(10.00);
       t4.setAmount(20.00);
 
-      testTotalExpenses = t1.getAmount() + t2.getAmount()  + t3.getAmount() + t4.getAmount();
+      testTotalExpenses =
+          t1.getAmount() + t2.getAmount() + t3.getAmount() + t4.getAmount();
 
       expect(testTotalExpenses, 36.00);
       expect(testTotalExpenses, isNot(0.00));
-
-    })
-  })
+    });
+  });
 }

@@ -29,8 +29,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Budget budget = Provider.of<Budgets>(context)
-        .monthlyBudget; // budget contains the amounts; rest are null on first run of build
+    final Budget budget =
+        Budget(); // budget contains the amounts; rest are null on first run of build
     budget.categoryAmount =
         budget.categoryAmount == null ? {} : budget.categoryAmount;
 
@@ -66,7 +66,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             style: TextStyle(color: Colors.amber, fontSize: 15),
                           ),
                           AutoSizeText(
-                            '\$${budget.amount}', // .toStringAsFixed(2)
+                            '\$${budget.getAmount()}', // .toStringAsFixed(2)
                             maxLines: 1,
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor,
@@ -82,7 +82,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             style: TextStyle(color: Colors.amber, fontSize: 15),
                           ),
                           AutoSizeText(
-                            '\$${budget.remainingAmount.toStringAsFixed(2)}',
+                            '\$${budget.getRemainingAmount().toStringAsFixed(2)}',
                             maxLines: 1,
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor,
@@ -116,7 +116,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             .setCategoryAmount(
                                 activeCategory, activeAmount, context);
                         setState(() {
-                          if (budget.remainingAmount < -0.001)
+                          if (budget.getRemainingAmount() < -0.001)
                             Scaffold.of(context).showSnackBar(
                               SnackBar(
                                 behavior: SnackBarBehavior.floating,
@@ -130,7 +130,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                 ),
                               ),
                             );
-                          else if (budget.remainingAmount > 0.001) {
+                          else if (budget.getRemainingAmount() > 0.001) {
                             Scaffold.of(context).showSnackBar(
                               SnackBar(
                                 behavior: SnackBarBehavior.floating,
