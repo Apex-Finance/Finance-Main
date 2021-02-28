@@ -7,6 +7,7 @@ import './transaction.dart' as Transaction;
 import './categories.dart';
 import './month_changer.dart';
 import '../providers/auth.dart';
+import '../models/category.dart' as Category;
 
 class Budget {
   String _id;

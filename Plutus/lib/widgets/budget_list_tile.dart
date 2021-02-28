@@ -6,9 +6,10 @@ import '../models/budget.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import '../models/category_icon.dart';
+import '../models/category.dart' as Category;
 
 class BudgetListTile extends StatefulWidget {
-  final MainCategory category;
+  final Category.Category category;
 
   BudgetListTile(this.category);
 

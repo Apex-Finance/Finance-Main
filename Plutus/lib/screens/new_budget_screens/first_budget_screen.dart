@@ -7,6 +7,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import '../../widgets/category_list_tile.dart';
 import '../../models/categories.dart';
 import '../../models/budget.dart';
+import '../../models/category.dart';
 
 class FirstBudgetScreen extends StatefulWidget {
   static const routeName = '/first_budget';
@@ -30,6 +31,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var categoryDataProvider = Provider.of<CategoryDataProvider>(context);
     final Budget budget =
         Budget(); // budget contains the amounts; rest are null on first run of build
     budget.categoryAmount =
@@ -105,7 +107,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           shrinkWrap: true,
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) => CategoryListTile(
-                            MainCategory.values[index],
+                            categoryDataProvider
+                                .initializeCategory(snapshot.data.docs[index]),
                             setActiveCategory,
                             catAmountFocusNodes,
                             index,
@@ -120,11 +123,13 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                     builder: (context) => FloatingActionButton.extended(
                       backgroundColor: Theme.of(context).primaryColor,
                       onPressed: () {
-                        Provider.of<Budgets>(context, listen: false)
+                        Provider.of<Budgets>(context,
+                                listen:
+                                    false) //TODO ALEX no setcategoryamount() for budget yet
                             .setCategoryAmount(
                                 activeCategory, activeAmount, context);
                         setState(() {
-                          if (budget.remainingAmount < -0.001)
+                          if (budget.getRemainingAmount() < -0.001)
                             Scaffold.of(context).showSnackBar(
                               SnackBar(
                                 behavior: SnackBarBehavior.floating,
@@ -138,7 +143,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                 ),
                               ),
                             );
-                          else if (budget.remainingAmount > 0.001) {
+                          else if (budget.getRemainingAmount() > 0.001) {
                             Scaffold.of(context).showSnackBar(
                               SnackBar(
                                 behavior: SnackBarBehavior.floating,
