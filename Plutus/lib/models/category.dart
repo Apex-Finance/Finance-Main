@@ -64,16 +64,11 @@ class Category {
   }
 }
 
-class CategoryDataProvider with ChangeNotifier {
-  // initialize a category document from database into category object
+class CategoryDataProvider {
   Category initializeCategory(DocumentSnapshot doc) {
     Category category = Category();
+
     category.setID(doc.id);
-    if (doc.data()['amount'].toDouble() == null) {
-      category.setAmount(0.00);
-    } else {
-      category.setAmount(doc.data()['amount'].toDouble());
-    }
     category.setAmount(doc.data()['amount'].toDouble());
     category.setTitle(doc.data()['title']);
     category.setCodepoint(doc.data()['codepoint'].toInt());
@@ -126,19 +121,5 @@ class CategoryDataProvider with ChangeNotifier {
         .collection('categories')
         .doc(category.getID())
         .delete();
-  }
-
-  // get the list of transaction from the db matching the category
-  Stream<QuerySnapshot> getCategoryTransactions(
-      BuildContext context, String categoryID) {
-    var db = FirebaseFirestore.instance;
-    var categoryTransactions = db
-        .collection('users')
-        .doc(Provider.of<Auth>(context).getUserId())
-        .collection('Transactions')
-        .where('category id', isEqualTo: categoryID)
-        .snapshots();
-
-    return categoryTransactions;
   }
 }
