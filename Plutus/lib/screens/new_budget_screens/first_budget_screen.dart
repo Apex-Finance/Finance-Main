@@ -1,4 +1,5 @@
 import 'package:Plutus/models/budget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -94,16 +95,23 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                   ),
                 ),
                 Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: MainCategory.values.length,
-                    itemBuilder: (context, index) => CategoryListTile(
-                      MainCategory.values[index],
-                      setActiveCategory,
-                      catAmountFocusNodes,
-                      index,
-                    ),
-                  ),
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('DefaultCategories')
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data.docs.length,
+                          itemBuilder: (context, index) => CategoryListTile(
+                            MainCategory.values[index],
+                            setActiveCategory,
+                            catAmountFocusNodes,
+                            index,
+                          ),
+                        );
+                      }),
                 ),
                 Container(
                   padding: EdgeInsets.fromLTRB(30, 30, 0, 50),
