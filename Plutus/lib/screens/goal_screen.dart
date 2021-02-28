@@ -81,7 +81,9 @@ class GoalScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         goal = goalDataProvider
                             .initializeGoal(snapshot.data.docs[index]);
-                        return GoalsListTile(goal);
+                        return GoalsListTile(
+                          goal: goal,
+                        );
                       },
                     ),
                   ),

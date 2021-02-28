@@ -90,7 +90,14 @@ class _TransactionListTileState extends State<TransactionListTile> {
             onTap: () => _updateTransaction(context, widget.transaction),
             tileColor: Colors.grey[850],
             leading: CircleAvatar(
-                child: Icon(categoryIcon[widget.transaction.getCategoryId()])),
+                // child: Icon(
+                //   IconData(
+                //     widget.transaction.getCategoryCodePoint(),
+                //     fontFamily: 'MaterialIcons',
+                //   ),
+
+                // ),
+                ),
             title: AutoSizeText(
               '${widget.transaction.getTitle()}',
               maxLines: 1,

@@ -8,31 +8,62 @@ import './categories.dart';
 import './month_changer.dart';
 import '../providers/auth.dart';
 
-class Budget with ChangeNotifier {
-  String id;
-  String title;
-  double amount;
-  List<Transaction.Transaction> transactions;
+class Budget {
+  String _id;
+  String _title;
+  double _amount;
+  DateTime _date;
   Map<MainCategory, double> categoryAmount;
-  double remainingMonthlyAmount;
+  double _remainingMonthlyAmount;
 
-  double get remainingAmount {
-    double tempAmount = amount;
-    if (categoryAmount != null)
-      categoryAmount.forEach((key, value) {
-        tempAmount -= value;
-      });
-    return tempAmount;
+  void setID(String idValue) {
+    _id = idValue;
   }
 
-  List<Transaction.Transaction> getCategoryTransactions(
-      Budget budget, MainCategory category) {
-    return budget.transactions == null
-        ? null
-        : budget.transactions
-            .where((transaction) => transaction.getCategoryId() == category)
-            .toList();
+  String getID() {
+    return _id;
   }
+
+  void setTitle(String titleValue) {
+    _title = titleValue;
+  }
+
+  String getTitle() {
+    return _title;
+  }
+
+  void setAmount(double amountValue) {
+    _amount = amountValue;
+  }
+
+  double getAmount() {
+    return _amount;
+  }
+
+  void setRemainingAmount(double budgetTransactionExpenses) {
+    _remainingMonthlyAmount = getAmount() - budgetTransactionExpenses;
+  }
+
+  double getRemainingAmount() {
+    return _remainingMonthlyAmount;
+  }
+
+  void setDate(DateTime dateValue) {
+    _date = dateValue;
+  }
+
+  DateTime getDate() {
+    return _date;
+  }
+
+  // List<Transaction.Transaction> getCategoryTransactions(
+  //     Budget budget, MainCategory category) {
+  //   return budget.transactions == null
+  //       ? null
+  //       : budget.transactions
+  //           .where((transaction) => transaction.getCategoryId() == category)
+  //           .toList();
+  // }
 
   double getCategoryTransactionsAmount(Budget budget, MainCategory category) {
     List<Transaction.Transaction> categoryTransactions =
@@ -100,8 +131,8 @@ class Budget with ChangeNotifier {
   });
 }
 
-class Budgets with ChangeNotifier {
-  List<Budget> _budgets = [];
+class BudgetDataProvider with ChangeNotifier {
+  // List<Budget> _budgets = [];
   MonthChanger monthChanger;
   Transaction.Transactions transactions;
   List<Transaction.Transaction> get monthlyTransactions =>
@@ -165,13 +196,25 @@ class Budgets with ChangeNotifier {
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .collection('budgets')
-        .doc(budget.id)
+        .doc(budget.getID())
         .set({
-      'title': budget.title,
-      'amount': budget.amount,
-      'remainingMonthlyAmount': budget.remainingAmount,
+      'title': budget.getTitle(),
+      'amount': budget.getAmount(),
     });
     notifyListeners();
+  }
+
+  void editBudget(Budget budget, BuildContext context) async {
+    _budgets.add(budget);
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('budgets')
+        .doc(budget.getID())
+        .set({
+      'title': budget.getTitle(),
+      'amount': budget.getAmount(),
+    }, SetOptions(merge: true));
   }
 
   void setCategoryToDB(
@@ -180,7 +223,7 @@ class Budgets with ChangeNotifier {
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .collection('budgets')
-        .doc(monthlyBudget.id)
+        .doc(monthlyBudget.getID())
         .collection('categories')
         .doc(categoryId)
         .set({

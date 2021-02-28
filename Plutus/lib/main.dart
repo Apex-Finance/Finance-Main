@@ -17,6 +17,7 @@ import './screens/account_screen.dart';
 import './screens/settings_screen.dart';
 import './models/transaction.dart';
 import './models/budget.dart';
+import './models/category.dart';
 import './providers/auth.dart';
 import 'models/goals.dart';
 
@@ -31,7 +32,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => GoalDataProvider()),
+        ChangeNotifierProvider(
+          create: (context) => CategoryDataProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => GoalDataProvider(),
+        ),
         ChangeNotifierProvider(
           create: (context) => Budget(),
         ),
