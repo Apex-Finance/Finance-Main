@@ -1,12 +1,16 @@
 import 'dart:ui';
+import 'package:Plutus/models/categories.dart';
+import 'package:Plutus/models/budget.dart';
 import 'package:Plutus/widgets/goals_form.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import './budget_screen.dart';
 import './transaction_screen.dart';
 import './dashboard_screen.dart';
 import './goal_screen.dart';
 import '../widgets/transaction_form.dart';
+import '../models/transaction.dart';
 import '../widgets/tappable_fab_circular_menu.dart';
 import 'new_budget_screens/income_screen.dart';
 
@@ -18,15 +22,18 @@ class TabScreen extends StatefulWidget {
 }
 
 class _TabScreenState extends State<TabScreen> {
-  final GlobalKey<TappableFabCircularMenuState> fabKey = GlobalKey();
   @override
   void initState() {
     super.initState();
   }
 
-  List<Widget> _pages = []; // List of screens for the BottomNavigationBar
-  int _selectedPageIndex = 0; // Defaults to Dashboard screen
-  bool _isOpen = false; // Determines if Fab_Circular_Menu is open
+  List<Transaction> transactions = [];
+  List<Widget> _pages = [];
+  List<Category> categories = [];
+  List<Budget> budgets = [];
+
+  int _selectedPageIndex = 0;
+  bool _isOpen = false;
 
   // Select a screen from the list of screens; manages tabs
   void _selectPage(int index) {
@@ -37,17 +44,17 @@ class _TabScreenState extends State<TabScreen> {
     });
   }
 
-  // Pull up budget form when FAB is tapped; add the returned budget to the list of budgets
+  // Pull up budget form when FAB is tapped; add the returned budget to the list of budgets (?)
   void _enterBudget(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (_) => IncomeScreen(),
-    ).then(
-      (newBudget) {
-        if (newBudget == null) return;
-      },
-    );
+    ).then((newBudget) {
+      if (newBudget == null) return;
+      Provider.of<Budgets>(context, listen: false)
+          .addBudget(newBudget, context); //TODO check if needed
+    });
   }
 
   // Pull up transaction form when FAB is tapped; add the returned transaction to the list of transactions
@@ -59,25 +66,20 @@ class _TabScreenState extends State<TabScreen> {
     ).then((newTransaction) {
       if (newTransaction == null) return;
     });
-    fabKey.currentState.close();
   }
 
-  // Pull up goal form when FAB is tapped; add the returned goal to the list of goals
   void _enterGoal(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (_) => GoalsForm(),
-    ).then((newGoal) {
-      if (newGoal == null) return;
-    });
-    fabKey.currentState.close();
+    );
   }
 
-  // Manages tabs
   @override
   Widget build(BuildContext context) {
     _pages = [
+      // manages tabs
       DashboardScreen(),
       BudgetScreen(),
       null, // workaround for spacing
@@ -85,122 +87,81 @@ class _TabScreenState extends State<TabScreen> {
       GoalScreen(),
     ];
 
-    // GestureDetector wraps entire widget to ensure that users can close the Fab_Circular_Menu from
-    // anywhere in the app. Absorb Pointer prevents accidental touches to interactable widgets
-    // (i.e. buttons, arrows) on other screens when Fab_Circular_Menu is open
-    return GestureDetector(
-      onTap: () {
-        if (_isOpen) fabKey.currentState.close();
-      },
-      child: AbsorbPointer(
-        absorbing: _isOpen == true ? true : false,
-        child: Scaffold(
-          appBar: AppBar(),
-          drawer: Drawer(
-            child: ListView(
-              children: [
-                // settings
-                ListTile(
-                  onTap: () {
-                    Navigator.of(context).pushNamed('/settings');
-                  },
-                  leading: Icon(
-                    Icons.settings,
-                    size: 30,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  title: Text(
-                    'Settings',
-                    style: TextStyle(
-                        color: Theme.of(context).primaryColor, fontSize: 18),
-                  ),
-                ),
-                // acount
-                ListTile(
-                  onTap: () {
-                    Navigator.of(context).pushNamed('/account');
-                  },
-                  leading: Icon(
-                    Icons.account_circle,
-                    size: 30,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  title: Text(
-                    'Account',
-                    style: TextStyle(
-                        color: Theme.of(context).primaryColor, fontSize: 18),
-                  ),
-                ),
-              ],
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.settings),
+          onPressed: () {
+            Navigator.of(context).pushNamed('/settings');
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.account_circle),
+            onPressed: () {
+              Navigator.of(context).pushNamed('/account');
+            },
+          ),
+        ],
+      ),
+      floatingActionButton: TappableFabCircularMenu(
+        alignment: Alignment.bottomCenter,
+        animationDuration: Duration(milliseconds: 500),
+        children: <Widget>[
+          Ink(
+            decoration: const ShapeDecoration(
+              color: Color(0xFF212121), // basically Colors.grey[900]
+              shape: CircleBorder(),
+            ),
+            child: IconButton(
+              color: Theme.of(context).primaryColor,
+              icon: Icon(Icons.account_balance),
+              onPressed: () => _enterBudget(context),
             ),
           ),
-          // Custom Fab_Circular_Menu used here to utilize BackdropFilter widget
-          floatingActionButton: TappableFabCircularMenu(
-            alignment: Alignment.bottomCenter,
-            animationDuration: Duration(milliseconds: 500),
-            children: <Widget>[
-              // Budget form
-              Ink(
-                decoration: const ShapeDecoration(
-                  color: Color(0xFF212121), // basically Colors.grey[900]
-                  shape: CircleBorder(),
-                ),
-                child: IconButton(
-                  color: Theme.of(context).primaryColor,
-                  icon: Icon(Icons.account_balance),
-                  onPressed: () => _enterBudget(context),
-                  splashRadius: 23,
-                ),
-              ),
-              // Transaction form
-              Ink(
-                decoration: const ShapeDecoration(
-                  color: Color(0xFF212121),
-                  shape: CircleBorder(),
-                ),
-                child: IconButton(
-                  color: Theme.of(context).primaryColor,
-                  icon: Icon(Icons.shopping_cart),
-                  onPressed: () => _enterTransaction(context),
-                  splashRadius: 23,
-                ),
-              ),
-              // Goal Form
-              Ink(
-                decoration: const ShapeDecoration(
-                  color: Color(0xFF212121),
-                  shape: CircleBorder(),
-                ),
-                child: IconButton(
-                  color: Theme.of(context).primaryColor,
-                  icon: Icon(Icons.star),
-                  onPressed: () => _enterGoal(context),
-                  splashRadius: 23,
-                ),
-              ),
-            ],
-            onDisplayChange: (isOpen) {
-              setState(() {
-                _isOpen = !_isOpen;
-              });
-            },
-            key: fabKey,
-            ringDiameter: 300,
-            fabMargin: EdgeInsets.fromLTRB(0, 0, 40, 30),
-            fabOpenIcon: Icon(Icons.add),
-            ringColor: Colors.amber.withOpacity(0),
+          Ink(
+            decoration: const ShapeDecoration(
+              color: Color(0xFF212121), // basically Colors.grey[900]
+              shape: CircleBorder(),
+            ),
+            child: IconButton(
+              color: Theme.of(context).primaryColor,
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () => _enterTransaction(context),
+            ),
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          body: _pages[_selectedPageIndex],
-          bottomNavigationBar: buildTabBar(context),
-        ),
+          Ink(
+            decoration: const ShapeDecoration(
+              color: Color(0xFF212121), // basically Colors.grey[900]
+              shape: CircleBorder(),
+            ),
+            child: IconButton(
+              color: Theme.of(context).primaryColor,
+              icon: Icon(Icons.star),
+              onPressed: () => _enterGoal(context),
+            ),
+          ),
+        ],
+        onDisplayChange: (isOpen) {
+          setState(() {
+            _isOpen = !_isOpen;
+          });
+        },
+        ringDiameter: 300,
+        fabMargin: EdgeInsets.fromLTRB(0, 0, 40, 30),
+        fabOpenIcon: Icon(Icons.add),
+        ringColor: Colors.amber.withOpacity(0),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: AbsorbPointer(
+          absorbing: _isOpen == true ? true : false,
+          child: _pages[_selectedPageIndex]),
+      bottomNavigationBar: AbsorbPointer(
+          absorbing: _isOpen == true ? true : false,
+          child: buildTabBar(context)),
     );
   }
 
-  // Builds a BottomNavigationBar that includes tabs for Dashboard, Budget,
-  // Transaction, and Goals screens
   BottomNavigationBar buildTabBar(BuildContext context) {
     return BottomNavigationBar(
       onTap: _selectPage,
@@ -229,7 +190,6 @@ class _TabScreenState extends State<TabScreen> {
     );
   }
 
-  // Builds each individual tab for BottomNavigationBar
   BottomNavigationBarItem buildTab(
       BuildContext context, IconData icon, String label) {
     return BottomNavigationBarItem(

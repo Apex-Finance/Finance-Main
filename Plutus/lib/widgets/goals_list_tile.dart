@@ -5,11 +5,9 @@ import 'package:percent_indicator/percent_indicator.dart';
 import '../models/goals.dart';
 
 class GoalsListTile extends StatefulWidget {
-  final Goal goal;
-
-  GoalsListTile({@required this.goal});
   @override
   _GoalsListTileState createState() => _GoalsListTileState();
+  GoalsListTile(Goal goal);
 }
 
 class _GoalsListTileState extends State<GoalsListTile> {
@@ -44,14 +42,14 @@ class _GoalsListTileState extends State<GoalsListTile> {
           //   ),
           // ),
           title: Text(
-            widget.goal.getTitle(),
+            "Lambroghini Reventon",
             style: Theme.of(context).textTheme.headline1,
           ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "\$${widget.goal.amountSaved}",
+                "\$10,000",
                 style: Theme.of(context).textTheme.subtitle1,
               ),
               SizedBox(
@@ -71,11 +69,11 @@ class _GoalsListTileState extends State<GoalsListTile> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    "${DateFormat.yMMMd().format(widget.goal.getDate())}",
+                    "${DateFormat.yMMMd().format(_date)}",
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                   Text(
-                    "\$${widget.goal.goalAmount}",
+                    "\$1,400,000",
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ],

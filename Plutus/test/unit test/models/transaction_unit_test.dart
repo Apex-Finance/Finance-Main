@@ -1,3 +1,6 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:Plutus/models/transaction.dart';
+
 void main() {
   Transaction ogTransaction = Transaction();
   Transaction newTransaction = Transaction();
