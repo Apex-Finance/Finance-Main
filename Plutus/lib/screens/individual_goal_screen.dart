@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 
 import '../models/goals.dart';
 
-// ignore: must_be_immutable
-class IndividualGoalScreen extends StatelessWidget {
-  static const routeName = '/individualgoal';
+class IndividualGoalScreen extends StatefulWidget {
   Goal goal = Goal();
 
-  IndividualGoalScreen({@required this.goal});
+  IndividualGoalScreen(goal);
 
+  @override
+  _IndividualGoalScreenState createState() => _IndividualGoalScreenState();
+}
+
+class _IndividualGoalScreenState extends State<IndividualGoalScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

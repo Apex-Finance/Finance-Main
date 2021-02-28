@@ -12,6 +12,14 @@ class GoalsListTile extends StatefulWidget {
 }
 
 class _GoalsListTileState extends State<GoalsListTile> {
+  void _updateGoal(BuildContext context, Goal goal) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (_) => IndividualGoalScreen(goal),
+    );
+  }
+
   DateTime _date = DateTime.now();
   @override
   Widget build(BuildContext context) {
@@ -20,8 +28,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(20)),
         child: ListTile(
-          onTap: () =>
-              Navigator.pushNamed(context, IndividualGoalScreen.routeName),
+          onTap: () => _updateGoal(context, widget.goal),
           tileColor: Colors.grey[850],
           leading: Image.network(
             'https://2p2bboli8d61fqhjiqzb8p1a-wpengine.netdna-ssl.com/wp-content/uploads/2018/07/1.jpg',

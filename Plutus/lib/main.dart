@@ -90,7 +90,6 @@ class MyApp extends StatelessWidget {
             AccountScreen.routeName: (context) => AccountScreen(),
             SettingsScreen.routeName: (context) => SettingsScreen(),
             TabScreen.routeName: (context) => TabScreen(),
-            IndividualGoalScreen.routeName: (context) => IndividualGoalScreen(),
           },
         ),
       ),
