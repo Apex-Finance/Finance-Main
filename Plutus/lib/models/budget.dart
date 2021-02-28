@@ -56,35 +56,6 @@ class Budget {
     return _date;
   }
 
-  List<Transaction.Transaction> getCategoryTransactions(
-      Budget budget, MainCategory category) {
-    return budget.transactions == null
-        ? null
-        : budget.transactions
-            .where((transaction) => transaction.getCategoryId() == category)
-            .toList();
-  }
-
-  double getCategoryTransactionsAmount(Budget budget, MainCategory category) {
-    List<Transaction.Transaction> categoryTransactions =
-        getCategoryTransactions(budget, category);
-    if (categoryTransactions == null)
-      return 0.00;
-    else {
-      var sum = 0.0;
-      for (var transaction in categoryTransactions) {
-        sum += transaction.getAmount();
-      }
-      return sum;
-    }
-  }
-
-  List<MainCategory> get budgetedCategory {
-    return MainCategory.values
-        .where((category) => categoryAmount[category] != null)
-        .toList();
-  }
-
   // void setUnbudgetedCategory() {
   //   // adds categories that were not budgeted but expenses were made
   //   for (var transaction in transactions)
@@ -118,15 +89,24 @@ class Budget {
   //   return budgetWithTransactions;
   // }
 
-  List<MainCategory> get budgetedAndUnbudgetedCategories {
-    return budgetedCategory;
-  }
+  // List<MainCategory> get budgetedAndUnbudgetedCategories {
+  //   return budgetedCategory;
+  // }
 }
 
 class BudgetDataProvider with ChangeNotifier {
-  // List<Budget> _budgets = [];
   MonthChanger monthChanger;
-  Transaction.Transactions transactions;
+
+  Budget initializeBudget(DocumentSnapshot doc) {
+    var budget = new Budget();
+
+    budget.setID(doc.id);
+    budget.setTitle(doc.data()['title']);
+    budget.setAmount(doc.data()['amount']);
+    budget.setDate(doc.data()['date']);
+
+    return budget;
+  }
 
   Budget get monthlyBudget {
     var budgetWithTransactions = budgets.firstWhere(
@@ -147,20 +127,6 @@ class BudgetDataProvider with ChangeNotifier {
           budgetWithTransactions.amount - transactions.monthlyExpenses;
     }
     return budgetWithTransactions;
-  }
-
-  void setCategoryAmount(
-      MainCategory category, double amount, BuildContext context) async {
-    String categoryId = category.toString().split('.').last;
-    if (amount > 0) {
-      setCategoryToDB(categoryId, amount, context);
-      monthlyBudget.categoryAmount[category] = amount;
-    }
-    if (amount == 0) {
-      monthlyBudget.categoryAmount.remove(category);
-      removeCategoryFromDB(categoryId, amount, context);
-    }
-    notifyListeners();
   }
 
   void addBudget(Budget budget, BuildContext context) async {

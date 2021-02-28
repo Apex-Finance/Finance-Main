@@ -52,7 +52,7 @@ class _TabScreenState extends State<TabScreen> {
       builder: (_) => IncomeScreen(),
     ).then((newBudget) {
       if (newBudget == null) return;
-      Provider.of<Budgets>(context, listen: false)
+      Provider.of<BudgetDataProvider>(context, listen: false)
           .addBudget(newBudget, context); //TODO check if needed
     });
   }
