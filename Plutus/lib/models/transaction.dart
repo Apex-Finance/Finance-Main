@@ -9,14 +9,14 @@ import '../providers/auth.dart';
 class Transaction {
   String _id;
   String _title;
+  double _amount;
+  DateTime _date;
   String _categoryId;
   /* this will be treated like an id to 
      compare to the actual category id and
      a budget with the same category id */
   String _categoryTitle; // retrieve from corresponding category in db
   int _categoryCodePoint; // Int value to display icon for category
-  double _amount;
-  DateTime _date;
 
   void setID(String idValue) {
     _id = idValue;
@@ -91,6 +91,7 @@ class Transactions with ChangeNotifier {
     transaction.setTitle(doc.data()['title']);
     transaction.setDate(doc.data()['date'].toDate());
     transaction.setCategoryId(doc.data()['category id']);
+    transaction.setCategoryTitle(doc.data()['category title']);
     transaction.setAmount(doc.data()['amount']);
 
     return transaction;
@@ -107,6 +108,7 @@ class Transactions with ChangeNotifier {
       'amount': transaction.getAmount(),
       'date': transaction.getDate(),
       'category id': transaction.getCategoryId(),
+      'category title': transaction.getCategoryTitle(),
     });
   }
 
@@ -122,6 +124,7 @@ class Transactions with ChangeNotifier {
         'amount': transaction.getAmount(),
         'date': transaction.getDate(),
         'category id': transaction.getCategoryId(),
+        'category title': transaction.getCategoryTitle(),
       },
       SetOptions(merge: true),
     );
