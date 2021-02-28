@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../models/goals.dart';
 
+// Screen that displays information about one specific goal
 class IndividualGoalScreen extends StatefulWidget {
-  Goal goal = Goal();
-
-  IndividualGoalScreen(goal);
+  final Goal goal;
+  IndividualGoalScreen(this.goal);
 
   @override
   _IndividualGoalScreenState createState() => _IndividualGoalScreenState();
@@ -19,7 +19,7 @@ class _IndividualGoalScreenState extends State<IndividualGoalScreen> {
       body: Column(
         children: <Widget>[
           Text(
-            "${widget.goal.getTitle}",
+            "${widget.goal.getTitle()}",
             style: Theme.of(context).textTheme.headline1,
           ),
           // Container(

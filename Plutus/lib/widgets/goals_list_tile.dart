@@ -6,9 +6,10 @@ import 'package:percent_indicator/percent_indicator.dart';
 import '../models/goals.dart';
 
 class GoalsListTile extends StatefulWidget {
+  final Goal goal;
   @override
   _GoalsListTileState createState() => _GoalsListTileState();
-  GoalsListTile(Goal goal);
+  GoalsListTile(this.goal);
 }
 
 class _GoalsListTileState extends State<GoalsListTile> {
