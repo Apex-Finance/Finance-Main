@@ -123,7 +123,7 @@ class TransactionsCard extends StatelessWidget {
       : super(key: key);
 
   AsyncSnapshot<QuerySnapshot> transactionsSnapshot;
-  Transaction.Transaction transaction = Transaction.Transaction();
+  Transaction.Transaction transaction = new Transaction.Transaction.empty();
 
   @override
   Widget build(BuildContext context) {

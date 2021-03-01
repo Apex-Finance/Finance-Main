@@ -17,6 +17,16 @@ class Transaction {
      a budget with the same category id */
   String _categoryTitle; // retrieve from corresponding category in db
   int _categoryCodePoint; // Int value to display icon for category
+  
+  Transaction.empty();
+
+  Transaction(String id, String title, DateTime date, String categoryId, this._amount, {categoryTitle = ""}) {
+    _id = id;
+    _title = title;
+    _date = date;
+    _categoryId = categoryId;
+    _categoryTitle = categoryTitle;
+  }
 
   void setID(String idValue) {
     _id = idValue;
@@ -85,16 +95,7 @@ class Transactions with ChangeNotifier {
 
   Transaction initializeTransaction(DocumentSnapshot doc) {
     // Initialize a transaction with document data
-    Transaction transaction = Transaction();
-
-    transaction.setID(doc.id);
-    transaction.setTitle(doc.data()['title']);
-    transaction.setDate(doc.data()['date'].toDate());
-    transaction.setCategoryId(doc.data()['category id']);
-    transaction.setCategoryTitle(doc.data()['category title']);
-    transaction.setAmount(doc.data()['amount']);
-
-    return transaction;
+    return new Transaction(doc.id, doc.data()['title'], doc.data()['date'].toDate(), doc.data()['category id'], doc.data()['amount'], categoryTitle: doc.data()['category title']);
   }
 
   void addTransaction(Transaction transaction, BuildContext context) async {

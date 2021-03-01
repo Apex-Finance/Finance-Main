@@ -7,38 +7,39 @@ void main() {
   Transaction t1, t2, t3, t4;
 
   t1 = Transaction(
-    title: 'Coffee',
-    amount: 3.45,
-    date: DateTime.now(),
-    category: 'home',
+    'a',
+    'Coffee',
+    DateTime.now(),
+    'home',
+    3.45,
   );
-
   t2 = Transaction(
-    title: 'Shirt',
-    date: DateTime.now(),
-    amount: 10.96,
-    category: 'bills_and_utilities',
+    'b',
+    'Shirt',
+    DateTime.now(),
+    'bills_and_utilities',
+    10.96,
   );
-
   t3 = Transaction(
-    date: DateTime.now(),
-    title: 'Movies',
-    amount: 25.35,
-    category: 'home',
+    'c',
+    'Movies',
+    DateTime.now(),
+    'home',
+    25.35,
   );
-
   t4 = Transaction(
-    date: DateTime.now(),
-    title: 'Shoes',
-    amount: 35.85,
-    category: 'food_and_drinks',
+    'd',
+    'Shoes',
+    DateTime.now(),
+    'food_and_drinks',
+    35.85,
   );
 
   group('getRemainingAmount', () {
     test('Test if remaining amount is accurate', () {
       double value = 1000;
       double tempAmount = 500;
-      Budget().remainingMonthlyAmount = value - tempAmount;
+      Budget().setremainingMonthlyAmount = value - tempAmount;
 
       expect(Budget().remainingAmount, Budget().remainingMonthlyAmount);
     });

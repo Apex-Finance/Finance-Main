@@ -24,7 +24,7 @@ class _TransactionFormState extends State<TransactionForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime _date = DateTime.now();
 
-  Transaction.Transaction _transaction = new Transaction.Transaction();
+  Transaction.Transaction _transaction = new Transaction.Transaction.empty();
   MainCategory category = MainCategory.uncategorized;
 
   // Change the date of the transaction

@@ -110,17 +110,11 @@ class BudgetDataProvider with ChangeNotifier {
   }
 
   Budget get monthlyBudget {
-    var budgetWithTransactions = budgets.firstWhere(
-      (budget) =>
-          DateTime.parse(budget.title).month == monthChanger.selectedMonth &&
-          DateTime.parse(budget.title).year == monthChanger.selectedYear,
-      orElse: () => Budget(
-          id: null,
-          title: null,
-          amount: null,
-          transactions: null,
-          categoryAmount: null),
-    );
+    Budget budgetWithTransactions = budgets.firstWhere(
+        (budget) =>
+            DateTime.parse(budget.title).month == monthChanger.selectedMonth &&
+            DateTime.parse(budget.title).year == monthChanger.selectedYear,
+        orElse: () => new Budget());
     if (budgetWithTransactions.amount != null) {
       //b/c of the way data is set up, initializing properties here, but should eventually be getters in Budget Provider
       budgetWithTransactions.transactions = monthlyTransactions;
