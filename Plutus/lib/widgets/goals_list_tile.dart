@@ -6,6 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import '../models/goals.dart';
 import '../widgets/goals_form.dart';
+import '../screens/individual_goal_screen.dart';
 
 class GoalsListTile extends StatefulWidget {
   final Goal goal;
