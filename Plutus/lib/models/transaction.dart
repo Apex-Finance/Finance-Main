@@ -161,7 +161,7 @@ class Transactions with ChangeNotifier {
   }
 
   // Take all transactions, filter out only the ones from the selected month, and reverse the order from newest to oldest
-  List<Transaction> get monthlyTransactions {
+  List<Transaction> getMonthlyTransactions () {
     var unsorted = _transactions
         .where((transaction) =>
             transaction.getDate().month == monthChanger.selectedMonth &&
@@ -170,7 +170,9 @@ class Transactions with ChangeNotifier {
     unsorted.sort((a, b) => (b.getDate()).compareTo(a.getDate()));
     return unsorted;
   }
-
+  void getCategoryTransactions(String categoryID) {
+    var snapshot = FirebaseFirestore.instance
+  }
   // Sum the expenses for the month
   double get monthlyExpenses {
     var sum = 0.00;

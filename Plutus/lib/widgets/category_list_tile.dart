@@ -28,8 +28,6 @@ class CategoryListTile extends StatefulWidget {
 class _CategoryListTileState extends State<CategoryListTile> {
   @override
   Widget build(BuildContext context) {
-    Budgets budgets = Provider.of<Budgets>(
-        context); // contains the amount; each change to a category's amount will update Provider (and then remaining amount)
     final _controller = TextEditingController(
         text: widget.category.getAmount() != null
             ? widget.category.getAmount().toStringAsFixed(2)

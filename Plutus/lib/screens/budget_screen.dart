@@ -25,7 +25,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
       builder: (_) => IncomeScreen(),
     ).then((newBudget) {
       if (newBudget == null) return;
-      Provider.of<Budgets>(context, listen: false)
+      Provider.of<BudgetDataProvider>(context, listen: false)
           .addBudget(newBudget, context); //TODO check if needed
     });
   }
@@ -61,7 +61,8 @@ class _BudgetScreenState extends State<BudgetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final monthlyBudget = Provider.of<Budgets>(context).monthlyBudget;
+    final monthlyBudget =
+        Provider.of<BudgetDataProvider>(context).monthlyBudget;
     var monthData = Provider.of<MonthChanger>(context);
     var monthlyTransactions = Provider.of<Transactions>(context);
 
