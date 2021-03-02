@@ -109,14 +109,24 @@ class BudgetDataProvider with ChangeNotifier {
     return budget;
   }
 
-  void getmonthlyBudget(BuildContext context, DateTime date) async {
+  Stream<QuerySnapshot> getmonthlyBudget(BuildContext context, DateTime date) {
+    var budgetRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('budget')
+        .where('date', isGreaterThanOrEqualTo: DateTime(date.year, date.month))
+        .snapshots();
+    return budgetRef;
+  }
+
+  void getBudget(BuildContext context, DateTime date) async {
     var budgetRef = await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .collection('budget')
         .where('date', isGreaterThanOrEqualTo: DateTime(date.year, date.month))
         .get();
-    print(budgetRef.docs.length);
+    print("budgets found: ${budgetRef.docs.length}");
   }
 
   void addBudget(Budget budget, BuildContext context) async {

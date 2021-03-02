@@ -141,18 +141,4 @@ class CategoryDataProvider with ChangeNotifier {
 
     return categoryTransactions;
   }
-
-  double getCategoryTransactionsAmount(Budget budget, MainCategory category) {
-    List<Transaction.Transaction> categoryTransactions =
-        getCategoryTransactions(budget, category);
-    if (categoryTransactions == null)
-      return 0.00;
-    else {
-      var sum = 0.0;
-      for (var transaction in categoryTransactions) {
-        sum += transaction.getAmount();
-      }
-      return sum;
-    }
-  }
 }

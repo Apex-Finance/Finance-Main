@@ -175,11 +175,11 @@ class Transactions with ChangeNotifier {
     var snapshot = FirebaseFirestore.instance
   }
   // Sum the expenses for the month
-  double get monthlyExpenses {
-    var sum = 0.00;
-    for (var transaction in monthlyTransactions) {
-      sum += transaction.getAmount();
-    }
-    return sum;
-  }
+  // double get monthlyExpenses {
+  //   var sum = 0.00;
+  //   for (var transaction in monthlyTransactions) {
+  //     sum += transaction.getAmount();
+  //   }
+  //   return sum;
+  // }
 }
