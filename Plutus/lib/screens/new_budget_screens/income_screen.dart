@@ -9,6 +9,7 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import './first_budget_screen.dart';
 import '../../models/budget.dart';
 import '../../models/month_changer.dart';
+import '../../models/category.dart' as Category;
 
 // Asks the user for his monthly income and creates the budget based on that amount
 class IncomeScreen extends StatefulWidget {
@@ -23,8 +24,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
   // Validates the budget amount and pushes to First Budget Screen
   @override
   Widget build(BuildContext context) {
-    var _budget = Provider.of<Budgets>(context)
-        .monthlyBudget; // budget initialized to all nulls and subsequent changes will update Provider
+    var category = Category.Category();
     var monthData = Provider.of<MonthChanger>(context);
 
     // Alerts the user of discarding his budget changes. User may discard or keeping editing.

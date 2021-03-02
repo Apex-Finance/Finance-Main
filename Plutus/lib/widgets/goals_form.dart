@@ -17,7 +17,7 @@ class _GoalsFormState extends State<GoalsForm> {
   DateTime _date = DateTime.now();
   Goal _goal = Goal(
     title: null,
-    amountSaved: null,
+    amountSaved: 0,
     goalAmount: null,
     dateOfGoal: null,
   );
