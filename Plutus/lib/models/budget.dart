@@ -109,19 +109,14 @@ class BudgetDataProvider with ChangeNotifier {
     return budget;
   }
 
-  Budget get monthlyBudget {
-    Budget budgetWithTransactions = budgets.firstWhere(
-        (budget) =>
-            DateTime.parse(budget.title).month == monthChanger.selectedMonth &&
-            DateTime.parse(budget.title).year == monthChanger.selectedYear,
-        orElse: () => new Budget());
-    if (budgetWithTransactions.amount != null) {
-      //b/c of the way data is set up, initializing properties here, but should eventually be getters in Budget Provider
-      budgetWithTransactions.transactions = monthlyTransactions;
-      budgetWithTransactions.remainingMonthlyAmount =
-          budgetWithTransactions.amount - transactions.monthlyExpenses;
-    }
-    return budgetWithTransactions;
+  void getmonthlyBudget(BuildContext context, DateTime date) async {
+    var budgetRef = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('budget')
+        .where('date', isGreaterThanOrEqualTo: DateTime(date.year, date.month))
+        .get();
+    print(budgetRef.docs.length);
   }
 
   void addBudget(Budget budget, BuildContext context) async {
