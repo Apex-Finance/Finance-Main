@@ -17,10 +17,12 @@ class Transaction {
      a budget with the same category id */
   String _categoryTitle; // retrieve from corresponding category in db
   int _categoryCodePoint; // Int value to display icon for category
-  
+
   Transaction.empty();
 
-  Transaction(String id, String title, DateTime date, String categoryId, this._amount, {categoryTitle = ""}) {
+  Transaction(
+      String id, String title, DateTime date, String categoryId, this._amount,
+      {categoryTitle = ""}) {
     _id = id;
     _title = title;
     _date = date;
@@ -95,7 +97,13 @@ class Transactions with ChangeNotifier {
 
   Transaction initializeTransaction(DocumentSnapshot doc) {
     // Initialize a transaction with document data
-    return new Transaction(doc.id, doc.data()['title'], doc.data()['date'].toDate(), doc.data()['category id'], doc.data()['amount'], categoryTitle: doc.data()['category title']);
+    return new Transaction(
+        doc.id,
+        doc.data()['title'],
+        doc.data()['date'].toDate(),
+        doc.data()['category id'],
+        doc.data()['amount'],
+        categoryTitle: doc.data()['category title']);
   }
 
   void addTransaction(Transaction transaction, BuildContext context) async {
@@ -162,7 +170,7 @@ class Transactions with ChangeNotifier {
   }
 
   // Take all transactions, filter out only the ones from the selected month, and reverse the order from newest to oldest
-  List<Transaction> getMonthlyTransactions () {
+  List<Transaction> getMonthlyTransactions() {
     var unsorted = _transactions
         .where((transaction) =>
             transaction.getDate().month == monthChanger.selectedMonth &&
@@ -171,8 +179,29 @@ class Transactions with ChangeNotifier {
     unsorted.sort((a, b) => (b.getDate()).compareTo(a.getDate()));
     return unsorted;
   }
-  void getCategoryTransactions(String categoryID) {
+
+  Stream<QuerySnapshot> getCategoryTransactions(
+      String categoryID, DateTime budgetDate, BuildContext context) {
     var snapshot = FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('Transactions')
+        .where('category id', isEqualTo: categoryID)
+        .where(
+          'date',
+          isGreaterThanOrEqualTo: DateTime(
+            budgetDate.year,
+            budgetDate.month,
+            1,
+          ),
+          isLessThan: DateTime(
+            budgetDate.year,
+            budgetDate.month + 1,
+            1,
+          ),
+        )
+        .snapshots();
+    return snapshot;
   }
   // Sum the expenses for the month
   // double get monthlyExpenses {
