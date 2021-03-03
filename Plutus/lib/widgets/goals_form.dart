@@ -69,6 +69,9 @@ class _GoalsFormState extends State<GoalsForm> {
       _goal.setGoalAmount(widget.goal.getGoalAmount());
       // TODO getDate doesn't retrieve correct date (retrieves DateTime.now())
       _goal.setDate(widget.goal.getDate());
+      print(widget.goal.getDate());
+    } else {
+      _goal.setDate(_date);
     }
     super.initState();
   }
@@ -156,7 +159,7 @@ class _GoalsFormState extends State<GoalsForm> {
         Container(
           width: 125,
           child: Text(
-            'Date: ${DateFormat.MMMd().format(_date)}',
+            'Date: ${DateFormat.MMMd().format(_goal.getDate())}',
             style: TextStyle(
               fontSize: 16,
               color: Theme.of(context).primaryColor,

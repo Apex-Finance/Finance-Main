@@ -10,6 +10,8 @@ class Goal {
   double goalAmount; // Total amount of goal
   DateTime dateOfGoal; // Date goal was set
 
+  Goal.empty();
+
   // Call this function to set the data when you have gathered all the value for creating a goal
   Goal({
     this.title,
@@ -70,7 +72,7 @@ class GoalDataProvider with ChangeNotifier {
     goal.setAmountSaved(doc.data()['amountSaved']);
     goal.setTitle(doc.data()['title']);
     goal.setGoalAmount(doc.data()['goalAmount']);
-    goal.setDate(doc.data()['date']);
+    goal.setDate(doc.data()['dateOfGoal'].toDate());
 
     return goal;
   }
@@ -83,8 +85,9 @@ class GoalDataProvider with ChangeNotifier {
         .doc()
         .set({
       'title': goal.getTitle(),
-      'amount': goal.getAmount(),
+      'amountSaved': goal.getAmount(),
       'goalAmount': goal.getGoalAmount(),
+      'dateOfGoal': goal.getDate(),
     });
   }
 
