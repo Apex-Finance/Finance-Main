@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:Plutus/models/goals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +10,9 @@ import '../models/goals.dart';
 
 // Form to add a new goal
 class GoalsForm extends StatefulWidget {
+  final Goal goal;
+  GoalsForm({this.goal}); // Optional constructor for editing goal
+
   @override
   _GoalsFormState createState() => _GoalsFormState();
 }
@@ -26,7 +28,6 @@ class _GoalsFormState extends State<GoalsForm> {
     dateOfGoal: null,
   );
 
-  // TODO May need to change to update to DB
   void _setDate(DateTime value) {
     if (value == null) return; // if user cancels datepicker
     setState(() {
@@ -57,6 +58,19 @@ class _GoalsFormState extends State<GoalsForm> {
         _goalImage = File(pickedFile.path);
       }
     });
+  }
+
+  @override
+  // If editing, store previous values in goal to display previous values and submit them later
+  void initState() {
+    if (widget.goal != null) {
+      _goal.setTitle(widget.goal.getTitle());
+      _goal.setAmountSaved(widget.goal.getAmount());
+      _goal.setGoalAmount(widget.goal.getGoalAmount());
+      // TODO getDate doesn't retrieve correct date (retrieves DateTime.now())
+      _goal.setDate(widget.goal.getDate());
+    }
+    super.initState();
   }
 
   @override
@@ -196,7 +210,7 @@ class GoalTitleField extends StatelessWidget {
       autofocus: true,
       style: TextStyle(fontSize: 20.0, color: Theme.of(context).primaryColor),
       inputFormatters: [
-        LengthLimitingTextInputFormatter(15),
+        LengthLimitingTextInputFormatter(50),
       ],
       maxLength: 50,
       onEditingComplete: () {

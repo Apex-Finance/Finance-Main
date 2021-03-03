@@ -1,4 +1,3 @@
-import 'package:Plutus/screens/individual_goal_screen.dart';
 import 'package:Plutus/screens/new_budget_screens/income_screen.dart';
 import 'package:Plutus/models/month_changer.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,6 @@ import './models/transaction.dart';
 import './models/budget.dart';
 import './providers/auth.dart';
 import 'models/goals.dart';
-import './screens/individual_goal_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -76,6 +74,7 @@ class MyApp extends StatelessWidget {
                 bodyText2: TextStyle(color: Colors.amber, fontSize: 12),
                 subtitle1: TextStyle(color: Colors.amber, fontSize: 17),
                 headline1: TextStyle(color: Colors.amber, fontSize: 25),
+                headline2: TextStyle(color: Colors.amber, fontSize: 35),
               ),
             ),
           ),

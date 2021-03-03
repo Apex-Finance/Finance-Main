@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:percent_indicator/percent_indicator.dart';
 import '../models/goals.dart';
 import '../widgets/goals_form.dart';
-import '../screens/individual_goal_screen.dart';
 
 class GoalsListTile extends StatefulWidget {
   final Goal goal;
@@ -20,7 +18,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (_) => IndividualGoalScreen(goal),
+      builder: (_) => GoalsForm(goal: goal),
     );
   }
 
