@@ -67,9 +67,7 @@ class _GoalsFormState extends State<GoalsForm> {
       _goal.setTitle(widget.goal.getTitle());
       _goal.setAmountSaved(widget.goal.getAmount());
       _goal.setGoalAmount(widget.goal.getGoalAmount());
-      // TODO getDate doesn't retrieve correct date (retrieves DateTime.now())
       _goal.setDate(widget.goal.getDate());
-      print(widget.goal.getDate());
     } else {
       _goal.setDate(_date);
     }
@@ -146,7 +144,8 @@ class _GoalsFormState extends State<GoalsForm> {
         onPressed: () {
           _submitGoalForm(context);
         },
-        label: Text("Add Goal"),
+        // TODO change the text and make sure updateGoal is being called when goal is tapped
+        label: Text(_goal.getID() == null ? "Add Goal" : "Edit Goal"),
       ),
     );
   }

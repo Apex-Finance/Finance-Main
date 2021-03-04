@@ -85,7 +85,6 @@ class _GoalsListTileState extends State<GoalsListTile> {
           },
           child: ListTile(
             contentPadding: EdgeInsets.all(10),
-            //onTap: () => _updateGoal(context, widget.goal),
             tileColor: Colors.grey[850],
             leading: CircleAvatar(
               radius: 35,
