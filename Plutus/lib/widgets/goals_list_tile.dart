@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
@@ -6,6 +7,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import '../models/goals.dart';
 import '../widgets/goals_form.dart';
 
+// List Tile that displayes each individual goal
 class GoalsListTile extends StatefulWidget {
   final Goal goal;
   @override
@@ -22,7 +24,6 @@ class _GoalsListTileState extends State<GoalsListTile> {
     );
   }
 
-  DateTime _date = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -83,7 +84,8 @@ class _GoalsListTileState extends State<GoalsListTile> {
               );
           },
           child: ListTile(
-            onTap: () => _updateGoal(context, widget.goal),
+            contentPadding: EdgeInsets.all(10),
+            //onTap: () => _updateGoal(context, widget.goal),
             tileColor: Colors.grey[850],
             leading: CircleAvatar(
               radius: 35,
@@ -98,36 +100,40 @@ class _GoalsListTileState extends State<GoalsListTile> {
                   '${widget.goal.getTitle()}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                Text(
+                  '${DateFormat.MMMd().format(widget.goal.getDate())}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                      color: Theme.of(context).primaryColor, fontSize: 18),
+                      color: Theme.of(context).primaryColorLight, fontSize: 12),
                 ),
               ],
             ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    AutoSizeText(
-                      '02/22/2021',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    AutoSizeText(
-                      '\$20 left',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ],
-                ),
-
                 new LinearPercentIndicator(
-                  alignment: MainAxisAlignment.center,
-                  width: MediaQuery.of(context).size.width * .57,
-                  lineHeight: 12.0,
+                  leading: AutoSizeText(
+                    // TODO Ask user how much he has saved already
+                    // this is NULL right now
+                    '\$ ${widget.goal.getAmount()}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style:
+                        TextStyle(color: Theme.of(context).primaryColorLight),
+                  ),
+                  trailing: AutoSizeText(
+                    '\$ ${widget.goal.getGoalAmount()}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style:
+                        TextStyle(color: Theme.of(context).primaryColorLight),
+                  ),
+                  alignment: MainAxisAlignment.start,
+                  width: MediaQuery.of(context).size.width * .25,
+                  lineHeight: 8.0,
                   backgroundColor: Colors.black,
                   progressColor: Colors.amber,
                 ),
@@ -136,15 +142,12 @@ class _GoalsListTileState extends State<GoalsListTile> {
                 //"Due Date: ${DateFormat.MMMd().format(widget.goal.getDate())}",
                 //style: Theme.of(context).textTheme.bodyText2,
                 //),
-                Center(
-                  child: AutoSizeText(
-                    '\$20 of \$${widget.goal.getGoalAmount()}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                )
               ],
+            ),
+            trailing: IconButton(
+              color: Theme.of(context).primaryColor,
+              icon: Icon(Icons.edit),
+              onPressed: () => _updateGoal(context, widget.goal),
             ),
             isThreeLine: true,
           ),
