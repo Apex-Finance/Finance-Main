@@ -79,6 +79,7 @@ class _TransactionFormState extends State<TransactionForm> {
 
     if (widget.transaction != null) {
       // if editing, store previous values in transaction to display previous values and submit them later
+      _transaction.setID(widget.transaction.getID());
       _transaction.setTitle(widget.transaction.getTitle());
       _transaction.setCategoryId(widget.transaction.getCategoryId());
       _transaction.setAmount(widget.transaction.getAmount());

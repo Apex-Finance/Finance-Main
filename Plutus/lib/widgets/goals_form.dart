@@ -64,6 +64,7 @@ class _GoalsFormState extends State<GoalsForm> {
   // If editing, store previous values in goal to display previous values and submit them later
   void initState() {
     if (widget.goal != null) {
+      _goal.setID(widget.goal.getID());
       _goal.setTitle(widget.goal.getTitle());
       _goal.setAmountSaved(widget.goal.getAmount());
       _goal.setGoalAmount(widget.goal.getGoalAmount());
