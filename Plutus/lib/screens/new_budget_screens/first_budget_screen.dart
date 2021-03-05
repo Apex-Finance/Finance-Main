@@ -11,6 +11,7 @@ import '../../models/categories.dart';
 import '../../models/budget.dart';
 import '../../models/category.dart' as Category;
 
+// Form to budget out monthly income into categories
 class FirstBudgetScreen extends StatefulWidget {
   static const routeName = '/first_budget';
   String budgetID;
@@ -20,12 +21,12 @@ class FirstBudgetScreen extends StatefulWidget {
 }
 
 class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
-  final _formKey = GlobalKey<FormState>();
   List<FocusNode> catAmountFocusNodes = List<FocusNode>.generate(
       MainCategory.values.length, (index) => FocusNode());
   MainCategory activeCategory = MainCategory.values[0];
   double activeAmount = 0;
 
+  // Sets the category and amount for the current ListTile being built
   void setActiveCategory(MainCategory category, double amount) {
     activeCategory = category;
     activeAmount = amount ?? 0;
@@ -51,9 +52,9 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
         padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
         child: Container(
           child: Form(
-            key: _formKey,
             child: Column(
               children: [
+                // Title
                 Text(
                   "New Monthly Budget",
                   style: TextStyle(
@@ -66,6 +67,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // Total budget
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -82,6 +84,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           ),
                         ],
                       ),
+                      // Remaining budget
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -101,6 +104,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                     ],
                   ),
                 ),
+                // Scrollable category list with text fields
                 Expanded(
                   child: StreamBuilder<QuerySnapshot>(
                       stream: categoryDataProvider.getCategories(context),
@@ -161,6 +165,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                         }
                       }),
                 ),
+                // Add budget button
                 Container(
                   padding: EdgeInsets.fromLTRB(30, 30, 0, 50),
                   alignment: Alignment.bottomRight,
@@ -199,14 +204,15 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                         Theme.of(context).textTheme.bodyText1,
                                   ),
                                 ),
-                              ),
-                            );
-                          } else {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/tab', (Route<dynamic> route) => false);
-                          }
-                        });
-                      }, // removes all screens besides tab (useful after intro or just normal budget creation)
+                              );
+                              // removes all screens besides tab (useful after intro or just normal budget creation)
+                            } else {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/tab', (Route<dynamic> route) => false);
+                            }
+                          },
+                        );
+                      },
                       label: Text('Add Budget'),
                     ),
                   ),

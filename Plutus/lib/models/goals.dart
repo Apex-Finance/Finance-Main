@@ -72,7 +72,7 @@ class GoalDataProvider with ChangeNotifier {
     goal.setAmountSaved(doc.data()['amountSaved']);
     goal.setTitle(doc.data()['title']);
     goal.setGoalAmount(doc.data()['goalAmount']);
-    goal.setDate(doc.data()['dateofGoal'].toDate());
+    goal.setDate(doc.data()['date']);
 
     return goal;
   }
@@ -85,9 +85,8 @@ class GoalDataProvider with ChangeNotifier {
         .doc()
         .set({
       'title': goal.getTitle(),
-      'amountSaved': goal.getAmount(),
+      'amount': goal.getAmount(),
       'goalAmount': goal.getGoalAmount(),
-      'dateofGoal': goal.getDate(),
     });
   }
 

@@ -3,13 +3,12 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
 
 import '../models/categories.dart';
-import '../models/category.dart' as Category;
 import '../models/category_icon.dart';
 import '../models/budget.dart';
 
 // ignore: must_be_immutable
 class CategoryListTile extends StatefulWidget {
-  final Category.Category category;
+  MainCategory category;
   Function categoryHandler;
   List<FocusNode> focusNode;
   int index;
@@ -29,14 +28,15 @@ class _CategoryListTileState extends State<CategoryListTile> {
   @override
   Widget build(BuildContext context) {
     final _controller = TextEditingController(
-        text: widget.category.getAmount() != null
-            ? widget.category.getAmount().toStringAsFixed(2)
+        text: budgets.monthlyBudget.categoryAmount[widget.category] != null
+            ? budgets.monthlyBudget.categoryAmount[widget.category]
+                .toStringAsFixed(2)
             : '');
     return ListTile(
       tileColor: Colors.grey[850],
-      // leading: CircleAvatar(child: Icon(IcondData(categoryIcon[widget.category.getCodepoint()]))),
+      leading: CircleAvatar(child: Icon(categoryIcon[widget.category])),
       title: AutoSizeText(
-        (widget.category.getTitle()),
+        stringToUserString(enumValueToString(widget.category)),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 15),
@@ -48,7 +48,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
             Text('\$', style: Theme.of(context).textTheme.bodyText1),
             Expanded(
               child: Focus(
-                key: ValueKey(widget.category.getAmount()),
+                key: ValueKey(widget.category),
                 onFocusChange: (hasFocus) {
                   if (!hasFocus) {
                     if (_controller.text
@@ -69,7 +69,8 @@ class _CategoryListTileState extends State<CategoryListTile> {
                           ),
                         );
                       }
-                      widget.category.setAmount(double.parse(_controller.text));
+                      budgets.setCategoryAmount(widget.category,
+                          double.parse(_controller.text), context);
                     } // validates for numbers < 0
                     else if (_controller.text.isNotEmpty) {
                       Scaffold.of(context).showSnackBar(
@@ -89,7 +90,8 @@ class _CategoryListTileState extends State<CategoryListTile> {
                     // TODO find a way to make this less redundant
                     else if (_controller.text.isEmpty) {
                       _controller.text = '0.00';
-                      widget.category.setAmount(double.parse(_controller.text));
+                      budgets.setCategoryAmount(widget.category,
+                          double.parse(_controller.text), context);
                     } // if amount is cleared, set to 0 so that remainingBudget can update
                   }
                 },

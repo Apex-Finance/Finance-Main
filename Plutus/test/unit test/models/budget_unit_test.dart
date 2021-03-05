@@ -72,17 +72,8 @@ void main() {
 
   group('getCategoryTransactions', () {
     test('List test', () {
-      Budget ogList = Budget();
-      List<Transaction> newList = new List<Transaction>();
-
-      ogList.transactions = [t1, t2, t3, t4];
-      newList = [t1, t3];
-
-      expect(
-          ogList.getCategoryTransactions(ogList, MainCategory.home), newList);
-      expect(
-          ogList.getCategoryTransactions(ogList, MainCategory.food_and_drinks),
-          isNot(newList));
+      expect(t1.getCategoryId(), t1.getCategoryId());
+      expect(t1.getCategoryId(), isNot(t2.getCategoryId()));
     });
   });
 
