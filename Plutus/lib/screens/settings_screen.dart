@@ -13,7 +13,7 @@ class SettingsScreen extends StatelessWidget {
           bottom: Radius.circular(20),
         ),
       ),
-      color: Colors.grey[500],
+      color: Colors.grey[600],
       child: Row(
         children: [
           Icon(Icons.circle),
@@ -92,7 +92,7 @@ class SettingsScreen extends StatelessWidget {
                           activeFgColor: Colors.black,
                           inactiveBgColor: Colors.grey,
                           inactiveFgColor: Colors.black,
-                          labels: ['YES', 'NO'],
+                          labels: ['ON', 'OFF'],
                           icons: [
                             Icons.check,
                             Icons.highlight_off,
@@ -103,10 +103,10 @@ class SettingsScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    _colorOption(
-                        'Black', Colors.grey[900], Colors.black, context),
-                    _colorOption('Dark Blue', Colors.blue[900],
-                        Colors.indigo[900], context),
+                    // if(light)(
+                    _colorOption('Black', Colors.black, Colors.white, context),
+                    _colorOption('Dark Blue', Colors.indigo[900],
+                        Colors.indigo[50], context),
                     _colorOption(
                         'Amber', Colors.amber, Colors.amber[50], context),
                     _colorOption('Light Blue', Colors.blue[700],
@@ -115,7 +115,37 @@ class SettingsScreen extends StatelessWidget {
                         'Light Green', Colors.green, Colors.green[50], context),
                     _colorOption('Pink', Colors.pink, Colors.pink[50], context),
                     _colorOption(
-                        'Purple', Colors.purple, Colors.purple[900], context),
+                        'Purple', Colors.purple, Colors.purple[50], context),
+                    // ),
+                    // if(dark)(
+                    // _colorOption('Black', Colors.white, Colors.black, context),
+                    // _colorOption(
+                    //     'Dark Blue', Colors.indigo[800], Colors.black, context),
+                    // _colorOption('Amber', Colors.amber, Colors.black, context),
+                    // _colorOption(
+                    //     'Light Blue', Colors.blue[700], Colors.black, context),
+                    // _colorOption(
+                    //     'Light Green', Colors.green, Colors.black, context),
+                    // _colorOption('Pink', Colors.pink, Colors.black, context),
+                    // _colorOption(
+                    //     'Purple', Colors.purple, Colors.black, context),
+                    // ),
+                    RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                          bottom: Radius.circular(20),
+                        ),
+                      ),
+                      color: Colors.amber,
+                      child: Text(
+                        'Default',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                      onPressed: () {},
+                    ),
                   ],
                 ),
               ),
