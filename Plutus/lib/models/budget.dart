@@ -14,7 +14,6 @@ class Budget {
   String _title;
   double _amount;
   DateTime _date;
-  Map<MainCategory, double> categoryAmount;
   double _remainingMonthlyAmount;
 
   Budget.empty();
