@@ -30,14 +30,17 @@ class SettingsScreen extends StatelessWidget {
             width: 30,
           ),
           Container(
-            width: 30,
-            height: 20,
+            width: 50,
+            height: 25,
             color: color1,
           ),
           Container(
-            width: 30,
-            height: 20,
+            width: 50,
+            height: 25,
             color: color2,
+          ),
+          SizedBox(
+            width: 20,
           ),
         ],
       ),
