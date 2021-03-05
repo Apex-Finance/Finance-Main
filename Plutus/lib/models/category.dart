@@ -124,4 +124,19 @@ class CategoryDataProvider with ChangeNotifier {
 
     return categoryTransactions;
   }
+
+  Stream<QuerySnapshot> getCategories(BuildContext context) {
+    var categoryQuery =
+        FirebaseFirestore.instance.collection('DefaultCategories').where(
+      'userID',
+      whereIn: [
+        'default',
+        Provider.of<Auth>(context).getUserId(),
+      ],
+    ).snapshots();
+    // var defaultCategories = getDefaultCategories();
+    // var customCategories = getCustomCategories(context);
+
+    return categoryQuery;
+  }
 }
