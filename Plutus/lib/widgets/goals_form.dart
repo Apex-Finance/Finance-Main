@@ -36,13 +36,20 @@ class _GoalsFormState extends State<GoalsForm> {
     });
   }
 
-  // Validates the goal object then pushes its data to the DB
+  // Validates each required textfield, saves its value to the goal, and
+  // returns the goal to the previous screen
   void _submitGoalForm(BuildContext context) {
+    var goalDataProvider =
+        Provider.of<GoalDataProvider>(context, listen: false);
+
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       // TODO save image into DB
-      Provider.of<GoalDataProvider>(context, listen: false)
-          .addGoal(_goal, context);
+      if (_goal.getID() == null) {
+        goalDataProvider.addGoal(_goal, context);
+      } else {
+        goalDataProvider.updateGoal(_goal, context);
+      }
       Navigator.of(context).pop(
         _goal,
       );
@@ -93,9 +100,11 @@ class _GoalsFormState extends State<GoalsForm> {
               key: _formKey,
               child: Column(
                 children: <Widget>[
+                  // Title Text Field
                   GoalTitleField(
                     goal: _goal,
                   ),
+                  // Goal Amount Text Field
                   GoalAmountField(
                     goal: _goal,
                   ),
@@ -145,7 +154,6 @@ class _GoalsFormState extends State<GoalsForm> {
         onPressed: () {
           _submitGoalForm(context);
         },
-        // TODO change the text and make sure updateGoal is being called when goal is tapped
         label: Text(_goal.getID() == null ? "Add Goal" : "Edit Goal"),
       ),
     );

@@ -84,6 +84,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
               );
           },
           child: ListTile(
+            onTap: () => _updateGoal(context, widget.goal),
             contentPadding: EdgeInsets.all(10),
             tileColor: Colors.grey[850],
             leading: CircleAvatar(
@@ -106,7 +107,9 @@ class _GoalsListTileState extends State<GoalsListTile> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                      color: Theme.of(context).primaryColorLight, fontSize: 12),
+                    color: Theme.of(context).primaryColorLight,
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),
@@ -115,8 +118,6 @@ class _GoalsListTileState extends State<GoalsListTile> {
               children: [
                 new LinearPercentIndicator(
                   leading: AutoSizeText(
-                    // TODO Ask user how much he has saved already
-                    // this is NULL right now
                     '\$ ${widget.goal.getAmount()}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -146,7 +147,8 @@ class _GoalsListTileState extends State<GoalsListTile> {
             trailing: IconButton(
               color: Theme.of(context).primaryColor,
               icon: Icon(Icons.edit),
-              onPressed: () => _updateGoal(context, widget.goal),
+              // TODO add money screen
+              onPressed: () {},
             ),
             isThreeLine: true,
           ),
