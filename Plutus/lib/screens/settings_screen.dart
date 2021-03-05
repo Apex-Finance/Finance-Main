@@ -4,13 +4,55 @@ import 'package:toggle_switch/toggle_switch.dart';
 class SettingsScreen extends StatelessWidget {
   static const routeName = '/settings';
 
+  Widget _colorOption(
+      String name, Color color1, Color color2, BuildContext context) {
+    return RaisedButton(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+          bottom: Radius.circular(20),
+        ),
+      ),
+      color: Colors.grey[500],
+      child: Row(
+        children: [
+          Icon(Icons.circle),
+          SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: Text(
+              name,
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+          ),
+          SizedBox(
+            width: 30,
+          ),
+          Container(
+            width: 30,
+            height: 20,
+            color: color1,
+          ),
+          Container(
+            width: 30,
+            height: 20,
+            color: color2,
+          ),
+        ],
+      ),
+      onPressed: () {},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           'Settings Screen',
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyText2,
         ),
       ),
       body: Card(
@@ -29,7 +71,10 @@ class SettingsScreen extends StatelessWidget {
                   children: [
                     Text(
                       'Change colors',
-                      style: Theme.of(context).textTheme.bodyText2,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                    SizedBox(
+                      height: 15,
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.max,
@@ -37,7 +82,7 @@ class SettingsScreen extends StatelessWidget {
                         Expanded(
                           child: Text(
                             'Dark mode',
-                            style: Theme.of(context).textTheme.bodyText2,
+                            style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ),
                         ToggleSwitch(
@@ -58,265 +103,19 @@ class SettingsScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                          bottom: Radius.circular(20),
-                        ),
-                      ),
-                      color: Colors.grey[500],
-                      child: Row(
-                        children: [
-                          Icon(Icons.circle),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: Text(
-                              'black',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          Container(
-                            width: 30,
-                            height: 20,
-                            color: Colors.grey[900],
-                          ),
-                          Container(
-                            width: 30,
-                            height: 20,
-                            color: Colors.black,
-                          ),
-                        ],
-                      ),
-                      onPressed: () {},
-                    ),
-                    RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                          bottom: Radius.circular(20),
-                        ),
-                      ),
-                      color: Colors.grey[500],
-                      child: Row(
-                        children: [
-                          Icon(Icons.circle),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: Text(
-                              'Dark Blue',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          Container(
-                            width: 30,
-                            height: 20,
-                            color: Colors.blue[900],
-                          ),
-                          Container(
-                            width: 30,
-                            height: 20,
-                            color: Colors.indigo[900],
-                          ),
-                        ],
-                      ),
-                      onPressed: () {},
-                    ),
-                    RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                          bottom: Radius.circular(20),
-                        ),
-                      ),
-                      color: Colors.grey[500],
-                      child: Row(
-                        children: [
-                          Icon(Icons.circle),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: Text(
-                              'Amber',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          Container(
-                            width: 30,
-                            height: 20,
-                            color: Colors.amber,
-                          ),
-                          Container(
-                            width: 30,
-                            height: 20,
-                            color: Colors.amber[50],
-                          ),
-                        ],
-                      ),
-                      onPressed: () {},
-                    ),
-                    RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                          bottom: Radius.circular(20),
-                        ),
-                      ),
-                      color: Colors.grey[500],
-                      child: Row(
-                        children: [
-                          Icon(Icons.circle),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: Text(
-                              'Light Blue',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          Container(
-                            width: 30,
-                            height: 20,
-                            color: Colors.blue[700],
-                          ),
-                          Container(
-                            width: 30,
-                            height: 20,
-                            color: Colors.blue[50],
-                          ),
-                        ],
-                      ),
-                      onPressed: () {},
-                    ),
-                    RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                          bottom: Radius.circular(20),
-                        ),
-                      ),
-                      color: Colors.grey[500],
-                      child: Row(
-                        children: [
-                          Icon(Icons.circle),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: Text(
-                              'Light Green',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          Container(
-                            width: 30,
-                            height: 20,
-                            color: Colors.green,
-                          ),
-                          Container(
-                            width: 30,
-                            height: 20,
-                            color: Colors.green[50],
-                          ),
-                        ],
-                      ),
-                      onPressed: () {},
-                    ),
-                    RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                          bottom: Radius.circular(20),
-                        ),
-                      ),
-                      color: Colors.grey[500],
-                      child: Row(
-                        children: [
-                          Icon(Icons.circle),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: Text(
-                              'Pink',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          Container(
-                            width: 30,
-                            height: 20,
-                            color: Colors.pink,
-                          ),
-                          Container(
-                            width: 30,
-                            height: 20,
-                            color: Colors.pink[50],
-                          ),
-                        ],
-                      ),
-                      onPressed: () {},
-                    ),
-                    RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                          bottom: Radius.circular(20),
-                        ),
-                      ),
-                      color: Colors.grey[500],
-                      child: Row(
-                        children: [
-                          Icon(Icons.circle),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: Text(
-                              'Purple',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          Container(
-                            width: 30,
-                            height: 20,
-                            color: Colors.purple,
-                          ),
-                          Container(
-                            width: 30,
-                            height: 20,
-                            color: Colors.purple[900],
-                          ),
-                        ],
-                      ),
-                      onPressed: () {},
-                    ),
+                    _colorOption(
+                        'Black', Colors.grey[900], Colors.black, context),
+                    _colorOption('Dark Blue', Colors.blue[900],
+                        Colors.indigo[900], context),
+                    _colorOption(
+                        'Amber', Colors.amber, Colors.amber[50], context),
+                    _colorOption('Light Blue', Colors.blue[700],
+                        Colors.blue[50], context),
+                    _colorOption(
+                        'Light Green', Colors.green, Colors.green[50], context),
+                    _colorOption('Pink', Colors.pink, Colors.pink[50], context),
+                    _colorOption(
+                        'Purple', Colors.purple, Colors.purple[900], context),
                   ],
                 ),
               ),
