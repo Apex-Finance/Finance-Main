@@ -115,7 +115,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                               categoryDataProvider.initializeCategory(doc));
                         });
                         if (widget.budgetID != null) {
-                          StreamBuilder<QuerySnapshot>(
+                          return StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
                                 .collection('users')
                                 .doc(Provider.of<Auth>(context, listen: false)
@@ -147,6 +147,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                   setActiveCategory,
                                   catAmountFocusNodes,
                                   index,
+                                  categoryList.length,
                                 ),
                               );
                             },
@@ -160,6 +161,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                               setActiveCategory,
                               catAmountFocusNodes,
                               index,
+                              categoryList.length,
                             ),
                           );
                         }
@@ -177,31 +179,33 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                 listen:
                                     false) //TODO ALEX no setcategoryamount() for budget yet
                             .uploadCategory(widget.budgetID, category, context);
-                        setState(() {
-                          if (budget.getRemainingAmount() < -0.001)
-                            Scaffold.of(context).showSnackBar(
-                              SnackBar(
-                                behavior: SnackBarBehavior.floating,
-                                content: Padding(
-                                  padding: const EdgeInsets.only(top: 5.0),
-                                  child: Text(
-                                    'You have budgeted more money than is available this month.',
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
+                        setState(
+                          () {
+                            if (budget.getRemainingAmount() < -0.001)
+                              Scaffold.of(context).showSnackBar(
+                                SnackBar(
+                                  behavior: SnackBarBehavior.floating,
+                                  content: Padding(
+                                    padding: const EdgeInsets.only(top: 5.0),
+                                    child: Text(
+                                      'You have budgeted more money than is available this month.',
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          else if (budget.getRemainingAmount() > 0.001) {
-                            Scaffold.of(context).showSnackBar(
-                              SnackBar(
-                                behavior: SnackBarBehavior.floating,
-                                content: Padding(
-                                  padding: const EdgeInsets.only(top: 5.0),
-                                  child: Text(
-                                    'You have some money that still needs to be budgeted.',
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
+                              );
+                            else if (budget.getRemainingAmount() > 0.001) {
+                              Scaffold.of(context).showSnackBar(
+                                SnackBar(
+                                  behavior: SnackBarBehavior.floating,
+                                  content: Padding(
+                                    padding: const EdgeInsets.only(top: 5.0),
+                                    child: Text(
+                                      'You have some money that still needs to be budgeted.',
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    ),
                                   ),
                                 ),
                               );

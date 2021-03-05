@@ -20,16 +20,10 @@ class Budget {
 
   void setID(String idValue) {
     _id = idValue;
-
   }
 
-  List<Transaction.Transaction> getCategoryTransactions(
-      Budget budget, MainCategory category) {
-    return budget.transactions == null
-        ? null
-        : budget.transactions
-            .where((transaction) => transaction.getCategoryId() == category)
-            .toList();
+  String getID() {
+    return _id;
   }
 
   void setTitle(String titleValue) {
@@ -102,7 +96,6 @@ class Budget {
   // }
 }
 
-
 class BudgetDataProvider with ChangeNotifier {
   Budget initializeBudget(DocumentSnapshot doc) {
     var budget = new Budget.empty();
@@ -140,15 +133,13 @@ class BudgetDataProvider with ChangeNotifier {
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .collection('budgets')
-        .doc(budget.id)
+        .doc()
         .set({
-      'title': budget.title,
-      'amount': budget.amount,
-      'remainingMonthlyAmount': budget.remainingAmount,
+      'title': budget.getTitle(),
+      'amount': budget.getAmount(),
     });
     notifyListeners();
   }
-
 
   void editBudget(Budget budget, BuildContext context) async {
     await FirebaseFirestore.instance
@@ -163,7 +154,6 @@ class BudgetDataProvider with ChangeNotifier {
   }
 
   void deleteBudget(String budgetID, BuildContext context) async {
-
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
