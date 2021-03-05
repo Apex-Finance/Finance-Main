@@ -49,10 +49,10 @@ class _TabScreenState extends State<TabScreen> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (_) => IncomeScreen(),
+      builder: (_) => IncomeScreen(budget: new Budget.empty()),
     ).then((newBudget) {
       if (newBudget == null) return;
-      Provider.of<Budgets>(context, listen: false)
+      Provider.of<BudgetDataProvider>(context, listen: false)
           .addBudget(newBudget, context); //TODO check if needed
     });
   }

@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           create: (context) => GoalDataProvider(),
         ),
         ChangeNotifierProvider(
-          create: (context) => Budget(),
+          create: (context) => BudgetDataProvider(),
         ),
         ChangeNotifierProvider(
           create: (_) => Auth(),
@@ -54,12 +54,12 @@ class MyApp extends StatelessWidget {
                       : previousTransactions.transactions),
           create: null,
         ),
-        ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
-          update: (buildContext, monthChanger, transactions, previousBudgets) =>
-              Budgets(monthChanger, transactions,
-                  previousBudgets == null ? [] : previousBudgets.budgets),
-          create: null,
-        ),
+        // ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
+        //   update: (buildContext, monthChanger, transactions, previousBudgets) =>
+        //       Budgets(monthChanger, transactions,
+        //           previousBudgets == null ? [] : previousBudgets.budgets),
+        //   create: null,
+        // ),
       ],
       child: Builder(
         builder: (context) => MaterialApp(

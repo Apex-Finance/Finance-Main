@@ -1,16 +1,21 @@
 import 'package:Plutus/models/budget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/auth.dart';
 import '../../widgets/category_list_tile.dart';
 import '../../models/categories.dart';
 import '../../models/budget.dart';
+import '../../models/category.dart' as Category;
 
 // Form to budget out monthly income into categories
 class FirstBudgetScreen extends StatefulWidget {
   static const routeName = '/first_budget';
-
+  String budgetID;
+  FirstBudgetScreen({this.budgetID});
   @override
   _FirstBudgetScreenState createState() => _FirstBudgetScreenState();
 }
@@ -30,10 +35,13 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Budget budget = Provider.of<Budgets>(context)
-        .monthlyBudget; // budget contains the amounts; rest are null on first run of build
-    budget.categoryAmount =
-        budget.categoryAmount == null ? {} : budget.categoryAmount;
+    var categoryDataProvider =
+        Provider.of<Category.CategoryDataProvider>(context);
+    var category = Category.Category();
+    var categoryList = new List<Category.Category>();
+    double categoryExpenses;
+    final Budget budget = Budget
+        .empty(); // budget contains the amounts; rest are null on first run of build
 
     return Scaffold(
       appBar: AppBar(
@@ -68,7 +76,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             style: TextStyle(color: Colors.amber, fontSize: 15),
                           ),
                           AutoSizeText(
-                            '\$${budget.amount}',
+                            '\$${budget.getAmount()}', // .toStringAsFixed(2)
                             maxLines: 1,
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor,
@@ -85,7 +93,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             style: TextStyle(color: Colors.amber, fontSize: 15),
                           ),
                           AutoSizeText(
-                            '\$${budget.remainingAmount.toStringAsFixed(2)}',
+                            '\$${budget.getRemainingAmount().toStringAsFixed(2)}',
                             maxLines: 1,
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor,
@@ -98,16 +106,64 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                 ),
                 // Scrollable category list with text fields
                 Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: MainCategory.values.length,
-                    itemBuilder: (context, index) => CategoryListTile(
-                      MainCategory.values[index],
-                      setActiveCategory,
-                      catAmountFocusNodes,
-                      index,
-                    ),
-                  ),
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: categoryDataProvider.getCategories(context),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        snapshot.data.docs.forEach((doc) {
+                          categoryList.add(
+                              categoryDataProvider.initializeCategory(doc));
+                        });
+                        if (widget.budgetID != null) {
+                          StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(Provider.of<Auth>(context, listen: false)
+                                    .getUserId())
+                                .collection('budgets')
+                                .doc(widget.budgetID)
+                                .collection('categories')
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (snapshot.data.docs.isNotEmpty) {
+                                snapshot.data.docs.forEach((doc) {
+                                  categoryList.forEach((category) {
+                                    if (doc.id == category.getID()) {
+                                      var amount = doc.data()['amount'] != null
+                                          ? doc.data()['amount']
+                                          : 0;
+                                      category.setAmount(amount);
+                                    }
+                                  });
+                                });
+                              }
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: categoryList.length,
+                                itemBuilder: (context, index) =>
+                                    CategoryListTile(
+                                  categoryList[index],
+                                  setActiveCategory,
+                                  catAmountFocusNodes,
+                                  index,
+                                ),
+                              );
+                            },
+                          );
+                        } else {
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: categoryList.length,
+                            itemBuilder: (context, index) => CategoryListTile(
+                              categoryList[index],
+                              setActiveCategory,
+                              catAmountFocusNodes,
+                              index,
+                            ),
+                          );
+                        }
+                      }),
                 ),
                 // Add budget button
                 Container(
@@ -117,37 +173,35 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                     builder: (context) => FloatingActionButton.extended(
                       backgroundColor: Theme.of(context).primaryColor,
                       onPressed: () {
-                        Provider.of<Budgets>(context, listen: false)
-                            .setCategoryAmount(
-                                activeCategory, activeAmount, context);
-                        // Validates the category amount entered
-                        setState(
-                          () {
-                            if (budget.remainingAmount < -0.001)
-                              Scaffold.of(context).showSnackBar(
-                                SnackBar(
-                                  behavior: SnackBarBehavior.floating,
-                                  content: Padding(
-                                    padding: const EdgeInsets.only(top: 5.0),
-                                    child: Text(
-                                      'You have budgeted more money than is available this month.',
-                                      style:
-                                          Theme.of(context).textTheme.bodyText1,
-                                    ),
+                        Provider.of<Category.CategoryDataProvider>(context,
+                                listen:
+                                    false) //TODO ALEX no setcategoryamount() for budget yet
+                            .uploadCategory(widget.budgetID, category, context);
+                        setState(() {
+                          if (budget.getRemainingAmount() < -0.001)
+                            Scaffold.of(context).showSnackBar(
+                              SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                content: Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: Text(
+                                    'You have budgeted more money than is available this month.',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
                                   ),
                                 ),
-                              );
-                            else if (budget.remainingAmount > 0.001) {
-                              Scaffold.of(context).showSnackBar(
-                                SnackBar(
-                                  behavior: SnackBarBehavior.floating,
-                                  content: Padding(
-                                    padding: const EdgeInsets.only(top: 5.0),
-                                    child: Text(
-                                      'You have some money that still needs to be budgeted.',
-                                      style:
-                                          Theme.of(context).textTheme.bodyText1,
-                                    ),
+                              ),
+                            );
+                          else if (budget.getRemainingAmount() > 0.001) {
+                            Scaffold.of(context).showSnackBar(
+                              SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                content: Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: Text(
+                                    'You have some money that still needs to be budgeted.',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
                                   ),
                                 ),
                               );

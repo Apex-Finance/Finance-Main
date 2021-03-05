@@ -4,36 +4,42 @@ import 'package:Plutus/models/transaction.dart';
 import 'package:Plutus/models/categories.dart';
 
 void main() {
-  Transaction t1 = Transaction();
-  Transaction t2 = Transaction();
-  Transaction t3 = Transaction();
-  Transaction t4 = Transaction();
+  Transaction t1, t2, t3, t4;
 
-  t1.setTitle('Coffee');
-  t1.setAmount(3.45);
-  t1.setDate(DateTime.now());
-  t1.setCategoryId('home');
-
-  t2.setTitle('Shirt');
-  t2.setAmount(10.96);
-  t2.setDate(DateTime.now());
-  t2.setCategoryId('bills_and_utilities');
-
-  t3.setTitle('Movies');
-  t3.setAmount(25.35);
-  t3.setDate(DateTime.now());
-  t3.setCategoryId('home');
-
-  t4.setTitle('Shoes');
-  t4.setAmount(35.85);
-  t4.setDate(DateTime.now());
-  t4.setCategoryId('food_and_drinks');
+  t1 = Transaction(
+    'a',
+    'Coffee',
+    DateTime.now(),
+    'home',
+    3.45,
+  );
+  t2 = Transaction(
+    'b',
+    'Shirt',
+    DateTime.now(),
+    'bills_and_utilities',
+    10.96,
+  );
+  t3 = Transaction(
+    'c',
+    'Movies',
+    DateTime.now(),
+    'home',
+    25.35,
+  );
+  t4 = Transaction(
+    'd',
+    'Shoes',
+    DateTime.now(),
+    'food_and_drinks',
+    35.85,
+  );
 
   group('getRemainingAmount', () {
     test('Test if remaining amount is accurate', () {
       double value = 1000;
       double tempAmount = 500;
-      Budget().remainingMonthlyAmount = value - tempAmount;
+      Budget().setremainingMonthlyAmount = value - tempAmount;
 
       expect(Budget().remainingAmount, Budget().remainingMonthlyAmount);
     });
