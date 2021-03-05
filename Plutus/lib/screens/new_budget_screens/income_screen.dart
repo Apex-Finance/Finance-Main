@@ -13,6 +13,8 @@ import '../../models/category.dart' as Category;
 
 // Asks the user for his monthly income and creates the budget based on that amount
 class IncomeScreen extends StatefulWidget {
+  final Budget budget;
+  IncomeScreen({this.budget});
   static const routeName = '/income';
   @override
   _IncomeScreenState createState() => _IncomeScreenState();
@@ -55,8 +57,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 onPressed: () {
                   // TODO Any changes made to this budget (does not include first creation) will be saved as a brand new budget
                   // TODO Will need to be addressed once the DB is incorporated into budget.dart
-                  Provider.of<Budgets>(context, listen: false)
-                      .deleteBudget(_budget.id);
+                  Provider.of<BudgetDataProvider>(context, listen: false)
+                      .deleteBudget(widget.budget.getID(), context);
                   Navigator.of(context).pushNamed(TabScreen.routeName);
                 },
               ),
@@ -74,7 +76,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
     return WillPopScope(
       onWillPop: () async {
-        if (_budget.amount != null) _showDiscardBudgetDialog();
+        if (widget.budget.getAmount() != null) _showDiscardBudgetDialog();
         return true;
       },
       child: Scaffold(
@@ -117,22 +119,31 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             onEditingComplete: () {
                               if (_formKey.currentState.validate()) {
                                 _formKey.currentState.save();
-                                _budget.id = DateTime(monthData.selectedYear,
-                                        monthData.selectedMonth)
-                                    .toIso8601String();
-                                _budget.title = DateTime(monthData.selectedYear,
-                                        monthData.selectedMonth)
-                                    .toIso8601String();
-                                Provider.of<Budgets>(context, listen: false)
-                                    .addBudget(_budget, context);
-                                Navigator.of(context)
-                                    .pushNamed(FirstBudgetScreen.routeName);
+                                widget.budget.setDate(DateTime(
+                                    monthData.selectedYear,
+                                    monthData.selectedMonth,
+                                    1));
+                                if (widget.budget.getID() == null) {
+                                  Provider.of<BudgetDataProvider>(context,
+                                          listen: false)
+                                      .editBudget(widget.budget, context);
+                                } else {
+                                  Provider.of<BudgetDataProvider>(context,
+                                          listen: false)
+                                      .addBudget(widget.budget, context);
+                                }
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => FirstBudgetScreen(
+                                          budgetID: widget.budget.getID()),
+                                    ));
                               }
                             },
                             // Prevents users from entering budgets >= $1billion
                             maxLength: 14,
-                            onSaved: (val) => _budget.amount =
-                                double.parse(val.replaceAll(",", "")),
+                            onSaved: (val) => widget.budget.setAmount(
+                                double.parse(val.replaceAll(",", ""))),
                             validator: (val) {
                               if (val.contains(new RegExp(
                                   r'^-?\d{0,3}(,\d{3}){0,3}(.\d+)?$'))) {

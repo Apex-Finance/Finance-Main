@@ -3,15 +3,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/auth.dart';
 import '../../widgets/category_list_tile.dart';
 import '../../models/categories.dart';
 import '../../models/budget.dart';
-import '../../models/category.dart';
+import '../../models/category.dart' as Category;
 
 class FirstBudgetScreen extends StatefulWidget {
   static const routeName = '/first_budget';
-
+  String budgetID;
+  FirstBudgetScreen({this.budgetID});
   @override
   _FirstBudgetScreenState createState() => _FirstBudgetScreenState();
 }
@@ -31,11 +34,13 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var categoryDataProvider = Provider.of<CategoryDataProvider>(context);
-    final Budget budget =
-        Budget(); // budget contains the amounts; rest are null on first run of build
-    budget.categoryAmount =
-        budget.categoryAmount == null ? {} : budget.categoryAmount;
+    var categoryDataProvider =
+        Provider.of<Category.CategoryDataProvider>(context);
+    var category = Category.Category();
+    var categoryList = new List<Category.Category>();
+    double categoryExpenses;
+    final Budget budget = Budget
+        .empty(); // budget contains the amounts; rest are null on first run of build
 
     return Scaffold(
       appBar: AppBar(
@@ -98,22 +103,62 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                 ),
                 Expanded(
                   child: StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('DefaultCategories')
-                          .snapshots(),
+                      stream: categoryDataProvider.getCategories(context),
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot> snapshot) {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: snapshot.data.docs.length,
-                          itemBuilder: (context, index) => CategoryListTile(
-                            categoryDataProvider
-                                .initializeCategory(snapshot.data.docs[index]),
-                            setActiveCategory,
-                            catAmountFocusNodes,
-                            index,
-                          ),
-                        );
+                        snapshot.data.docs.forEach((doc) {
+                          categoryList.add(
+                              categoryDataProvider.initializeCategory(doc));
+                        });
+                        if (widget.budgetID != null) {
+                          StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(Provider.of<Auth>(context, listen: false)
+                                    .getUserId())
+                                .collection('budgets')
+                                .doc(widget.budgetID)
+                                .collection('categories')
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (snapshot.data.docs.isNotEmpty) {
+                                snapshot.data.docs.forEach((doc) {
+                                  categoryList.forEach((category) {
+                                    if (doc.id == category.getID()) {
+                                      var amount = doc.data()['amount'] != null
+                                          ? doc.data()['amount']
+                                          : 0;
+                                      category.setAmount(amount);
+                                    }
+                                  });
+                                });
+                              }
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: categoryList.length,
+                                itemBuilder: (context, index) =>
+                                    CategoryListTile(
+                                  categoryList[index],
+                                  setActiveCategory,
+                                  catAmountFocusNodes,
+                                  index,
+                                ),
+                              );
+                            },
+                          );
+                        } else {
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: categoryList.length,
+                            itemBuilder: (context, index) => CategoryListTile(
+                              categoryList[index],
+                              setActiveCategory,
+                              catAmountFocusNodes,
+                              index,
+                            ),
+                          );
+                        }
                       }),
                 ),
                 Container(
@@ -123,11 +168,10 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                     builder: (context) => FloatingActionButton.extended(
                       backgroundColor: Theme.of(context).primaryColor,
                       onPressed: () {
-                        Provider.of<Budgets>(context,
+                        Provider.of<Category.CategoryDataProvider>(context,
                                 listen:
                                     false) //TODO ALEX no setcategoryamount() for budget yet
-                            .setCategoryAmount(
-                                activeCategory, activeAmount, context);
+                            .uploadCategory(widget.budgetID, category, context);
                         setState(() {
                           if (budget.getRemainingAmount() < -0.001)
                             Scaffold.of(context).showSnackBar(

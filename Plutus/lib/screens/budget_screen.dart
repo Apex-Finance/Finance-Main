@@ -21,11 +21,11 @@ class BudgetScreen extends StatefulWidget {
 }
 
 class _BudgetScreenState extends State<BudgetScreen> {
-  void _enterBudget(BuildContext context) {
+  void _enterBudget(BuildContext context, Budget budget) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (_) => IncomeScreen(),
+      builder: (_) => IncomeScreen(budget: budget),
     ).then((newBudget) {
       if (newBudget == null) return;
       Provider.of<BudgetDataProvider>(context, listen: false)
@@ -105,7 +105,8 @@ class _BudgetScreenState extends State<BudgetScreen> {
                             child: Text('Add Budget'),
                             color: Theme.of(context).primaryColor,
                             textColor: Theme.of(context).canvasColor,
-                            onPressed: () => _enterBudget(context),
+                            onPressed: () =>
+                                _enterBudget(context, new Budget.empty()),
                           ),
                         ],
                       ),

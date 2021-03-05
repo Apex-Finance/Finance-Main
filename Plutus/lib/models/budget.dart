@@ -17,6 +17,8 @@ class Budget {
   Map<MainCategory, double> categoryAmount;
   double _remainingMonthlyAmount;
 
+  Budget.empty();
+
   void setID(String idValue) {
     _id = idValue;
   }
@@ -41,8 +43,8 @@ class Budget {
     return _amount;
   }
 
-  void setRemainingAmount(double budgetTransactionExpenses) {
-    _remainingMonthlyAmount = getAmount() - budgetTransactionExpenses;
+  void setRemainingAmount(double budgetExpenses) {
+    _remainingMonthlyAmount = getAmount() - budgetExpenses;
   }
 
   double getRemainingAmount() {
@@ -99,7 +101,7 @@ class BudgetDataProvider with ChangeNotifier {
   MonthChanger monthChanger;
 
   Budget initializeBudget(DocumentSnapshot doc) {
-    var budget = new Budget();
+    var budget = new Budget.empty();
 
     budget.setID(doc.id);
     budget.setTitle(doc.data()['title']);

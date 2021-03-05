@@ -74,30 +74,13 @@ class CategoryDataProvider with ChangeNotifier {
     } else {
       category.setAmount(doc.data()['amount'].toDouble());
     }
-    category.setAmount(doc.data()['amount'].toDouble());
     category.setTitle(doc.data()['title']);
     category.setCodepoint(doc.data()['codepoint'].toInt());
 
     return category;
   }
 
-  void addCategory(
-      String budgetID, Category category, BuildContext context) async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('budgets')
-        .doc(budgetID)
-        .collection('categories')
-        .doc()
-        .set({
-      'title': category.getTitle(),
-      'amount': category.getAmount(),
-      'codepoint': category.getCodepoint(),
-    });
-  }
-
-  void editCategory(
+  void uploadCategory(
       String budgetID, Category category, BuildContext context) async {
     await FirebaseFirestore.instance
         .collection('users')
