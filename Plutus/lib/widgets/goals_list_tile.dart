@@ -6,6 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import '../models/goals.dart';
 import '../widgets/goals_form.dart';
+import '../screens/add_goal_money_screen.dart';
 
 // List Tile that displayes each individual goal
 class GoalsListTile extends StatefulWidget {
@@ -21,6 +22,14 @@ class _GoalsListTileState extends State<GoalsListTile> {
       isScrollControlled: true,
       context: context,
       builder: (_) => GoalsForm(goal: goal),
+    );
+  }
+
+  void _addGoalMoney(BuildContext context, Goal goal) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (_) => AddGoalMoneyScreen(),
     );
   }
 
@@ -83,75 +92,91 @@ class _GoalsListTileState extends State<GoalsListTile> {
                 ),
               );
           },
-          child: ListTile(
-            onTap: () => _updateGoal(context, widget.goal),
-            contentPadding: EdgeInsets.all(10),
-            tileColor: Colors.grey[850],
-            leading: CircleAvatar(
-              radius: 35,
-              backgroundImage: NetworkImage(
-                'https://2p2bboli8d61fqhjiqzb8p1a-wpengine.netdna-ssl.com/wp-content/uploads/2018/07/1.jpg',
+          child: Column(children: [
+            ListTile(
+              onTap: () => _updateGoal(context, widget.goal),
+              contentPadding: EdgeInsets.all(10),
+              tileColor: Colors.grey[850],
+              leading: CircleAvatar(
+                radius: 35,
+                backgroundImage: NetworkImage(
+                  'https://2p2bboli8d61fqhjiqzb8p1a-wpengine.netdna-ssl.com/wp-content/uploads/2018/07/1.jpg',
+                ),
               ),
-            ),
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AutoSizeText(
-                  '${widget.goal.getTitle()}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                Text(
-                  '${DateFormat.MMMd().format(widget.goal.getDate())}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColorLight,
-                    fontSize: 12,
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AutoSizeText(
+                    '${widget.goal.getTitle()}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
-                ),
-              ],
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                new LinearPercentIndicator(
-                  leading: AutoSizeText(
+                  AutoSizeText(
                     '\$ ${widget.goal.getAmount()}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style:
                         TextStyle(color: Theme.of(context).primaryColorLight),
                   ),
-                  trailing: AutoSizeText(
-                    '\$ ${widget.goal.getGoalAmount()}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style:
-                        TextStyle(color: Theme.of(context).primaryColorLight),
+                ],
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [],
+              ),
+              trailing: IconButton(
+                color: Theme.of(context).primaryColor,
+                icon: Icon(Icons.add),
+                // TODO add money screen
+                onPressed: () => _addGoalMoney(context, widget.goal),
+              ),
+              isThreeLine: true,
+            ),
+            Container(
+              color: Colors.grey[850],
+              child: Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      10,
+                      0,
+                      10,
+                      10,
+                    ),
+                    child: new LinearPercentIndicator(
+                      leading: Padding(
+                        padding: EdgeInsets.only(
+                          right: 18,
+                        ),
+                        child: Text(
+                          '${DateFormat.yMMMd().format(widget.goal.getDate())}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColorLight,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      trailing: AutoSizeText(
+                        '\$ ${widget.goal.getGoalAmount()}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColorLight),
+                      ),
+                      alignment: MainAxisAlignment.start,
+                      width: MediaQuery.of(context).size.width * .50,
+                      lineHeight: 12,
+                      backgroundColor: Colors.black,
+                      progressColor: Colors.amber,
+                    ),
                   ),
-                  alignment: MainAxisAlignment.start,
-                  width: MediaQuery.of(context).size.width * .25,
-                  lineHeight: 8.0,
-                  backgroundColor: Colors.black,
-                  progressColor: Colors.amber,
-                ),
-
-                //Text(
-                //"Due Date: ${DateFormat.MMMd().format(widget.goal.getDate())}",
-                //style: Theme.of(context).textTheme.bodyText2,
-                //),
-              ],
+                ],
+              ),
             ),
-            trailing: IconButton(
-              color: Theme.of(context).primaryColor,
-              icon: Icon(Icons.edit),
-              // TODO add money screen
-              onPressed: () {},
-            ),
-            isThreeLine: true,
-          ),
+          ]),
         ),
       ),
     );
