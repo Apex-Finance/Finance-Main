@@ -17,6 +17,7 @@ class GoalsListTile extends StatefulWidget {
 }
 
 class _GoalsListTileState extends State<GoalsListTile> {
+  // Displays the goal form if editing
   void _updateGoal(BuildContext context, Goal goal) {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -25,6 +26,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
     );
   }
 
+  // Displays a dialog box where amounts can be entered in to progress a goal
   void _addGoalMoney(BuildContext context, Goal goal) {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -39,6 +41,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
       padding: const EdgeInsets.all(8.0),
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(20)),
+        // Deletes a goal if list tile is swiped from right to left
         child: Dismissible(
           key: ValueKey(widget.goal.getID()),
           background: Container(
@@ -57,6 +60,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
           ),
           direction: DismissDirection.endToStart,
           confirmDismiss: (direction) {
+            // Displays a dialog box confirming the deletion of a goal
             return showDialog(
               context: context,
               builder: (ctx) => AlertDialog(
@@ -104,6 +108,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
                     right: BorderSide(width: 1.0, color: Colors.white24),
                   ),
                 ),
+                // Goal image preview
                 child: CircleAvatar(
                   radius: 35,
                   backgroundImage: NetworkImage(
@@ -114,6 +119,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Goal title
                   AutoSizeText(
                     '${widget.goal.getTitle()}',
                     maxLines: 1,
@@ -125,6 +131,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Date the goal is due
                   Text(
                     '${DateFormat.yMMMd().format(widget.goal.getDate())}',
                     maxLines: 1,
@@ -136,6 +143,8 @@ class _GoalsListTileState extends State<GoalsListTile> {
                   ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(0, 8, 0, 5),
+                    // Visual bar graph that displays amount currently saved
+                    // and the goal amount
                     child: new LinearPercentIndicator(
                       center: AutoSizeText(
                         '\$ ${widget.goal.getAmount().toStringAsFixed(0)} of \$ ${widget.goal.getGoalAmount()}',
@@ -149,6 +158,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
                   ),
                 ],
               ),
+              // Add money button
               trailing: Container(
                 // Needed to keep the same size border as CircleAvatar border
                 height: 100,
