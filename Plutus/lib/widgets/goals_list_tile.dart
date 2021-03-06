@@ -95,12 +95,20 @@ class _GoalsListTileState extends State<GoalsListTile> {
           child: Column(children: [
             ListTile(
               onTap: () => _updateGoal(context, widget.goal),
-              contentPadding: EdgeInsets.all(10),
+              contentPadding: EdgeInsets.all(4),
               tileColor: Colors.grey[850],
-              leading: CircleAvatar(
-                radius: 35,
-                backgroundImage: NetworkImage(
-                  'https://2p2bboli8d61fqhjiqzb8p1a-wpengine.netdna-ssl.com/wp-content/uploads/2018/07/1.jpg',
+              leading: Container(
+                width: 80,
+                decoration: BoxDecoration(
+                  border: Border(
+                    right: BorderSide(width: 1.0, color: Colors.white24),
+                  ),
+                ),
+                child: CircleAvatar(
+                  radius: 35,
+                  backgroundImage: NetworkImage(
+                    'https://2p2bboli8d61fqhjiqzb8p1a-wpengine.netdna-ssl.com/wp-content/uploads/2018/07/1.jpg',
+                  ),
                 ),
               ),
               title: Column(
@@ -112,69 +120,53 @@ class _GoalsListTileState extends State<GoalsListTile> {
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
-                  AutoSizeText(
-                    '\$ ${widget.goal.getAmount()}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style:
-                        TextStyle(color: Theme.of(context).primaryColorLight),
-                  ),
                 ],
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [],
-              ),
-              trailing: IconButton(
-                color: Theme.of(context).primaryColor,
-                icon: Icon(Icons.add),
-                // TODO add money screen
-                onPressed: () => _addGoalMoney(context, widget.goal),
-              ),
-              isThreeLine: true,
-            ),
-            Container(
-              color: Colors.grey[850],
-              child: Row(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(
-                      10,
-                      0,
-                      10,
-                      10,
+                  Text(
+                    '${DateFormat.yMMMd().format(widget.goal.getDate())}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColorLight,
+                      fontSize: 12,
                     ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 8, 0, 5),
                     child: new LinearPercentIndicator(
-                      leading: Padding(
-                        padding: EdgeInsets.only(
-                          right: 18,
-                        ),
-                        child: Text(
-                          '${DateFormat.yMMMd().format(widget.goal.getDate())}',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColorLight,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                      trailing: AutoSizeText(
-                        '\$ ${widget.goal.getGoalAmount()}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColorLight),
+                      center: AutoSizeText(
+                        '\$ ${widget.goal.getAmount().toStringAsFixed(0)} of \$ ${widget.goal.getGoalAmount()}',
                       ),
                       alignment: MainAxisAlignment.start,
-                      width: MediaQuery.of(context).size.width * .50,
-                      lineHeight: 12,
+                      width: MediaQuery.of(context).size.width * .46,
+                      lineHeight: 20,
                       backgroundColor: Colors.black,
                       progressColor: Colors.amber,
                     ),
                   ),
                 ],
               ),
+              trailing: Container(
+                // Needed to keep the same size border as CircleAvatar border
+                height: 100,
+                decoration: BoxDecoration(
+                  border: Border(
+                    left: BorderSide(
+                      width: 1.0,
+                      color: Colors.white24,
+                    ),
+                  ),
+                ),
+                child: IconButton(
+                  color: Theme.of(context).primaryColor,
+                  icon: Icon(Icons.add),
+                  onPressed: () => _addGoalMoney(context, widget.goal),
+                ),
+              ),
+              isThreeLine: true,
             ),
           ]),
         ),
