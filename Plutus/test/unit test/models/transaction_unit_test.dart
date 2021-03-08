@@ -50,7 +50,7 @@ void main() {
       expect(testTotalExpenses, 36.00);
       expect(testTotalExpenses, isNot(0.00));
     });
-    
+
     test('Test double type convert', () {
       double testDouble;
       int value;
