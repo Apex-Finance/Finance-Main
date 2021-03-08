@@ -30,6 +30,7 @@ void main() {
       expect(newTransaction.getID(), isNot(null));
     });
   });
+
   group('getTransactionExpenses', () {
     Transaction t1 = Transaction();
     Transaction t2 = Transaction();
