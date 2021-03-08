@@ -108,9 +108,17 @@ class _GoalsFormState extends State<GoalsForm> {
                   GoalAmountField(
                     goal: _goal,
                   ),
-                  buildDateChanger(context),
-                  buildImageSelector(context),
-                  buildSubmitButton(context),
+                  // Amount Saved Text Field
+                  AmountSavedField(
+                    goal: _goal,
+                  ),
+                  Row(
+                    children: [
+                      buildImageSelector(context),
+                      buildDateChanger(context),
+                      buildSubmitButton(context),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -121,80 +129,81 @@ class _GoalsFormState extends State<GoalsForm> {
   }
 
   // Selects an image to add to a goal
-  Row buildImageSelector(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        GestureDetector(
-          onTap: () => getImage(),
-          child: Container(
-            color: Theme.of(context).primaryColorLight,
-            width: 85,
-            height: 85,
-            child: _goalImage == null
-                ? Icon(Icons.camera_alt)
-                : FittedBox(
-                    fit: BoxFit.cover,
-                    child: Image.file(_goalImage),
-                  ),
-          ),
+  Widget buildImageSelector(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: 12,
+      ),
+      child: GestureDetector(
+        onTap: () => getImage(),
+        child: Container(
+          color: Theme.of(context).primaryColorLight,
+          width: 85,
+          height: 85,
+          child: _goalImage == null
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.camera_alt),
+                    Text(
+                      "Add a picture",
+                      style: TextStyle(
+                        color: Theme.of(context).canvasColor,
+                      ),
+                    ),
+                  ],
+                )
+              : FittedBox(
+                  fit: BoxFit.cover,
+                  child: Image.file(_goalImage),
+                ),
         ),
-        Padding(
-            padding: EdgeInsets.all(15),
-            child: Text("(Optional) Click to enter an Image")),
-      ],
+      ),
     );
   }
 
   // Validates required fields and sends goal data to DB
-  Container buildSubmitButton(BuildContext context) {
-    return Container(
-      alignment: Alignment.bottomRight,
-      child: FloatingActionButton.extended(
-        backgroundColor: Theme.of(context).primaryColorLight,
-        onPressed: () {
-          _submitGoalForm(context);
-        },
-        label: Text(_goal.getID() == null ? "Add Goal" : "Edit Goal"),
+  Widget buildSubmitButton(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+      child: Container(
+        child: FloatingActionButton.extended(
+          backgroundColor: Theme.of(context).primaryColorLight,
+          onPressed: () => _submitGoalForm(context),
+          label: Text(_goal.getID() == null ? "Add Goal" : "Edit Goal"),
+        ),
       ),
     );
   }
 
   // Changes the date of the goal
-  Row buildDateChanger(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Container(
-          width: 125,
-          child: Text(
-            'Date: ${DateFormat.MMMd().format(_goal.getDate())}',
-            style: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).primaryColor,
+  Widget buildDateChanger(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(10, 0, 30, 37),
+      child: RaisedButton(
+        color: Theme.of(context).primaryColorLight,
+        child: _goal.getID() == null
+            ? Text('Due Date')
+            : Text(
+                '${DateFormat.MMMd().format(_goal.getDate())}',
+              ),
+        onPressed: () => showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime.now().subtract(
+            Duration(
+              days: 365,
             ),
           ),
-        ),
-        RaisedButton(
-          color: Theme.of(context).primaryColorLight,
-          child: Text('Pick Date'),
-          onPressed: () => showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime.now().subtract(
-              Duration(
-                days: 365,
-              ),
+          lastDate: DateTime.now().add(
+            Duration(
+              days: 365,
             ),
-            lastDate: DateTime.now().add(
-              Duration(
-                days: 365,
-              ),
-            ),
-          ).then(
-            (value) => _setDate(value),
           ),
+        ).then(
+          (value) => _setDate(value),
         ),
-      ],
+      ),
     );
   }
 }
@@ -254,11 +263,52 @@ class GoalAmountField extends StatelessWidget {
       decoration: InputDecoration(
         labelStyle: new TextStyle(
             color: Theme.of(context).primaryColor, fontSize: 16.0),
-        labelText: "Amount",
+        labelText: "Target Amount",
       ),
       keyboardType: TextInputType
           .number, // May want to use Currency_Input_Formatter like income.dart
       onSaved: (val) => _goal.goalAmount = double.parse(val),
+      validator: (val) {
+        if (val.isEmpty) return 'Please enter an amount.';
+        if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
+          // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
+          if (double.parse(double.parse(val).toStringAsFixed(2)) <=
+              0.00) // seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
+            return 'Please enter an amount greater than 0.';
+          if (double.parse(double.parse(val).toStringAsFixed(2)) > 999999999.99)
+            return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
+          return null;
+        } else {
+          return 'Please enter a number.';
+        }
+      },
+    );
+  }
+}
+
+// Accepts input from keyboard and validates as Goal Amount
+class AmountSavedField extends StatelessWidget {
+  const AmountSavedField({
+    Key key,
+    @required Goal goal,
+  })  : _goal = goal,
+        super(key: key);
+
+  final Goal _goal;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      initialValue:
+          _goal.amountSaved == null ? '' : _goal.amountSaved.toString(),
+      decoration: InputDecoration(
+        labelStyle: new TextStyle(
+            color: Theme.of(context).primaryColor, fontSize: 16.0),
+        labelText: "Saved Already",
+      ),
+      keyboardType: TextInputType
+          .number, // May want to use Currency_Input_Formatter like income.dart
+      onSaved: (val) => _goal.amountSaved = double.parse(val),
       validator: (val) {
         if (val.isEmpty) return 'Please enter an amount.';
         if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {

@@ -8,7 +8,7 @@ import '../models/goals.dart';
 import '../widgets/goals_form.dart';
 import '../screens/add_goal_money_screen.dart';
 
-// List Tile that displayes each individual goal
+// List Tile that displays each individual goal
 class GoalsListTile extends StatefulWidget {
   final Goal goal;
   @override
@@ -31,7 +31,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (_) => AddGoalMoneyScreen(),
+      builder: (_) => AddGoalMoneyScreen(goal: goal),
     );
   }
 
@@ -170,6 +170,8 @@ class _GoalsListTileState extends State<GoalsListTile> {
                     ),
                   ),
                 ),
+                // TODO May want to change this to a gesture detector with child container with child icon.
+                // TODO This enables you to click on the entire container and not just the icon.
                 child: IconButton(
                   color: Theme.of(context).primaryColor,
                   icon: Icon(Icons.add),
