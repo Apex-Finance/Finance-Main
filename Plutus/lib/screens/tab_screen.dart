@@ -3,6 +3,7 @@ import 'package:Plutus/models/categories.dart';
 import 'package:Plutus/models/budget.dart';
 import 'package:Plutus/widgets/goals_form.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import './budget_screen.dart';
 import './transaction_screen.dart';
@@ -21,7 +22,6 @@ class TabScreen extends StatefulWidget {
 }
 
 class _TabScreenState extends State<TabScreen> {
-  final GlobalKey<TappableFabCircularMenuState> fabKey = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -35,47 +35,6 @@ class _TabScreenState extends State<TabScreen> {
   int _selectedPageIndex = 0;
   bool _isOpen = false;
 
-  Widget _openDrawer() {
-    return Drawer(
-      child: ListView(
-        children: [
-          // settings
-          ListTile(
-            onTap: () {
-              Navigator.of(context).pushNamed('/settings');
-            },
-            leading: Icon(
-              Icons.settings,
-              size: 30,
-              color: Theme.of(context).primaryColor,
-            ),
-            title: Text(
-              'Settings',
-              style: TextStyle(
-                  color: Theme.of(context).primaryColor, fontSize: 18),
-            ),
-          ),
-          // acount
-          ListTile(
-            onTap: () {
-              Navigator.of(context).pushNamed('/account');
-            },
-            leading: Icon(
-              Icons.account_circle,
-              size: 30,
-              color: Theme.of(context).primaryColor,
-            ),
-            title: Text(
-              'Account',
-              style: TextStyle(
-                  color: Theme.of(context).primaryColor, fontSize: 18),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   // Select a screen from the list of screens; manages tabs
   void _selectPage(int index) {
     if (index == 2)
@@ -85,17 +44,17 @@ class _TabScreenState extends State<TabScreen> {
     });
   }
 
-  // Pull up budget form when FAB is tapped; add the returned budget to the list of budgets
+  // Pull up budget form when FAB is tapped; add the returned budget to the list of budgets (?)
   void _enterBudget(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (_) => IncomeScreen(),
-    ).then(
-      (newBudget) {
-        if (newBudget == null) return;
-      },
-    );
+      builder: (_) => IncomeScreen(budget: new Budget.empty()),
+    ).then((newBudget) {
+      if (newBudget == null) return;
+      Provider.of<BudgetDataProvider>(context, listen: false)
+          .addBudget(newBudget, context); //TODO check if needed
+    });
   }
 
   // Pull up transaction form when FAB is tapped; add the returned transaction to the list of transactions
@@ -107,7 +66,6 @@ class _TabScreenState extends State<TabScreen> {
     ).then((newTransaction) {
       if (newTransaction == null) return;
     });
-    fabKey.currentState.close();
   }
 
   void _enterGoal(BuildContext context) {
@@ -115,10 +73,7 @@ class _TabScreenState extends State<TabScreen> {
       isScrollControlled: true,
       context: context,
       builder: (_) => GoalsForm(),
-    ).then((newGoal) {
-      if (newGoal == null) return;
-    });
-    fabKey.currentState.close();
+    );
   }
 
   @override
@@ -133,15 +88,22 @@ class _TabScreenState extends State<TabScreen> {
     ];
 
     return Scaffold(
-      appBar: AppBar(),
-      drawer: _isOpen
-          // TODO if _isOpen == true, then it darkens the screen briefly
-          // Like it's opening an invisible Drawer
-          ? IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: null,
-            )
-          : _openDrawer(),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.settings),
+          onPressed: () {
+            Navigator.of(context).pushNamed('/settings');
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.account_circle),
+            onPressed: () {
+              Navigator.of(context).pushNamed('/account');
+            },
+          ),
+        ],
+      ),
       floatingActionButton: TappableFabCircularMenu(
         alignment: Alignment.bottomCenter,
         animationDuration: Duration(milliseconds: 500),
@@ -185,7 +147,6 @@ class _TabScreenState extends State<TabScreen> {
             _isOpen = !_isOpen;
           });
         },
-        key: fabKey,
         ringDiameter: 300,
         fabMargin: EdgeInsets.fromLTRB(0, 0, 40, 30),
         fabOpenIcon: Icon(Icons.add),

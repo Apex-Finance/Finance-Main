@@ -18,6 +18,18 @@ class Transaction {
   double _amount;
   DateTime _date;
 
+  Transaction.empty();
+
+  Transaction(
+      String id, String title, DateTime date, String categoryId, this._amount,
+      {categoryTitle = ""}) {
+    _id = id;
+    _title = title;
+    _date = date;
+    _categoryId = categoryId;
+    _categoryTitle = categoryTitle;
+  }
+
   void setID(String idValue) {
     _id = idValue;
   }
@@ -85,15 +97,13 @@ class Transactions with ChangeNotifier {
 
   Transaction initializeTransaction(DocumentSnapshot doc) {
     // Initialize a transaction with document data
-    Transaction transaction = Transaction();
-
-    transaction.setID(doc.id);
-    transaction.setTitle(doc.data()['title']);
-    transaction.setDate(doc.data()['date'].toDate());
-    transaction.setCategoryId(doc.data()['category id']);
-    transaction.setAmount(doc.data()['amount']);
-
-    return transaction;
+    return new Transaction(
+        doc.id,
+        doc.data()['title'],
+        doc.data()['date'].toDate(),
+        doc.data()['category id'],
+        doc.data()['amount'],
+        categoryTitle: doc.data()['category title']);
   }
 
   void addTransaction(Transaction transaction, BuildContext context) async {
@@ -158,7 +168,7 @@ class Transactions with ChangeNotifier {
   }
 
   // Take all transactions, filter out only the ones from the selected month, and reverse the order from newest to oldest
-  List<Transaction> get monthlyTransactions {
+  List<Transaction> getMonthlyTransactions() {
     var unsorted = _transactions
         .where((transaction) =>
             transaction.getDate().month == monthChanger.selectedMonth &&
@@ -168,12 +178,35 @@ class Transactions with ChangeNotifier {
     return unsorted;
   }
 
-  // Sum the expenses for the month
-  double get monthlyExpenses {
-    var sum = 0.00;
-    for (var transaction in monthlyTransactions) {
-      sum += transaction.getAmount();
-    }
-    return sum;
+  Stream<QuerySnapshot> getCategoryTransactions(
+      String categoryID, DateTime budgetDate, BuildContext context) {
+    var snapshot = FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('Transactions')
+        .where('category id', isEqualTo: categoryID)
+        .where(
+          'date',
+          isGreaterThanOrEqualTo: DateTime(
+            budgetDate.year,
+            budgetDate.month,
+            1,
+          ),
+          isLessThan: DateTime(
+            budgetDate.year,
+            budgetDate.month + 1,
+            1,
+          ),
+        )
+        .snapshots();
+    return snapshot;
   }
+  // Sum the expenses for the month
+  // double get monthlyExpenses {
+  //   var sum = 0.00;
+  //   for (var transaction in monthlyTransactions) {
+  //     sum += transaction.getAmount();
+  //   }
+  //   return sum;
+  // }
 }

@@ -1,3 +1,4 @@
+import 'package:Plutus/screens/individual_goal_screen.dart';
 import 'package:Plutus/screens/new_budget_screens/income_screen.dart';
 import 'package:Plutus/models/month_changer.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ import './models/transaction.dart';
 import './models/budget.dart';
 import './providers/auth.dart';
 import 'models/goals.dart';
+import './screens/individual_goal_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,9 +33,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => GoalDataProvider()),
         ChangeNotifierProvider(
-          create: (context) => Budget(),
+          create: (context) => GoalDataProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => BudgetDataProvider(),
         ),
         ChangeNotifierProvider(
           create: (_) => Auth(),
@@ -50,12 +54,12 @@ class MyApp extends StatelessWidget {
                       : previousTransactions.transactions),
           create: null,
         ),
-        ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
-          update: (buildContext, monthChanger, transactions, previousBudgets) =>
-              Budgets(monthChanger, transactions,
-                  previousBudgets == null ? [] : previousBudgets.budgets),
-          create: null,
-        ),
+        // ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
+        //   update: (buildContext, monthChanger, transactions, previousBudgets) =>
+        //       Budgets(monthChanger, transactions,
+        //           previousBudgets == null ? [] : previousBudgets.budgets),
+        //   create: null,
+        // ),
       ],
       child: Builder(
         builder: (context) => MaterialApp(
@@ -68,7 +72,7 @@ class MyApp extends StatelessWidget {
             canvasColor: Colors.black,
             textTheme: GoogleFonts.latoTextTheme(
               TextTheme(
-                bodyText1: TextStyle(color: Colors.amber),
+                bodyText1: TextStyle(color: Colors.amber, fontSize: 18),
                 bodyText2: TextStyle(color: Colors.amber, fontSize: 12),
                 subtitle1: TextStyle(color: Colors.amber, fontSize: 17),
                 headline1: TextStyle(color: Colors.amber, fontSize: 25),
