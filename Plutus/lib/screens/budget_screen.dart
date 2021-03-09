@@ -69,8 +69,6 @@ class _BudgetScreenState extends State<BudgetScreen> {
     var monthlyTransactions = Provider.of<Transactions>(context);
     var transactionDataProvider =
         Provider.of<Transactions>(context, listen: false);
-    budgetDataProvider.getBudget(
-        context, DateTime(monthData.selectedYear, monthData.selectedMonth));
 
     return Column(
       children: [
@@ -116,6 +114,8 @@ class _BudgetScreenState extends State<BudgetScreen> {
               } else {
                 var budget = budgetDataProvider
                     .initializeBudget(budgetSnapshot.data.docs.first);
+
+                // Get the transactions for the budget
                 var budgetTransactions = FirebaseFirestore.instance
                     .collection('users')
                     .doc(Provider.of<Auth>(context, listen: false).getUserId())
@@ -134,21 +134,19 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       ),
                     )
                     .snapshots();
-                var budgetCategories = FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(Provider.of<Auth>(context, listen: false).getUserId())
-                    .collection('budgets')
-                    .doc(budget.getID())
-                    .collection('categories')
-                    .snapshots();
+
+                // Get the categories selected by the user for this budget
+                var budgetCategories = BudgetDataProvider()
+                    .getBudgetCategories(context, budget.getID());
+
                 return Container(
                   margin: EdgeInsets.only(top: 40),
                   child: StreamBuilder<QuerySnapshot>(
                     stream: budgetTransactions,
                     builder: (context, transactionSnapshots) {
                       var transactionExpenses = transactionDataProvider
-                          .getTransactionExpenses(transactionSnapshots);
-                      budget.setRemainingAmount(transactionExpenses);
+                          .getTransactionExpenses(transactionSnapshots.data);
+                      budget.calculateRemainingAmount(transactionExpenses);
                       return Card(
                         color: Colors.grey[900],
                         shape: RoundedRectangleBorder(

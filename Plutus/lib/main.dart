@@ -1,3 +1,4 @@
+import 'package:Plutus/models/category.dart';
 import 'package:Plutus/screens/individual_goal_screen.dart';
 import 'package:Plutus/screens/new_budget_screens/income_screen.dart';
 import 'package:Plutus/models/month_changer.dart';
@@ -40,10 +41,16 @@ class MyApp extends StatelessWidget {
           create: (context) => BudgetDataProvider(),
         ),
         ChangeNotifierProvider(
+          create: (context) => CategoryDataProvider(),
+        ),
+        ChangeNotifierProvider(
           create: (_) => Auth(),
         ),
         ChangeNotifierProvider(
           create: (context) => MonthChanger(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => Budget.empty(),
         ),
         ChangeNotifierProxyProvider<MonthChanger, Transactions>(
           update: (buildContext, monthChanger, previousTransactions) =>

@@ -137,7 +137,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => FirstBudgetScreen(
-                                          budgetID: widget.budget.getID()),
+                                          budget: widget.budget),
                                     ));
                               }
                             },

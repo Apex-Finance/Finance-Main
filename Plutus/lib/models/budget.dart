@@ -9,12 +9,12 @@ import './month_changer.dart';
 import '../providers/auth.dart';
 import '../models/category.dart' as Category;
 
-class Budget {
+class Budget with ChangeNotifier {
   String _id;
   String _title;
   double _amount;
   DateTime _date;
-  double _remainingMonthlyAmount;
+  double _remainingMonthlyAmount = 0;
 
   Budget.empty();
 
@@ -36,14 +36,17 @@ class Budget {
 
   void setAmount(double amountValue) {
     _amount = amountValue;
+    _remainingMonthlyAmount = amountValue;
   }
 
   double getAmount() {
     return _amount;
   }
 
-  void setRemainingAmount(double budgetExpenses) {
-    _remainingMonthlyAmount = getAmount() - budgetExpenses;
+  void calculateRemainingAmount(double budgetExpenses) {
+    print(_amount);
+    _remainingMonthlyAmount -= budgetExpenses;
+    notifyListeners();
   }
 
   double getRemainingAmount() {
@@ -118,14 +121,15 @@ class BudgetDataProvider with ChangeNotifier {
     return budgetRef;
   }
 
-  void getBudget(BuildContext context, DateTime date) async {
-    var budgetRef = await FirebaseFirestore.instance
+  Stream<QuerySnapshot> getBudgetCategories(
+      BuildContext context, String budgetID) {
+    return FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('budget')
-        .where('date', isGreaterThanOrEqualTo: DateTime(date.year, date.month))
-        .get();
-    print("budgets found: ${budgetRef.docs.length}");
+        .collection('budgets')
+        .doc(budgetID)
+        .collection('categories')
+        .snapshots();
   }
 
   void addBudget(Budget budget, BuildContext context) async {
