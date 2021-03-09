@@ -66,6 +66,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                         );
                       }
                       widget.category.setAmount(double.parse(_controller.text));
+                      widget.categoryHandler(double.tryParse(_controller.text));
                     } // validates for numbers < 0
                     else if (_controller.text.isNotEmpty) {
                       Scaffold.of(context).showSnackBar(
@@ -105,8 +106,8 @@ class _CategoryListTileState extends State<CategoryListTile> {
                   keyboardType: TextInputType.number,
                   controller: _controller,
                   onChanged: (_) {
-                    print('hello');
-                    widget.categoryHandler(double.tryParse(_controller.text));
+                    // print('hello');
+                    // widget.categoryHandler(double.tryParse(_controller.text));
                     // widget.categoryHandler(
                     //     widget.category, double.tryParse(_controller.text));
                   },
