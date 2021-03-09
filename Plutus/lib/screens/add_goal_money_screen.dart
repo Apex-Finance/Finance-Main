@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
@@ -14,6 +15,8 @@ class AddGoalMoneyScreen extends StatefulWidget {
 
 class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
   final _formKey = GlobalKey<FormState>();
+  double amountSaved = 0.0;
+
 // TODO Set initstate
 
   void _submitAddMoneyForm(BuildContext context) {
@@ -44,54 +47,24 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
             child: Form(
               key: _formKey,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(
-                    'Add money to your goal',
+                  AutoSizeText(
+                    'Add money to ${widget.goal.getTitle()}',
                     style: Theme.of(context).textTheme.headline1,
+                    overflow: TextOverflow.visible,
+                    textAlign: TextAlign.center,
                   ),
-                  Text(
-                    '\$ ${widget.goal.getAmount()}',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      RaisedButton(
-                        onPressed: () {},
-                        color: Theme.of(context).primaryColorLight,
-                        child: Text('+ \$10'),
-                      ),
-                      RaisedButton(
-                        onPressed: () {},
-                        color: Theme.of(context).primaryColorLight,
-                        child: Text('+ \$25'),
-                      ),
-                      RaisedButton(
-                        onPressed: () {},
-                        color: Theme.of(context).primaryColorLight,
-                        child: Text('+ \$100'),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Flexible(
-                        flex: 2,
-                        child: Text(
-                          'Custom Amount: ',
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                      ),
-                      Flexible(
-                        flex: 2,
-                        child: GoalAmountField(
-                          goal: widget.goal,
-                        ),
-                      ),
-                    ],
+                  // Text(
+                  //   '\$ ${amountSaved.toString()}',
+                  //   style: Theme.of(context).textTheme.headline1,
+                  // ),
+                  GoalAmountField(
+                    goal: widget.goal,
+                    amountSaved: amountSaved,
                   ),
                   Container(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
                     alignment: Alignment.bottomRight,
                     child: FloatingActionButton.extended(
                       backgroundColor: Theme.of(context).primaryColorLight,
@@ -111,32 +84,35 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
 
 // TODO Comment
 class GoalAmountField extends StatelessWidget {
-  const GoalAmountField({
+  GoalAmountField({
     Key key,
     @required Goal goal,
+    @required double amountSaved,
   })  : _goal = goal,
         super(key: key);
 
   final Goal _goal;
+  double amountSaved;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue:
-          _goal.amountSaved == null ? '' : '\$ ${_goal.amountSaved.toString()}',
+      initialValue: '\$ ${0.00}',
       decoration: InputDecoration(
         labelStyle: new TextStyle(
             color: Theme.of(context).primaryColor, fontSize: 16.0),
       ),
       keyboardType: TextInputType.number,
       onSaved: (val) {
-        _goal.amountSaved = _goal.amountSaved + double.parse(val);
+        amountSaved = double.parse(val);
+        _goal.amountSaved += amountSaved;
       },
       inputFormatters: [
         CurrencyTextInputFormatter(),
       ],
       // REGEX from income.dart
       validator: (val) {
+        // TODO add validation
         if (val.contains(new RegExp(r'^-?\d{0,3}(,\d{3}){0,3}(.\d+)?$'))) {
           // ^-?\d+(\.\d{1,2})?$
           // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'

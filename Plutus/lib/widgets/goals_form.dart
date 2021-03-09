@@ -108,10 +108,6 @@ class _GoalsFormState extends State<GoalsForm> {
                   GoalAmountField(
                     goal: _goal,
                   ),
-                  // Amount Saved Text Field
-                  AmountSavedField(
-                    goal: _goal,
-                  ),
                   Row(
                     children: [
                       buildImageSelector(context),
@@ -268,47 +264,6 @@ class GoalAmountField extends StatelessWidget {
       keyboardType: TextInputType
           .number, // May want to use Currency_Input_Formatter like income.dart
       onSaved: (val) => _goal.goalAmount = double.parse(val),
-      validator: (val) {
-        if (val.isEmpty) return 'Please enter an amount.';
-        if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
-          // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
-          if (double.parse(double.parse(val).toStringAsFixed(2)) <=
-              0.00) // seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
-            return 'Please enter an amount greater than 0.';
-          if (double.parse(double.parse(val).toStringAsFixed(2)) > 999999999.99)
-            return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
-          return null;
-        } else {
-          return 'Please enter a number.';
-        }
-      },
-    );
-  }
-}
-
-// Accepts input from keyboard and validates as Goal Amount
-class AmountSavedField extends StatelessWidget {
-  const AmountSavedField({
-    Key key,
-    @required Goal goal,
-  })  : _goal = goal,
-        super(key: key);
-
-  final Goal _goal;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      initialValue:
-          _goal.amountSaved == null ? '' : _goal.amountSaved.toString(),
-      decoration: InputDecoration(
-        labelStyle: new TextStyle(
-            color: Theme.of(context).primaryColor, fontSize: 16.0),
-        labelText: "Saved Already",
-      ),
-      keyboardType: TextInputType
-          .number, // May want to use Currency_Input_Formatter like income.dart
-      onSaved: (val) => _goal.amountSaved = double.parse(val),
       validator: (val) {
         if (val.isEmpty) return 'Please enter an amount.';
         if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {

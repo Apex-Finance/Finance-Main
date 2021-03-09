@@ -100,8 +100,9 @@ class GoalDataProvider with ChangeNotifier {
         .set(
       {
         'title': goal.getTitle(),
-        'amount': goal.getAmount(),
+        'amountSaved': goal.getAmount(),
         'goalAmount': goal.getGoalAmount(),
+        'dateOfGoal': goal.getDate(),
       },
       SetOptions(merge: true),
     );
