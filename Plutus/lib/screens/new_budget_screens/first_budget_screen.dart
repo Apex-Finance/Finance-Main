@@ -150,7 +150,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             itemCount: categoryList.length,
                             itemBuilder: (context, index) => CategoryListTile(
                               categoryList[index],
-                              widget.budget.calculateRemainingAmount,
+                              setActiveCategory,
                               catAmountFocusNodes,
                               index,
                               categoryList.length,
