@@ -84,7 +84,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
             stream: budgetDataProvider.getmonthlyBudget(context,
                 DateTime(monthData.selectedYear, monthData.selectedMonth)),
             builder: (context, budgetSnapshot) {
-              if (budgetSnapshot.data.docs.isEmpty) {
+              if (!budgetSnapshot.hasData || budgetSnapshot.data.docs.isEmpty) {
                 return Container(
                   margin: EdgeInsets.only(top: 40),
                   child: Center(

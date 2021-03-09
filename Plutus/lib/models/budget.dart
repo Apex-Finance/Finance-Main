@@ -9,7 +9,7 @@ import './month_changer.dart';
 import '../providers/auth.dart';
 import '../models/category.dart' as Category;
 
-class Budget with ChangeNotifier {
+class Budget {
   String _id;
   String _title;
   double _amount;
@@ -17,6 +17,8 @@ class Budget with ChangeNotifier {
   double _remainingMonthlyAmount = 0;
 
   Budget.empty();
+
+  Budget();
 
   void setID(String idValue) {
     _id = idValue;
@@ -44,9 +46,7 @@ class Budget with ChangeNotifier {
   }
 
   void calculateRemainingAmount(double budgetExpenses) {
-    print(_amount);
     _remainingMonthlyAmount -= budgetExpenses;
-    notifyListeners();
   }
 
   double getRemainingAmount() {

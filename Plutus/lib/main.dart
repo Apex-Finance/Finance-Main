@@ -49,9 +49,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => MonthChanger(),
         ),
-        ChangeNotifierProvider(
-          create: (context) => Budget.empty(),
-        ),
         ChangeNotifierProxyProvider<MonthChanger, Transactions>(
           update: (buildContext, monthChanger, previousTransactions) =>
               Transactions(
