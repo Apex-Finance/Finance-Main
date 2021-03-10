@@ -144,10 +144,10 @@ class Transactions with ChangeNotifier {
     }
   }
 
-  double getTransactionExpenses(AsyncSnapshot<QuerySnapshot> snapshot) {
+  double getTransactionExpenses(QuerySnapshot snapshot) {
     double totalExpenses = 0;
 
-    snapshot.data.docs.forEach((doc) {
+    snapshot.docs.forEach((doc) {
       totalExpenses += doc.data()['amount'].toDouble();
     });
 

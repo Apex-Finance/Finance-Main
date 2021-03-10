@@ -14,8 +14,8 @@ import '../../models/category.dart' as Category;
 // Form to budget out monthly income into categories
 class FirstBudgetScreen extends StatefulWidget {
   static const routeName = '/first_budget';
-  String budgetID;
-  FirstBudgetScreen({this.budgetID});
+  Budget budget;
+  FirstBudgetScreen({this.budget});
   @override
   _FirstBudgetScreenState createState() => _FirstBudgetScreenState();
 }
@@ -40,8 +40,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
     var category = Category.Category();
     var categoryList = new List<Category.Category>();
     double categoryExpenses;
-    final Budget budget = Budget
-        .empty(); // budget contains the amounts; rest are null on first run of build
+    // final Budget budget = Budget
+    //     .empty(); // budget contains the amounts; rest are null on first run of build
 
     return Scaffold(
       appBar: AppBar(
@@ -76,7 +76,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             style: TextStyle(color: Colors.amber, fontSize: 15),
                           ),
                           AutoSizeText(
-                            '\$${budget.getAmount()}', // .toStringAsFixed(2)
+                            '\$${widget.budget.getAmount()}', // .toStringAsFixed(2)
                             maxLines: 1,
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor,
@@ -93,7 +93,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             style: TextStyle(color: Colors.amber, fontSize: 15),
                           ),
                           AutoSizeText(
-                            '\$${budget.getRemainingAmount().toStringAsFixed(2)}',
+                            '\$${widget.budget.getRemainingAmount().toStringAsFixed(2)}',
                             maxLines: 1,
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor,
@@ -108,24 +108,16 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                 Expanded(
                   child: StreamBuilder<QuerySnapshot>(
                       stream: categoryDataProvider.getCategories(context),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                      builder: (context, snapshot) {
                         snapshot.data.docs.forEach((doc) {
                           categoryList.add(
                               categoryDataProvider.initializeCategory(doc));
                         });
-                        if (widget.budgetID != null) {
+                        if (widget.budget.getID() != null) {
                           return StreamBuilder<QuerySnapshot>(
-                            stream: FirebaseFirestore.instance
-                                .collection('users')
-                                .doc(Provider.of<Auth>(context, listen: false)
-                                    .getUserId())
-                                .collection('budgets')
-                                .doc(widget.budgetID)
-                                .collection('categories')
-                                .snapshots(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                            stream: BudgetDataProvider().getBudgetCategories(
+                                context, widget.budget.getID()),
+                            builder: (context, snapshot) {
                               if (snapshot.data.docs.isNotEmpty) {
                                 snapshot.data.docs.forEach((doc) {
                                   categoryList.forEach((category) {
@@ -178,10 +170,11 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                         Provider.of<Category.CategoryDataProvider>(context,
                                 listen:
                                     false) //TODO ALEX no setcategoryamount() for budget yet
-                            .uploadCategory(widget.budgetID, category, context);
+                            .uploadCategory(
+                                widget.budget.getID(), category, context);
                         setState(
                           () {
-                            if (budget.getRemainingAmount() < -0.001)
+                            if (widget.budget.getRemainingAmount() < -0.001)
                               Scaffold.of(context).showSnackBar(
                                 SnackBar(
                                   behavior: SnackBarBehavior.floating,
@@ -195,7 +188,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                   ),
                                 ),
                               );
-                            else if (budget.getRemainingAmount() > 0.001) {
+                            else if (widget.budget.getRemainingAmount() >
+                                0.001) {
                               Scaffold.of(context).showSnackBar(
                                 SnackBar(
                                   behavior: SnackBarBehavior.floating,

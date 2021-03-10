@@ -40,7 +40,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
         stream: categoryTransactions,
         builder: (context, snapshot) {
           var transactionExpenses =
-              transactionDataProvider.getTransactionExpenses(snapshot);
+              transactionDataProvider.getTransactionExpenses(snapshot.data);
           widget.category.calculateRemainingAmount(transactionExpenses);
           return Padding(
             padding: const EdgeInsets.all(8.0),
