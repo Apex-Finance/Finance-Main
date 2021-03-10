@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:catcher/catcher.dart';
 
 import './screens/tab_screen.dart';
 import './screens/intro_screen.dart';
@@ -24,6 +25,20 @@ import 'models/goals.dart';
 import './screens/individual_goal_screen.dart';
 
 void main() async {
+  // Debug configuration with dialog report mode and console handler. It will show dialog and once user accepts it, error will be shown   /// in console.
+  CatcherOptions debugOptions =
+      CatcherOptions(DialogReportMode(), [ConsoleHandler()]);
+
+  // Release configuration. Same as above, but once user accepts dialog, user will be prompted to send email with crash to support.
+  CatcherOptions releaseOptions = CatcherOptions(DialogReportMode(), [
+    EmailManualHandler(["support@email.com"])
+  ]);
+
+  Catcher(
+      rootWidget: MyApp(),
+      debugConfig: debugOptions,
+      releaseConfig: releaseOptions);
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
@@ -66,6 +81,7 @@ class MyApp extends StatelessWidget {
         // ),
       ],
       child: Builder(
+        navigatorKey: Catcher.navigatorKey,
         builder: (context) => MaterialApp(
           title: 'Plutus',
           theme: ThemeData(
