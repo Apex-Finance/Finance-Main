@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math.dart' as vector;
 
+// Custom Fab_Circular_Menu widget for the sake of adding a BackdropFilter
 typedef DisplayChange = void Function(bool isOpen);
 
 class TappableFabCircularMenu extends StatefulWidget {
