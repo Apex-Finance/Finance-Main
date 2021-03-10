@@ -64,7 +64,7 @@ class Category {
   }
 }
 
-class CategoryDataProvider {
+class CategoryDataProvider with ChangeNotifier {
   Category initializeCategory(DocumentSnapshot doc) {
     Category category = Category();
 
@@ -111,6 +111,7 @@ class CategoryDataProvider {
         .doc(category.getID())
         .delete();
   }
+
   // get the list of transaction from the db matching the category
   Stream<QuerySnapshot> getCategoryTransactions(
       BuildContext context, String categoryID) {
