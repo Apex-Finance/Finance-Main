@@ -1,10 +1,9 @@
-import 'package:Plutus/models/category.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:Plutus/models/transaction.dart';
 
 void main() {
-  Transaction cat1 = Transaction();
-  Transaction cat2 = Transaction();
+  Transaction cat1 = Transaction.empty();
+  Transaction cat2 = Transaction.empty();
 
   cat1.setCategoryId('HoMe');
   cat2.setCategoryId('BiLLs aNd UtIlities');

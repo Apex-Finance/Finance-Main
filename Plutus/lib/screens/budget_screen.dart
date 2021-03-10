@@ -1,4 +1,6 @@
+import 'package:Plutus/models/category.dart';
 import 'package:Plutus/models/transaction.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -6,6 +8,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import '../models/budget.dart';
 import 'new_budget_screens/income_screen.dart';
 import '../widgets/budget_list_tile.dart';
+import '../providers/auth.dart';
 
 import 'package:provider/provider.dart';
 import '../models/month_changer.dart';
@@ -18,14 +21,14 @@ class BudgetScreen extends StatefulWidget {
 }
 
 class _BudgetScreenState extends State<BudgetScreen> {
-  void _enterBudget(BuildContext context) {
+  void _enterBudget(BuildContext context, Budget budget) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (_) => IncomeScreen(),
+      builder: (_) => IncomeScreen(budget: budget),
     ).then((newBudget) {
       if (newBudget == null) return;
-      Provider.of<Budgets>(context, listen: false)
+      Provider.of<BudgetDataProvider>(context, listen: false)
           .addBudget(newBudget, context); //TODO check if needed
     });
   }
@@ -61,9 +64,11 @@ class _BudgetScreenState extends State<BudgetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final monthlyBudget = Provider.of<Budgets>(context).monthlyBudget;
+    final budgetDataProvider = Provider.of<BudgetDataProvider>(context);
     var monthData = Provider.of<MonthChanger>(context);
     var monthlyTransactions = Provider.of<Transactions>(context);
+    var transactionDataProvider =
+        Provider.of<Transactions>(context, listen: false);
 
     return Column(
       children: [
@@ -75,10 +80,14 @@ class _BudgetScreenState extends State<BudgetScreen> {
           ),
         ),
         Expanded(
-          child: Container(
-            margin: EdgeInsets.only(top: 40),
-            child: monthlyBudget.id == null
-                ? Center(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: budgetDataProvider.getmonthlyBudget(context,
+                DateTime(monthData.selectedYear, monthData.selectedMonth)),
+            builder: (context, budgetSnapshot) {
+              if (!budgetSnapshot.hasData || budgetSnapshot.data.docs.isEmpty) {
+                return Container(
+                  margin: EdgeInsets.only(top: 40),
+                  child: Center(
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: 250),
                       child: Column(
@@ -94,133 +103,190 @@ class _BudgetScreenState extends State<BudgetScreen> {
                             child: Text('Add Budget'),
                             color: Theme.of(context).primaryColor,
                             textColor: Theme.of(context).canvasColor,
-                            onPressed: () => _enterBudget(context),
+                            onPressed: () =>
+                                _enterBudget(context, new Budget.empty()),
                           ),
                         ],
                       ),
                     ),
-                  )
-                : Card(
-                    color: Colors.grey[900],
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    )),
-                    child: Column(children: [
-                      ClipRRect(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(20)),
-                        child: ListTile(
-                          tileColor: Colors.grey[850],
-                          title: Column(
-                            children: [
-                              Text(
-                                'Total Budget',
-                                style: TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Remaining',
-                                        style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            fontSize: 18),
-                                      ),
-                                      AutoSizeText(
-                                        '\$${monthlyBudget.amount < monthlyTransactions.monthlyExpenses ? 0.0 : monthlyBudget.amount - monthlyTransactions.monthlyExpenses}',
-                                        maxLines: 1,
-                                        style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            fontSize: 18),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Available per day',
-                                        style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            fontSize: 18),
-                                      ),
-                                      AutoSizeText(
-                                        '\$${_getRemainingAmountPerDay(monthData, monthlyBudget.remainingMonthlyAmount).toStringAsFixed(2)}',
-                                        maxLines: 1,
-                                        style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            fontSize: 18),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  new LinearPercentIndicator(
-                                    alignment: MainAxisAlignment.center,
-                                    width: 310.0,
-                                    lineHeight: 14.0,
-                                    percent: monthlyTransactions
-                                                .monthlyExpenses >
-                                            monthlyBudget.amount
-                                        ? 1
-                                        : monthlyTransactions.monthlyExpenses /
-                                            monthlyBudget.amount,
-                                    backgroundColor: Colors.black,
-                                    progressColor: Colors.amber,
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  AutoSizeText(
-                                    '\$${monthlyTransactions.monthlyExpenses} of \$${monthlyBudget.amount}',
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontSize: 18),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Divider(height: 10),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: monthlyBudget
-                              .budgetedAndUnbudgetedCategories.length,
-                          itemBuilder: (context, index) => BudgetListTile(
-                              monthlyBudget
-                                  .budgetedAndUnbudgetedCategories[index]),
-                        ),
-                      ),
-                    ]),
                   ),
+                );
+              } else {
+                var budget = budgetDataProvider
+                    .initializeBudget(budgetSnapshot.data.docs.first);
+
+                // Get the transactions for the budget
+                var budgetTransactions = FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(Provider.of<Auth>(context, listen: false).getUserId())
+                    .collection('Transactions')
+                    .where(
+                      'date',
+                      isGreaterThanOrEqualTo: DateTime(
+                        budget.getDate().year,
+                        budget.getDate().month,
+                        1,
+                      ),
+                      isLessThan: DateTime(
+                        budget.getDate().year,
+                        budget.getDate().month + 1,
+                        1,
+                      ),
+                    )
+                    .snapshots();
+
+                // Get the categories selected by the user for this budget
+                var budgetCategories = BudgetDataProvider()
+                    .getBudgetCategories(context, budget.getID());
+
+                return Container(
+                  margin: EdgeInsets.only(top: 40),
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: budgetTransactions,
+                    builder: (context, transactionSnapshots) {
+                      var transactionExpenses = transactionDataProvider
+                          .getTransactionExpenses(transactionSnapshots.data);
+                      budget.calculateRemainingAmount(transactionExpenses);
+                      return Card(
+                        color: Colors.grey[900],
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        )),
+                        child: Column(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20)),
+                              child: ListTile(
+                                tileColor: Colors.grey[850],
+                                title: Column(
+                                  children: [
+                                    Text(
+                                      'Total Budget',
+                                      style: TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Theme.of(context).primaryColor),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Remaining',
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  fontSize: 18),
+                                            ),
+                                            AutoSizeText(
+                                              '\$${budget.getAmount() < transactionExpenses ? 0.0 : budget.getRemainingAmount()}',
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  fontSize: 18),
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Available per day',
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  fontSize: 18),
+                                            ),
+                                            AutoSizeText(
+                                              '\$${_getRemainingAmountPerDay(monthData, budget.getRemainingAmount()).toStringAsFixed(2)}',
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  fontSize: 18),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        new LinearPercentIndicator(
+                                          alignment: MainAxisAlignment.center,
+                                          width: 310.0,
+                                          lineHeight: 14.0,
+                                          percent: transactionExpenses >
+                                                  budget.getAmount()
+                                              ? 1
+                                              : transactionExpenses /
+                                                  budget.getAmount(),
+                                          backgroundColor: Colors.black,
+                                          progressColor: Colors.amber,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        AutoSizeText(
+                                          '\$$transactionExpenses of \$${budget.getAmount()}',
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 18),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Divider(height: 10),
+                            Expanded(
+                              child: StreamBuilder<QuerySnapshot>(
+                                  stream: budgetCategories,
+                                  builder: (context, categorySnapshot) {
+                                    return ListView.builder(
+                                        itemCount:
+                                            categorySnapshot.data.docs.length,
+                                        itemBuilder: (context, index) {
+                                          return BudgetListTile(
+                                              Provider.of<CategoryDataProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .initializeCategory(
+                                                      categorySnapshot
+                                                          .data.docs[index]));
+                                        });
+                                  }),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+            },
           ),
         ),
       ],

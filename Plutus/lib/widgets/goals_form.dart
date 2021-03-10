@@ -20,14 +20,9 @@ class GoalsForm extends StatefulWidget {
 class _GoalsFormState extends State<GoalsForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime _date = DateTime.now();
-  File _goalImage; // Image selected from the phone gallery
-  Goal _goal = Goal(
-    title: null,
-    amountSaved: null,
-    goalAmount: null,
-    dateOfGoal: null,
-  );
-
+  Goal _goal = Goal.empty();
+  File _goalImage; // Image selected from the phone galler
+  // TODO May need to change to update to DB
   void _setDate(DateTime value) {
     if (value == null) return; // if user cancels datepicker
     setState(() {
