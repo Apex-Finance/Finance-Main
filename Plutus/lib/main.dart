@@ -83,7 +83,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-          initialRoute: '/onboarding',
+          initialRoute: DashboardScreen.routeName,
           routes: {
             '/onboarding': (context) => OnBoardingPage(),
             DashboardScreen.routeName: (context) => DashboardScreen(),
