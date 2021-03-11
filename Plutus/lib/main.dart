@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:catcher/catcher.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import './screens/tab_screen.dart';
 import './screens/intro_screen.dart';
@@ -25,7 +26,7 @@ import 'models/goals.dart';
 import './screens/individual_goal_screen.dart';
 
 void main() async {
-  // Debug configuration with dialog report mode and console handler. It will show dialog and once user accepts it, error will be shown   /// in console.
+  // Debug configuration with dialog report mode and console handler. It will show dialog and once user accepts it, error will be shown in console.
   CatcherOptions debugOptions =
       CatcherOptions(DialogReportMode(), [ConsoleHandler()]);
 
@@ -38,6 +39,13 @@ void main() async {
       rootWidget: MyApp(),
       debugConfig: debugOptions,
       releaseConfig: releaseOptions);
+
+  // (Note: if you set Crashlytics.instance.enableInDevMode = true,
+  // you will get reports while in debug mode but if it’s set to false
+  // you will not get reports while in debug mode )
+  Crashlytics.instance.enableInDevMode = true;
+
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -81,8 +89,8 @@ class MyApp extends StatelessWidget {
         // ),
       ],
       child: Builder(
-        navigatorKey: Catcher.navigatorKey,
         builder: (context) => MaterialApp(
+          navigatorKey: Catcher.navigatorKey,
           title: 'Plutus',
           theme: ThemeData(
             primarySwatch: Colors.amber,
