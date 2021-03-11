@@ -83,7 +83,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-          initialRoute: TabScreen.routeName,
+          initialRoute: AuthScreen.routeName,
           routes: {
             '/onboarding': (context) => OnBoardingPage(),
             DashboardScreen.routeName: (context) => DashboardScreen(),

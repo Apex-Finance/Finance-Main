@@ -24,7 +24,7 @@ class GroupedBarChart extends StatelessWidget {
 
   factory GroupedBarChart.withSampleData() {
     return new GroupedBarChart(
-      _createSampleData(),
+      ChartDataProvider.getBarChartData(),
       // Disable animations for image tests.
       animate: false,
     );
@@ -57,46 +57,6 @@ class GroupedBarChart extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  /// Create series list with multiple series
-  static List<charts.Series<OrdinalSales, String>> _createSampleData() {
-    final transactionsReported = [
-      new OrdinalSales('January', 400),
-      new OrdinalSales('February', 700),
-      new OrdinalSales('March', 600),
-    ];
-
-    final budgetGiven = [
-      new OrdinalSales('January', 500),
-      new OrdinalSales('February', 600),
-      new OrdinalSales('March', 800),
-    ];
-
-    return [
-      new charts.Series<OrdinalSales, String>(
-        id: 'Transactions',
-        colorFn: (OrdinalSales sales, int index) =>
-            sales.sales <= budgetGiven[index].sales
-                ? charts.ColorUtil.fromDartColor(Colors.greenAccent)
-                : charts.ColorUtil.fromDartColor(Colors.redAccent),
-        domainFn: (OrdinalSales sales, _) => sales.year,
-        measureFn: (OrdinalSales sales, _) => sales.sales,
-        data: transactionsReported,
-        labelAccessorFn: (OrdinalSales sales, _) =>
-            'Total Transactions: \$${sales.sales}',
-      ),
-      new charts.Series<OrdinalSales, String>(
-        id: 'Budget',
-        colorFn: (_, __) => charts.ColorUtil.fromDartColor(Colors.blueAccent),
-        domainFn: (OrdinalSales sales, _) => sales.year,
-        measureFn: (OrdinalSales sales, _) => sales.sales,
-        data: budgetGiven,
-        // fillPatternFn: (OrdinalSales sales, _) =>
-        //     charts.FillPatternType.forwardHatch,
-        labelAccessorFn: (OrdinalSales sales, _) => 'Budget: \$${sales.sales}',
-      ),
-    ];
   }
 }
 
@@ -173,7 +133,7 @@ class NormalTimeChart extends StatelessWidget {
 
   factory NormalTimeChart.withSampleData() {
     return new NormalTimeChart(
-      _createSampleData(),
+      ChartDataProvider.getTimeData(),
       // Disable animations for image tests.
       animate: false,
     );
@@ -200,9 +160,50 @@ class NormalTimeChart extends StatelessWidget {
       ),
     );
   }
+}
+
+class ChartDataProvider with ChangeNotifier {
+  static List<charts.Series<OrdinalSales, String>> getBarChartData() {
+    final transactionsReported = [
+      new OrdinalSales('January', 400),
+      new OrdinalSales('February', 700),
+      new OrdinalSales('March', 600),
+    ];
+
+    final budgetGiven = [
+      new OrdinalSales('January', 500),
+      new OrdinalSales('February', 600),
+      new OrdinalSales('March', 800),
+    ];
+
+    return [
+      new charts.Series<OrdinalSales, String>(
+        id: 'Transactions',
+        colorFn: (OrdinalSales sales, int index) =>
+            sales.sales <= budgetGiven[index].sales
+                ? charts.ColorUtil.fromDartColor(Colors.greenAccent)
+                : charts.ColorUtil.fromDartColor(Colors.redAccent),
+        domainFn: (OrdinalSales sales, _) => sales.year,
+        measureFn: (OrdinalSales sales, _) => sales.sales,
+        data: transactionsReported,
+        labelAccessorFn: (OrdinalSales sales, _) =>
+            'Total Transactions: \$${sales.sales}',
+      ),
+      new charts.Series<OrdinalSales, String>(
+        id: 'Budget',
+        colorFn: (_, __) => charts.ColorUtil.fromDartColor(Colors.blueAccent),
+        domainFn: (OrdinalSales sales, _) => sales.year,
+        measureFn: (OrdinalSales sales, _) => sales.sales,
+        data: budgetGiven,
+        // fillPatternFn: (OrdinalSales sales, _) =>
+        //     charts.FillPatternType.forwardHatch,
+        labelAccessorFn: (OrdinalSales sales, _) => 'Budget: \$${sales.sales}',
+      ),
+    ];
+  }
 
   /// Create series list with multiple series
-  static List<charts.Series<TimeSeriesSales, DateTime>> _createSampleData() {
+  static List<charts.Series<TimeSeriesSales, DateTime>> getTimeData() {
     final transactionsReported = [
       new TimeSeriesSales(DateTime(2021, 1, 1), 400),
       new TimeSeriesSales(DateTime(2021, 2, 1), 700),
@@ -223,8 +224,6 @@ class NormalTimeChart extends StatelessWidget {
         domainFn: (TimeSeriesSales sales, _) => sales.time,
         measureFn: (TimeSeriesSales sales, _) => sales.sales,
         data: transactionsReported,
-        // labelAccessorFn: (TimeSeriesSales sales, _) =>
-        //     'Total Transactions: \$${sales.sales}',
       ),
       new charts.Series<TimeSeriesSales, DateTime>(
         id: 'Budget',
@@ -232,10 +231,6 @@ class NormalTimeChart extends StatelessWidget {
         domainFn: (TimeSeriesSales sales, _) => sales.time,
         measureFn: (TimeSeriesSales sales, _) => sales.sales,
         data: budgetGiven,
-        // fillPatternFn: (OrdinalSales sales, _) =>
-        //     charts.FillPatternType.forwardHatch,
-        // labelAccessorFn: (TimeSeriesSales sales, _) =>
-        //     'Budget: \$${sales.sales}',
       ),
     ];
   }

@@ -115,7 +115,7 @@ class BudgetDataProvider with ChangeNotifier {
     var budgetRef = FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('budget')
+        .collection('budgets')
         .where('date', isGreaterThanOrEqualTo: DateTime(date.year, date.month))
         .snapshots();
     return budgetRef;
