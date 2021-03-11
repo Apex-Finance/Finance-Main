@@ -135,61 +135,66 @@ class _TabScreenState extends State<TabScreen> {
             ),
           ),
           // Custom Fab_Circular_Menu used here to utilize BackdropFilter widget
-          floatingActionButton: TappableFabCircularMenu(
-            alignment: Alignment.bottomCenter,
-            animationDuration: Duration(milliseconds: 500),
-            children: <Widget>[
-              // Budget form
-              Ink(
-                decoration: const ShapeDecoration(
-                  color: Color(0xFF212121), // basically Colors.grey[900]
-                  shape: CircleBorder(),
+          floatingActionButton: AbsorbPointer(
+            absorbing: false,
+            child: TappableFabCircularMenu(
+              alignment: Alignment.bottomCenter,
+              animationDuration: Duration(milliseconds: 500),
+              children: <Widget>[
+                // Budget form
+                Ink(
+                  decoration: const ShapeDecoration(
+                    color: Color(0xFF212121), // basically Colors.grey[900]
+                    shape: CircleBorder(),
+                  ),
+                  child: IconButton(
+                    color: Theme.of(context).primaryColor,
+                    icon: Icon(Icons.account_balance),
+                    onPressed: () => _enterBudget(context),
+                    splashRadius: 23,
+                  ),
                 ),
-                child: IconButton(
-                  color: Theme.of(context).primaryColor,
-                  icon: Icon(Icons.account_balance),
-                  onPressed: () => _enterBudget(context),
-                  splashRadius: 23,
+
+                // Transaction form
+                Ink(
+                  decoration: const ShapeDecoration(
+                    color: Color(0xFF212121),
+                    shape: CircleBorder(),
+                  ),
+                  child: IconButton(
+                    color: Theme.of(context).primaryColor,
+                    icon: Icon(Icons.shopping_cart),
+                    onPressed: () => _enterTransaction(context),
+                    splashRadius: 23,
+                  ),
                 ),
-              ),
-              // Transaction form
-              Ink(
-                decoration: const ShapeDecoration(
-                  color: Color(0xFF212121),
-                  shape: CircleBorder(),
+                // Goal Form
+                Ink(
+                  decoration: const ShapeDecoration(
+                    color: Color(0xFF212121),
+                    shape: CircleBorder(),
+                  ),
+                  child: IconButton(
+                    color: Theme.of(context).primaryColor,
+                    icon: Icon(Icons.star),
+                    onPressed: () => _enterGoal(context),
+                    splashRadius: 23,
+                  ),
                 ),
-                child: IconButton(
-                  color: Theme.of(context).primaryColor,
-                  icon: Icon(Icons.shopping_cart),
-                  onPressed: () => _enterTransaction(context),
-                  splashRadius: 23,
-                ),
-              ),
-              // Goal Form
-              Ink(
-                decoration: const ShapeDecoration(
-                  color: Color(0xFF212121),
-                  shape: CircleBorder(),
-                ),
-                child: IconButton(
-                  color: Theme.of(context).primaryColor,
-                  icon: Icon(Icons.star),
-                  onPressed: () => _enterGoal(context),
-                  splashRadius: 23,
-                ),
-              ),
-            ],
-            onDisplayChange: (isOpen) {
-              setState(() {
-                _isOpen = !_isOpen;
-              });
-            },
-            key: fabKey,
-            ringDiameter: 300,
-            fabMargin: EdgeInsets.fromLTRB(0, 0, 40, 30),
-            fabOpenIcon: Icon(Icons.add),
-            ringColor: Colors.amber.withOpacity(0),
+              ],
+              onDisplayChange: (isOpen) {
+                setState(() {
+                  _isOpen = !_isOpen;
+                });
+              },
+              key: fabKey,
+              ringDiameter: 300,
+              fabMargin: EdgeInsets.fromLTRB(0, 0, 40, 30),
+              fabOpenIcon: Icon(Icons.add),
+              ringColor: Colors.amber.withOpacity(0),
+            ),
           ),
+
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           body: _pages[_selectedPageIndex],
