@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:provider/provider.dart';
 
-class SettingsScreen extends StatelessWidget {
+import '../providers/color.dart';
+
+class SettingsScreen extends StatefulWidget {
   static const routeName = '/settings';
 
-  Widget _colorOption(
-      String name, Color color1, Color color2, BuildContext context) {
+  @override
+  _SettingsScreenState createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  var selectedColorIndex;
+  var isDark;
+  var initialIndex;
+
+  Widget _colorOption(String name, Color foreground, Color background,
+      int index, Function setColorIndex, BuildContext context) {
     return RaisedButton(
+      padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(20),
@@ -16,7 +29,11 @@ class SettingsScreen extends StatelessWidget {
       color: Colors.grey[600],
       child: Row(
         children: [
-          Icon(Icons.circle),
+          Icon(Icons.circle,
+              color: selectedColorIndex ==
+                      index // if user selects this color, make the icon the same color
+                  ? (foreground == Colors.black ? Colors.white : foreground)
+                  : IconTheme.of(context).color),
           SizedBox(
             width: 10,
           ),
@@ -26,30 +43,35 @@ class SettingsScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyText1,
             ),
           ),
-          SizedBox(
-            width: 30,
+          Container(
+            width: 40,
+            height: 40,
+            color: foreground,
           ),
           Container(
-            width: 50,
-            height: 25,
-            color: color1,
-          ),
-          Container(
-            width: 50,
-            height: 25,
-            color: color2,
+            width: 40,
+            height: 40,
+            color: background,
           ),
           SizedBox(
-            width: 20,
+            width: 50,
           ),
         ],
       ),
-      onPressed: () {},
+      onPressed: () {
+        setColorIndex();
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    var colors = Provider.of<ColorProvider>(context);
+    isDark = colors.isDark ??
+        false; // set isDark to user's last preference; if none found (or initial load), default to light mode
+    selectedColorIndex = colors.selectedColorIndex ??
+        2; // set active color to user's last preference; if none found (or initial load), default to amber
+    initialIndex = isDark ? 0 : 1; //set toggle to match dark mode
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -68,88 +90,100 @@ class SettingsScreen extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              child: ListTile(
-                tileColor: Colors.grey[800],
-                title: Column(
-                  children: [
-                    Text(
-                      'Change colors',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Dark mode',
-                            style: Theme.of(context).textTheme.bodyText1,
+              child: Container(
+                color: Colors.grey[800],
+                child: Container(
+                  margin: EdgeInsets.all(8),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Change colors',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Dark mode',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                            ),
+                            ToggleSwitch(
+                              minWidth: 90.0,
+                              cornerRadius: 20.0,
+                              activeBgColor: Theme.of(context).primaryColor,
+                              activeFgColor: Colors.black,
+                              inactiveBgColor: Colors.grey,
+                              inactiveFgColor: Colors.black,
+                              labels: ['ON', 'OFF'],
+                              initialLabelIndex: initialIndex,
+                              icons: [
+                                Icons.check,
+                                Icons.highlight_off,
+                              ],
+                              onToggle: (index) {
+                                setState(() {
+                                  initialIndex =
+                                      index; // package has a quirk that requires you do this if using setState; see https://github.com/PramodJoshi/toggle_switch/issues/11 for more info
+
+                                  if (index == 0)
+                                    colors.setIsDark(true);
+                                  // isDark = true;
+                                  else
+                                    colors.setIsDark(false);
+                                  //isDark = false;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: colors.colorOptions.length * 50.0,
+                        child: ListView.builder(
+                            itemCount: colors.colorOptions.length,
+                            itemBuilder: (context, index) {
+                              return _colorOption(
+                                  colors.colorOptions[index]
+                                      [isDark ? 'dark' : 'light']['name'],
+                                  colors.colorOptions[index]
+                                          [isDark ? 'dark' : 'light']
+                                      ['primaryColor'],
+                                  colors.colorOptions[index]
+                                          [isDark ? 'dark' : 'light']
+                                      ['canvasColor'],
+                                  index,
+                                  () => colors.setSelectedColorIndex(index),
+                                  context);
+                            }),
+                      ),
+                      RaisedButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20),
+                            bottom: Radius.circular(20),
                           ),
                         ),
-                        ToggleSwitch(
-                          minWidth: 90.0,
-                          cornerRadius: 20.0,
-                          activeBgColor: Theme.of(context).primaryColor,
-                          activeFgColor: Colors.black,
-                          inactiveBgColor: Colors.grey,
-                          inactiveFgColor: Colors.black,
-                          labels: ['ON', 'OFF'],
-                          icons: [
-                            Icons.check,
-                            Icons.highlight_off,
-                          ],
-                          onToggle: (index) {
-                            print('switched to: $index');
-                          },
+                        color: Colors.amber,
+                        child: Text(
+                          'Default',
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
                         ),
-                      ],
-                    ),
-                    // if(light)(
-                    _colorOption('Black', Colors.black, Colors.white, context),
-                    _colorOption('Dark Blue', Colors.indigo[900],
-                        Colors.indigo[50], context),
-                    _colorOption(
-                        'Amber', Colors.amber, Colors.amber[50], context),
-                    _colorOption('Light Blue', Colors.blue[700],
-                        Colors.blue[50], context),
-                    _colorOption(
-                        'Light Green', Colors.green, Colors.green[50], context),
-                    _colorOption('Pink', Colors.pink, Colors.pink[50], context),
-                    _colorOption(
-                        'Purple', Colors.purple, Colors.purple[50], context),
-                    // ),
-                    // if(dark)(
-                    // _colorOption('Black', Colors.white, Colors.black, context),
-                    // _colorOption(
-                    //     'Dark Blue', Colors.indigo[800], Colors.black, context),
-                    // _colorOption('Amber', Colors.amber, Colors.black, context),
-                    // _colorOption(
-                    //     'Light Blue', Colors.blue[700], Colors.black, context),
-                    // _colorOption(
-                    //     'Light Green', Colors.green, Colors.black, context),
-                    // _colorOption('Pink', Colors.pink, Colors.black, context),
-                    // _colorOption(
-                    //     'Purple', Colors.purple, Colors.black, context),
-                    // ),
-                    RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                          bottom: Radius.circular(20),
-                        ),
+                        onPressed: () {
+                          colors.setSelectedColorIndex(2);
+                          colors.setIsDark(false);
+                        },
                       ),
-                      color: Colors.amber,
-                      child: Text(
-                        'Default',
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                      onPressed: () {},
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

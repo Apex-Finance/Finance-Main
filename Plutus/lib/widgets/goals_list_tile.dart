@@ -131,7 +131,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
                   width: MediaQuery.of(context).size.width * .57,
                   lineHeight: 12.0,
                   backgroundColor: Colors.black,
-                  progressColor: Colors.amber,
+                  progressColor: Theme.of(context).primaryColor,
                 ),
 
                 //Text(
