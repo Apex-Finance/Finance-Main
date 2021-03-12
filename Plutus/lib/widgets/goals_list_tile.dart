@@ -149,7 +149,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
                       center: AutoSizeText(
                         '\$ ${widget.goal.getAmount().toStringAsFixed(0)} of \$ ${widget.goal.getGoalAmount()}',
                         style: TextStyle(
-                          color: Theme.of(context).canvasColor,
+                          color: Theme.of(context).accentColor,
                         ),
                       ),
                       percent: widget.goal.getAmount() == null
@@ -161,7 +161,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
                       alignment: MainAxisAlignment.start,
                       width: MediaQuery.of(context).size.width * .46,
                       lineHeight: 20,
-                      backgroundColor: Theme.of(context).accentColor,
+                      backgroundColor: Colors.black,
                       progressColor: Theme.of(context).primaryColor,
                     ),
                   ),

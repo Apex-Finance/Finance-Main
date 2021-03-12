@@ -110,7 +110,6 @@ class GoalAmountField extends StatelessWidget {
       inputFormatters: [
         CurrencyTextInputFormatter(),
       ],
-      autofocus: true,
       // REGEX from income.dart
       validator: (val) {
         // TODO add validation

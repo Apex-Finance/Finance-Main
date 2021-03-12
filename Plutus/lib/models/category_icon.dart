@@ -18,6 +18,5 @@ Map<MainCategory, IconData> categoryIcon = {
   //MainCategory.kids: Icons.stroller,
   //MainCategory.pets: Icons.pets,
   //MainCategory.business: Icons.business_center,
-  MainCategory.goals: Icons.star,
   MainCategory.uncategorized: Icons.category,
 };
