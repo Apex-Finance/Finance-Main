@@ -17,6 +17,7 @@ enum MainCategory {
   //kids,
   //pets,
   //business,
+  goals,
   uncategorized, // Needed for getter
 }
 
@@ -173,6 +174,12 @@ enum life_and_entertainment {
   electronics_and_software,
   newspapers,
   magazines,
+}
+
+enum goals {
+  active,
+  paused,
+  completed,
 }
 
 enum health_and_fitness {
