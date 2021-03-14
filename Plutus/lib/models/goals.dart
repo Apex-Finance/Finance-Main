@@ -45,10 +45,6 @@ class Goal {
     return title;
   }
 
-  void setAmountSaved(double amountValue) {
-    amountSaved = amountValue;
-  }
-
   double getAmountSaved(BuildContext context) {
     amountSaved = 0;
     var goalTransactions = FirebaseFirestore.instance

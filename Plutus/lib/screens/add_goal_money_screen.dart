@@ -14,10 +14,11 @@ class AddGoalMoneyScreen extends StatefulWidget {
   AddGoalMoneyScreen({this.goal}); // TODO comment this
 }
 
+double amountSaved = 0.0;
+
 class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
   Transaction.Transaction _transaction = new Transaction.Transaction.empty();
   final _formKey = GlobalKey<FormState>();
-  double amountSaved = 0.0;
 
 // TODO Set initstate
 
@@ -29,11 +30,9 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
 
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      goalDataProvider.updateGoal(widget.goal, context);
-
+      _transaction.setAmount(amountSaved);
       _transaction.setTitle('Goal money for ${widget.goal.getTitle()}');
       _transaction.setDate(widget.goal.getDate());
-      _transaction.setAmount(widget.goal.amountSaved);
       transactionDataProvider.addTransaction(
           transaction: _transaction,
           context: context,
@@ -73,7 +72,6 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
                       Expanded(
                         child: GoalAmountField(
                           goal: widget.goal,
-                          amountSaved: amountSaved,
                         ),
                       ),
                     ],
@@ -102,13 +100,10 @@ class GoalAmountField extends StatelessWidget {
   GoalAmountField({
     Key key,
     @required Goal goal,
-    @required double amountSaved,
   })  : _goal = goal,
         super(key: key);
 
   final Goal _goal;
-  double amountSaved;
-
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -120,7 +115,6 @@ class GoalAmountField extends StatelessWidget {
       keyboardType: TextInputType.number,
       onSaved: (val) {
         amountSaved = double.parse(val);
-        _goal.amountSaved += amountSaved;
       },
       validator: (val) {
         if (val.contains(new RegExp(r'^-?\d+(\.\d{1,2})?$'))) {
