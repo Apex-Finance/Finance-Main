@@ -58,7 +58,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                 Text(
                   "New Monthly Budget",
                   style: TextStyle(
-                    color: Theme.of(context).primaryColor,
+                    color: Colors.amber,
                     fontSize: 30,
                   ),
                 ),
@@ -73,7 +73,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                         children: [
                           Text(
                             'Total Budget:',
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: TextStyle(color: Colors.amber, fontSize: 15),
                           ),
                           AutoSizeText(
                             '\$${widget.budget.getAmount()}', // .toStringAsFixed(2)
@@ -90,7 +90,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                         children: [
                           Text(
                             'Remaining Budget:',
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: TextStyle(color: Colors.amber, fontSize: 15),
                           ),
                           AutoSizeText(
                             '\$${widget.budget.getRemainingAmount().toStringAsFixed(2)}',
