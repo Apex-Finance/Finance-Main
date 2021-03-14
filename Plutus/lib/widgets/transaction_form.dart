@@ -1,3 +1,4 @@
+import 'package:Plutus/models/category.dart';
 import 'package:Plutus/models/transaction.dart' as Transaction;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,9 +7,9 @@ import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../models/categories.dart';
 import '../models/category_icon.dart';
 import '../providers/auth.dart';
+import '../models/category.dart';
 
 // Form to add a new transaction
 class TransactionForm extends StatefulWidget {
@@ -24,7 +25,6 @@ class _TransactionFormState extends State<TransactionForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime _date = DateTime.now();
   Transaction.Transaction _transaction = new Transaction.Transaction.empty();
-  MainCategory category = MainCategory.uncategorized;
 
   // Change the date of the transaction
   void _setDate(DateTime value) {
@@ -39,10 +39,14 @@ class _TransactionFormState extends State<TransactionForm> {
 
   // Change the category of the transaction
   //TODO this may need to be heavily revised after we set up the stream for categories
-  void _setCategory(String value) {
-    if (value == null) return; // if user taps out of popup
+  void _setCategory(Category category) {
+    if (category.getTitle() == null) return; // if user taps out of popup
     setState(() {
-      _transaction.setCategoryId(value);
+      print(category.getTitle() + " chosen");
+      print(category.getID());
+      _transaction.setCategoryId(category.getID());
+      _transaction.setCategoryCodePoint(category.getCodepoint());
+      _transaction.setCategoryTitle(category.getTitle());
       // _transaction.category = category =
       //     value; // update category if category changes since no onsave property
     });
@@ -79,10 +83,15 @@ class _TransactionFormState extends State<TransactionForm> {
 
     if (widget.transaction != null) {
       // if editing, store previous values in transaction to display previous values and submit them later
+      _transaction.setID(widget.transaction.getID());
       _transaction.setTitle(widget.transaction.getTitle());
-      _transaction.setCategoryId(widget.transaction.getCategoryId());
       _transaction.setAmount(widget.transaction.getAmount());
       _transaction.setDate(widget.transaction.getDate());
+      _transaction.setCategoryId(widget.transaction.getCategoryId());
+      _transaction.setCategoryTitle(widget.transaction.getCategoryTitle());
+      _transaction
+          .setCategoryCodePoint(widget.transaction.getCategoryCodePoint());
+
       // _transaction.id = widget.transaction.id;
       // _transaction.title = widget.transaction.title;
       // _transaction.category = category = widget.transaction.category;
@@ -181,133 +190,126 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   Widget buildCategoryChanger(BuildContext context) {
+    Category category = new Category();
+    var categoryDataProvider = Provider.of<CategoryDataProvider>(context);
     //TODO this will need to be rebuilt to stream the default categories in the database so we can tie the title and id to the transaction; this will eventually help with custom categories
-    var categoryRef = getCategoryCollection(context);
-    return FutureBuilder(
-      future: categoryRef,
-      builder: (context, snapshot) {
-        return Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Text(
-              'Category: ',
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).primaryColor,
+    var categories = new List<Category>();
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Text(
+          'Category: ',
+          style: TextStyle(
+            fontSize: 16,
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+        GestureDetector(
+          onTap: () => showDialog(
+            context: context,
+            builder: (bctx) => SimpleDialog(
+              backgroundColor: Theme.of(context).primaryColor,
+              title: Text(
+                'Choose Category',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontFamily: 'Anton',
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            GestureDetector(
-              onTap: () => showDialog(
-                context: context,
-                builder: (bctx) => SimpleDialog(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  title: Text(
-                    'Choose Category',
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontFamily: 'Anton',
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    ...MainCategory.values
-                        .map(
-                          (category) => Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              ListTile(
-                                tileColor: Theme.of(context).canvasColor,
-                                leading: Icon(
-                                  categoryIcon[category],
-                                  size: 30,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                title: Text(
-                                  '${stringToUserString(enumValueToString(category))}',
-                                  style: TextStyle(
+                    Container(
+                      height: 600,
+                      width: 400,
+                      child: StreamBuilder(
+                        stream: categoryDataProvider.getCategories(context),
+                        builder:
+                            (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            snapshot.data.docs.forEach((element) {
+                              categories.add(categoryDataProvider
+                                  .initializeCategory(element));
+                            });
+                            print("${categories.length} number of categories");
+                            // categories = convertQuerytoList(
+                            //     snapshot, categoryDataProvider);
+                            // print(categories.length);
+                            return ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (context, index) {
+                                print("$index index");
+                                category =
+                                    categoryDataProvider.initializeCategory(
+                                        snapshot.data.docs[index]);
+                                print(categories[index].getTitle() +
+                                    " initializd");
+                                return ListTile(
+                                  tileColor: Theme.of(context).canvasColor,
+                                  leading: Icon(
+                                    IconData(
+                                      categories[index].getCodepoint(),
+                                      fontFamily: 'MaterialIcons',
+                                    ),
+                                    size: 30,
                                     color: Theme.of(context).primaryColor,
-                                    fontSize: 18,
-                                    fontFamily: 'Anton',
-                                    fontWeight: FontWeight.bold,
                                   ),
-                                ),
-                                onTap: () {
-                                  Navigator.of(context).pop(category);
-                                },
-                              ),
-                            ],
-                          ),
-                        )
-                        .toList(),
+                                  title: Text(
+                                    '${categories[index].getTitle()}',
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: 18,
+                                      fontFamily: 'Anton',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    _setCategory(categories[index]);
+
+                                    Navigator.of(context).pop(category);
+                                  },
+                                );
+                              },
+                            );
+                          } else {
+                            return CircularProgressIndicator();
+                          }
+                        },
+                      ),
+                    ),
                   ],
                 ),
-              ).then((chosenCategory) => _setCategory(chosenCategory)),
-              child: Chip(
-                avatar: CircleAvatar(
-                  backgroundColor: Colors.black,
-                  child: Icon(
-                    categoryIcon[category],
-                  ),
-                ),
-                label: Text(
-                  '${stringToUserString(enumValueToString(category.toString()))}',
-                  style: TextStyle(color: Colors.black),
-                ),
-                backgroundColor: Theme.of(context).primaryColorLight,
-              ),
+              ],
             ),
-          ],
-        );
-      },
+          ),
+          child: Chip(
+            // avatar: CircleAvatar(
+            //   backgroundColor: Colors.black,
+            //   child: Icon(
+            //     IconData(
+            //       _transaction.getCategoryCodePoint(),
+            //       fontFamily: 'MaterialIcons',
+            //     ),
+            //     size: 50,
+            //   ),
+            // ),
+            label: Text(
+              '${_transaction.getCategoryTitle()}',
+              style: TextStyle(color: Colors.black),
+            ),
+            backgroundColor: Theme.of(context).primaryColorLight,
+          ),
+        ),
+      ],
     );
   }
-
-  // will return the collection of default categories or categories for the bduget if a corresponding budget exists
-  Future<QuerySnapshot> getCategoryCollection(BuildContext context) async {
-    // return default categories if there is no budget with the same date as the transaction
-    if ((await FirebaseFirestore.instance
-            .collection('users')
-            .doc(Provider.of<Auth>(context).getUserId())
-            .collection('budgets')
-            .where('date', isEqualTo: _transaction.getDate())
-            .get())
-        .docs
-        .isEmpty) {
-      return FirebaseFirestore.instance.collection('DefaultCategories').get();
-      // otherwise return that budgets colleciton of categories
-    } else {
-      var budgetID = (await FirebaseFirestore.instance
-              .collection('users')
-              .doc(Provider.of<Auth>(context).getUserId())
-              .collection('budgets')
-              .where(
-                'date',
-                isGreaterThanOrEqualTo: new DateTime(
-                  _transaction.getDate().year,
-                  _transaction.getDate().month,
-                  1,
-                ),
-                isLessThan: new DateTime(
-                  _transaction.getDate().year,
-                  _transaction.getDate().month + 1,
-                  1,
-                ),
-              )
-              .get())
-          .docs
-          .single
-          .id;
-
-      return FirebaseFirestore.instance
-          .collection('users')
-          .doc(Provider.of<Auth>(context).getUserId())
-          .collection('budgets')
-          .doc(budgetID)
-          .collection('categories')
-          .get();
-    }
-  }
 }
+
+// will return the collection of default categories or categories for the bduget if a corresponding budget exists
 
 class AmountTFF extends StatelessWidget {
   const AmountTFF({
