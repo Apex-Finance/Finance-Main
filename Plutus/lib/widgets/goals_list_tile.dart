@@ -154,10 +154,11 @@ class _GoalsListTileState extends State<GoalsListTile> {
                       ),
                       percent: widget.goal.getAmountSaved(context) == null
                           ? 0.0
-                          : widget.goal.amountSaved > widget.goal.goalAmount
+                          : widget.goal.getAmountSaved(context) >
+                                  widget.goal.getGoalAmount()
                               ? 1
-                              : widget.goal.amountSaved /
-                                  widget.goal.goalAmount,
+                              : widget.goal.getAmountSaved(context) /
+                                  widget.goal.getGoalAmount(),
                       alignment: MainAxisAlignment.start,
                       width: MediaQuery.of(context).size.width * .46,
                       lineHeight: 20,

@@ -19,7 +19,7 @@ class GoalsForm extends StatefulWidget {
 
 class _GoalsFormState extends State<GoalsForm> {
   final _formKey = GlobalKey<FormState>();
-  DateTime _date = DateTime.now();
+  DateTime _date;
   Goal _goal = Goal.empty();
   File _goalImage; // Image selected from the phone galler
   // TODO May need to change to update to DB
@@ -39,6 +39,9 @@ class _GoalsFormState extends State<GoalsForm> {
 
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+
+      // If no date is set, set the date to today's date
+      if (_goal.getDate() == null) _goal.setDate(DateTime.now());
       // TODO save image into DB
       if (_goal.getID() == null) {
         goalDataProvider.addGoal(_goal, context);
@@ -98,6 +101,9 @@ class _GoalsFormState extends State<GoalsForm> {
                   GoalTitleField(
                     goal: _goal,
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   // Goal Amount Text Field
                   GoalAmountField(
                     goal: _goal,
@@ -122,7 +128,7 @@ class _GoalsFormState extends State<GoalsForm> {
   Widget buildImageSelector(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        top: 12,
+        top: 40,
       ),
       child: GestureDetector(
         onTap: () => getImage(),
@@ -155,12 +161,12 @@ class _GoalsFormState extends State<GoalsForm> {
   // Validates required fields and sends goal data to DB
   Widget buildSubmitButton(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+      padding: EdgeInsets.fromLTRB(0, 120, 0, 0),
       child: Container(
         child: FloatingActionButton.extended(
           backgroundColor: Theme.of(context).primaryColorLight,
           onPressed: () => _submitGoalForm(context),
-          label: Text(_goal.id == null ? "Add Goal" : "Edit Goal"),
+          label: Text(_goal.getID() == null ? "Add Goal" : "Edit Goal"),
         ),
       ),
     );
@@ -169,17 +175,18 @@ class _GoalsFormState extends State<GoalsForm> {
   // Changes the date of the goal
   Widget buildDateChanger(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(10, 0, 30, 37),
+      padding: EdgeInsets.fromLTRB(10, 35, 30, 0),
       child: RaisedButton(
         color: Theme.of(context).primaryColorLight,
-        child: _goal.getID() == null
+        child: _goal.getDate() == null
             ? Text('Due Date')
             : Text(
                 '${DateFormat.MMMd().format(_goal.getDate())}',
               ),
         onPressed: () => showDatePicker(
           context: context,
-          initialDate: _goal.dateOfGoal,
+          initialDate:
+              _goal.getDate() == null ? DateTime.now() : _goal.getDate(),
           firstDate: DateTime.now().subtract(
             Duration(
               days: 365,

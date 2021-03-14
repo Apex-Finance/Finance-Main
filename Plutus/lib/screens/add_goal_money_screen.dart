@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
@@ -23,13 +22,12 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
 // TODO Set initstate
 
   void _submitAddMoneyForm(BuildContext context) {
-    var goalDataProvider =
-        Provider.of<GoalDataProvider>(context, listen: false);
     var transactionDataProvider =
         Provider.of<Transaction.Transactions>(context, listen: false);
 
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+      print(amountSaved);
       _transaction.setAmount(amountSaved);
       _transaction.setTitle('Goal money for ${widget.goal.getTitle()}');
       _transaction.setDate(widget.goal.getDate());
@@ -120,10 +118,12 @@ class GoalAmountField extends StatelessWidget {
         if (val.contains(new RegExp(r'^-?\d+(\.\d{1,2})?$'))) {
           // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
           // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
-          if (double.parse(
-                  double.parse(val.replaceAll(",", "")).toStringAsFixed(2)) <=
+          if (double.parse(double.parse(val).toStringAsFixed(2)) <=
               0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
             return 'Please enter an amount greater than 0.';
+          if (double.parse(double.parse(val).toStringAsFixed(2)) >
+              _goal.getGoalAmount())
+            return 'Amount cannot be greater than the Goal Amount';
           return null;
         } else {
           return 'Please enter a number.';

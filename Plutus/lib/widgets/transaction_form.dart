@@ -379,7 +379,7 @@ class DescriptionTFF extends StatelessWidget {
       inputFormatters: [
         LengthLimitingTextInputFormatter(15),
       ],
-      maxLength: 15,
+      maxLength: 50,
       onEditingComplete: () => FocusScope.of(context).nextFocus(),
       onSaved: (val) => _transaction.setTitle(val.trim()),
       validator: (val) {
