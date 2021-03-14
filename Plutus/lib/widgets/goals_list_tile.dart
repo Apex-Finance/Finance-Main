@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +8,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import '../models/goals.dart';
 import '../widgets/goals_form.dart';
 import '../screens/add_goal_money_screen.dart';
+import '../models/transaction.dart' as Transaction;
 
 // List Tile that displays each individual goal
 class GoalsListTile extends StatefulWidget {
@@ -145,26 +147,34 @@ class _GoalsListTileState extends State<GoalsListTile> {
                     padding: EdgeInsets.fromLTRB(0, 8, 0, 5),
                     // Visual bar graph that displays amount currently saved
                     // and the goal amount
-                    child: new LinearPercentIndicator(
-                      center: AutoSizeText(
-                        '\$ ${widget.goal.getAmountSaved(context).toStringAsFixed(0)} of \$ ${widget.goal.getGoalAmount()}',
-                        style: TextStyle(
-                          color: Theme.of(context).accentColor,
-                        ),
-                      ),
-                      percent: widget.goal.getAmountSaved(context) == null
-                          ? 0.0
-                          : widget.goal.getAmountSaved(context) >
-                                  widget.goal.getGoalAmount()
-                              ? 1
-                              : widget.goal.getAmountSaved(context) /
-                                  widget.goal.getGoalAmount(),
-                      alignment: MainAxisAlignment.start,
-                      width: MediaQuery.of(context).size.width * .46,
-                      lineHeight: 20,
-                      backgroundColor: Colors.black,
-                      progressColor: Theme.of(context).primaryColor,
-                    ),
+                    child: StreamBuilder<QuerySnapshot>(
+                        stream: Provider.of<Transaction.Transactions>(context,
+                                listen: false)
+                            .getGoalTransactions(context, widget.goal.getID()),
+                        builder: (context, snapshot) {
+                          var amountSaved = snapshot.data.docs.isEmpty
+                              ? 0
+                              : widget.goal
+                                  .getAmountSaved(context, snapshot.data);
+                          return new LinearPercentIndicator(
+                            center: AutoSizeText(
+                              '\$ $amountSaved of \$ ${widget.goal.getGoalAmount()}',
+                              style: TextStyle(
+                                color: Theme.of(context).accentColor,
+                              ),
+                            ),
+                            percent: amountSaved == null
+                                ? 0.0
+                                : amountSaved > widget.goal.getGoalAmount()
+                                    ? 1
+                                    : amountSaved / widget.goal.getGoalAmount(),
+                            alignment: MainAxisAlignment.start,
+                            width: MediaQuery.of(context).size.width * .46,
+                            lineHeight: 20,
+                            backgroundColor: Colors.black,
+                            progressColor: Theme.of(context).primaryColor,
+                          );
+                        }),
                   ),
                 ],
               ),

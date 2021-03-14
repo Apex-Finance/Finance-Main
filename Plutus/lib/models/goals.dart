@@ -45,22 +45,24 @@ class Goal {
     return title;
   }
 
-  double getAmountSaved(BuildContext context) {
+  double getAmountSaved(BuildContext context, QuerySnapshot snapshot) {
     amountSaved = 0;
-    var goalTransactions = FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('Transactions')
-        .where('goalID', isEqualTo: id)
-        .snapshots();
-    goalTransactions.listen((snapshot) {
-      if (snapshot.docs.isNotEmpty) {
-        snapshot.docs.forEach((doc) {
-          amountSaved += doc.data()['amount'];
-        });
-      }
-    });
-
+    for (var doc in snapshot.docs) {
+      amountSaved += doc.data()['amount'];
+    }
+    // goalTransactions.listen((snapshot) {
+    //   if (snapshot.docs.isNotEmpty) {
+    //     print(snapshot.docs.length);
+    //     snapshot.docs.forEach((doc) {
+    //       var amount = doc.data()['amount'];
+    //       print("amount  $amount");
+    //       amountSaved += amount;
+    //       count += 1;
+    //       print("$count count");
+    //     });
+    //   }
+    // });
+    print("$amountSaved amountSaved");
     return amountSaved;
   }
 

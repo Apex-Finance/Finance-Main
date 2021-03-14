@@ -208,6 +208,16 @@ class Transactions with ChangeNotifier {
         .snapshots();
     return snapshot;
   }
+
+  Stream<QuerySnapshot> getGoalTransactions(
+      BuildContext context, String goalID) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('Transactions')
+        .where('goalID', isEqualTo: goalID)
+        .snapshots();
+  }
   // Sum the expenses for the month
   // double get monthlyExpenses {
   //   var sum = 0.00;

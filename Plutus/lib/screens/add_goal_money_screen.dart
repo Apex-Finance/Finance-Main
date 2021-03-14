@@ -27,7 +27,7 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
 
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      print(amountSaved);
+      print("amount saved $amountSaved");
       _transaction.setAmount(amountSaved);
       _transaction.setTitle('Goal money for ${widget.goal.getTitle()}');
       _transaction.setDate(widget.goal.getDate());
