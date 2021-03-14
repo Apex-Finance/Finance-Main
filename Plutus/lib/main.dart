@@ -1,3 +1,4 @@
+import 'package:Plutus/models/category.dart';
 import 'package:Plutus/screens/individual_goal_screen.dart';
 import 'package:Plutus/screens/new_budget_screens/income_screen.dart';
 import 'package:Plutus/models/month_changer.dart';
@@ -37,7 +38,10 @@ class MyApp extends StatelessWidget {
           create: (context) => GoalDataProvider(),
         ),
         ChangeNotifierProvider(
-          create: (context) => Budget(),
+          create: (context) => BudgetDataProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CategoryDataProvider(),
         ),
         ChangeNotifierProvider(
           create: (_) => Auth(),
@@ -54,12 +58,12 @@ class MyApp extends StatelessWidget {
                       : previousTransactions.transactions),
           create: null,
         ),
-        ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
-          update: (buildContext, monthChanger, transactions, previousBudgets) =>
-              Budgets(monthChanger, transactions,
-                  previousBudgets == null ? [] : previousBudgets.budgets),
-          create: null,
-        ),
+        // ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
+        //   update: (buildContext, monthChanger, transactions, previousBudgets) =>
+        //       Budgets(monthChanger, transactions,
+        //           previousBudgets == null ? [] : previousBudgets.budgets),
+        //   create: null,
+        // ),
       ],
       child: Builder(
         builder: (context) => MaterialApp(
@@ -79,7 +83,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-          initialRoute: '/onboarding',
+          initialRoute: AuthScreen.routeName,
           routes: {
             '/onboarding': (context) => OnBoardingPage(),
             DashboardScreen.routeName: (context) => DashboardScreen(),

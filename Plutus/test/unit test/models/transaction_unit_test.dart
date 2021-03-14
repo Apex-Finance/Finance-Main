@@ -30,6 +30,7 @@ void main() {
       expect(newTransaction.getID(), isNot(null));
     });
   });
+
   group('getTransactionExpenses', () {
     Transaction t1 = Transaction();
     Transaction t2 = Transaction();
@@ -50,6 +51,7 @@ void main() {
       expect(testTotalExpenses, 36.00);
       expect(testTotalExpenses, isNot(0.00));
     });
+
     test('Test double type convert', () {
       double testDouble;
       int value;

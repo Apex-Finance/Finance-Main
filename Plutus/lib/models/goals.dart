@@ -10,6 +10,8 @@ class Goal {
   double goalAmount; // Total amount of goal
   DateTime dateOfGoal; // Date goal was set
 
+  Goal.empty();
+
   // Call this function to set the data when you have gathered all the value for creating a goal
   Goal({
     this.title,
