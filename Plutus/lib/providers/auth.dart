@@ -53,8 +53,10 @@ class Auth with ChangeNotifier {
     return true;
   }
 
-  Future<void> logout() async {
-    // await _auth.signOut();
+  Future<void> logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.of(context).pushNamed('/auth');
+
     notifyListeners();
   }
 }
