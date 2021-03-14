@@ -213,8 +213,8 @@ class _AuthFormState extends State<AuthForm> {
                     RaisedButton(
                       child: Text('Alex Login'),
                       onPressed: () {
-                        email = 'alex@apex.com';
-                        password = '123456';
+                        email = 'alex@apex3.com';
+                        password = '123456789';
                         _passwordController.text = password;
                         _emailController.text = email;
 

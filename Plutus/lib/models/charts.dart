@@ -9,11 +9,11 @@ class OrdinalSales {
   OrdinalSales(this.year, this.sales);
 }
 
-class TimeSeriesSales {
-  final DateTime time;
-  final int sales;
+class TimeChartData {
+  final DateTime date;
+  int value;
 
-  TimeSeriesSales(this.time, this.sales);
+  TimeChartData(this.date, this.value);
 }
 
 class GroupedBarChart extends StatelessWidget {
@@ -203,33 +203,33 @@ class ChartDataProvider with ChangeNotifier {
   }
 
   /// Create series list with multiple series
-  static List<charts.Series<TimeSeriesSales, DateTime>> getTimeData() {
+  static List<charts.Series<TimeChartData, DateTime>> getTimeData() {
     final transactionsReported = [
-      new TimeSeriesSales(DateTime(2021, 1, 1), 400),
-      new TimeSeriesSales(DateTime(2021, 2, 1), 700),
-      new TimeSeriesSales(DateTime(2021, 3, 1), 600),
+      new TimeChartData(DateTime(2021, 1, 1), 400),
+      new TimeChartData(DateTime(2021, 2, 1), 700),
+      new TimeChartData(DateTime(2021, 3, 1), 600),
     ];
 
     final budgetGiven = [
-      new TimeSeriesSales(DateTime(2021, 1, 1), 500),
-      new TimeSeriesSales(DateTime(2021, 2, 1), 600),
-      new TimeSeriesSales(DateTime(2021, 3, 1), 800),
+      new TimeChartData(DateTime(2021, 1, 1), 500),
+      new TimeChartData(DateTime(2021, 2, 1), 600),
+      new TimeChartData(DateTime(2021, 3, 1), 800),
     ];
 
     return [
-      new charts.Series<TimeSeriesSales, DateTime>(
+      new charts.Series<TimeChartData, DateTime>(
         id: 'Transactions',
-        colorFn: (TimeSeriesSales sales, int index) =>
+        colorFn: (TimeChartData sales, int index) =>
             charts.ColorUtil.fromDartColor(Colors.yellowAccent),
-        domainFn: (TimeSeriesSales sales, _) => sales.time,
-        measureFn: (TimeSeriesSales sales, _) => sales.sales,
+        domainFn: (TimeChartData sales, _) => sales.date,
+        measureFn: (TimeChartData sales, _) => sales.value,
         data: transactionsReported,
       ),
-      new charts.Series<TimeSeriesSales, DateTime>(
+      new charts.Series<TimeChartData, DateTime>(
         id: 'Budget',
         colorFn: (_, __) => charts.ColorUtil.fromDartColor(Colors.blueAccent),
-        domainFn: (TimeSeriesSales sales, _) => sales.time,
-        measureFn: (TimeSeriesSales sales, _) => sales.sales,
+        domainFn: (TimeChartData sales, _) => sales.date,
+        measureFn: (TimeChartData sales, _) => sales.value,
         data: budgetGiven,
       ),
     ];

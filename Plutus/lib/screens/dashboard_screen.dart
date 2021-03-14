@@ -5,6 +5,7 @@ import 'package:Plutus/models/charts.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:intl/intl.dart';
 
 class DashboardScreen extends StatelessWidget {
   static const routeName = '/dashboard';
@@ -39,28 +40,90 @@ class DashboardScreen extends StatelessWidget {
                       if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
                         return Text("No Data Available");
                       }
-                      List<QueryDocumentSnapshot> data = snapshot.data.docs;
-                      List<TimeSeriesSales> budgetGiven =
-                          List<TimeSeriesSales>();
-                      List<charts.Series<TimeSeriesSales, DateTime>> chartData =
-                          List<charts.Series<TimeSeriesSales, DateTime>>();
-                      for (QueryDocumentSnapshot doc in data) {
-                        budgetGiven.add(TimeSeriesSales(
-                            DateTime.parse(doc["title"]),
-                            doc["amount"].round()));
+
+                      // Budget data for a user
+                      List<QueryDocumentSnapshot> budgets = snapshot.data.docs;
+
+                      // Data for the chart to use.
+                      List<charts.Series<TimeChartData, DateTime>> chartData =
+                          List<charts.Series<TimeChartData, DateTime>>();
+
+                      // Format the budget data for the chart
+                      List<TimeChartData> budgetsGiven = List<TimeChartData>();
+                      for (QueryDocumentSnapshot budget in budgets) {
+                        budgetsGiven.add(TimeChartData(
+                            DateTime.parse(budget["title"]),
+                            budget["amount"].round()));
                       }
+
+                      // Add the budget data with line formatting
                       chartData.add(
-                        charts.Series<TimeSeriesSales, DateTime>(
+                        charts.Series<TimeChartData, DateTime>(
                           id: 'Budget',
                           colorFn: (_, __) =>
                               charts.ColorUtil.fromDartColor(Colors.blueAccent),
-                          domainFn: (TimeSeriesSales sales, _) => sales.time,
-                          measureFn: (TimeSeriesSales sales, _) => sales.sales,
-                          data: budgetGiven,
+                          domainFn: (TimeChartData x, _) => x.date,
+                          measureFn: (TimeChartData x, _) => x.value,
+                          data: budgetsGiven,
                         ),
                       );
-                      return NormalTimeChart(chartData, animate: false);
-                      // return NormalTimeChart(chartData, animate: false);
+
+                      // return NormalTimeChart.withSampleData();
+                      return StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(Provider.of<Auth>(context, listen: false)
+                                  .getUserId())
+                              .collection('Transactions')
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            // Transaction data for a user
+                            List<QueryDocumentSnapshot> transactions =
+                                snapshot.data.docs;
+
+                            Map<String, TimeChartData> totalTrans =
+                                Map<String, TimeChartData>();
+
+                            // Pre-populate the dict so that months without trans are shown on the chart
+                            for (TimeChartData budget in budgetsGiven) {
+                              totalTrans[
+                                  DateFormat("LLLL")
+                                      .format(budget.date)] = TimeChartData(
+                                  DateTime(budget.date.year, budget.date.month),
+                                  0);
+                              ;
+                            }
+
+                            for (QueryDocumentSnapshot tran in transactions) {
+                              DateTime date = tran["date"].toDate();
+                              String key = DateFormat("LLLL").format(date);
+
+                              // Add the item to the map if it doesn't exist
+                              if (!totalTrans.containsKey(key)) {
+                                // Give a date of the first of the month
+                                totalTrans[key] = TimeChartData(
+                                    DateTime(date.year, date.month), 0);
+                              }
+
+                              // Update the amount for that month
+                              totalTrans[key].value += tran["amount"].toInt();
+                            }
+
+                            // Add the transaction data with line formatting
+                            chartData.add(
+                              charts.Series<TimeChartData, DateTime>(
+                                id: 'Transaction',
+                                colorFn: (_, __) =>
+                                    charts.ColorUtil.fromDartColor(
+                                        Colors.yellowAccent),
+                                domainFn: (TimeChartData x, _) => x.date,
+                                measureFn: (TimeChartData x, _) => x.value,
+                                data: totalTrans.values.toList(),
+                              ),
+                            );
+
+                            return NormalTimeChart(chartData, animate: false);
+                          });
                     }),
               ),
             ),
