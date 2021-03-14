@@ -106,7 +106,10 @@ class Transactions with ChangeNotifier {
         categoryTitle: doc.data()['category title']);
   }
 
-  void addTransaction(Transaction transaction, BuildContext context) async {
+  void addTransaction(
+      {@required Transaction transaction,
+      @required BuildContext context,
+      String goalID}) async {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
@@ -117,6 +120,7 @@ class Transactions with ChangeNotifier {
       'amount': transaction.getAmount(),
       'date': transaction.getDate(),
       'category id': transaction.getCategoryId(),
+      'goalID': goalID,
     });
   }
 

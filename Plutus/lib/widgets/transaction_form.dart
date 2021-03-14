@@ -59,7 +59,10 @@ class _TransactionFormState extends State<TransactionForm> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       if (_transaction.getID() == null) {
-        transactionDataProvider.addTransaction(_transaction, context);
+        transactionDataProvider.addTransaction(
+          transaction: _transaction,
+          context: context,
+        );
       } else {
         transactionDataProvider.editTransaction(_transaction, context);
       }

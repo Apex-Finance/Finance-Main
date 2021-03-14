@@ -34,7 +34,10 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
       _transaction.setTitle('Goal money for ${widget.goal.getTitle()}');
       _transaction.setDate(widget.goal.getDate());
       _transaction.setAmount(widget.goal.amountSaved);
-      transactionDataProvider.addTransaction(_transaction, context);
+      transactionDataProvider.addTransaction(
+          transaction: _transaction,
+          context: context,
+          goalID: widget.goal.getID());
       Navigator.of(context).pop(widget.goal);
     }
   }
