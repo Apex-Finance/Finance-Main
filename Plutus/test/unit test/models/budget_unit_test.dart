@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:Plutus/models/budget.dart';
 import 'package:Plutus/models/transaction.dart';
-import 'package:Plutus/models/categories.dart';
 
 void main() {
   Transaction t1, t2, t3, t4;
@@ -39,13 +38,16 @@ void main() {
     test('Test if remaining amount is accurate', () {
       double value = 1000;
       double tempAmount = 500;
-      Budget().setremainingMonthlyAmount = value - tempAmount;
+      double remainingMonthlyAmount = 400;
+      double budgetExpenses = 200;
+      Budget.empty().setRemainingAmount(value - tempAmount);
+      remainingMonthlyAmount = Budget.empty().getAmount() - budgetExpenses;
 
-      expect(Budget().remainingAmount, Budget().remainingMonthlyAmount);
+      expect(Budget.empty().getRemainingAmount(), remainingMonthlyAmount);
     });
 
     test('Amount Comparison Test', () {
-      Budget ogAmount = Budget();
+      Budget ogAmount = Budget.empty();
       List<Transaction> newAmount = new List<Transaction>();
 
       ogAmount.transactions = [t2, t4];

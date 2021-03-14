@@ -96,7 +96,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                     Text(
                       "Monthly Income",
                       style: TextStyle(
-                        color: Colors.amber,
+                        color: Theme.of(context).primaryColor,
                         fontSize: 35,
                       ),
                     ),
@@ -137,7 +137,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => FirstBudgetScreen(
-                                          budgetID: widget.budget.getID()),
+                                          budget: widget.budget),
                                     ));
                               }
                             },

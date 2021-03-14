@@ -70,7 +70,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                               ),
                             ),
                             child: TransactionsCard(
-                              transactionsSnapshot: snapshot,
+                              transactionsSnapshot: snapshot.data,
                             ),
                           ),
                   ),
@@ -122,7 +122,7 @@ class TransactionsCard extends StatelessWidget {
   TransactionsCard({Key key, @required this.transactionsSnapshot})
       : super(key: key);
 
-  AsyncSnapshot<QuerySnapshot> transactionsSnapshot;
+  QuerySnapshot transactionsSnapshot;
   Transaction.Transaction transaction = new Transaction.Transaction.empty();
 
   @override
@@ -141,12 +141,11 @@ class TransactionsCard extends StatelessWidget {
         Divider(height: 10),
         Expanded(
           child: ListView.builder(
-              itemCount: transactionsSnapshot.data.docs.length,
+              itemCount: transactionsSnapshot.docs.length,
               itemBuilder: (context, index) {
                 // initialize the transaction document into a transaction object
-                transaction = transactionData.initializeTransaction(
-                    transactionsSnapshot.data.docs[index]);
-                return TransactionListTile(transaction);
+                return TransactionListTile(transactionData
+                    .initializeTransaction(transactionsSnapshot.docs[index]));
               }),
         ),
       ],
