@@ -161,7 +161,7 @@ class _GoalsFormState extends State<GoalsForm> {
         child: FloatingActionButton.extended(
           backgroundColor: Theme.of(context).primaryColorLight,
           onPressed: () => _submitGoalForm(context),
-          label: Text(_goal.getID() == null ? "Add Goal" : "Edit Goal"),
+          label: Text(_goal.id == null ? "Add Goal" : "Edit Goal"),
         ),
       ),
     );
@@ -180,7 +180,7 @@ class _GoalsFormState extends State<GoalsForm> {
               ),
         onPressed: () => showDatePicker(
           context: context,
-          initialDate: DateTime.now(),
+          initialDate: _goal.dateOfGoal,
           firstDate: DateTime.now().subtract(
             Duration(
               days: 365,

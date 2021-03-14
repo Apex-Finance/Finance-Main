@@ -93,6 +93,7 @@ class _TabScreenState extends State<TabScreen> {
         if (_isOpen) fabKey.currentState.close();
       },
       child: AbsorbPointer(
+        // TODO figure out how to
         absorbing: false,
         //_isOpen == true ? true : false,
         child: Scaffold(

@@ -5,6 +5,7 @@ import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
 
 import '../models/goals.dart';
+import '../models/transaction.dart' as Transaction;
 
 class AddGoalMoneyScreen extends StatefulWidget {
   final Goal goal;
@@ -14,6 +15,7 @@ class AddGoalMoneyScreen extends StatefulWidget {
 }
 
 class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
+  Transaction.Transaction _transaction = new Transaction.Transaction.empty();
   final _formKey = GlobalKey<FormState>();
   double amountSaved = 0.0;
 
@@ -22,10 +24,17 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
   void _submitAddMoneyForm(BuildContext context) {
     var goalDataProvider =
         Provider.of<GoalDataProvider>(context, listen: false);
+    var transactionDataProvider =
+        Provider.of<Transaction.Transactions>(context, listen: false);
 
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       goalDataProvider.updateGoal(widget.goal, context);
+
+      _transaction.setTitle('Goal money for ${widget.goal.getTitle()}');
+      _transaction.setDate(widget.goal.getDate());
+      _transaction.setAmount(widget.goal.amountSaved);
+      transactionDataProvider.addTransaction(_transaction, context);
       Navigator.of(context).pop(widget.goal);
     }
   }
