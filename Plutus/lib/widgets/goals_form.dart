@@ -68,7 +68,6 @@ class _GoalsFormState extends State<GoalsForm> {
     if (widget.goal != null) {
       _goal.setID(widget.goal.getID());
       _goal.setTitle(widget.goal.getTitle());
-      _goal.setAmountSaved(widget.goal.getAmount());
       _goal.setGoalAmount(widget.goal.getGoalAmount());
       _goal.setDate(widget.goal.getDate());
     } else {

@@ -147,12 +147,12 @@ class _GoalsListTileState extends State<GoalsListTile> {
                     // and the goal amount
                     child: new LinearPercentIndicator(
                       center: AutoSizeText(
-                        '\$ ${widget.goal.getAmount().toStringAsFixed(0)} of \$ ${widget.goal.getGoalAmount()}',
+                        '\$ ${widget.goal.getAmountSaved(context).toStringAsFixed(0)} of \$ ${widget.goal.getGoalAmount()}',
                         style: TextStyle(
                           color: Theme.of(context).accentColor,
                         ),
                       ),
-                      percent: widget.goal.getAmount() == null
+                      percent: widget.goal.getAmountSaved(context) == null
                           ? 0.0
                           : widget.goal.amountSaved > widget.goal.goalAmount
                               ? 1

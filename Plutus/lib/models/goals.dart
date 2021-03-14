@@ -49,11 +49,27 @@ class Goal {
     amountSaved = amountValue;
   }
 
-  double getAmount() {
+  double getAmountSaved(BuildContext context) {
+    amountSaved = 0;
+    var goalTransactions = FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('Transactions')
+        .where('goalID', isEqualTo: id)
+        .snapshots();
+    goalTransactions.listen((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        snapshot.docs.forEach((doc) {
+          amountSaved += doc.data()['amount'];
+        });
+      }
+    });
+
     return amountSaved;
   }
 
   void setGoalAmount(double amountValue) {
+    amountSaved = 0;
     goalAmount = amountValue;
   }
 
@@ -69,7 +85,6 @@ class GoalDataProvider with ChangeNotifier {
     Goal goal = Goal();
 
     goal.setID(doc.id);
-    goal.setAmountSaved(doc.data()['amountSaved']);
     goal.setTitle(doc.data()['title']);
     goal.setGoalAmount(doc.data()['goalAmount']);
     goal.setDate(doc.data()['dateOfGoal'].toDate());
@@ -85,7 +100,6 @@ class GoalDataProvider with ChangeNotifier {
         .doc()
         .set({
       'title': goal.getTitle(),
-      'amountSaved': goal.getAmount(),
       'goalAmount': goal.getGoalAmount(),
       'dateOfGoal': goal.getDate(),
     });
@@ -100,7 +114,6 @@ class GoalDataProvider with ChangeNotifier {
         .set(
       {
         'title': goal.getTitle(),
-        'amountSaved': goal.getAmount(),
         'goalAmount': goal.getGoalAmount(),
         'dateOfGoal': goal.getDate(),
       },
