@@ -8,6 +8,7 @@ import '../models/categories.dart';
 import '../models/category_icon.dart';
 import 'package:provider/provider.dart';
 import './transaction_form.dart';
+import '../models/goals.dart';
 
 class TransactionListTile extends StatefulWidget {
   final Transaction transaction;
@@ -78,6 +79,8 @@ class _TransactionListTileState extends State<TransactionListTile> {
           onDismissed: (direction) {
             Provider.of<Transactions>(context, listen: false)
                 .deleteTransaction(widget.transaction, context);
+            Provider.of<GoalDataProvider>(context, listen: false)
+                .removeGoal(widget.goal, context);
             Scaffold.of(context)
               ..removeCurrentSnackBar()
               ..showSnackBar(

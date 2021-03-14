@@ -64,13 +64,16 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
                     overflow: TextOverflow.visible,
                     textAlign: TextAlign.center,
                   ),
-                  // Text(
-                  //   '\$ ${amountSaved.toString()}',
-                  //   style: Theme.of(context).textTheme.headline1,
-                  // ),
-                  GoalAmountField(
-                    goal: widget.goal,
-                    amountSaved: amountSaved,
+                  Row(
+                    children: <Widget>[
+                      Text('\$', style: Theme.of(context).textTheme.bodyText1),
+                      Expanded(
+                        child: GoalAmountField(
+                          goal: widget.goal,
+                          amountSaved: amountSaved,
+                        ),
+                      ),
+                    ],
                   ),
                   Container(
                     padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
@@ -106,7 +109,7 @@ class GoalAmountField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue: '\$ ${0.00}',
+      autofocus: true,
       decoration: InputDecoration(
         labelStyle: new TextStyle(
             color: Theme.of(context).primaryColor, fontSize: 16.0),
@@ -116,14 +119,8 @@ class GoalAmountField extends StatelessWidget {
         amountSaved = double.parse(val);
         _goal.amountSaved += amountSaved;
       },
-      inputFormatters: [
-        CurrencyTextInputFormatter(),
-      ],
-      // REGEX from income.dart
       validator: (val) {
-        // TODO add validation
-        if (val.contains(new RegExp(r'^-?\d{0,3}(,\d{3}){0,3}(.\d+)?$'))) {
-          // ^-?\d+(\.\d{1,2})?$
+        if (val.contains(new RegExp(r'^-?\d+(\.\d{1,2})?$'))) {
           // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
           // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
           if (double.parse(
