@@ -1,3 +1,5 @@
+import 'package:Plutus/models/category.dart';
+import 'package:Plutus/screens/individual_goal_screen.dart';
 import 'package:Plutus/screens/new_budget_screens/income_screen.dart';
 import 'package:Plutus/models/month_changer.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +31,10 @@ void main() async {
       ChangeNotifierProvider(create: (context) => ColorProvider()),
       ChangeNotifierProvider(create: (context) => GoalDataProvider()),
       ChangeNotifierProvider(
-        create: (context) => Budget(),
+        create: (context) => BudgetDataProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => CategoryDataProvider(),
       ),
       ChangeNotifierProvider(
         create: (_) => Auth(),
@@ -60,7 +65,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var colors = Provider.of<ColorProvider>(context);
-    var isDark = colors.isDark ?? false; // default to light mode
     var colorMode = isDark ? 'dark' : 'light';
     var selectedColorIndex = colors.selectedColorIndex ?? 2; // default to amber
     var primarySwatch =
@@ -87,7 +91,6 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        initialRoute: '/onboarding',
         routes: {
           '/onboarding': (context) => OnBoardingPage(),
           DashboardScreen.routeName: (context) => DashboardScreen(),
