@@ -145,7 +145,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             maxLength: 14,
                             onSaved: (val) => widget.budget.setAmount(
                                 double.parse(val.replaceAll(",", ""))),
-
                             validator: (val) {
                               if (val.contains(new RegExp(
                                   r'^-?\d{0,3}(,\d{3}){0,3}(.\d+)?$'))) {
