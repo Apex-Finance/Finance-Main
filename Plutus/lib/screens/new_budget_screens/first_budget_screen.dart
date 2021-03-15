@@ -14,7 +14,7 @@ import '../../models/category.dart' as Category;
 // Form to budget out monthly income into categories
 class FirstBudgetScreen extends StatefulWidget {
   static const routeName = '/first_budget';
-  Budget budget;
+  final Budget budget;
   FirstBudgetScreen({this.budget});
   @override
   _FirstBudgetScreenState createState() => _FirstBudgetScreenState();

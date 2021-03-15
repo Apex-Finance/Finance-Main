@@ -118,34 +118,42 @@ Row buildMonthChanger(BuildContext context, MonthChanger monthData) {
   ]);
 }
 
-class TransactionsCard extends StatelessWidget {
+class TransactionsCard extends StatefulWidget {
   TransactionsCard({Key key, @required this.transactionsSnapshot})
       : super(key: key);
 
-  QuerySnapshot transactionsSnapshot;
-  Transaction.Transaction transaction = new Transaction.Transaction.empty();
+  final QuerySnapshot transactionsSnapshot;
+
+  @override
+  _TransactionsCardState createState() => _TransactionsCardState();
+}
+
+class _TransactionsCardState extends State<TransactionsCard> {
+  final Transaction.Transaction transaction =
+      new Transaction.Transaction.empty();
 
   @override
   Widget build(BuildContext context) {
-    final transactionData = Provider.of<Transaction.Transactions>(context);
+    var transactionData = Provider.of<Transaction.Transactions>(context);
 
     return Column(
       children: [
         ClipRRect(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           child: TotalExpenses(
-            monthlyExpenses:
-                transactionData.getTransactionExpenses(transactionsSnapshot),
+            monthlyExpenses: transactionData
+                .getTransactionExpenses(widget.transactionsSnapshot),
           ),
         ),
         Divider(height: 10),
         Expanded(
           child: ListView.builder(
-              itemCount: transactionsSnapshot.docs.length,
+              itemCount: widget.transactionsSnapshot.docs.length,
               itemBuilder: (context, index) {
                 // initialize the transaction document into a transaction object
-                return TransactionListTile(transactionData
-                    .initializeTransaction(transactionsSnapshot.docs[index]));
+                return TransactionListTile(
+                    transactionData.initializeTransaction(
+                        widget.transactionsSnapshot.docs[index]));
               }),
         ),
       ],
@@ -153,7 +161,7 @@ class TransactionsCard extends StatelessWidget {
   }
 }
 
-class TotalExpenses extends StatelessWidget {
+class TotalExpenses extends StatefulWidget {
   const TotalExpenses({
     Key key,
     @required this.monthlyExpenses,
@@ -161,6 +169,11 @@ class TotalExpenses extends StatelessWidget {
 
   final double monthlyExpenses;
 
+  @override
+  _TotalExpensesState createState() => _TotalExpensesState();
+}
+
+class _TotalExpensesState extends State<TotalExpenses> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -170,7 +183,7 @@ class TotalExpenses extends StatelessWidget {
         style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
       ),
       trailing: Text(
-        '\$${monthlyExpenses.toStringAsFixed(2)}',
+        '\$${widget.monthlyExpenses.toStringAsFixed(2)}',
         style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
       ),
     );
