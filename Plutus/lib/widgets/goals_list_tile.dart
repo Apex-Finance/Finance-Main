@@ -116,12 +116,6 @@ class _GoalsListTileState extends State<GoalsListTile> {
                   backgroundImage: NetworkImage(
                     'https://2p2bboli8d61fqhjiqzb8p1a-wpengine.netdna-ssl.com/wp-content/uploads/2018/07/1.jpg',
                   ),
-                new LinearPercentIndicator(
-                  alignment: MainAxisAlignment.center,
-                  width: MediaQuery.of(context).size.width * .57,
-                  lineHeight: 12.0,
-                  backgroundColor: Colors.black,
-                  progressColor: Theme.of(context).primaryColor,
                 ),
               ),
               title: Column(

@@ -6,26 +6,7 @@ class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'Account Screen',
-          style: TextStyle(
-            color: Theme.of(context).canvasColor,
-          ),
-        ),
-        // IconButton(
-        //icon:
-        actions: [
-          Icon(
-            Icons.logout,
-            size: 25,
-            color: Theme.of(context).accentColor,
-            //onPressed: () {},
-          ),
-        ],
-        // ),
-      ),
+      appBar: AppBar(),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {
       //     Navigator.of(context).pushNamed('/dashboard');
@@ -50,28 +31,6 @@ class AccountScreen extends StatelessWidget {
             ),
             SizedBox(
               height: 20,
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  //'$email',
-                  'name',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                // IconButton(
-                //icon:
-                Icon(
-                  Icons.create_sharp,
-                  size: 25,
-                  color: Theme.of(context).primaryColor,
-                  //onPressed: () {},
-                ),
-                // ),
-              ],
             ),
             Icon(
               Icons.account_circle,
@@ -91,21 +50,6 @@ class AccountScreen extends StatelessWidget {
             Text(
               'Password',
               style: Theme.of(context).textTheme.bodyText2,
-            RaisedButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(20),
-                  bottom: Radius.circular(20),
-                ),
-              ),
-              color: Theme.of(context).primaryColor,
-              child: Text(
-                'Change Password',
-                style: TextStyle(
-                  color: Theme.of(context).canvasColor,
-                ),
-              ),
-              onPressed: () {},
             ),
           ],
         ),

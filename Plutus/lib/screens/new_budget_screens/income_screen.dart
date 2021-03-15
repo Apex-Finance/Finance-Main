@@ -96,7 +96,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                     Text(
                       "Monthly Income",
                       style: TextStyle(
-                        color: Theme.of(context).primaryColor,
+                        color: Colors.amber,
                         fontSize: 35,
                       ),
                     ),
