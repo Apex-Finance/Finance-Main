@@ -86,8 +86,8 @@ class _BudgetListTileState extends State<BudgetListTile> {
                             : monthlyBudget.getCategoryTransactionsAmount(
                                     monthlyBudget, widget.category) /
                                 monthlyBudget.categoryAmount[widget.category],
-                    backgroundColor: Colors.black,
-                    progressColor: Colors.amber,
+                    backgroundColor: Theme.of(context).canvasColor,
+                    progressColor: Theme.of(context).primaryColor,
                   ),
                   SizedBox(
                     height: 20,
