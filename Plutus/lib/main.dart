@@ -19,6 +19,7 @@ import './screens/settings_screen.dart';
 import './models/transaction.dart';
 import './models/budget.dart';
 import './providers/auth.dart';
+import './providers/color.dart';
 import 'models/goals.dart';
 
 void main() async {
@@ -49,12 +50,12 @@ void main() async {
                     : previousTransactions.transactions),
         create: null,
       ),
-      ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
-        update: (buildContext, monthChanger, transactions, previousBudgets) =>
-            Budgets(monthChanger, transactions,
-                previousBudgets == null ? [] : previousBudgets.budgets),
-        create: null,
-      ),
+      // ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
+      //   update: (buildContext, monthChanger, transactions, previousBudgets) =>
+      //       Budgets(monthChanger, transactions,
+      //           previousBudgets == null ? [] : previousBudgets.budgets),
+      //   create: null,
+      // ),
     ], child: MyApp()),
   );
 }
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var colors = Provider.of<ColorProvider>(context);
+    var isDark = colors.isDark ?? false; // default to light mode
     var colorMode = isDark ? 'dark' : 'light';
     var selectedColorIndex = colors.selectedColorIndex ?? 2; // default to amber
     var primarySwatch =
@@ -88,21 +90,21 @@ class MyApp extends StatelessWidget {
               headline1: TextStyle(color: primaryColor, fontSize: 25),
             ),
           ),
-          initialRoute: '/onboarding',
-          routes: {
-            '/onboarding': (context) => OnBoardingPage(),
-            DashboardScreen.routeName: (context) => DashboardScreen(),
-            BudgetScreen.routeName: (context) => BudgetScreen(),
-            TransactionScreen.routeName: (context) => TransactionScreen(),
-            GoalScreen.routeName: (context) => GoalScreen(),
-            IncomeScreen.routeName: (context) => IncomeScreen(),
-            FirstBudgetScreen.routeName: (context) => FirstBudgetScreen(),
-            AuthScreen.routeName: (context) => AuthScreen(),
-            AccountScreen.routeName: (context) => AccountScreen(),
-            SettingsScreen.routeName: (context) => SettingsScreen(),
-            TabScreen.routeName: (context) => TabScreen(),
-          },
         ),
+        initialRoute: '/onboarding',
+        routes: {
+          '/onboarding': (context) => OnBoardingPage(),
+          DashboardScreen.routeName: (context) => DashboardScreen(),
+          BudgetScreen.routeName: (context) => BudgetScreen(),
+          TransactionScreen.routeName: (context) => TransactionScreen(),
+          GoalScreen.routeName: (context) => GoalScreen(),
+          IncomeScreen.routeName: (context) => IncomeScreen(),
+          FirstBudgetScreen.routeName: (context) => FirstBudgetScreen(),
+          AuthScreen.routeName: (context) => AuthScreen(),
+          AccountScreen.routeName: (context) => AccountScreen(),
+          SettingsScreen.routeName: (context) => SettingsScreen(),
+          TabScreen.routeName: (context) => TabScreen(),
+        },
       ),
     );
   }
