@@ -6,14 +6,13 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import '../models/goals.dart';
 import '../widgets/goals_form.dart';
+import '../screens/individual_goal_screen.dart';
 
 class GoalsListTile extends StatefulWidget {
   final Goal goal;
-
-  GoalsListTile(this.goal);
-
   @override
   _GoalsListTileState createState() => _GoalsListTileState();
+  GoalsListTile(this.goal);
 }
 
 class _GoalsListTileState extends State<GoalsListTile> {
@@ -21,10 +20,11 @@ class _GoalsListTileState extends State<GoalsListTile> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (_) => GoalsForm(),
+      builder: (_) => IndividualGoalScreen(goal),
     );
   }
 
+  DateTime _date = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Padding(

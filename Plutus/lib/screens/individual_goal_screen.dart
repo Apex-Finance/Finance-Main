@@ -5,6 +5,7 @@ import '../models/goals.dart';
 class IndividualGoalScreen extends StatefulWidget {
   static const routeName = '/individualgoal';
   Goal goal = Goal();
+  IndividualGoalScreen(this.goal);
 
   @override
   _IndividualGoalScreenState createState() => _IndividualGoalScreenState();
@@ -37,8 +38,11 @@ class IndividualGoalScreen extends StatelessWidget {
   static const routeName = '/individualgoal';
   Goal goal = Goal();
 
-  IndividualGoalScreen({@required this.goal});
+  @override
+  _IndividualGoalScreenState createState() => _IndividualGoalScreenState();
+}
 
+class _IndividualGoalScreenState extends State<IndividualGoalScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
