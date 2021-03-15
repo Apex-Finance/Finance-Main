@@ -57,7 +57,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Manage Transactions",
           body:
-              "Stay on top of your expenses with Plutus. Know exactly what and where you spent your money.",
+              "Stay on top of your expenses with Plutus. Know exactly what and when you spent your money.",
           image: _buildImage(
               'Keep-Track-of-the-Financial-Transactions-Within-Komet_1080x.png'),
           decoration: pageDecoration,

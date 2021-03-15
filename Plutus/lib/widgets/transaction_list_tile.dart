@@ -8,6 +8,7 @@ import '../models/categories.dart';
 import '../models/category_icon.dart';
 import 'package:provider/provider.dart';
 import './transaction_form.dart';
+import '../models/goals.dart';
 
 class TransactionListTile extends StatefulWidget {
   final Transaction transaction;
@@ -90,10 +91,7 @@ class _TransactionListTileState extends State<TransactionListTile> {
             onTap: () => _updateTransaction(context, widget.transaction),
             tileColor: Colors.grey[850],
             leading: CircleAvatar(
-                child: Icon(
-              categoryIcon[widget.transaction.getCategoryId()],
-              color: Theme.of(context).primaryColor,
-            )),
+                child: Icon(categoryIcon[widget.transaction.getCategoryId()])),
             title: AutoSizeText(
               '${widget.transaction.getTitle()}',
               maxLines: 1,

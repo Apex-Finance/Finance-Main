@@ -106,7 +106,10 @@ class Transactions with ChangeNotifier {
         categoryTitle: doc.data()['category title']);
   }
 
-  void addTransaction(Transaction transaction, BuildContext context) async {
+  void addTransaction(
+      {@required Transaction transaction,
+      @required BuildContext context,
+      String goalID}) async {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
@@ -117,6 +120,7 @@ class Transactions with ChangeNotifier {
       'amount': transaction.getAmount(),
       'date': transaction.getDate(),
       'category id': transaction.getCategoryId(),
+      'goalID': goalID,
     });
   }
 
@@ -148,7 +152,10 @@ class Transactions with ChangeNotifier {
     double totalExpenses = 0;
 
     snapshot.docs.forEach((doc) {
-      totalExpenses += doc.data()['amount'].toDouble();
+      if (doc.data()['amount'] == null)
+        totalExpenses += 0;
+      else
+        totalExpenses += doc.data()['amount'];
     });
 
     return totalExpenses;
@@ -200,6 +207,16 @@ class Transactions with ChangeNotifier {
         )
         .snapshots();
     return snapshot;
+  }
+
+  Stream<QuerySnapshot> getGoalTransactions(
+      BuildContext context, String goalID) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('Transactions')
+        .where('goalID', isEqualTo: goalID)
+        .snapshots();
   }
   // Sum the expenses for the month
   // double get monthlyExpenses {

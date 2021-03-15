@@ -46,7 +46,6 @@ class _AccountScreenState extends State<AccountScreen> {
         ],
         // ),
       ),
-
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {
       //     Navigator.of(context).pushNamed('/dashboard');

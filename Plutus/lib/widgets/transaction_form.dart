@@ -59,7 +59,10 @@ class _TransactionFormState extends State<TransactionForm> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       if (_transaction.getID() == null) {
-        transactionDataProvider.addTransaction(_transaction, context);
+        transactionDataProvider.addTransaction(
+          transaction: _transaction,
+          context: context,
+        );
       } else {
         transactionDataProvider.editTransaction(_transaction, context);
       }
@@ -79,6 +82,7 @@ class _TransactionFormState extends State<TransactionForm> {
 
     if (widget.transaction != null) {
       // if editing, store previous values in transaction to display previous values and submit them later
+      _transaction.setID(widget.transaction.getID());
       _transaction.setTitle(widget.transaction.getTitle());
       _transaction.setCategoryId(widget.transaction.getCategoryId());
       _transaction.setAmount(widget.transaction.getAmount());
@@ -375,7 +379,7 @@ class DescriptionTFF extends StatelessWidget {
       inputFormatters: [
         LengthLimitingTextInputFormatter(15),
       ],
-      maxLength: 15,
+      maxLength: 50,
       onEditingComplete: () => FocusScope.of(context).nextFocus(),
       onSaved: (val) => _transaction.setTitle(val.trim()),
       validator: (val) {

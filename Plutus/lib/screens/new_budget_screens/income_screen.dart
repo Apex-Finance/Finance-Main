@@ -96,7 +96,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                     Text(
                       "Monthly Income",
                       style: TextStyle(
-                        color: Theme.of(context).primaryColor,
+                        color: Colors.amber,
                         fontSize: 35,
                       ),
                     ),
@@ -110,13 +110,10 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             style: Theme.of(context).textTheme.bodyText1),
                         Expanded(
                           child: TextFormField(
-                            inputFormatters: [
-                              CurrencyTextInputFormatter(),
-                            ],
                             style: Theme.of(context).textTheme.bodyText1,
                             autofocus: true,
                             keyboardType: TextInputType.numberWithOptions(
-                                decimal: false, signed: true),
+                                decimal: true, signed: false),
                             onEditingComplete: () {
                               if (_formKey.currentState.validate()) {
                                 _formKey.currentState.save();
@@ -146,16 +143,18 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             onSaved: (val) => widget.budget.setAmount(
                                 double.parse(val.replaceAll(",", ""))),
                             validator: (val) {
-                              if (val.contains(new RegExp(
-                                  r'^-?\d{0,3}(,\d{3}){0,3}(.\d+)?$'))) {
-                                // ^-?\d+(\.\d{1,2})?$
+                              if (val.contains(
+                                  new RegExp(r'^-?\d+(\.\d{1,2})?$'))) {
                                 // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
                                 // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
                                 if (double.parse(
-                                        double.parse(val.replaceAll(",", ""))
-                                            .toStringAsFixed(2)) <=
+                                        double.parse(val).toStringAsFixed(2)) <=
                                     0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
                                   return 'Please enter an amount greater than 0.';
+                                if (double.parse(
+                                        double.parse(val).toStringAsFixed(2)) >
+                                    999999999.99)
+                                  return 'Max amount is \$999,999,999.99'; // no budget >= $1billion
                                 return null;
                               } else {
                                 return 'Please enter a number.';

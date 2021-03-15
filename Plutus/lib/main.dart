@@ -1,5 +1,4 @@
 import 'package:Plutus/models/category.dart';
-import 'package:Plutus/screens/individual_goal_screen.dart';
 import 'package:Plutus/screens/new_budget_screens/income_screen.dart';
 import 'package:Plutus/models/month_changer.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,6 @@ import './screens/settings_screen.dart';
 import './models/transaction.dart';
 import './models/budget.dart';
 import './providers/auth.dart';
-import './providers/color.dart';
 import 'models/goals.dart';
 
 void main() async {
@@ -90,20 +88,21 @@ class MyApp extends StatelessWidget {
               headline1: TextStyle(color: primaryColor, fontSize: 25),
             ),
           ),
+          initialRoute: '/onboarding',
+          routes: {
+            '/onboarding': (context) => OnBoardingPage(),
+            DashboardScreen.routeName: (context) => DashboardScreen(),
+            BudgetScreen.routeName: (context) => BudgetScreen(),
+            TransactionScreen.routeName: (context) => TransactionScreen(),
+            GoalScreen.routeName: (context) => GoalScreen(),
+            IncomeScreen.routeName: (context) => IncomeScreen(),
+            FirstBudgetScreen.routeName: (context) => FirstBudgetScreen(),
+            AuthScreen.routeName: (context) => AuthScreen(),
+            AccountScreen.routeName: (context) => AccountScreen(),
+            SettingsScreen.routeName: (context) => SettingsScreen(),
+            TabScreen.routeName: (context) => TabScreen(),
+          },
         ),
-        routes: {
-          '/onboarding': (context) => OnBoardingPage(),
-          DashboardScreen.routeName: (context) => DashboardScreen(),
-          BudgetScreen.routeName: (context) => BudgetScreen(),
-          TransactionScreen.routeName: (context) => TransactionScreen(),
-          GoalScreen.routeName: (context) => GoalScreen(),
-          IncomeScreen.routeName: (context) => IncomeScreen(),
-          FirstBudgetScreen.routeName: (context) => FirstBudgetScreen(),
-          AuthScreen.routeName: (context) => AuthScreen(),
-          AccountScreen.routeName: (context) => AccountScreen(),
-          SettingsScreen.routeName: (context) => SettingsScreen(),
-          TabScreen.routeName: (context) => TabScreen(),
-        },
       ),
     );
   }

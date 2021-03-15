@@ -45,15 +45,29 @@ class Goal {
     return title;
   }
 
-  void setAmountSaved(double amountValue) {
-    amountSaved = amountValue;
-  }
-
-  double getAmount() {
+  double getAmountSaved(BuildContext context, QuerySnapshot snapshot) {
+    amountSaved = 0;
+    for (var doc in snapshot.docs) {
+      amountSaved += doc.data()['amount'];
+    }
+    // goalTransactions.listen((snapshot) {
+    //   if (snapshot.docs.isNotEmpty) {
+    //     print(snapshot.docs.length);
+    //     snapshot.docs.forEach((doc) {
+    //       var amount = doc.data()['amount'];
+    //       print("amount  $amount");
+    //       amountSaved += amount;
+    //       count += 1;
+    //       print("$count count");
+    //     });
+    //   }
+    // });
+    print("$amountSaved amountSaved");
     return amountSaved;
   }
 
   void setGoalAmount(double amountValue) {
+    amountSaved = 0;
     goalAmount = amountValue;
   }
 
@@ -69,10 +83,9 @@ class GoalDataProvider with ChangeNotifier {
     Goal goal = Goal();
 
     goal.setID(doc.id);
-    goal.setAmountSaved(doc.data()['amountSaved']);
     goal.setTitle(doc.data()['title']);
     goal.setGoalAmount(doc.data()['goalAmount']);
-    goal.setDate(doc.data()['date']);
+    goal.setDate(doc.data()['dateOfGoal'].toDate());
 
     return goal;
   }
@@ -85,8 +98,8 @@ class GoalDataProvider with ChangeNotifier {
         .doc()
         .set({
       'title': goal.getTitle(),
-      'amount': goal.getAmount(),
       'goalAmount': goal.getGoalAmount(),
+      'dateOfGoal': goal.getDate(),
     });
   }
 
@@ -99,8 +112,8 @@ class GoalDataProvider with ChangeNotifier {
         .set(
       {
         'title': goal.getTitle(),
-        'amount': goal.getAmount(),
         'goalAmount': goal.getGoalAmount(),
+        'dateOfGoal': goal.getDate(),
       },
       SetOptions(merge: true),
     );

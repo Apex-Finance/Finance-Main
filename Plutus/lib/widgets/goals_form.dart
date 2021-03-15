@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:Plutus/models/goals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -11,13 +10,16 @@ import '../models/goals.dart';
 
 // Form to add a new goal
 class GoalsForm extends StatefulWidget {
+  final Goal goal;
+  GoalsForm({this.goal}); // Optional constructor for editing goal
+
   @override
   _GoalsFormState createState() => _GoalsFormState();
 }
 
 class _GoalsFormState extends State<GoalsForm> {
   final _formKey = GlobalKey<FormState>();
-  DateTime _date = DateTime.now();
+  DateTime _date;
   Goal _goal = Goal.empty();
   File _goalImage; // Image selected from the phone galler
   // TODO May need to change to update to DB
@@ -29,13 +31,23 @@ class _GoalsFormState extends State<GoalsForm> {
     });
   }
 
-  // Validates the goal object then pushes its data to the DB
+  // Validates each required textfield, saves its value to the goal, and
+  // returns the goal to the previous screen
   void _submitGoalForm(BuildContext context) {
+    var goalDataProvider =
+        Provider.of<GoalDataProvider>(context, listen: false);
+
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+
+      // If no date is set, set the date to today's date
+      if (_goal.getDate() == null) _goal.setDate(DateTime.now());
       // TODO save image into DB
-      Provider.of<GoalDataProvider>(context, listen: false)
-          .addGoal(_goal, context);
+      if (_goal.getID() == null) {
+        goalDataProvider.addGoal(_goal, context);
+      } else {
+        goalDataProvider.updateGoal(_goal, context);
+      }
       Navigator.of(context).pop(
         _goal,
       );
@@ -51,6 +63,20 @@ class _GoalsFormState extends State<GoalsForm> {
         _goalImage = File(pickedFile.path);
       }
     });
+  }
+
+  @override
+  // If editing, store previous values in goal to display previous values and submit them later
+  void initState() {
+    if (widget.goal != null) {
+      _goal.setID(widget.goal.getID());
+      _goal.setTitle(widget.goal.getTitle());
+      _goal.setGoalAmount(widget.goal.getGoalAmount());
+      _goal.setDate(widget.goal.getDate());
+    } else {
+      _goal.setDate(_date);
+    }
+    super.initState();
   }
 
   @override
@@ -71,15 +97,24 @@ class _GoalsFormState extends State<GoalsForm> {
               key: _formKey,
               child: Column(
                 children: <Widget>[
+                  // Title Text Field
                   GoalTitleField(
                     goal: _goal,
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  // Goal Amount Text Field
                   GoalAmountField(
                     goal: _goal,
                   ),
-                  buildDateChanger(context),
-                  buildImageSelector(context),
-                  buildSubmitButton(context),
+                  Row(
+                    children: [
+                      buildImageSelector(context),
+                      buildDateChanger(context),
+                      buildSubmitButton(context),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -90,80 +125,82 @@ class _GoalsFormState extends State<GoalsForm> {
   }
 
   // Selects an image to add to a goal
-  Row buildImageSelector(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        GestureDetector(
-          onTap: () => getImage(),
-          child: Container(
-            color: Theme.of(context).primaryColorLight,
-            width: 85,
-            height: 85,
-            child: _goalImage == null
-                ? Icon(Icons.camera_alt)
-                : FittedBox(
-                    fit: BoxFit.cover,
-                    child: Image.file(_goalImage),
-                  ),
-          ),
+  Widget buildImageSelector(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: 40,
+      ),
+      child: GestureDetector(
+        onTap: () => getImage(),
+        child: Container(
+          color: Theme.of(context).primaryColorLight,
+          width: 85,
+          height: 85,
+          child: _goalImage == null
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.camera_alt),
+                    Text(
+                      "Add a picture",
+                      style: TextStyle(
+                        color: Theme.of(context).canvasColor,
+                      ),
+                    ),
+                  ],
+                )
+              : FittedBox(
+                  fit: BoxFit.cover,
+                  child: Image.file(_goalImage),
+                ),
         ),
-        Padding(
-            padding: EdgeInsets.all(15),
-            child: Text("(Optional) Click to enter an Image")),
-      ],
+      ),
     );
   }
 
   // Validates required fields and sends goal data to DB
-  Container buildSubmitButton(BuildContext context) {
-    return Container(
-      alignment: Alignment.bottomRight,
-      child: FloatingActionButton.extended(
-        backgroundColor: Theme.of(context).primaryColorLight,
-        onPressed: () {
-          _submitGoalForm(context);
-        },
-        label: Text("Add Goal"),
+  Widget buildSubmitButton(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0, 120, 0, 0),
+      child: Container(
+        child: FloatingActionButton.extended(
+          backgroundColor: Theme.of(context).primaryColorLight,
+          onPressed: () => _submitGoalForm(context),
+          label: Text(_goal.getID() == null ? "Add Goal" : "Edit Goal"),
+        ),
       ),
     );
   }
 
   // Changes the date of the goal
-  Row buildDateChanger(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Container(
-          width: 125,
-          child: Text(
-            'Date: ${DateFormat.MMMd().format(_date)}',
-            style: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).primaryColor,
+  Widget buildDateChanger(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(10, 35, 30, 0),
+      child: RaisedButton(
+        color: Theme.of(context).primaryColorLight,
+        child: _goal.getDate() == null
+            ? Text('Due Date')
+            : Text(
+                '${DateFormat.MMMd().format(_goal.getDate())}',
+              ),
+        onPressed: () => showDatePicker(
+          context: context,
+          initialDate:
+              _goal.getDate() == null ? DateTime.now() : _goal.getDate(),
+          firstDate: DateTime.now().subtract(
+            Duration(
+              days: 365,
             ),
           ),
-        ),
-        RaisedButton(
-          color: Theme.of(context).primaryColorLight,
-          child: Text('Pick Date'),
-          onPressed: () => showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime.now().subtract(
-              Duration(
-                days: 365,
-              ),
+          lastDate: DateTime.now().add(
+            Duration(
+              days: 365,
             ),
-            lastDate: DateTime.now().add(
-              Duration(
-                days: 365,
-              ),
-            ),
-          ).then(
-            (value) => _setDate(value),
           ),
+        ).then(
+          (value) => _setDate(value),
         ),
-      ],
+      ),
     );
   }
 }
@@ -190,7 +227,7 @@ class GoalTitleField extends StatelessWidget {
       autofocus: true,
       style: TextStyle(fontSize: 20.0, color: Theme.of(context).primaryColor),
       inputFormatters: [
-        LengthLimitingTextInputFormatter(15),
+        LengthLimitingTextInputFormatter(50),
       ],
       maxLength: 50,
       onEditingComplete: () {
@@ -223,7 +260,7 @@ class GoalAmountField extends StatelessWidget {
       decoration: InputDecoration(
         labelStyle: new TextStyle(
             color: Theme.of(context).primaryColor, fontSize: 16.0),
-        labelText: "Amount",
+        labelText: "Target Amount",
       ),
       keyboardType: TextInputType
           .number, // May want to use Currency_Input_Formatter like income.dart
