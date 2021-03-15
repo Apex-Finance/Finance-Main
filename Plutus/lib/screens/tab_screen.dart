@@ -198,6 +198,7 @@ class _TabScreenState extends State<TabScreen> {
         bottomNavigationBar: AbsorbPointer(
             absorbing: _isOpen == true ? true : false,
             child: buildTabBar(context)),
+
       ),
     );
   }
