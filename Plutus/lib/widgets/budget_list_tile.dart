@@ -75,6 +75,81 @@ class _BudgetListTileState extends State<BudgetListTile> {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
+                  Icon(
+                    categoryIcon[widget.category],
+                    size: 20,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  AutoSizeText(
+                    stringToUserString(enumValueToString(widget.category)),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor, fontSize: 18),
+                  ),
+                  // category budget allocated
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '\$${monthlyBudget.categoryAmount[widget.category]}',
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 18),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              subtitle: Column(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  new LinearPercentIndicator(
+                    alignment: MainAxisAlignment.center,
+                    width: MediaQuery.of(context).size.width * .8,
+                    lineHeight: 12.0,
+                    percent: monthlyBudget.transactions == null
+                        ? 0.0
+                        : monthlyBudget.getCategoryTransactionsAmount(
+                                    monthlyBudget, widget.category) >
+                                monthlyBudget.categoryAmount[widget.category]
+                            ? 1
+                            : monthlyBudget.getCategoryTransactionsAmount(
+                                    monthlyBudget, widget.category) /
+                                monthlyBudget.categoryAmount[widget.category],
+                    backgroundColor: Theme.of(context).canvasColor,
+                    progressColor: Theme.of(context).primaryColor,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    '\$${monthlyBudget.categoryAmount[widget.category] - monthlyBudget.getCategoryTransactionsAmount(monthlyBudget, widget.category)} remaining',
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor, fontSize: 18),
+                  ),
+                ],
+              ),
+            ),
+            if (_expanded)
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                color: Colors.grey[550],
+                height: 100,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Total',
+                            style: TextStyle(
                               color: Theme.of(context).primaryColor,
                               fontSize: 18),
                         ),
