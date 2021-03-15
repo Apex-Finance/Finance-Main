@@ -22,7 +22,9 @@ class AccountScreen extends StatelessWidget {
         centerTitle: true,
         title: Text(
           'Account Screen',
-          style: Theme.of(context).textTheme.bodyText1,
+          style: TextStyle(
+            color: Theme.of(context).canvasColor,
+          ),
         ),
         // IconButton(
         //icon:
@@ -62,7 +64,7 @@ class AccountScreen extends StatelessWidget {
                 Text(
                   //'$email',
                   'name',
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context).textTheme.bodyText1,
                 ),
                 SizedBox(
                   width: 10,
@@ -93,7 +95,9 @@ class AccountScreen extends StatelessWidget {
               color: Theme.of(context).primaryColor,
               child: Text(
                 'Change Password',
-                style: Theme.of(context).textTheme.bodyText2,
+                style: TextStyle(
+                  color: Theme.of(context).canvasColor,
+                ),
               ),
               onPressed: () {},
             ),

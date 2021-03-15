@@ -107,7 +107,8 @@ class _CategoryListTileState extends State<CategoryListTile> {
                   }, // go to next textfield
                   decoration: InputDecoration(
                     hintText: '0.00',
-                    hintStyle: TextStyle(color: Colors.amber.withOpacity(0.6)),
+                    hintStyle: TextStyle(
+                        color: Theme.of(context).primaryColor.withOpacity(0.6)),
                   ),
                   style: Theme.of(context).textTheme.bodyText1,
                   keyboardType: TextInputType.number,
