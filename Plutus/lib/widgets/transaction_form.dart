@@ -228,61 +228,72 @@ class _TransactionFormState extends State<TransactionForm> {
                       height: 600,
                       width: 400,
                       child: StreamBuilder(
-                        stream: categoryDataProvider.getCategories(context),
-                        builder:
-                            (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            snapshot.data.docs.forEach((element) {
-                              categories.add(categoryDataProvider
-                                  .initializeCategory(element));
-                            });
-                            print("${categories.length} number of categories");
-                            // categories = convertQuerytoList(
-                            //     snapshot, categoryDataProvider);
-                            // print(categories.length);
-                            return ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              itemCount: snapshot.data.docs.length,
-                              itemBuilder: (context, index) {
-                                print("$index index");
-                                category =
-                                    categoryDataProvider.initializeCategory(
-                                        snapshot.data.docs[index]);
-                                print(categories[index].getTitle() +
-                                    " initializd");
-                                return ListTile(
-                                  tileColor: Theme.of(context).canvasColor,
-                                  leading: Icon(
-                                    IconData(
-                                      categories[index].getCodepoint(),
-                                      fontFamily: 'MaterialIcons',
-                                    ),
-                                    size: 30,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                  title: Text(
-                                    '${categories[index].getTitle()}',
-                                    style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 18,
-                                      fontFamily: 'Anton',
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    _setCategory(categories[index]);
+                          stream: categoryDataProvider.getCategories(context),
+                          builder:
+                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.none:
+                                {
+                                  return Text(
+                                      'There was an error loading your categories.');
+                                }
+                              case ConnectionState.waiting:
+                                {
+                                  return CircularProgressIndicator();
+                                }
+                              default:
+                                {
+                                  snapshot.data.docs.forEach((element) {
+                                    categories.add(categoryDataProvider
+                                        .initializeCategory(element));
+                                  });
+                                  print(
+                                      "${categories.length} number of categories");
+                                  // categories = convertQuerytoList(
+                                  //     snapshot, categoryDataProvider);
+                                  // print(categories.length);
+                                  return ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: snapshot.data.docs.length,
+                                    itemBuilder: (context, index) {
+                                      print("$index index");
+                                      category = categoryDataProvider
+                                          .initializeCategory(
+                                              snapshot.data.docs[index]);
+                                      print(categories[index].getTitle() +
+                                          " initializd");
+                                      return ListTile(
+                                        tileColor:
+                                            Theme.of(context).canvasColor,
+                                        leading: Icon(
+                                          IconData(
+                                            categories[index].getCodepoint(),
+                                            fontFamily: 'MaterialIcons',
+                                          ),
+                                          size: 30,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        title: Text(
+                                          '${categories[index].getTitle()}',
+                                          style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: 18,
+                                            fontFamily: 'Anton',
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          _setCategory(categories[index]);
 
-                                    Navigator.of(context).pop(category);
-                                  },
-                                );
-                              },
-                            );
-                          } else {
-                            return CircularProgressIndicator();
-                          }
-                        },
-                      ),
+                                          Navigator.of(context).pop(category);
+                                        },
+                                      );
+                                    },
+                                  );
+                                }
+                            }
+                          }),
                     ),
                   ],
                 ),
