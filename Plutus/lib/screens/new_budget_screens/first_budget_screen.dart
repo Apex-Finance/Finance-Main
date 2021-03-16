@@ -31,9 +31,9 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
     categoryList.forEach((category) {
       amount += category.getAmount();
     });
-    setState(() {
-      widget.budget.categoryAmount = amount;
-    });
+    // setState(() {
+    widget.budget.categoryAmount = amount;
+    // });
     return;
   }
 
@@ -174,11 +174,11 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                     builder: (context) => FloatingActionButton.extended(
                       backgroundColor: Theme.of(context).primaryColor,
                       onPressed: () {
-                        Provider.of<CategoryDataProvider>(context,
-                                listen:
-                                    false) //TODO ALEX no setcategoryamount() for budget yet
-                            .uploadCategory(
-                                widget.budget.getID(), category, context);
+                        // Provider.of<CategoryDataProvider>(context,
+                        //         listen:
+                        //             false) //TODO ALEX no setcategoryamount() for budget yet
+                        //     .uploadCategory(
+                        //         widget.budget.getID(), category, context);
                         setState(
                           () {
                             if (widget.budget.getRemainingAmountNew() < -0.001)

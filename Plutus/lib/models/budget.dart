@@ -113,7 +113,7 @@ class BudgetDataProvider with ChangeNotifier {
     budget.setID(doc.id);
     budget.setTitle(doc.data()['title']);
     budget.setAmount(doc.data()['amount']);
-    budget.setDate(doc.data()['date']);
+    budget.setDate(doc.data()['date'].toDate());
 
     return budget;
   }
@@ -122,7 +122,7 @@ class BudgetDataProvider with ChangeNotifier {
     var budgetRef = FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('budget')
+        .collection('budgets')
         .where('date', isGreaterThanOrEqualTo: DateTime(date.year, date.month))
         .snapshots();
     return budgetRef;

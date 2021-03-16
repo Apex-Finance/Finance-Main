@@ -265,18 +265,21 @@ class _BudgetScreenState extends State<BudgetScreen> {
                               child: StreamBuilder<QuerySnapshot>(
                                   stream: budgetCategories,
                                   builder: (context, categorySnapshot) {
-                                    return ListView.builder(
-                                        itemCount:
-                                            categorySnapshot.data.docs.length,
-                                        itemBuilder: (context, index) {
-                                          return BudgetListTile(
-                                              Provider.of<CategoryDataProvider>(
-                                                      context,
-                                                      listen: false)
-                                                  .initializeCategory(
-                                                      categorySnapshot
-                                                          .data.docs[index]));
-                                        });
+                                    if (categorySnapshot.hasData &&
+                                        categorySnapshot.data.docs.isNotEmpty) {
+                                      return ListView.builder(
+                                          itemCount:
+                                              categorySnapshot.data.docs.length,
+                                          itemBuilder: (context, index) {
+                                            return BudgetListTile(Provider.of<
+                                                        CategoryDataProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .initializeCategory(
+                                                    categorySnapshot
+                                                        .data.docs[index]));
+                                          });
+                                    }
                                   }),
                             ),
                           ],
