@@ -67,19 +67,18 @@ class _CategoryListTileState extends State<CategoryListTile> {
                       }
                       widget.categoryList[widget.index]
                           .setAmount(double.parse(_controller.text));
-                      if (widget.categoryList[widget.index].getAmount() ==
+                      if (widget.categoryList[widget.index].getAmount() >
+                          0.00) {
+                        Provider.of<CategoryDataProvider>(context,
+                                listen: false)
+                            .uploadCategory(widget.budget.getID(),
+                                widget.categoryList[widget.index], context);
+                      } else if (widget.categoryList[widget.index]
+                              .getAmount() ==
                           0.00) {
                         Provider.of<CategoryDataProvider>(context,
                                 listen: false)
                             .removeCategory(
-                          widget.budget.getID(),
-                          widget.categoryList[widget.index],
-                          context,
-                        );
-                      } else {
-                        Provider.of<CategoryDataProvider>(context,
-                                listen: false)
-                            .uploadCategory(
                           widget.budget.getID(),
                           widget.categoryList[widget.index],
                           context,
@@ -115,14 +114,6 @@ class _CategoryListTileState extends State<CategoryListTile> {
                           widget.categoryList[widget.index],
                           context,
                         );
-                      } else {
-                        Provider.of<CategoryDataProvider>(context,
-                                listen: false)
-                            .uploadCategory(
-                          widget.budget.getID(),
-                          widget.categoryList[widget.index],
-                          context,
-                        );
                       }
                     } // if amount is cleared, set to 0 so that remainingBudget can update
                   }
@@ -144,21 +135,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                   keyboardType: TextInputType.number,
                   controller: _controller,
                   onChanged: (_) {
-                    Provider.of<CategoryDataProvider>(context, listen: false)
-                        .uploadCategory(
-                      widget.budget.getID(),
-                      widget.categoryList[widget.index],
-                      context,
-                    );
-
                     widget.categoryHandler();
-
-                    Provider.of<CategoryDataProvider>(context, listen: false)
-                        .uploadCategory(
-                      widget.budget.getID(),
-                      widget.categoryList[widget.index],
-                      context,
-                    );
                   },
                 ),
               ),

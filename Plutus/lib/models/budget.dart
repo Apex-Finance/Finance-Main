@@ -16,9 +16,15 @@ class Budget {
   DateTime _date;
   double _remainingMonthlyAmount = 0;
 
+  double categoryAmount = 0;
+
   Budget.empty();
 
   Budget();
+
+  double getRemainingAmountNew() {
+    return _amount - categoryAmount;
+  }
 
   void setID(String idValue) {
     _id = idValue;
@@ -138,11 +144,10 @@ class BudgetDataProvider with ChangeNotifier {
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .collection('budgets')
-        .doc()
-        .set({
+        .add({
       'date': budget.getDate(),
       'amount': budget.getAmount(),
-    });
+    }).then((docRef) => {budget.setID(docRef.id)});
     notifyListeners();
   }
 
@@ -166,4 +171,16 @@ class BudgetDataProvider with ChangeNotifier {
         .doc(budgetID)
         .delete();
   }
+
+  // String getBudgetID(DateTime date, BuildContext context) {
+  //   var something = FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(Provider.of<Auth>(context, listen: false).getUserId())
+  //       .collection('budgets')
+  //       .where('date', isEqualTo: date)
+  //       .snapshots()
+  //       .first;
+
+  //   something.whenComplete((item) => return item)
+  // }
 }

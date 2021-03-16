@@ -27,9 +27,14 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
 
   // Sets the category and amount for the current ListTile being built
   void calculateAmountLeft() {
+    double amount = 0.00;
+    print(categoryList.length);
     categoryList.forEach((category) {
-      remainingAmount -= category.getAmount();
+      amount += category.getAmount();
     });
+    widget.budget.categoryAmount = amount;
+    // remainingAmount = widget.budget.getAmount() - amount;
+    // print("inside: $remainingAmount");
 
     return;
   }
@@ -93,7 +98,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             style: TextStyle(color: Colors.amber, fontSize: 15),
                           ),
                           AutoSizeText(
-                            '\$${widget.budget.getRemainingAmount().toStringAsFixed(2)}',
+                            '\$${widget.budget.getRemainingAmountNew().toStringAsFixed(2)}',
                             maxLines: 1,
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor,
@@ -121,7 +126,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             stream: BudgetDataProvider().getBudgetCategories(
                                 context, widget.budget.getID()),
                             builder: (context, snapshot) {
-                              if (snapshot.data.docs.isNotEmpty) {
+                              if (snapshot.hasData &&
+                                  snapshot.data.docs.isNotEmpty) {
                                 snapshot.data.docs.forEach((doc) {
                                   categoryList.forEach((category) {
                                     if (doc.id == category.getID()) {
@@ -177,7 +183,9 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                 widget.budget.getID(), category, context);
                         setState(
                           () {
-                            if (widget.budget.getRemainingAmount() < -0.001)
+                            print(
+                                "outside: ${widget.budget.getRemainingAmountNew()}");
+                            if (widget.budget.getRemainingAmountNew() < -0.001)
                               Scaffold.of(context).showSnackBar(
                                 SnackBar(
                                   behavior: SnackBarBehavior.floating,
@@ -191,7 +199,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                   ),
                                 ),
                               );
-                            else if (widget.budget.getRemainingAmount() >
+                            else if (widget.budget.getRemainingAmountNew() >
                                 0.001) {
                               Scaffold.of(context).showSnackBar(
                                 SnackBar(
