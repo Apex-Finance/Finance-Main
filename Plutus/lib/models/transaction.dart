@@ -204,7 +204,7 @@ class Transactions with ChangeNotifier {
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .collection('Transactions')
-        .where('category id', isEqualTo: categoryID)
+        .where('categoryID', isEqualTo: categoryID)
         .where(
           'date',
           isGreaterThanOrEqualTo: DateTime(
