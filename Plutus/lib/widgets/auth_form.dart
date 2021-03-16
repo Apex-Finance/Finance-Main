@@ -139,6 +139,7 @@ class _AuthFormState extends State<AuthForm> {
                   onSaved: (value) {
                     email = value.trim();
                   },
+                  style: Theme.of(context).textTheme.bodyText2,
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Password'),
@@ -159,6 +160,7 @@ class _AuthFormState extends State<AuthForm> {
                   onSaved: (value) {
                     password = value.trim();
                   },
+                  style: Theme.of(context).textTheme.bodyText2,
                 ),
                 if (_authMode == AuthMode.Signup)
                   TextFormField(
@@ -174,6 +176,7 @@ class _AuthFormState extends State<AuthForm> {
                             }
                           }
                         : null,
+                    style: Theme.of(context).textTheme.bodyText2,
                   ),
                 SizedBox(
                   height: 20,
