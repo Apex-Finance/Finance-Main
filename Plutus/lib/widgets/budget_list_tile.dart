@@ -3,6 +3,7 @@ import 'package:Plutus/widgets/transaction_list_tile.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 import '../providers/auth.dart';
 import '../models/budget.dart';
@@ -32,7 +33,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .collection('Transactions')
-        .where('category id', isEqualTo: widget.category.getID())
+        .where('categoryID', isEqualTo: widget.category.getID())
         .snapshots();
     // final monthlyBudget =
     //     Provider.of<BudgetDataProvider>(context).monthlyBudget;
@@ -51,6 +52,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                 children: [
                   ListTile(
                     onTap: () {
+                      print('tapped');
                       setState(() {
                         _expanded = !_expanded;
                       });
@@ -82,7 +84,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              '\$${widget.category.getAmount()}',
+                              '\$${widget.category.getRemainingAmount()}',
                               style: TextStyle(
                                   color: Theme.of(context).primaryColor,
                                   fontSize: 18),
@@ -127,7 +129,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 15, vertical: 4),
                       color: Colors.grey[550],
-                      height: 100,
+                      height: min(snapshot.data.docs.length * 200.0, 250),
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
@@ -165,20 +167,22 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                         fontSize: 18),
                                     textAlign: TextAlign.center,
                                   )
-                                : Column(
-                                    children: [
-                                      ListView.builder(
-                                        itemCount: snapshot.data.docs.length,
-                                        itemBuilder: (context, index) {
-                                          return TransactionListTile(Provider
-                                                  .of<Transaction.Transactions>(
-                                                      context,
-                                                      listen: false)
-                                              .initializeTransaction(
-                                                  snapshot.data.docs[index]));
-                                        },
-                                      ),
-                                    ],
+                                : Container(
+                                    height: min(
+                                            snapshot.data.docs.length * 200.0,
+                                            250.0) -
+                                        25,
+                                    child: ListView.builder(
+                                      itemCount: snapshot.data.docs.length,
+                                      itemBuilder: (context, index) {
+                                        return TransactionListTile(Provider.of<
+                                                    Transaction.Transactions>(
+                                                context,
+                                                listen: false)
+                                            .initializeTransaction(
+                                                snapshot.data.docs[index]));
+                                      },
+                                    ),
                                   ),
                           ],
                         ),
