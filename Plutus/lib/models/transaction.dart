@@ -20,12 +20,19 @@ class Transaction {
 
   Transaction.empty();
 
-  Transaction(
-      String id, String title, DateTime date, String categoryId, this._amount,
-      {categoryTitle = ""}) {
+  Transaction({
+    @required String id,
+    @required String title,
+    @required DateTime date,
+    @required String categoryId,
+    @required double amount,
+    @required String categoryTitle,
+    @required int categoryCodepoint,
+  }) {
     _id = id;
     _title = title;
     _date = date;
+    _amount = amount;
     _categoryId = categoryId;
     _categoryTitle = categoryTitle;
   }
@@ -98,12 +105,14 @@ class Transactions with ChangeNotifier {
   Transaction initializeTransaction(DocumentSnapshot doc) {
     // Initialize a transaction with document data
     return new Transaction(
-        doc.id,
-        doc.data()['title'],
-        doc.data()['date'].toDate(),
-        doc.data()['category id'],
-        doc.data()['amount'],
-        categoryTitle: doc.data()['category title']);
+      id: doc.id,
+      title: doc.data()['title'],
+      date: doc.data()['date'].toDate(),
+      categoryId: doc.data()['categoryID'],
+      categoryTitle: doc.data()['categoryTitle'],
+      categoryCodepoint: doc.data()['categoryCodepoint'],
+      amount: doc.data()['amount'],
+    );
   }
 
   void addTransaction(
@@ -119,7 +128,9 @@ class Transactions with ChangeNotifier {
       'title': transaction.getTitle(),
       'amount': transaction.getAmount(),
       'date': transaction.getDate(),
-      'category id': transaction.getCategoryId(),
+      'categoryID': transaction.getCategoryId(),
+      'categoryTitle': transaction.getCategoryTitle(),
+      'categoryCodepoint': transaction.getCategoryCodePoint(),
       'goalID': goalID,
     });
   }
@@ -135,7 +146,9 @@ class Transactions with ChangeNotifier {
         'title': transaction.getTitle(),
         'amount': transaction.getAmount(),
         'date': transaction.getDate(),
-        'category id': transaction.getCategoryId(),
+        'categoryID': transaction.getCategoryId(),
+        'categoryTitle': transaction.getCategoryTitle(),
+        'categoryCodepoint': transaction.getCategoryCodePoint(),
       },
       SetOptions(merge: true),
     );

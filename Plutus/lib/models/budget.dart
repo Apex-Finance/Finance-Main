@@ -122,7 +122,7 @@ class BudgetDataProvider with ChangeNotifier {
     var budgetRef = FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('budgets')
+        .collection('Budgets')
         .where('date', isGreaterThanOrEqualTo: DateTime(date.year, date.month))
         .snapshots();
     return budgetRef;
@@ -133,7 +133,7 @@ class BudgetDataProvider with ChangeNotifier {
     return FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('budgets')
+        .collection('Budgets')
         .doc(budgetID)
         .collection('categories')
         .snapshots();
@@ -143,7 +143,7 @@ class BudgetDataProvider with ChangeNotifier {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('budgets')
+        .collection('Budgets')
         .add({
       'date': budget.getDate(),
       'amount': budget.getAmount(),
@@ -155,7 +155,7 @@ class BudgetDataProvider with ChangeNotifier {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('budgets')
+        .collection('Budgets')
         .doc(budget.getID())
         .set({
       'date': budget.getDate(),
@@ -167,7 +167,7 @@ class BudgetDataProvider with ChangeNotifier {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('budgets')
+        .collection('Budgets')
         .doc(budgetID)
         .delete();
   }

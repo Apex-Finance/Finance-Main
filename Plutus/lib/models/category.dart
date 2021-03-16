@@ -86,7 +86,7 @@ class CategoryDataProvider with ChangeNotifier {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('budgets')
+        .collection('Budgets')
         .doc(budgetID)
         .collection('categories')
         .doc(category.getID())
@@ -105,7 +105,7 @@ class CategoryDataProvider with ChangeNotifier {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('budgets')
+        .collection('Budgets')
         .doc(budgetID)
         .collection('categories')
         .doc(category.getID())
