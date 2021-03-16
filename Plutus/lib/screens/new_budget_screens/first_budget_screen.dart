@@ -20,24 +20,25 @@ class FirstBudgetScreen extends StatefulWidget {
 }
 
 var categoryList = new List<Category>();
-double remainingAmount;
+List<FocusNode> catAmountFocusNodes = List<FocusNode>();
 
 class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   double activeAmount = 0;
 
   // Sets the category and amount for the current ListTile being built
-  void calculateAmountLeft() {
+  void calculateAmountLeft(int index) {
     double amount = 0.00;
     categoryList.forEach((category) {
       amount += category.getAmount();
     });
+    // setState(() {
     widget.budget.categoryAmount = amount;
+    // });
     return;
   }
 
   @override
   Widget build(BuildContext context) {
-    remainingAmount = widget.budget.getAmount();
     var categoryDataProvider = Provider.of<CategoryDataProvider>(context);
     var category = Category();
 
@@ -116,9 +117,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                               categoryDataProvider.initializeCategory(doc));
                         });
                         categoryList = tempList;
-                        List<FocusNode> catAmountFocusNodes =
-                            List<FocusNode>.generate(
-                                categoryList.length, (index) => FocusNode());
+                        catAmountFocusNodes = List<FocusNode>.generate(
+                            categoryList.length, (index) => FocusNode());
                         if (widget.budget.getID() != null) {
                           return StreamBuilder<QuerySnapshot>(
                             stream: BudgetDataProvider().getBudgetCategories(
@@ -174,11 +174,11 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                     builder: (context) => FloatingActionButton.extended(
                       backgroundColor: Theme.of(context).primaryColor,
                       onPressed: () {
-                        Provider.of<CategoryDataProvider>(context,
-                                listen:
-                                    false) //TODO ALEX no setcategoryamount() for budget yet
-                            .uploadCategory(
-                                widget.budget.getID(), category, context);
+                        // Provider.of<CategoryDataProvider>(context,
+                        //         listen:
+                        //             false) //TODO ALEX no setcategoryamount() for budget yet
+                        //     .uploadCategory(
+                        //         widget.budget.getID(), category, context);
                         setState(
                           () {
                             if (widget.budget.getRemainingAmountNew() < -0.001)

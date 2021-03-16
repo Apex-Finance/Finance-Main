@@ -84,7 +84,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                           context,
                         );
                       }
-                      widget.categoryHandler();
+                      widget.categoryHandler(widget.index);
                     } // validates for numbers < 0
                     else if (_controller.text.isNotEmpty) {
                       Scaffold.of(context).showSnackBar(
@@ -124,7 +124,10 @@ class _CategoryListTileState extends State<CategoryListTile> {
                   onFieldSubmitted: (value) {
                     //widget.focusNode[widget.index].unfocus();
                     if (widget.index < widget.categoryList.length) {
-                      widget.focusNode[widget.index + 1].requestFocus();
+                      widget.focusNode[widget.index].unfocus();
+                      FocusScope.of(context)
+                          .requestFocus(widget.focusNode[widget.index + 1]);
+                      // widget.focusNode[widget.index + 1].requestFocus();
                     }
                   }, // go to next textfield
                   decoration: InputDecoration(
@@ -135,6 +138,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                   style: Theme.of(context).textTheme.bodyText1,
                   keyboardType: TextInputType.number,
                   controller: _controller,
+                  onChanged: (_) => {},
                 ),
               ),
             ),

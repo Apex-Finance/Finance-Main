@@ -70,8 +70,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                           width: 10,
                         ),
                         AutoSizeText(
-                          stringToUserString(
-                              enumValueToString(widget.category)),
+                          widget.category.getTitle(),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -180,32 +179,6 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                         },
                                       ),
                                     ],
-                                    // monthlyBudget
-                                    //     .getCategoryTransactions(
-                                    //         monthlyBudget, widget.category)
-                                    //     .map(
-                                    //       (trans) => Row(
-                                    //         mainAxisAlignment:
-                                    //             MainAxisAlignment.spaceBetween,
-                                    //         children: [
-                                    //           Text(
-                                    //             trans.getTitle(),
-                                    //             style: TextStyle(
-                                    //                 color: Theme.of(context)
-                                    //                     .primaryColor,
-                                    //                 fontSize: 18),
-                                    //           ),
-                                    //           Text(
-                                    //             '\$${trans.getAmount()}',
-                                    //             style: TextStyle(
-                                    //                 color: Theme.of(context)
-                                    //                     .primaryColor,
-                                    //                 fontSize: 18),
-                                    //           )
-                                    //         ],
-                                    //       ),
-                                    //     )
-                                    //     .toList(),
                                   ),
                           ],
                         ),
