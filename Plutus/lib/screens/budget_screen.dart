@@ -26,7 +26,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
     ).then((newBudget) {
       if (newBudget == null) return;
       Provider.of<Budgets>(context, listen: false)
-          .addBudget(newBudget, context); //TODO check if needed
+          .addBudget(newBudget, context); //TODO check if neededs
     });
   }
 
