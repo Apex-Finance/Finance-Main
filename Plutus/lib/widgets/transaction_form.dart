@@ -79,7 +79,15 @@ class _TransactionFormState extends State<TransactionForm> {
   @override
   void initState() {
     // _transaction.setCategory(category);
-    _transaction.setDate(_date);
+    if (widget.transaction == null) {
+      _transaction.setDate(_date);
+      _transaction.setCategoryId(
+          "CbPdG5AksSODRfuf7319"); // id for uncategorized category
+      _transaction
+          .setCategoryTitle("Uncategorized"); // TODO: grab these two from db
+      _transaction.setCategoryCodePoint(58947);
+    }
+
     // _transaction.category =
     //     category; // initialize date and category since no onsave property
     // _transaction.date = _date;
@@ -161,7 +169,7 @@ class _TransactionFormState extends State<TransactionForm> {
         Container(
           width: 125,
           child: Text(
-            'Date: ${DateFormat.MMMd().format(_date)}',
+            'Date: ${DateFormat.MMMd().format(_transaction.getDate())}',
             style: TextStyle(
               fontSize: 16,
               color: Theme.of(context).primaryColor,
@@ -173,7 +181,7 @@ class _TransactionFormState extends State<TransactionForm> {
           child: Text('Pick Date'),
           onPressed: () => showDatePicker(
             context: context,
-            initialDate: DateTime.now(),
+            initialDate: _transaction.getDate(),
             firstDate: DateTime.now().subtract(
               Duration(
                 days: 365,
