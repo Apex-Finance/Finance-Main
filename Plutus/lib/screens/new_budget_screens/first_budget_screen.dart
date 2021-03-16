@@ -7,9 +7,8 @@ import 'package:provider/provider.dart';
 
 import '../../providers/auth.dart';
 import '../../widgets/category_list_tile.dart';
-import '../../models/categories.dart';
 import '../../models/budget.dart';
-import '../../models/category.dart' as Category;
+import '../../models/category.dart';
 
 // Form to budget out monthly income into categories
 class FirstBudgetScreen extends StatefulWidget {
@@ -20,26 +19,27 @@ class FirstBudgetScreen extends StatefulWidget {
   _FirstBudgetScreenState createState() => _FirstBudgetScreenState();
 }
 
+var categoryList = new List<Category>();
+double remainingAmount;
+
 class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
-  List<FocusNode> catAmountFocusNodes = List<FocusNode>.generate(
-      MainCategory.values.length, (index) => FocusNode());
-  MainCategory activeCategory = MainCategory.values[0];
   double activeAmount = 0;
 
   // Sets the category and amount for the current ListTile being built
-  void setActiveCategory(MainCategory category, double amount) {
-    activeCategory = category;
-    activeAmount = amount ?? 0;
+  void calculateAmountLeft() {
+    categoryList.forEach((category) {
+      remainingAmount -= category.getAmount();
+    });
+
     return;
   }
 
   @override
   Widget build(BuildContext context) {
-    var categoryDataProvider =
-        Provider.of<Category.CategoryDataProvider>(context);
-    var category = Category.Category();
-    var categoryList = new List<Category.Category>();
-    double categoryExpenses;
+    remainingAmount = widget.budget.getAmount();
+    var categoryDataProvider = Provider.of<CategoryDataProvider>(context);
+    var category = Category();
+
     // final Budget budget = Budget
     //     .empty(); // budget contains the amounts; rest are null on first run of build
 
@@ -113,6 +113,9 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           categoryList.add(
                               categoryDataProvider.initializeCategory(doc));
                         });
+                        List<FocusNode> catAmountFocusNodes =
+                            List<FocusNode>.generate(
+                                categoryList.length, (index) => FocusNode());
                         if (widget.budget.getID() != null) {
                           return StreamBuilder<QuerySnapshot>(
                             stream: BudgetDataProvider().getBudgetCategories(
@@ -135,11 +138,11 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                 itemCount: categoryList.length,
                                 itemBuilder: (context, index) =>
                                     CategoryListTile(
-                                  categoryList[index],
-                                  setActiveCategory,
+                                  categoryList,
+                                  calculateAmountLeft,
                                   catAmountFocusNodes,
                                   index,
-                                  categoryList.length,
+                                  widget.budget,
                                 ),
                               );
                             },
@@ -149,11 +152,11 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             shrinkWrap: true,
                             itemCount: categoryList.length,
                             itemBuilder: (context, index) => CategoryListTile(
-                              categoryList[index],
-                              setActiveCategory,
+                              categoryList,
+                              calculateAmountLeft,
                               catAmountFocusNodes,
                               index,
-                              categoryList.length,
+                              widget.budget,
                             ),
                           );
                         }
@@ -167,7 +170,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                     builder: (context) => FloatingActionButton.extended(
                       backgroundColor: Theme.of(context).primaryColor,
                       onPressed: () {
-                        Provider.of<Category.CategoryDataProvider>(context,
+                        Provider.of<CategoryDataProvider>(context,
                                 listen:
                                     false) //TODO ALEX no setcategoryamount() for budget yet
                             .uploadCategory(

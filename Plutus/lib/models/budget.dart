@@ -46,6 +46,7 @@ class Budget {
   }
 
   void calculateRemainingAmount(double budgetExpenses) {
+    _remainingMonthlyAmount = _amount;
     _remainingMonthlyAmount -= budgetExpenses;
   }
 
@@ -139,7 +140,7 @@ class BudgetDataProvider with ChangeNotifier {
         .collection('budgets')
         .doc()
         .set({
-      'title': budget.getTitle(),
+      'date': budget.getDate(),
       'amount': budget.getAmount(),
     });
     notifyListeners();
@@ -152,7 +153,7 @@ class BudgetDataProvider with ChangeNotifier {
         .collection('budgets')
         .doc(budget.getID())
         .set({
-      'title': budget.getTitle(),
+      'date': budget.getDate(),
       'amount': budget.getAmount(),
     }, SetOptions(merge: true));
   }
