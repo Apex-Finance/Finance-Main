@@ -84,6 +84,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                           context,
                         );
                       }
+                      widget.categoryHandler();
                     } // validates for numbers < 0
                     else if (_controller.text.isNotEmpty) {
                       Scaffold.of(context).showSnackBar(
@@ -134,9 +135,6 @@ class _CategoryListTileState extends State<CategoryListTile> {
                   style: Theme.of(context).textTheme.bodyText1,
                   keyboardType: TextInputType.number,
                   controller: _controller,
-                  onChanged: (_) {
-                    widget.categoryHandler();
-                  },
                 ),
               ),
             ),

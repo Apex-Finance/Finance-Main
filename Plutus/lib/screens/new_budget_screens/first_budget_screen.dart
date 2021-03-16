@@ -28,14 +28,10 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   // Sets the category and amount for the current ListTile being built
   void calculateAmountLeft() {
     double amount = 0.00;
-    print(categoryList.length);
     categoryList.forEach((category) {
       amount += category.getAmount();
     });
     widget.budget.categoryAmount = amount;
-    // remainingAmount = widget.budget.getAmount() - amount;
-    // print("inside: $remainingAmount");
-
     return;
   }
 
@@ -114,10 +110,12 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                   child: StreamBuilder<QuerySnapshot>(
                       stream: categoryDataProvider.getCategories(context),
                       builder: (context, snapshot) {
+                        var tempList = List<Category>();
                         snapshot.data.docs.forEach((doc) {
-                          categoryList.add(
+                          tempList.add(
                               categoryDataProvider.initializeCategory(doc));
                         });
+                        categoryList = tempList;
                         List<FocusNode> catAmountFocusNodes =
                             List<FocusNode>.generate(
                                 categoryList.length, (index) => FocusNode());
@@ -183,8 +181,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                 widget.budget.getID(), category, context);
                         setState(
                           () {
-                            print(
-                                "outside: ${widget.budget.getRemainingAmountNew()}");
                             if (widget.budget.getRemainingAmountNew() < -0.001)
                               Scaffold.of(context).showSnackBar(
                                 SnackBar(
