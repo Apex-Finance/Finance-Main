@@ -95,44 +95,6 @@ class _TabScreenState extends State<TabScreen> {
       },
       child: Scaffold(
         appBar: CustomAppBar(),
-        drawer: Drawer(
-          child: ListView(
-            children: [
-              // settings
-              ListTile(
-                onTap: () {
-                  Navigator.of(context).pushNamed('/settings');
-                },
-                leading: Icon(
-                  Icons.settings,
-                  size: 30,
-                  color: Theme.of(context).primaryColor,
-                ),
-                title: Text(
-                  'Settings',
-                  style: TextStyle(
-                      color: Theme.of(context).primaryColor, fontSize: 18),
-                ),
-              ),
-              // acount
-              ListTile(
-                onTap: () {
-                  Navigator.of(context).pushNamed('/account');
-                },
-                leading: Icon(
-                  Icons.account_circle,
-                  size: 30,
-                  color: Theme.of(context).primaryColor,
-                ),
-                title: Text(
-                  'Account',
-                  style: TextStyle(
-                      color: Theme.of(context).primaryColor, fontSize: 18),
-                ),
-              ),
-            ],
-          ),
-        ),
         // Custom Fab_Circular_Menu used here to utilize BackdropFilter widget
         floatingActionButton: TappableFabCircularMenu(
           alignment: Alignment.bottomCenter,
@@ -198,7 +160,6 @@ class _TabScreenState extends State<TabScreen> {
         bottomNavigationBar: AbsorbPointer(
             absorbing: _isOpen == true ? true : false,
             child: buildTabBar(context)),
-
       ),
     );
   }
@@ -257,7 +218,22 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AbsorbPointer(
       absorbing: _isOpen == true ? true : false,
-      child: AppBar(),
+      child: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.settings),
+          onPressed: () {
+            Navigator.of(context).pushNamed('/settings');
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.account_circle),
+            onPressed: () {
+              Navigator.of(context).pushNamed('/account');
+            },
+          ),
+        ],
+      ),
     );
   }
 }

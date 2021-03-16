@@ -28,7 +28,9 @@ class _AccountScreenState extends State<AccountScreen> {
         centerTitle: true,
         title: Text(
           'Account Screen',
-          style: Theme.of(context).textTheme.bodyText1,
+          style: TextStyle(
+            color: Theme.of(context).canvasColor,
+          ),
         ),
         // IconButton(
         //icon:
@@ -88,7 +90,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           children: [
                             Text(
                               '$email',
-                              style: Theme.of(context).textTheme.bodyText2,
+                              style: Theme.of(context).textTheme.bodyText1,
                             ),
                             SizedBox(
                               width: 10,
@@ -120,7 +122,9 @@ class _AccountScreenState extends State<AccountScreen> {
                           color: Theme.of(context).primaryColor,
                           child: Text(
                             'Change Password',
-                            // style: Theme.of(context).textTheme.bodyText1,
+                            style: TextStyle(
+                              color: Theme.of(context).canvasColor,
+                            ),
                           ),
                           onPressed: () {
                             pullChangePasswordForm(context)
