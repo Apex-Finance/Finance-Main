@@ -29,8 +29,10 @@ class _BudgetListTileState extends State<BudgetListTile> {
   Widget build(BuildContext context) {
     var transactionDataProvider =
         Provider.of<Transaction.Transactions>(context, listen: false);
+    print(widget.category.getID());
     var categoryTransactions = widget.budgetTransactions
-        .where('categoryID', isEqualTo: widget.category.getID());
+        .where('categoryID', isEqualTo: widget.category.getID())
+        .orderBy('date', descending: false);
     // FirebaseFirestore.instance
     //     .collection('users')
     //     .doc(Provider.of<Auth>(context, listen: false).getUserId())
@@ -48,7 +50,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
     //     widget.budgetDate.month + 1,
     //     1,
     //   ),
-    ;
+
     //     .snapshots();
     // final monthlyBudget =
     //     Provider.of<BudgetDataProvider>(context).monthlyBudget;
