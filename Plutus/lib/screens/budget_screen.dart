@@ -132,8 +132,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                         budget.getDate().month + 1,
                         1,
                       ),
-                    )
-                    .snapshots();
+                    );
 
                 // Get the categories selected by the user for this budget
                 var budgetCategories = BudgetDataProvider()
@@ -142,7 +141,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 return Container(
                   margin: EdgeInsets.only(top: 40),
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: budgetTransactions,
+                    stream: budgetTransactions.snapshots(),
                     builder: (context, transactionSnapshots) {
                       var transactionExpenses = transactionDataProvider
                           .getTransactionExpenses(transactionSnapshots.data);
@@ -271,14 +270,18 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                           itemCount:
                                               categorySnapshot.data.docs.length,
                                           itemBuilder: (context, index) {
-                                            return BudgetListTile(Provider.of<
-                                                        CategoryDataProvider>(
-                                                    context,
-                                                    listen: false)
-                                                .initializeCategory(
-                                                    categorySnapshot
-                                                        .data.docs[index]));
+                                            return BudgetListTile(
+                                                Provider.of<CategoryDataProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .initializeCategory(
+                                                        categorySnapshot
+                                                            .data.docs[index]),
+                                                budgetTransactions);
                                           });
+                                    } else {
+                                      return Text(
+                                          'There are no categories selected for this budget.');
                                     }
                                   }),
                             ),

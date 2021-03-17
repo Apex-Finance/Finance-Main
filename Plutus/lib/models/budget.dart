@@ -123,7 +123,10 @@ class BudgetDataProvider with ChangeNotifier {
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .collection('Budgets')
-        .where('date', isGreaterThanOrEqualTo: DateTime(date.year, date.month))
+        .where(
+          'date',
+          isEqualTo: DateTime(date.year, date.month),
+        )
         .snapshots();
     return budgetRef;
   }

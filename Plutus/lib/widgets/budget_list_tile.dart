@@ -15,8 +15,8 @@ import '../models/category.dart' as Category;
 
 class BudgetListTile extends StatefulWidget {
   final Category.Category category;
-
-  BudgetListTile(this.category);
+  final Query budgetTransactions;
+  BudgetListTile(this.category, this.budgetTransactions);
 
   @override
   _BudgetListTileState createState() => _BudgetListTileState();
@@ -29,169 +29,207 @@ class _BudgetListTileState extends State<BudgetListTile> {
   Widget build(BuildContext context) {
     var transactionDataProvider =
         Provider.of<Transaction.Transactions>(context, listen: false);
-    var categoryTransactions = FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('Transactions')
+    print(widget.category.getID());
+    var categoryTransactions = widget.budgetTransactions
         .where('categoryID', isEqualTo: widget.category.getID())
-        .snapshots();
+        .orderBy('date', descending: false);
+    // FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(Provider.of<Auth>(context, listen: false).getUserId())
+    //     .collection('Transactions')
+    //     .where('categoryID', isEqualTo: widget.category.getID())
+    // .where(
+    //   'date',
+    //   isGreaterThanOrEqualTo: DateTime(
+    //     widget.DateTime.now().year,
+    //     widget.budgetDate.month,
+    //     1,
+    //   ),
+    //   isLessThan: DateTime(
+    //     widget.budgetDate.year,
+    //     widget.budgetDate.month + 1,
+    //     1,
+    //   ),
+
+    //     .snapshots();
     // final monthlyBudget =
     //     Provider.of<BudgetDataProvider>(context).monthlyBudget;
     return StreamBuilder<QuerySnapshot>(
-        stream: categoryTransactions,
+        stream: categoryTransactions.snapshots(),
         builder: (context, snapshot) {
-          var transactionExpenses =
-              transactionDataProvider.getTransactionExpenses(snapshot.data);
-          widget.category.calculateRemainingAmount(transactionExpenses);
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(
-                  20)), //BorderRadius.vertical(top: Radius.circular(20)),
-              child: Column(
-                children: [
-                  ListTile(
-                    onTap: () {
-                      print('tapped');
-                      setState(() {
-                        _expanded = !_expanded;
-                      });
-                    },
-                    tileColor: Colors.grey[850],
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              {
+                return Text("There was an error loading your information");
+              }
+            case ConnectionState.waiting:
+              {
+                return CircularProgressIndicator();
+              }
+            default:
+              {
+                var transactionExpenses = transactionDataProvider
+                    .getTransactionExpenses(snapshot.data);
+                widget.category.calculateRemainingAmount(transactionExpenses);
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(
+                        20)), //BorderRadius.vertical(top: Radius.circular(20)),
+                    child: Column(
                       children: [
-                        // Icon(
-                        //   IconData(
-                        //     widget.category.getCodepoint(),
-                        //   ),
-                        //   size: 20,
-                        //   color: Theme.of(context).primaryColor,
-                        // ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        AutoSizeText(
-                          widget.category.getTitle(),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 18),
-                        ),
-                        // category budget allocated
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              '\$${widget.category.getRemainingAmount()}',
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontSize: 18),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    subtitle: Column(
-                      children: [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        new LinearPercentIndicator(
-                          alignment: MainAxisAlignment.center,
-                          width: MediaQuery.of(context).size.width * .8,
-                          lineHeight: 12.0,
-                          percent: snapshot.data.docs.isEmpty
-                              ? 0.0
-                              : transactionExpenses >
-                                      widget.category.getAmount()
-                                  ? 1
-                                  : transactionExpenses /
-                                      widget.category.getAmount(),
-                          backgroundColor: Colors.black,
-                          progressColor: Colors.amber,
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          '\$${widget.category.getRemainingAmount()} remaining',
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 18),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (_expanded)
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-                      color: Colors.grey[550],
-                      height: min(snapshot.data.docs.length * 200.0, 250),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Total',
-                                  style: TextStyle(
+                        ListTile(
+                          onTap: () {
+                            print('tapped');
+                            setState(() {
+                              _expanded = !_expanded;
+                            });
+                          },
+                          tileColor: Colors.grey[850],
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Icon(
+                              //   IconData(
+                              //     widget.category.getCodepoint(),
+                              //   ),
+                              //   size: 20,
+                              //   color: Theme.of(context).primaryColor,
+                              // ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              AutoSizeText(
+                                widget.category.getTitle(),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
                                     color: Theme.of(context).primaryColor,
-                                    fontSize: 18,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  '\$$transactionExpenses',
-                                  style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 18),
-                                ),
-                              ],
-                            ),
-                            Divider(
-                              color: Theme.of(context).primaryColor,
-                              height: 10,
-                              thickness: 2,
-                              indent: 0,
-                              endIndent: 0,
-                            ),
-                            snapshot.data.docs.isEmpty
-                                ? Text(
-                                    'No transaction has been added yet',
+                                    fontSize: 18),
+                              ),
+                              // category budget allocated
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    '\$${widget.category.getRemainingAmount()}',
                                     style: TextStyle(
                                         color: Theme.of(context).primaryColor,
                                         fontSize: 18),
-                                    textAlign: TextAlign.center,
-                                  )
-                                : Container(
-                                    height: min(
-                                            snapshot.data.docs.length * 200.0,
-                                            250.0) -
-                                        25,
-                                    child: ListView.builder(
-                                      itemCount: snapshot.data.docs.length,
-                                      itemBuilder: (context, index) {
-                                        return TransactionListTile(Provider.of<
-                                                    Transaction.Transactions>(
-                                                context,
-                                                listen: false)
-                                            .initializeTransaction(
-                                                snapshot.data.docs[index]));
-                                      },
-                                    ),
                                   ),
-                          ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          subtitle: Column(
+                            children: [
+                              SizedBox(
+                                height: 20,
+                              ),
+                              new LinearPercentIndicator(
+                                alignment: MainAxisAlignment.center,
+                                width: MediaQuery.of(context).size.width * .8,
+                                lineHeight: 12.0,
+                                percent: snapshot.data.docs.isEmpty
+                                    ? 0.0
+                                    : transactionExpenses >
+                                            widget.category.getAmount()
+                                        ? 1
+                                        : transactionExpenses /
+                                            widget.category.getAmount(),
+                                backgroundColor: Colors.black,
+                                progressColor: Colors.amber,
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                '\$${widget.category.getRemainingAmount()} remaining',
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: 18),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    )
-                ],
-              ),
-            ),
-          );
+                        if (_expanded)
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 4),
+                            color: Colors.grey[550],
+                            height: min(snapshot.data.docs.length * 200.0, 250),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Total',
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: 18,
+                                          // fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        '\$$transactionExpenses',
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                  Divider(
+                                    color: Theme.of(context).primaryColor,
+                                    height: 10,
+                                    thickness: 2,
+                                    indent: 0,
+                                    endIndent: 0,
+                                  ),
+                                  snapshot.data.docs.isEmpty
+                                      ? Text(
+                                          'No transaction has been added yet',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 18),
+                                          textAlign: TextAlign.center,
+                                        )
+                                      : Container(
+                                          height: min(
+                                                  snapshot.data.docs.length *
+                                                      200.0,
+                                                  250.0) -
+                                              25,
+                                          child: ListView.builder(
+                                            itemCount:
+                                                snapshot.data.docs.length,
+                                            itemBuilder: (context, index) {
+                                              return TransactionListTile(
+                                                  Provider.of<
+                                                              Transaction
+                                                                  .Transactions>(
+                                                          context,
+                                                          listen: false)
+                                                      .initializeTransaction(
+                                                          snapshot.data
+                                                              .docs[index]));
+                                            },
+                                          ),
+                                        ),
+                                ],
+                              ),
+                            ),
+                          )
+                      ],
+                    ),
+                  ),
+                );
+              }
+          }
         });
   }
 }
