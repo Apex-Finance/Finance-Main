@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../models/goals.dart';
 import '../models/transaction.dart' as Transaction;
 
+// Form for adding money to a goal
 class AddGoalMoneyScreen extends StatefulWidget {
   final Goal goal;
   @override
@@ -14,12 +15,15 @@ class AddGoalMoneyScreen extends StatefulWidget {
   AddGoalMoneyScreen({this.goal});
 }
 
-double amountSaved = 0.0;
+double amountSaved =
+    0.0; // Amount currently saved up for a goal; is calculated in runtime
 
 class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
   Transaction.Transaction _transaction = new Transaction.Transaction.empty();
   final _formKey = GlobalKey<FormState>();
 
+  // Validates the amount entered, saves its value to the goal, and
+  // returns the goal to the previous screen
   void _submitAddMoneyForm(BuildContext context) {
     var transactionDataProvider =
         Provider.of<Transaction.Transactions>(context, listen: false);
@@ -31,6 +35,8 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
 
       // Sets the date of the transaction to the date the amount was added
       _transaction.setDate(DateTime.now());
+
+      // Creates a transaction that is tied to the money added to this goal
       transactionDataProvider.addTransaction(
           transaction: _transaction,
           context: context,
@@ -58,12 +64,14 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+                  // Title
                   AutoSizeText(
                     'Add money to ${widget.goal.getTitle()}',
                     style: Theme.of(context).textTheme.headline1,
                     overflow: TextOverflow.visible,
                     textAlign: TextAlign.center,
                   ),
+                  // Goal amount left to go
                   StreamBuilder<QuerySnapshot>(
                       stream: Provider.of<Transaction.Transactions>(context,
                               listen: false)
@@ -80,6 +88,7 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
                           ),
                         );
                       }),
+                  // Textfield for adding amounts
                   Row(
                     children: <Widget>[
                       Text('\$', style: Theme.of(context).textTheme.bodyText1),
@@ -90,6 +99,7 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
                       ),
                     ],
                   ),
+                  // Add Money button
                   Container(
                     padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
                     alignment: Alignment.bottomRight,
@@ -109,7 +119,7 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
   }
 }
 
-// TODO Comment
+// Accepts input from keyboard and validates as Goal Amount Saved
 class GoalAmountField extends StatelessWidget {
   GoalAmountField({
     Key key,
