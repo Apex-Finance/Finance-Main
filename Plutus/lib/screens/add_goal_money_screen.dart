@@ -19,8 +19,6 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
   Transaction.Transaction _transaction = new Transaction.Transaction.empty();
   final _formKey = GlobalKey<FormState>();
 
-// TODO Set initstate
-
   void _submitAddMoneyForm(BuildContext context) {
     var transactionDataProvider =
         Provider.of<Transaction.Transactions>(context, listen: false);
@@ -63,6 +61,10 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
                     style: Theme.of(context).textTheme.headline1,
                     overflow: TextOverflow.visible,
                     textAlign: TextAlign.center,
+                  ),
+                  AutoSizeText(
+                    '\$ ${widget.goal.getGoalAmount() - widget.goal.getAmountSaved()}',
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                   Row(
                     children: <Widget>[
