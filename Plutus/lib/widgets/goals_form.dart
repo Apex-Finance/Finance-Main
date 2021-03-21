@@ -21,7 +21,7 @@ class _GoalsFormState extends State<GoalsForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime _date;
   Goal _goal = Goal.empty();
-  File _goalImage; // Image selected from the phone galler
+  File _goalImage; // Image selected from the phone gallery
   // TODO May need to change to update to DB
   void _setDate(DateTime value) {
     if (value == null) return; // if user cancels datepicker
@@ -42,15 +42,12 @@ class _GoalsFormState extends State<GoalsForm> {
 
       // If no date is set, set the date to today's date
       if (_goal.getDate() == null) _goal.setDate(DateTime.now());
-      // TODO save image into DB
       if (_goal.getID() == null) {
         goalDataProvider.addGoal(_goal, context);
       } else {
         goalDataProvider.updateGoal(_goal, context);
       }
-      Navigator.of(context).pop(
-        _goal,
-      );
+      Navigator.of(context).pop(_goal);
     }
   }
 
@@ -144,7 +141,8 @@ class _GoalsFormState extends State<GoalsForm> {
                     Text(
                       "Add a picture",
                       style: TextStyle(
-                        color: Theme.of(context).canvasColor,
+                        // Has to be hardcoded since no textTheme has any fontsize smaller than 17
+                        fontSize: 12,
                       ),
                     ),
                   ],
@@ -161,7 +159,7 @@ class _GoalsFormState extends State<GoalsForm> {
   // Validates required fields and sends goal data to DB
   Widget buildSubmitButton(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0, 120, 0, 0),
+      padding: EdgeInsets.fromLTRB(0, 110, 0, 0),
       child: Container(
         child: FloatingActionButton.extended(
           backgroundColor: Theme.of(context).primaryColorLight,

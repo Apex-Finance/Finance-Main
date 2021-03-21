@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -113,9 +115,6 @@ class _GoalsListTileState extends State<GoalsListTile> {
                 // Goal image preview
                 child: CircleAvatar(
                   radius: 35,
-                  backgroundImage: NetworkImage(
-                    'https://2p2bboli8d61fqhjiqzb8p1a-wpengine.netdna-ssl.com/wp-content/uploads/2018/07/1.jpg',
-                  ),
                 ),
               ),
               title: Column(

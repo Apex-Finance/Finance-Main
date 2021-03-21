@@ -11,7 +11,7 @@ class AddGoalMoneyScreen extends StatefulWidget {
   final Goal goal;
   @override
   _AddGoalMoneyScreenState createState() => _AddGoalMoneyScreenState();
-  AddGoalMoneyScreen({this.goal}); // TODO comment this
+  AddGoalMoneyScreen({this.goal});
 }
 
 double amountSaved = 0.0;
@@ -27,7 +27,7 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       _transaction.setAmount(amountSaved);
-      _transaction.setTitle('Goal money for ${widget.goal.getTitle()}');
+      _transaction.setTitle('${widget.goal.getTitle()}');
 
       // Sets the date of the transaction to the date the amount was added
       _transaction.setDate(DateTime.now());
