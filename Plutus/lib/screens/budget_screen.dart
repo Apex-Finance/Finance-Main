@@ -9,7 +9,7 @@ import '../models/budget.dart';
 import 'new_budget_screens/income_screen.dart';
 import '../widgets/budget_list_tile.dart';
 import '../providers/auth.dart';
-
+import '../models/transaction.dart' as Transaction;
 import 'package:provider/provider.dart';
 import '../models/month_changer.dart';
 
@@ -116,23 +116,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
                     .initializeBudget(budgetSnapshot.data.docs.first);
 
                 // Get the transactions for the budget
-                var budgetTransactions = FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(Provider.of<Auth>(context, listen: false).getUserId())
-                    .collection('Transactions')
-                    .where(
-                      'date',
-                      isGreaterThanOrEqualTo: DateTime(
-                        budget.getDate().year,
-                        budget.getDate().month,
-                        1,
-                      ),
-                      isLessThan: DateTime(
-                        budget.getDate().year,
-                        budget.getDate().month + 1,
-                        1,
-                      ),
-                    );
+                var budgetTransactions =
+                    Provider.of<Transaction.Transactions>(context)
+                        .getMonthlyTransactions(
+                  context,
+                  budget.getDate(),
+                );
 
                 // Get the categories selected by the user for this budget
                 var budgetCategories = BudgetDataProvider()
