@@ -22,7 +22,6 @@ class _GoalsFormState extends State<GoalsForm> {
   DateTime _date;
   Goal _goal = Goal.empty();
   File _goalImage; // Image selected from the phone gallery
-  // TODO May need to change to update to DB
   void _setDate(DateTime value) {
     if (value == null) return; // if user cancels datepicker
     setState(() {
