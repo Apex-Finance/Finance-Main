@@ -33,27 +33,6 @@ class _BudgetListTileState extends State<BudgetListTile> {
     var categoryTransactions = widget.budgetTransactions
         .where('categoryID', isEqualTo: widget.category.getID())
         .orderBy('date', descending: false);
-    // FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(Provider.of<Auth>(context, listen: false).getUserId())
-    //     .collection('Transactions')
-    //     .where('categoryID', isEqualTo: widget.category.getID())
-    // .where(
-    //   'date',
-    //   isGreaterThanOrEqualTo: DateTime(
-    //     widget.DateTime.now().year,
-    //     widget.budgetDate.month,
-    //     1,
-    //   ),
-    //   isLessThan: DateTime(
-    //     widget.budgetDate.year,
-    //     widget.budgetDate.month + 1,
-    //     1,
-    //   ),
-
-    //     .snapshots();
-    // final monthlyBudget =
-    //     Provider.of<BudgetDataProvider>(context).monthlyBudget;
     return StreamBuilder<QuerySnapshot>(
         stream: categoryTransactions.snapshots(),
         builder: (context, snapshot) {
@@ -68,6 +47,9 @@ class _BudgetListTileState extends State<BudgetListTile> {
               }
             default:
               {
+                while (snapshot.data.docs == null) {
+                  return CircularProgressIndicator();
+                }
                 var transactionExpenses = transactionDataProvider
                     .getTransactionExpenses(snapshot.data);
                 widget.category.calculateRemainingAmount(transactionExpenses);
