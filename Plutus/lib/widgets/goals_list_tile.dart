@@ -190,8 +190,6 @@ class _GoalsListTileState extends State<GoalsListTile> {
                     ),
                   ),
                 ),
-                // TODO May want to change this to a gesture detector with child container with child icon.
-                // TODO This enables you to click on the entire container and not just the icon.
                 child: IconButton(
                   color: Theme.of(context).primaryColor,
                   icon: Icon(Icons.add),

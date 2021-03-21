@@ -81,9 +81,6 @@ class GoalScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         goal = goalDataProvider
                             .initializeGoal(snapshot.data.docs[index]);
-                        // Sets amountSaved to 0 when goal is initialized.
-                        // This is to ensure that amountSaved != null and does
-                        // not get initialized everytime a Goal is built
                         return GoalsListTile(goal);
                       },
                     ),

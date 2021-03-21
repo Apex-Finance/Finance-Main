@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
@@ -25,10 +26,11 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
 
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      print("amount saved $amountSaved");
       _transaction.setAmount(amountSaved);
       _transaction.setTitle('Goal money for ${widget.goal.getTitle()}');
-      _transaction.setDate(widget.goal.getDate());
+
+      // Sets the date of the transaction to the date the amount was added
+      _transaction.setDate(DateTime.now());
       transactionDataProvider.addTransaction(
           transaction: _transaction,
           context: context,
@@ -62,10 +64,22 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
                     overflow: TextOverflow.visible,
                     textAlign: TextAlign.center,
                   ),
-                  AutoSizeText(
-                    '\$ ${widget.goal.getGoalAmount() - widget.goal.getAmountSaved()}',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
+                  StreamBuilder<QuerySnapshot>(
+                      stream: Provider.of<Transaction.Transactions>(context,
+                              listen: false)
+                          .getGoalTransactions(context, widget.goal.getID()),
+                      builder: (context, snapshot) {
+                        var amountSaved = snapshot.data.docs.isEmpty
+                            ? 0
+                            : widget.goal
+                                .getAmountSaved(context, snapshot.data);
+                        return AutoSizeText(
+                          '\$ ${widget.goal.getGoalAmount() - amountSaved} left to go',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        );
+                      }),
                   Row(
                     children: <Widget>[
                       Text('\$', style: Theme.of(context).textTheme.bodyText1),
@@ -107,6 +121,7 @@ class GoalAmountField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: Theme.of(context).textTheme.bodyText1,
       autofocus: true,
       decoration: InputDecoration(
         labelStyle: new TextStyle(
