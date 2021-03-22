@@ -84,7 +84,14 @@ class _BudgetScreenState extends State<BudgetScreen> {
             stream: budgetDataProvider.getmonthlyBudget(context,
                 DateTime(monthData.selectedYear, monthData.selectedMonth)),
             builder: (context, budgetSnapshot) {
-              if (!budgetSnapshot.hasData || budgetSnapshot.data.docs.isEmpty) {
+              // TODO make switch statement to check connection state and then check if data == null
+              if (!budgetSnapshot.hasData ||
+                  budgetSnapshot.data == null ||
+                  budgetSnapshot.data.docs.isEmpty) {
+                return CircularProgressIndicator();
+              }
+              if (budgetSnapshot.hasData ||
+                  budgetSnapshot.data.docs.isNotEmpty) {
                 return Container(
                   margin: EdgeInsets.only(top: 40),
                   child: Center(
@@ -132,6 +139,11 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   child: StreamBuilder<QuerySnapshot>(
                     stream: budgetTransactions.snapshots(),
                     builder: (context, transactionSnapshots) {
+                      if (!transactionSnapshots.hasData ||
+                          transactionSnapshots.data.docs.isEmpty ||
+                          transactionSnapshots.data == null) {
+                        return CircularProgressIndicator();
+                      }
                       var transactionExpenses = transactionDataProvider
                           .getTransactionExpenses(transactionSnapshots.data);
                       budget.calculateRemainingAmount(transactionExpenses);
@@ -253,6 +265,11 @@ class _BudgetScreenState extends State<BudgetScreen> {
                               child: StreamBuilder<QuerySnapshot>(
                                   stream: budgetCategories,
                                   builder: (context, categorySnapshot) {
+                                    if (!categorySnapshot.hasData ||
+                                        categorySnapshot.data.docs.isEmpty ||
+                                        categorySnapshot.data == null) {
+                                      return CircularProgressIndicator();
+                                    }
                                     if (categorySnapshot.hasData &&
                                         categorySnapshot.data.docs.isNotEmpty) {
                                       return ListView.builder(
