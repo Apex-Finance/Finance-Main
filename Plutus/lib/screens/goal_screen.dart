@@ -28,7 +28,8 @@ class GoalScreen extends StatelessWidget {
     var dbRef = FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('Goals');
+        .collection('Goals')
+        .orderBy('dateOfGoal', descending: false);
     return StreamBuilder<QuerySnapshot>(
       stream: dbRef.snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
