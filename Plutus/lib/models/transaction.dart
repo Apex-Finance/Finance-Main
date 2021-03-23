@@ -240,7 +240,8 @@ class Transactions with ChangeNotifier {
             date.month + 1,
             1,
           ),
-        );
+        )
+        .orderBy('date', descending: true);
   }
   // Sum the expenses for the month
   // double get monthlyExpenses {
