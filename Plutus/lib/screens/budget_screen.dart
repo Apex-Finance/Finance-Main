@@ -174,7 +174,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                                   fontSize: 18),
                                             ),
                                             AutoSizeText(
-                                              '\$${budget.getAmount() < transactionExpenses ? 0.0 : budget.getRemainingAmount()}',
+                                              '\$${budget.getAmount() < transactionExpenses ? 0.00.toStringAsFixed(2) : budget.getRemainingAmount().toStringAsFixed(2)}',
                                               maxLines: 1,
                                               style: TextStyle(
                                                   color: Theme.of(context)
@@ -235,7 +235,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                           MainAxisAlignment.center,
                                       children: [
                                         AutoSizeText(
-                                          '\$$transactionExpenses of \$${budget.getAmount()}',
+                                          '\$${transactionExpenses.toStringAsFixed(2)} of \$${budget.getAmount().toStringAsFixed(2)}',
                                           maxLines: 1,
                                           style: TextStyle(
                                               color: Theme.of(context)
