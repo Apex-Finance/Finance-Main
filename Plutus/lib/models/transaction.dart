@@ -240,7 +240,9 @@ class Transactions with ChangeNotifier {
             date.month + 1,
             1,
           ),
-        );
+        )
+        .orderBy('date',
+            descending: false); // sorts transactions from newest to oldest
   }
   // Sum the expenses for the month
   // double get monthlyExpenses {

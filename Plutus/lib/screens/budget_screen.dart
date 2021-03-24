@@ -215,7 +215,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                                               fontSize: 18),
                                                         ),
                                                         AutoSizeText(
-                                                          '\$${budget.getAmount() < transactionExpenses ? 0.0 : budget.getRemainingAmount()}',
+                                                          '\$${budget.getAmount() < transactionExpenses ? 0.00.toStringAsFixed(2) : budget.getRemainingAmount().toStringAsFixed(2)}',
                                                           maxLines: 1,
                                                           style: TextStyle(
                                                               color: Theme.of(
