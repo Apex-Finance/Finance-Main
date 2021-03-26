@@ -153,7 +153,7 @@ class _AuthFormState extends State<AuthForm> {
                   controller: _passwordController,
                   // ignore: missing_return
                   validator: (value) {
-                    if (value.isEmpty || value.length < 5) {
+                    if (value.isEmpty || value.trim().length < 6) {
                       return 'Password is too short!';
                     }
                   },
@@ -171,7 +171,7 @@ class _AuthFormState extends State<AuthForm> {
                     validator: _authMode == AuthMode.Signup
                         // ignore: missing_return
                         ? (value) {
-                            if (value != _passwordController.text) {
+                            if (value != _passwordController.text.trim()) {
                               return 'Passwords do not match!';
                             }
                           }
