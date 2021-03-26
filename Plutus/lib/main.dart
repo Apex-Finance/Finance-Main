@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/services.dart';
 
 import './screens/tab_screen.dart';
 import './screens/intro_screen.dart';
@@ -23,45 +22,42 @@ import './providers/auth.dart';
 import './providers/color.dart';
 import 'models/goals.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((_) async {
-    await Firebase.initializeApp();
-    runApp(
-      MultiProvider(providers: [
-        ChangeNotifierProvider(create: (context) => ColorProvider()),
-        ChangeNotifierProvider(create: (context) => GoalDataProvider()),
-        ChangeNotifierProvider(
-          create: (context) => BudgetDataProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => CategoryDataProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => Auth(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => MonthChanger(),
-        ),
-        ChangeNotifierProxyProvider<MonthChanger, Transactions>(
-          update: (buildContext, monthChanger, previousTransactions) =>
-              Transactions(
-                  monthChanger,
-                  previousTransactions == null
-                      ? []
-                      : previousTransactions.transactions),
-          create: null,
-        ),
-        // ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
-        //   update: (buildContext, monthChanger, transactions, previousBudgets) =>
-        //       Budgets(monthChanger, transactions,
-        //           previousBudgets == null ? [] : previousBudgets.budgets),
-        //   create: null,
-        // ),
-      ], child: MyApp()),
-    );
-  });
+  await Firebase.initializeApp();
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (context) => ColorProvider()),
+      ChangeNotifierProvider(create: (context) => GoalDataProvider()),
+      ChangeNotifierProvider(
+        create: (context) => BudgetDataProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => CategoryDataProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => Auth(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => MonthChanger(),
+      ),
+      ChangeNotifierProxyProvider<MonthChanger, Transactions>(
+        update: (buildContext, monthChanger, previousTransactions) =>
+            Transactions(
+                monthChanger,
+                previousTransactions == null
+                    ? []
+                    : previousTransactions.transactions),
+        create: null,
+      ),
+      // ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
+      //   update: (buildContext, monthChanger, transactions, previousBudgets) =>
+      //       Budgets(monthChanger, transactions,
+      //           previousBudgets == null ? [] : previousBudgets.budgets),
+      //   create: null,
+      // ),
+    ], child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -109,7 +105,6 @@ class MyApp extends StatelessWidget {
           SettingsScreen.routeName: (context) => SettingsScreen(),
           TabScreen.routeName: (context) => TabScreen(),
         },
-        debugShowCheckedModeBanner: false,
       ),
     );
   }
