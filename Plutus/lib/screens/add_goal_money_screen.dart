@@ -32,6 +32,8 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
       _formKey.currentState.save();
       _transaction.setAmount(amountSaved);
       _transaction.setTitle('${widget.goal.getTitle()}');
+      // No need to go looking for category name. All transactions created here will have their categories set to Goal.
+      _transaction.setCategoryTitle('Goal');
 
       // Sets the date of the transaction to the date the amount was added
       _transaction.setDate(DateTime.now());

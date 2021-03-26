@@ -17,6 +17,7 @@ enum MainCategory {
   //kids,
   //pets,
   //business,
+  goals,
   uncategorized, // Needed for getter
 }
 
