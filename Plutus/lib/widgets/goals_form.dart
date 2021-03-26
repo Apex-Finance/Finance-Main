@@ -259,6 +259,7 @@ class GoalAmountField extends StatelessWidget {
             color: Theme.of(context).primaryColor, fontSize: 16.0),
         labelText: "Target Amount",
       ),
+      style: TextStyle(fontSize: 20.0, color: Theme.of(context).primaryColor),
       keyboardType: TextInputType
           .number, // May want to use Currency_Input_Formatter like income.dart
       onSaved: (val) => _goal.goalAmount = double.parse(val),
