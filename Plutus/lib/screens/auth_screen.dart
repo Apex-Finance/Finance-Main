@@ -20,7 +20,7 @@ class AuthScreen extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Colors.black,
+                  Colors.white,
                   Colors.amber,
                 ],
                 begin: Alignment.topLeft,
@@ -58,8 +58,7 @@ class AuthScreen extends StatelessWidget {
                     child: Text(
                       'Plutus login',
                       style: TextStyle(
-                        color:
-                            Theme.of(context).accentTextTheme.headline6.color,
+                        color: Theme.of(context).primaryColor,
                         fontSize: 25,
                         fontFamily: 'Anton',
                         fontWeight: FontWeight.normal,
