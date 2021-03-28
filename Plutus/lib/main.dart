@@ -6,6 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
 import './screens/tab_screen.dart';
 import './screens/intro_screen.dart';
@@ -65,6 +68,9 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
   @override
   Widget build(BuildContext context) {
     var colors = Provider.of<ColorProvider>(context);
@@ -96,6 +102,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
         initialRoute: '/onboarding',
+        navigatorObservers: [
+          FirebaseAnalyticsObserver(analytics: analytics),
+        ],
         routes: {
           '/onboarding': (context) => OnBoardingPage(),
           DashboardScreen.routeName: (context) => DashboardScreen(),
