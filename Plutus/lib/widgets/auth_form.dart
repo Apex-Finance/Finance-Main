@@ -194,8 +194,10 @@ class _AuthFormState extends State<AuthForm> {
                 CircularProgressIndicator()
               else
                 RaisedButton(
-                  child:
-                      Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
+                  child: Text(
+                    _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP',
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
                   onPressed: _submit,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
