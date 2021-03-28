@@ -155,12 +155,19 @@ class _GoalsListTileState extends State<GoalsListTile> {
                               : widget.goal
                                   .getAmountSaved(context, snapshot.data);
                           return new LinearPercentIndicator(
-                            center: AutoSizeText(
-                              '\$ $amountSaved of \$ ${widget.goal.getGoalAmount()}',
-                              style: TextStyle(
-                                color: Theme.of(context).accentColor,
-                              ),
-                            ),
+                            center: amountSaved == widget.goal.getGoalAmount()
+                                ? AutoSizeText(
+                                    'Completed!',
+                                    style: TextStyle(
+                                      color: Theme.of(context).accentColor,
+                                    ),
+                                  )
+                                : AutoSizeText(
+                                    '\$ ${amountSaved.toStringAsFixed(2)} of \$ ${widget.goal.getGoalAmount().toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                      color: Theme.of(context).accentColor,
+                                    ),
+                                  ),
                             percent: amountSaved == null
                                 ? 0.0
                                 : amountSaved > widget.goal.getGoalAmount()

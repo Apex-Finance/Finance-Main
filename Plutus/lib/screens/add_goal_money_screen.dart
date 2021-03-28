@@ -84,7 +84,7 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
                             : widget.goal
                                 .getAmountSaved(context, snapshot.data);
                         return AutoSizeText(
-                          '\$ ${widget.goal.getGoalAmount() - amountSaved} left to go',
+                          '\$ ${(widget.goal.getGoalAmount() - amountSaved).toStringAsFixed(2)} left to go',
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                           ),
@@ -144,7 +144,7 @@ class GoalAmountField extends StatelessWidget {
         amountSaved = double.parse(val);
       },
       validator: (val) {
-        if (val.contains(new RegExp(r'^-?\d+(\.\d{1,2})?$'))) {
+        if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
           // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
           // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
           if (double.parse(double.parse(val).toStringAsFixed(2)) <=

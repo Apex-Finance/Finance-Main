@@ -226,13 +226,13 @@ class GoalTitleField extends StatelessWidget {
       inputFormatters: [
         LengthLimitingTextInputFormatter(50),
       ],
-      maxLength: 50,
+      maxLength: 35,
       onEditingComplete: () {
         FocusScope.of(context).nextFocus();
       },
       onSaved: (val) => _goal.title = val.trim(),
       validator: (val) {
-        if (val.trim().length > 50) return 'Title is too long.';
+        if (val.trim().length > 35) return 'Title is too long.';
         if (val.isEmpty) return 'Please enter a title.';
         return null;
       },
