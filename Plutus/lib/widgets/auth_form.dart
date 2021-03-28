@@ -116,97 +116,104 @@ class _AuthFormState extends State<AuthForm> {
       ),
       elevation: 8.0,
       child: Container(
-        height: _authMode == AuthMode.Signup ? 320 : 260,
+        height: _authMode == AuthMode.Signup ? 400 : 340,
         constraints:
             BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
         width: deviceSize.width * 0.75,
         padding: EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'E-Mail'),
-                  keyboardType: TextInputType.emailAddress,
-                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                  controller: _emailController,
-                  validator: (value) {
-                    if (value.isEmpty || !value.contains('@')) {
-                      return 'Invalid email!';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    email = value.trim();
-                  },
-                  style: Theme.of(context).textTheme.bodyText2,
+          child: Column(
+            children: <Widget>[
+              Text(
+                'Plutus',
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontSize: 25,
+                  fontFamily: 'Anton',
+                  fontWeight: FontWeight.bold,
                 ),
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'E-Mail'),
+                keyboardType: TextInputType.emailAddress,
+                onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                controller: _emailController,
+                validator: (value) {
+                  if (value.isEmpty || !value.contains('@')) {
+                    return 'Invalid email!';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  email = value.trim();
+                },
+                style: Theme.of(context).textTheme.bodyText2,
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Password'),
+                onEditingComplete: () => {
+                  if (_authMode == AuthMode.Signup)
+                    {FocusScope.of(context).nextFocus()}
+                  else
+                    {FocusScope.of(context).unfocus()}
+                },
+                obscureText: true,
+                controller: _passwordController,
+                // ignore: missing_return
+                validator: (value) {
+                  if (value.isEmpty || value.trim().length < 6) {
+                    return 'Password is too short!';
+                  }
+                },
+                onSaved: (value) {
+                  password = value.trim();
+                },
+                style: Theme.of(context).textTheme.bodyText2,
+              ),
+              if (_authMode == AuthMode.Signup)
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Password'),
-                  onEditingComplete: () => {
-                    if (_authMode == AuthMode.Signup)
-                      {FocusScope.of(context).nextFocus()}
-                    else
-                      {FocusScope.of(context).unfocus()}
-                  },
+                  enabled: _authMode == AuthMode.Signup,
+                  decoration: InputDecoration(labelText: 'Confirm Password'),
+                  onEditingComplete: () => FocusScope.of(context).unfocus(),
                   obscureText: true,
-                  controller: _passwordController,
-                  // ignore: missing_return
-                  validator: (value) {
-                    if (value.isEmpty || value.trim().length < 6) {
-                      return 'Password is too short!';
-                    }
-                  },
-                  onSaved: (value) {
-                    password = value.trim();
-                  },
+                  validator: _authMode == AuthMode.Signup
+                      // ignore: missing_return
+                      ? (value) {
+                          if (value != _passwordController.text.trim()) {
+                            return 'Passwords do not match!';
+                          }
+                        }
+                      : null,
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
-                if (_authMode == AuthMode.Signup)
-                  TextFormField(
-                    enabled: _authMode == AuthMode.Signup,
-                    decoration: InputDecoration(labelText: 'Confirm Password'),
-                    onEditingComplete: () => FocusScope.of(context).unfocus(),
-                    obscureText: true,
-                    validator: _authMode == AuthMode.Signup
-                        // ignore: missing_return
-                        ? (value) {
-                            if (value != _passwordController.text.trim()) {
-                              return 'Passwords do not match!';
-                            }
-                          }
-                        : null,
-                    style: Theme.of(context).textTheme.bodyText2,
+              SizedBox(
+                height: 20,
+              ),
+              if (_isLoading)
+                CircularProgressIndicator()
+              else
+                RaisedButton(
+                  child:
+                      Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
+                  onPressed: _submit,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                SizedBox(
-                  height: 20,
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+                  color: Theme.of(context).primaryColor,
+                  textColor: Theme.of(context).primaryTextTheme.button.color,
                 ),
-                if (_isLoading)
-                  CircularProgressIndicator()
-                else
-                  RaisedButton(
-                    child:
-                        Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
-                    onPressed: _submit,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
-                    color: Theme.of(context).primaryColor,
-                    textColor: Theme.of(context).primaryTextTheme.button.color,
-                  ),
-                FlatButton(
-                  child: Text(
-                      '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
-                  onPressed: _switchAuthMode,
-                  padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  textColor: Theme.of(context).primaryColor,
-                ),
-              ],
-            ),
+              FlatButton(
+                child: Text(
+                    '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
+                onPressed: _switchAuthMode,
+                padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                textColor: Theme.of(context).primaryColor,
+              ),
+            ],
           ),
         ),
       ),
