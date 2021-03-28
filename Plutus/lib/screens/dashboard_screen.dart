@@ -96,7 +96,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         Card(
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 'Dashboard chart',
@@ -109,7 +109,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             Card(
               child: Column(
-                mainAxisSize: MainAxisSize.max,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     'Dashboard chart',
@@ -120,7 +120,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             Card(
               child: Column(
-                mainAxisSize: MainAxisSize.max,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     'Dashboard chart',
@@ -133,7 +133,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         Card(
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 'Dashboard chart',
@@ -144,7 +144,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         Card(
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 'Dashboard chart',
@@ -155,7 +155,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         Card(
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 'Dashboard chart',
