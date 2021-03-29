@@ -31,8 +31,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
         Provider.of<Transaction.Transactions>(context, listen: false);
     print(widget.category.getID());
     var categoryTransactions = widget.budgetTransactions
-        .where('categoryID', isEqualTo: widget.category.getID())
-        .orderBy('date', descending: false);
+        .where('categoryID', isEqualTo: widget.category.getID());
     // FirebaseFirestore.instance
     //     .collection('users')
     //     .doc(Provider.of<Auth>(context, listen: false).getUserId())

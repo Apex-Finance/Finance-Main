@@ -78,7 +78,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             style: TextStyle(color: Colors.amber, fontSize: 15),
                           ),
                           AutoSizeText(
-                            '\$${widget.budget.getAmount()}', // .toStringAsFixed(2)
+                            '\$${widget.budget.getAmount().toStringAsFixed(2)}',
                             maxLines: 1,
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor,
@@ -109,34 +109,76 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                 // Scrollable category list with text fields
                 Expanded(
                   child: StreamBuilder<QuerySnapshot>(
-                      stream: categoryDataProvider.getCategories(context),
-                      builder: (context, snapshot) {
-                        var tempList = List<Category>();
-                        snapshot.data.docs.forEach((doc) {
-                          tempList.add(
-                              categoryDataProvider.initializeCategory(doc));
-                        });
-                        categoryList = tempList;
-                        catAmountFocusNodes = List<FocusNode>.generate(
-                            categoryList.length, (index) => FocusNode());
-                        if (widget.budget.getID() != null) {
-                          return StreamBuilder<QuerySnapshot>(
-                            stream: BudgetDataProvider().getBudgetCategories(
-                                context, widget.budget.getID()),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData &&
-                                  snapshot.data.docs.isNotEmpty) {
-                                snapshot.data.docs.forEach((doc) {
-                                  categoryList.forEach((category) {
-                                    if (doc.id == category.getID()) {
-                                      var amount = doc.data()['amount'] != null
-                                          ? doc.data()['amount']
-                                          : 0;
-                                      category.setAmount(amount);
-                                    }
-                                  });
-                                });
-                              }
+                    stream: categoryDataProvider.getCategories(context),
+                    builder: (context, budgetSnapshot) {
+                      switch (budgetSnapshot.connectionState) {
+                        case ConnectionState.none:
+                          {
+                            return Text('An issue arose.');
+                          }
+                        case ConnectionState.waiting:
+                          {
+                            return CircularProgressIndicator();
+                          }
+                        default:
+                          {
+                            var tempList = List<Category>();
+                            budgetSnapshot.data.docs.forEach((doc) {
+                              tempList.add(
+                                  categoryDataProvider.initializeCategory(doc));
+                            });
+                            categoryList = tempList;
+                            catAmountFocusNodes = List<FocusNode>.generate(
+                                categoryList.length, (index) => FocusNode());
+                            if (widget.budget.getID() != null) {
+                              return StreamBuilder<QuerySnapshot>(
+                                stream: BudgetDataProvider()
+                                    .getBudgetCategories(
+                                        context, widget.budget.getID()),
+                                builder: (context, snapshot) {
+                                  switch (snapshot.connectionState) {
+                                    case ConnectionState.none:
+                                      {
+                                        return Text(
+                                            'There was an issue loading the categories.');
+                                      }
+                                    case ConnectionState.waiting:
+                                      {
+                                        return CircularProgressIndicator();
+                                      }
+                                    default:
+                                      {
+                                        if (snapshot.hasData &&
+                                            snapshot.data.docs.isNotEmpty) {
+                                          snapshot.data.docs.forEach((doc) {
+                                            categoryList.forEach((category) {
+                                              if (doc.id == category.getID()) {
+                                                var amount =
+                                                    doc.data()['amount'] != null
+                                                        ? doc.data()['amount']
+                                                        : 0;
+                                                category.setAmount(amount);
+                                              }
+                                            });
+                                          });
+                                        }
+                                        return ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: categoryList.length,
+                                          itemBuilder: (context, index) =>
+                                              CategoryListTile(
+                                            categoryList,
+                                            calculateAmountLeft,
+                                            catAmountFocusNodes,
+                                            index,
+                                            widget.budget,
+                                          ),
+                                        );
+                                      }
+                                  }
+                                },
+                              );
+                            } else {
                               return ListView.builder(
                                 shrinkWrap: true,
                                 itemCount: categoryList.length,
@@ -149,22 +191,11 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                   widget.budget,
                                 ),
                               );
-                            },
-                          );
-                        } else {
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: categoryList.length,
-                            itemBuilder: (context, index) => CategoryListTile(
-                              categoryList,
-                              calculateAmountLeft,
-                              catAmountFocusNodes,
-                              index,
-                              widget.budget,
-                            ),
-                          );
-                        }
-                      }),
+                            }
+                          }
+                      }
+                    },
+                  ),
                 ),
                 // Add budget button
                 Container(
