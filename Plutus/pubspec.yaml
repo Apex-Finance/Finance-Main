@@ -39,6 +39,8 @@ dependencies:
   fab_circular_menu: ^1.0.1
   toggle_switch: "^0.1.8"
   image_picker: ^0.6.7+22
+  charts_flutter: ^0.10.0
+
   catcher: ^0.4.2
   firebase_crashlytics: ^0.2.3
   device_info: ^1.0.0
