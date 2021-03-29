@@ -117,7 +117,7 @@ class _TransactionFormState extends State<TransactionForm> {
     return KeyboardAvoider(
       // stops keyboard from overlapping form
       child: Container(
-        height: 380, // large enough to accommodate all errors
+        height: 390, // large enough to accommodate all errors
         child: Card(
           color: Colors.grey[850],
           child: Padding(
