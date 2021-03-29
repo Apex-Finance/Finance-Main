@@ -34,7 +34,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       new PiePiece('travel', 10.3, Colors.pink),
       new PiePiece('entertainment', 12.4, Colors.purple),
       new PiePiece('investments', 15.7, Colors.brown),
-      new PiePiece('uncategorized', 24.8, Colors.black),
+      new PiePiece('uncategorized', 24.8, Colors.indigo),
     ];
 
     _pieSeriesData.add(
@@ -53,7 +53,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    _pieSeriesData = List<charts.Series<PiePiece, String>>();
+    _pieSeriesData = <charts.Series<PiePiece, String>>[];
     _generateData();
   }
 
@@ -280,7 +280,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       width: 400,
                       child: Center(
                         child: Text(
-                          'Recent Goals',
+                          'Upcoming Goals',
                           style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
