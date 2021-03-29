@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
 
 import '../screens/tab_screen.dart';
 import '../providers/auth.dart';
 
+// Form to login a user
 class AuthForm extends StatefulWidget {
   @override
   _AuthFormState createState() => _AuthFormState();
@@ -24,6 +24,7 @@ class _AuthFormState extends State<AuthForm> {
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
 
+  // Displays a popup informing the user that an issue occurred
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -40,6 +41,7 @@ class _AuthFormState extends State<AuthForm> {
     );
   }
 
+  // Submits the entered credentials and awaits for authentication
   Future<void> _submit() async {
     UserCredential credentialResult;
     if (!_formKey.currentState.validate()) {
@@ -73,6 +75,7 @@ class _AuthFormState extends State<AuthForm> {
       if (credentialResult != null) {
         Navigator.pushNamed(context, TabScreen.routeName);
       }
+      // Error messages
     } on FirebaseAuthException catch (error) {
       var errorMessage = 'Authentication failed';
       if (error.code == 'invalid-email') {
@@ -95,6 +98,7 @@ class _AuthFormState extends State<AuthForm> {
     });
   }
 
+  // Switches between Login and Signup modes
   void _switchAuthMode() {
     if (_authMode == AuthMode.Login) {
       setState(() {
@@ -109,13 +113,16 @@ class _AuthFormState extends State<AuthForm> {
 
   @override
   Widget build(BuildContext context) {
+    // Adjusts based on the size of the device
     final deviceSize = MediaQuery.of(context).size;
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 8.0,
       child: Container(
+        // Signup card is bigger due to extra textfield
         height: _authMode == AuthMode.Signup ? 400 : 340,
         constraints:
             BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
@@ -125,6 +132,7 @@ class _AuthFormState extends State<AuthForm> {
           key: _formKey,
           child: Column(
             children: <Widget>[
+              // Title
               Text(
                 'Plutus',
                 style: TextStyle(
@@ -134,6 +142,7 @@ class _AuthFormState extends State<AuthForm> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              // E-mail
               TextFormField(
                 decoration: InputDecoration(labelText: 'E-Mail'),
                 keyboardType: TextInputType.emailAddress,
@@ -150,6 +159,7 @@ class _AuthFormState extends State<AuthForm> {
                 },
                 style: Theme.of(context).textTheme.bodyText2,
               ),
+              // Password
               TextFormField(
                 decoration: InputDecoration(labelText: 'Password'),
                 onEditingComplete: () => {
@@ -171,7 +181,9 @@ class _AuthFormState extends State<AuthForm> {
                 },
                 style: Theme.of(context).textTheme.bodyText2,
               ),
+              // Default is Login
               if (_authMode == AuthMode.Signup)
+                // Confirm Password
                 TextFormField(
                   enabled: _authMode == AuthMode.Signup,
                   decoration: InputDecoration(labelText: 'Confirm Password'),
@@ -193,6 +205,7 @@ class _AuthFormState extends State<AuthForm> {
               if (_isLoading)
                 CircularProgressIndicator()
               else
+                // LOGIN/SIGNUP UP button
                 RaisedButton(
                   child: Text(
                     _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP',
@@ -207,6 +220,7 @@ class _AuthFormState extends State<AuthForm> {
                   color: Theme.of(context).primaryColor,
                   textColor: Theme.of(context).primaryTextTheme.button.color,
                 ),
+              // Button to switch AuthModes
               FlatButton(
                 child: Text(
                     '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),

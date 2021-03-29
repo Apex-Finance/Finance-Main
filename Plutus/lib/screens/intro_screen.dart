@@ -12,6 +12,7 @@ class OnBoardingPage extends StatefulWidget {
 class _OnBoardingPageState extends State<OnBoardingPage> {
   final introKey = GlobalKey<IntroductionScreenState>();
 
+  // Builds a vector image displayed in each page
   Widget _buildImage(String assetName) {
     return Align(
       child: Image.asset(
@@ -90,8 +91,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         ),
       ],
       onDone: () => Navigator.of(context).pushNamed(AuthScreen.routeName),
-      onSkip: () => introKey.currentState?.animateScroll(
-          5), //_onIntroEnd(context), // You can override onSkip callback
+      onSkip: () => introKey.currentState
+          ?.animateScroll(5), // You can override onSkip callback
       showSkipButton: true,
       skipFlex: 0,
       nextFlex: 0,

@@ -1,21 +1,20 @@
-// import 'dart:math';
+import 'package:flutter/material.dart';
 
 import '../widgets/auth_form.dart';
 
-import 'package:flutter/material.dart';
-
+// Login Screen
 class AuthScreen extends StatelessWidget {
   static const routeName = '/auth';
 
   @override
   Widget build(BuildContext context) {
+    // Adjusts based on the size of the device
     final deviceSize = MediaQuery.of(context).size;
-    // final transformConfig = Matrix4.rotationZ(-8 * pi / 180);
-    // transformConfig.translate(-10.0);
+
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
+          // Background gradient
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -29,6 +28,7 @@ class AuthScreen extends StatelessWidget {
               ),
             ),
           ),
+          // White card containing login interactables
           Container(
             height: deviceSize.height,
             width: deviceSize.width,
@@ -36,39 +36,9 @@ class AuthScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                // Flexible(
-                //   child: Container(
-                //     margin: EdgeInsets.only(bottom: 10.0),
-                //     padding:
-                //         EdgeInsets.symmetric(vertical: 8.0, horizontal: 94.0),
-                //     transform: Matrix4.rotationZ(0) // -8 * pi / 180
-                //       ..translate(0.0),
-                //     // ..translate(-10.0),
-                //     decoration: BoxDecoration(
-                //       borderRadius: BorderRadius.circular(20),
-                //       color: Colors.white,
-                //       boxShadow: [
-                //         BoxShadow(
-                //           blurRadius: 8,
-                //           color: Colors.black26,
-                //           offset: Offset(0, 2),
-                //         )
-                //       ],
-                //     ),
-                //     child: Text(
-                //       'Plutus',
-                //       style: TextStyle(
-                //         color: Theme.of(context).primaryColor,
-                //         fontSize: 25,
-                //         fontFamily: 'Anton',
-                //         fontWeight: FontWeight.bold,
-                //       ),
-                //     ),
-                //   ),
-                // ),
                 Flexible(
                   flex: deviceSize.height > 600 ? 3 : 2,
-                  child: AuthCard(),
+                  child: AuthForm(),
                 ),
               ],
             ),
@@ -76,22 +46,5 @@ class AuthScreen extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class AuthCard extends StatefulWidget {
-  const AuthCard({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  _AuthCardState createState() => _AuthCardState();
-}
-
-//TODO connect this widget with its builder method
-class _AuthCardState extends State<AuthCard> {
-  @override
-  Widget build(BuildContext context) {
-    return AuthForm();
   }
 }
