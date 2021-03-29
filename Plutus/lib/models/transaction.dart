@@ -35,6 +35,7 @@ class Transaction {
     _amount = amount;
     _categoryId = categoryId;
     _categoryTitle = categoryTitle;
+    _categoryCodePoint = categoryCodepoint;
   }
 
   void setID(String idValue) {
@@ -240,7 +241,9 @@ class Transactions with ChangeNotifier {
             date.month + 1,
             1,
           ),
-        );
+        )
+        .orderBy('date',
+            descending: true); // sorts transactions from newest to oldest
   }
   // Sum the expenses for the month
   // double get monthlyExpenses {

@@ -6,6 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
 import './screens/tab_screen.dart';
 import './screens/intro_screen.dart';
@@ -28,6 +31,7 @@ void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) async {
     await Firebase.initializeApp();
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     runApp(
       MultiProvider(providers: [
         ChangeNotifierProvider(create: (context) => ColorProvider()),
@@ -65,8 +69,13 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
   @override
   Widget build(BuildContext context) {
+    // To Create a crash
+    //FirebaseCrashlytics.instance.crash();
     var colors = Provider.of<ColorProvider>(context);
     var isDark = colors.isDark ?? false; // default to light mode
     var colorMode = isDark ? 'dark' : 'light';
@@ -96,6 +105,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
         initialRoute: '/onboarding',
+        navigatorObservers: [
+          FirebaseAnalyticsObserver(analytics: analytics),
+        ],
         routes: {
           '/onboarding': (context) => OnBoardingPage(),
           DashboardScreen.routeName: (context) => DashboardScreen(),
