@@ -309,16 +309,16 @@ class _TransactionFormState extends State<TransactionForm> {
             ),
           ),
           child: Chip(
-            // avatar: CircleAvatar(
-            //   backgroundColor: Colors.black,
-            //   child: Icon(
-            //     IconData(
-            //       _transaction.getCategoryCodePoint(),
-            //       fontFamily: 'MaterialIcons',
-            //     ),
-            //     size: 50,
-            //   ),
-            // ),
+            avatar: CircleAvatar(
+              backgroundColor: Colors.black,
+              child: Icon(
+                IconData(
+                  _transaction.getCategoryCodePoint(),
+                  fontFamily: 'MaterialIcons',
+                ),
+                size: 22,
+              ),
+            ),
             label: Text(
               '${_transaction.getCategoryTitle()}',
               style: TextStyle(color: Colors.black),

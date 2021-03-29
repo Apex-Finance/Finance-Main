@@ -38,7 +38,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
         style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 15),
       ),
       trailing: Container(
-        width: 52,
+        width: 80,
         child: Row(
           children: [
             Text('\$', style: Theme.of(context).textTheme.bodyText1),
@@ -117,6 +117,11 @@ class _CategoryListTileState extends State<CategoryListTile> {
                         );
                       }
                     } // if amount is cleared, set to 0 so that remainingBudget can update
+                  } else {
+                    // gaining focus
+                    if (_controller.text == '0.00') {
+                      _controller.text = '';
+                    }
                   }
                 },
                 child: TextFormField(
