@@ -1,6 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import '../models/pie_chart.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+import 'package:Plutus/models/category.dart';
+import 'package:Plutus/models/transaction.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+
+import '../models/budget.dart';
+import 'new_budget_screens/income_screen.dart';
+import '../widgets/budget_list_tile.dart';
+import '../providers/auth.dart';
+import '../models/transaction.dart' as Transaction;
+import 'package:provider/provider.dart';
+import '../models/month_changer.dart';
 
 class DashboardScreen extends StatefulWidget {
   static const routeName = '/dashboard';
@@ -45,13 +58,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
+      shrinkWrap: true,
+      padding: EdgeInsets.all(15.0),
       children: [
-        Card(
-          child: Padding(
-            padding: EdgeInsets.all(8),
-            child: Container(
-              child: Center(
+        Column(
+          children: [
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20),
+                  bottom: Radius.circular(20),
+                ),
+              ),
+              child: Container(
+                width: 400,
+                height: 500,
                 child: Column(
                   children: [
                     Text(
@@ -66,10 +88,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         animationDuration: Duration(seconds: 2),
                         behaviors: [
                           new charts.DatumLegend(
-                            outsideJustification:
-                                charts.OutsideJustification.endDrawArea,
                             horizontalFirst: false,
-                            desiredMaxRows: 2,
+                            desiredMaxRows: 4,
                             cellPadding:
                                 new EdgeInsets.only(right: 4, bottom: 4),
                             entryTextStyle: charts.TextStyleSpec(
@@ -92,77 +112,187 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
             ),
-          ),
-        ),
-        Card(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Dashboard chart',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-            ],
-          ),
-        ),
-        Row(
-          children: [
             Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Dashboard chart',
-                    style: Theme.of(context).textTheme.bodyText1,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20),
+                  bottom: Radius.circular(20),
+                ),
+              ),
+              child: ListTile(
+                title: Column(
+                  children: [
+                    Text(
+                      'Total Budget this month',
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColor),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                      child: new LinearPercentIndicator(
+                        width: MediaQuery.of(context).size.width * .82,
+                        animation: true,
+                        lineHeight: 20.0,
+                        animationDuration: 2500,
+                        percent: 0.8,
+                        center: Text("80.0%"),
+                        linearStrokeCap: LinearStrokeCap.roundAll,
+                        progressColor: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    /*new LinearPercentIndicator(
+                      alignment: MainAxisAlignment.center,
+                      width: 310.0,
+                      lineHeight: 14.0,
+                      percent: transactionExpenses > budget.getAmount()
+                          ? 1
+                          : transactionExpenses / budget.getAmount(),
+                      backgroundColor: Colors.black,
+                      progressColor: Colors.amber,
+                    ),*/
+                  ],
+                ),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(20),
+                      bottom: Radius.circular(20),
+                    ),
                   ),
-                ],
+                  child: Container(
+                    height: 90,
+                    width: 180,
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            'Total Spent',
+                            style: Theme.of(context).textTheme.headline1,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            '\$500',
+                            style: Theme.of(context).textTheme.headline1,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(20),
+                      bottom: Radius.circular(20),
+                    ),
+                  ),
+                  child: Container(
+                    height: 90,
+                    width: 180,
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            'Total Saved',
+                            style: Theme.of(context).textTheme.headline1,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            '\$500',
+                            style: Theme.of(context).textTheme.headline1,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20),
+                  bottom: Radius.circular(20),
+                ),
+              ),
+              child: Container(
+                width: 400,
+                height: 300,
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      width: 400,
+                      child: Center(
+                        child: Text(
+                          'Recent Transactions',
+                          style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Dashboard chart',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                ],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20),
+                  bottom: Radius.circular(20),
+                ),
+              ),
+              child: Container(
+                width: 400,
+                height: 300,
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      width: 400,
+                      child: Center(
+                        child: Text(
+                          'Recent Goals',
+                          style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
-        ),
-        Card(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Dashboard chart',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-            ],
-          ),
-        ),
-        Card(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Dashboard chart',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-            ],
-          ),
-        ),
-        Card(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Dashboard chart',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-            ],
-          ),
         ),
       ],
     );
