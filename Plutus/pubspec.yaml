@@ -55,7 +55,7 @@ dependencies:
   uuid: ^2.2.2
   firebase_analytics: ^6.2.0
   firebase: ^7.3.3
-  firebase_analytics_platform_interface: any
+  firebase_analytics_platform_interface: any #
   firebase_analytics_web: ^0.1.1
   
   # The following adds the Cupertino Icons font to your application.
