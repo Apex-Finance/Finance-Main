@@ -83,7 +83,7 @@ class _GoalsFormState extends State<GoalsForm> {
   Widget build(BuildContext context) {
     return KeyboardAvoider(
       child: Container(
-        height: 380,
+        height: 390, // large enough to accommodate all errors
         child: Card(
           color: Colors.grey[850],
           child: Padding(
