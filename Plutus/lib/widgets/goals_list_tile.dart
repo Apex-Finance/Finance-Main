@@ -113,9 +113,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
                 // Goal image preview
                 child: CircleAvatar(
                   radius: 35,
-                  backgroundImage: NetworkImage(
-                    'https://2p2bboli8d61fqhjiqzb8p1a-wpengine.netdna-ssl.com/wp-content/uploads/2018/07/1.jpg',
-                  ),
+                  child: Icon(Icons.star),
                 ),
               ),
               title: Column(
@@ -157,12 +155,19 @@ class _GoalsListTileState extends State<GoalsListTile> {
                               : widget.goal
                                   .getAmountSaved(context, snapshot.data);
                           return new LinearPercentIndicator(
-                            center: AutoSizeText(
-                              '\$ $amountSaved of \$ ${widget.goal.getGoalAmount()}',
-                              style: TextStyle(
-                                color: Theme.of(context).accentColor,
-                              ),
-                            ),
+                            center: amountSaved == widget.goal.getGoalAmount()
+                                ? AutoSizeText(
+                                    'Completed!',
+                                    style: TextStyle(
+                                      color: Theme.of(context).accentColor,
+                                    ),
+                                  )
+                                : AutoSizeText(
+                                    '\$ ${amountSaved.toStringAsFixed(2)} of \$ ${widget.goal.getGoalAmount().toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                      color: Theme.of(context).accentColor,
+                                    ),
+                                  ),
                             percent: amountSaved == null
                                 ? 0.0
                                 : amountSaved > widget.goal.getGoalAmount()
@@ -190,8 +195,6 @@ class _GoalsListTileState extends State<GoalsListTile> {
                     ),
                   ),
                 ),
-                // TODO May want to change this to a gesture detector with child container with child icon.
-                // TODO This enables you to click on the entire container and not just the icon.
                 child: IconButton(
                   color: Theme.of(context).primaryColor,
                   icon: Icon(Icons.add),

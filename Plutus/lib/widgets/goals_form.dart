@@ -21,8 +21,7 @@ class _GoalsFormState extends State<GoalsForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime _date;
   Goal _goal = Goal.empty();
-  File _goalImage; // Image selected from the phone galler
-  // TODO May need to change to update to DB
+  File _goalImage; // Image selected from the phone gallery
   void _setDate(DateTime value) {
     if (value == null) return; // if user cancels datepicker
     setState(() {
@@ -42,15 +41,12 @@ class _GoalsFormState extends State<GoalsForm> {
 
       // If no date is set, set the date to today's date
       if (_goal.getDate() == null) _goal.setDate(DateTime.now());
-      // TODO save image into DB
       if (_goal.getID() == null) {
         goalDataProvider.addGoal(_goal, context);
       } else {
         goalDataProvider.updateGoal(_goal, context);
       }
-      Navigator.of(context).pop(
-        _goal,
-      );
+      Navigator.of(context).pop(_goal);
     }
   }
 
@@ -144,7 +140,8 @@ class _GoalsFormState extends State<GoalsForm> {
                     Text(
                       "Add a picture",
                       style: TextStyle(
-                        color: Theme.of(context).canvasColor,
+                        // Has to be hardcoded since no textTheme has any fontsize smaller than 17
+                        fontSize: 12,
                       ),
                     ),
                   ],
@@ -161,7 +158,7 @@ class _GoalsFormState extends State<GoalsForm> {
   // Validates required fields and sends goal data to DB
   Widget buildSubmitButton(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0, 120, 0, 0),
+      padding: EdgeInsets.fromLTRB(0, 110, 0, 0),
       child: Container(
         child: FloatingActionButton.extended(
           backgroundColor: Theme.of(context).primaryColorLight,
@@ -229,13 +226,13 @@ class GoalTitleField extends StatelessWidget {
       inputFormatters: [
         LengthLimitingTextInputFormatter(50),
       ],
-      maxLength: 50,
+      maxLength: 35,
       onEditingComplete: () {
         FocusScope.of(context).nextFocus();
       },
       onSaved: (val) => _goal.title = val.trim(),
       validator: (val) {
-        if (val.trim().length > 50) return 'Title is too long.';
+        if (val.trim().length > 35) return 'Title is too long.';
         if (val.isEmpty) return 'Please enter a title.';
         return null;
       },
@@ -262,6 +259,7 @@ class GoalAmountField extends StatelessWidget {
             color: Theme.of(context).primaryColor, fontSize: 16.0),
         labelText: "Target Amount",
       ),
+      style: TextStyle(fontSize: 20.0, color: Theme.of(context).primaryColor),
       keyboardType: TextInputType
           .number, // May want to use Currency_Input_Formatter like income.dart
       onSaved: (val) => _goal.goalAmount = double.parse(val),
