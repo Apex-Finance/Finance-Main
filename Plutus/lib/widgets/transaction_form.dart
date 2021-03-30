@@ -117,7 +117,7 @@ class _TransactionFormState extends State<TransactionForm> {
     return KeyboardAvoider(
       // stops keyboard from overlapping form
       child: Container(
-        height: 390, // large enough to accommodate all errors
+        height: 380, // large enough to accommodate all errors
         child: Card(
           color: Colors.grey[850],
           child: Padding(
@@ -309,16 +309,16 @@ class _TransactionFormState extends State<TransactionForm> {
             ),
           ),
           child: Chip(
-            avatar: CircleAvatar(
-              backgroundColor: Colors.black,
-              child: Icon(
-                IconData(
-                  _transaction.getCategoryCodePoint(),
-                  fontFamily: 'MaterialIcons',
-                ),
-                size: 22,
-              ),
-            ),
+            // avatar: CircleAvatar(
+            //   backgroundColor: Colors.black,
+            //   child: Icon(
+            //     IconData(
+            //       _transaction.getCategoryCodePoint(),
+            //       fontFamily: 'MaterialIcons',
+            //     ),
+            //     size: 50,
+            //   ),
+            // ),
             label: Text(
               '${_transaction.getCategoryTitle()}',
               style: TextStyle(color: Colors.black),

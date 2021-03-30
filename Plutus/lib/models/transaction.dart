@@ -35,7 +35,6 @@ class Transaction {
     _amount = amount;
     _categoryId = categoryId;
     _categoryTitle = categoryTitle;
-    _categoryCodePoint = categoryCodepoint;
   }
 
   void setID(String idValue) {

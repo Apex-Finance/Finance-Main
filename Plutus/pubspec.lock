@@ -35,21 +35,7 @@ packages:
       name: charcode
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0"
-  charts_common:
-    dependency: transitive
-    description:
-      name: charts_common
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.10.0"
-  charts_flutter:
-    dependency: "direct main"
-    description:
-      name: charts_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.10.0"
+    version: "1.2.0-nullsafety.1"
   clock:
     dependency: transitive
     description:
@@ -148,34 +134,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.2.1"
-  firebase:
-    dependency: "direct main"
-    description:
-      name: firebase
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "7.3.3"
-  firebase_analytics:
-    dependency: "direct main"
-    description:
-      name: firebase_analytics
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "6.2.0"
-  firebase_analytics_platform_interface:
-    dependency: "direct main"
-    description:
-      name: firebase_analytics_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.3"
-  firebase_analytics_web:
-    dependency: "direct main"
-    description:
-      name: firebase_analytics_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.1"
   firebase_auth:
     dependency: "direct main"
     description:
@@ -468,7 +426,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0"
+    version: "1.8.0-nullsafety.2"
   stack_trace:
     dependency: transitive
     description:

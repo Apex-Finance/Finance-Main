@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../screens/tab_screen.dart';
 import '../providers/auth.dart';
 
-// Form to login a user
 class AuthForm extends StatefulWidget {
   @override
   _AuthFormState createState() => _AuthFormState();
@@ -24,7 +23,6 @@ class _AuthFormState extends State<AuthForm> {
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
 
-  // Displays a popup informing the user that an issue occurred
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -41,7 +39,6 @@ class _AuthFormState extends State<AuthForm> {
     );
   }
 
-  // Submits the entered credentials and awaits for authentication
   Future<void> _submit() async {
     UserCredential credentialResult;
     if (!_formKey.currentState.validate()) {
@@ -75,7 +72,6 @@ class _AuthFormState extends State<AuthForm> {
       if (credentialResult != null) {
         Navigator.pushNamed(context, TabScreen.routeName);
       }
-      // Error messages
     } on FirebaseAuthException catch (error) {
       var errorMessage = 'Authentication failed';
       if (error.code == 'invalid-email') {
@@ -98,7 +94,6 @@ class _AuthFormState extends State<AuthForm> {
     });
   }
 
-  // Switches between Login and Signup modes
   void _switchAuthMode() {
     if (_authMode == AuthMode.Login) {
       setState(() {
@@ -113,123 +108,104 @@ class _AuthFormState extends State<AuthForm> {
 
   @override
   Widget build(BuildContext context) {
-    // Adjusts based on the size of the device
     final deviceSize = MediaQuery.of(context).size;
-
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 8.0,
       child: Container(
-        // Signup card is bigger due to extra textfield
-        height: _authMode == AuthMode.Signup ? 400 : 340,
+        height: _authMode == AuthMode.Signup ? 320 : 260,
         constraints:
             BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
         width: deviceSize.width * 0.75,
         padding: EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: Column(
-            children: <Widget>[
-              // Title
-              Text(
-                'Plutus',
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontSize: 25,
-                  fontFamily: 'Anton',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              // E-mail
-              TextFormField(
-                decoration: InputDecoration(labelText: 'E-Mail'),
-                keyboardType: TextInputType.emailAddress,
-                onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                controller: _emailController,
-                validator: (value) {
-                  if (value.isEmpty || !value.contains('@')) {
-                    return 'Invalid email!';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  email = value.trim();
-                },
-                style: Theme.of(context).textTheme.bodyText2,
-              ),
-              // Password
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Password'),
-                onEditingComplete: () => {
-                  if (_authMode == AuthMode.Signup)
-                    {FocusScope.of(context).nextFocus()}
-                  else
-                    {FocusScope.of(context).unfocus()}
-                },
-                obscureText: true,
-                controller: _passwordController,
-                // ignore: missing_return
-                validator: (value) {
-                  if (value.isEmpty || value.trim().length < 6) {
-                    return 'Password is too short!';
-                  }
-                },
-                onSaved: (value) {
-                  password = value.trim();
-                },
-                style: Theme.of(context).textTheme.bodyText2,
-              ),
-              // Default is Login
-              if (_authMode == AuthMode.Signup)
-                // Confirm Password
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
                 TextFormField(
-                  enabled: _authMode == AuthMode.Signup,
-                  decoration: InputDecoration(labelText: 'Confirm Password'),
-                  onEditingComplete: () => FocusScope.of(context).unfocus(),
-                  obscureText: true,
-                  validator: _authMode == AuthMode.Signup
-                      // ignore: missing_return
-                      ? (value) {
-                          if (value != _passwordController.text.trim()) {
-                            return 'Passwords do not match!';
-                          }
-                        }
-                      : null,
+                  decoration: InputDecoration(labelText: 'E-Mail'),
+                  keyboardType: TextInputType.emailAddress,
+                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                  controller: _emailController,
+                  validator: (value) {
+                    if (value.isEmpty || !value.contains('@')) {
+                      return 'Invalid email!';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    email = value.trim();
+                  },
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
-              SizedBox(
-                height: 20,
-              ),
-              if (_isLoading)
-                CircularProgressIndicator()
-              else
-                // LOGIN/SIGNUP UP button
-                RaisedButton(
-                  child: Text(
-                    _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP',
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                  onPressed: _submit,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
-                  color: Theme.of(context).primaryColor,
-                  textColor: Theme.of(context).primaryTextTheme.button.color,
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Password'),
+                  onEditingComplete: () => {
+                    if (_authMode == AuthMode.Signup)
+                      {FocusScope.of(context).nextFocus()}
+                    else
+                      {FocusScope.of(context).unfocus()}
+                  },
+                  obscureText: true,
+                  controller: _passwordController,
+                  // ignore: missing_return
+                  validator: (value) {
+                    if (value.isEmpty || value.length < 5) {
+                      return 'Password is too short!';
+                    }
+                  },
+                  onSaved: (value) {
+                    password = value.trim();
+                  },
+                  style: Theme.of(context).textTheme.bodyText2,
                 ),
-              // Button to switch AuthModes
-              FlatButton(
-                child: Text(
-                    '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
-                onPressed: _switchAuthMode,
-                padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                textColor: Theme.of(context).primaryColor,
-              ),
-            ],
+                if (_authMode == AuthMode.Signup)
+                  TextFormField(
+                    enabled: _authMode == AuthMode.Signup,
+                    decoration: InputDecoration(labelText: 'Confirm Password'),
+                    onEditingComplete: () => FocusScope.of(context).unfocus(),
+                    obscureText: true,
+                    validator: _authMode == AuthMode.Signup
+                        // ignore: missing_return
+                        ? (value) {
+                            if (value != _passwordController.text) {
+                              return 'Passwords do not match!';
+                            }
+                          }
+                        : null,
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
+                SizedBox(
+                  height: 20,
+                ),
+                if (_isLoading)
+                  CircularProgressIndicator()
+                else
+                  RaisedButton(
+                    child:
+                        Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
+                    onPressed: _submit,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+                    color: Theme.of(context).primaryColor,
+                    textColor: Theme.of(context).primaryTextTheme.button.color,
+                  ),
+                FlatButton(
+                  child: Text(
+                      '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
+                  onPressed: _switchAuthMode,
+                  padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  textColor: Theme.of(context).primaryColor,
+                ),
+              ],
+            ),
           ),
         ),
       ),

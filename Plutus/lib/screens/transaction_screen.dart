@@ -53,12 +53,9 @@ class _TransactionScreenState extends State<TransactionScreen> {
             if (snapshot.hasError) return Text('Error: ${snapshot.error}');
 
             switch (snapshot.connectionState) {
-              case ConnectionState
-                  .waiting: // not sure if this is a good solution... keeps the screen from shifting left though... needs to be improved to stop screen from flashing on month change
-                return Row(
-                  children: [],
-                  mainAxisSize: MainAxisSize.max,
-                );
+              case ConnectionState.waiting:
+                // Do we need this? It appears everytime you switch to the Goal tab -Juan
+                return Text('Loading...');
               default:
                 return Expanded(
                   child: Container(
