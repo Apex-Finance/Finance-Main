@@ -36,6 +36,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var transactionDataProvider =
+        Provider.of<Transaction.Transactions>(context);
     var monthData = Provider.of<MonthChanger>(context);
     return Column(
       children: [
@@ -47,7 +49,14 @@ class _TransactionScreenState extends State<TransactionScreen> {
           ),
         ),
         StreamBuilder<QuerySnapshot>(
-          stream: getDbRef().snapshots(),
+          stream: transactionDataProvider
+              .getMonthlyTransactions(
+                  context,
+                  DateTime(
+                    monthData.selectedYear,
+                    monthData.selectedMonth,
+                  ))
+              .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) return Text('Error: ${snapshot.error}');

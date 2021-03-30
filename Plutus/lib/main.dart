@@ -121,6 +121,7 @@ class MyApp extends StatelessWidget {
           SettingsScreen.routeName: (context) => SettingsScreen(),
           TabScreen.routeName: (context) => TabScreen(),
         },
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

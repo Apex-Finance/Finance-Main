@@ -188,15 +188,37 @@ class Transactions with ChangeNotifier {
     notifyListeners();
   }
 
-  // Take all transactions, filter out only the ones from the selected month, and reverse the order from newest to oldest
-  List<Transaction> getMonthlyTransactions() {
-    var unsorted = _transactions
-        .where((transaction) =>
-            transaction.getDate().month == monthChanger.selectedMonth &&
-            transaction.getDate().year == monthChanger.selectedYear)
-        .toList();
-    unsorted.sort((a, b) => (b.getDate()).compareTo(a.getDate()));
-    return unsorted;
+  // // Take all transactions, filter out only the ones from the selected month, and reverse the order from newest to oldest
+  // List<Transaction> getMonthlyTransactions() {
+  //   var unsorted = _transactions
+  //       .where((transaction) =>
+  //           transaction.getDate().month == monthChanger.selectedMonth &&
+  //           transaction.getDate().year == monthChanger.selectedYear)
+  //       .toList();
+  //   unsorted.sort((a, b) => (b.getDate()).compareTo(a.getDate()));
+  //   return unsorted;
+  // }
+
+  Query getMonthlyTransactions(BuildContext context, DateTime date) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('Transactions')
+        .where(
+          'date',
+          isGreaterThanOrEqualTo: DateTime(
+            date.year,
+            date.month,
+            1,
+          ),
+          isLessThan: DateTime(
+            date.year,
+            date.month + 1,
+            1,
+          ),
+        )
+        .orderBy('date',
+            descending: true); // sorts transactions from newest to oldest
   }
 
   Stream<QuerySnapshot> getCategoryTransactions(
