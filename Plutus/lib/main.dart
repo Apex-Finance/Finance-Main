@@ -12,7 +12,7 @@ import './screens/account_screen.dart';
 import './screens/settings_screen.dart';
 import './models/budget.dart';
 import './providers/auth.dart';
-import 'models/goals.dart';
+import './models/goals.dart';
 import './models/month_changer.dart';
 import './providers/color.dart';
 import './models/category.dart';
