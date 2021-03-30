@@ -1,15 +1,30 @@
-import 'package:Plutus/models/category.dart';
-import 'package:Plutus/screens/new_budget_screens/income_screen.dart';
-import 'package:Plutus/models/month_changer.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+import './screens/new_budget_screens/income_screen.dart';
 import './screens/account_screen.dart';
 import './screens/settings_screen.dart';
 import './models/budget.dart';
 import './providers/auth.dart';
 import 'models/goals.dart';
+import './models/month_changer.dart';
+import './providers/color.dart';
+import './models/category.dart';
+import './models/transaction.dart';
+import './screens/intro_screen.dart';
+import './screens/budget_screen.dart';
+import './screens/dashboard_screen.dart';
+import './screens/transaction_screen.dart';
+import './screens/tab_screen.dart';
+import './screens/goal_screen.dart';
+import './screens/new_budget_screens/first_budget_screen.dart';
+import './screens/auth_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
