@@ -5,64 +5,62 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
-
-import './screens/tab_screen.dart';
-import './screens/intro_screen.dart';
-import './screens/dashboard_screen.dart';
-import './screens/budget_screen.dart';
-import './screens/transaction_screen.dart';
-import './screens/goal_screen.dart';
-import './screens/new_budget_screens/first_budget_screen.dart';
-import './screens/auth_screen.dart';
 import './screens/account_screen.dart';
 import './screens/settings_screen.dart';
-import './models/transaction.dart';
 import './models/budget.dart';
 import './providers/auth.dart';
-import './providers/color.dart';
 import 'models/goals.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(
-    MultiProvider(providers: [
-      ChangeNotifierProvider(create: (context) => ColorProvider()),
-      ChangeNotifierProvider(create: (context) => GoalDataProvider()),
-      ChangeNotifierProvider(
-        create: (context) => BudgetDataProvider(),
-      ),
-      ChangeNotifierProvider(
-        create: (context) => CategoryDataProvider(),
-      ),
-      ChangeNotifierProvider(
-        create: (_) => Auth(),
-      ),
-      ChangeNotifierProvider(
-        create: (context) => MonthChanger(),
-      ),
-      ChangeNotifierProxyProvider<MonthChanger, Transactions>(
-        update: (buildContext, monthChanger, previousTransactions) =>
-            Transactions(
-                monthChanger,
-                previousTransactions == null
-                    ? []
-                    : previousTransactions.transactions),
-        create: null,
-      ),
-      // ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
-      //   update: (buildContext, monthChanger, transactions, previousBudgets) =>
-      //       Budgets(monthChanger, transactions,
-      //           previousBudgets == null ? [] : previousBudgets.budgets),
-      //   create: null,
-      // ),
-    ], child: MyApp()),
-  );
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) async {
+    await Firebase.initializeApp();
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    runApp(
+      MultiProvider(providers: [
+        ChangeNotifierProvider(create: (context) => ColorProvider()),
+        ChangeNotifierProvider(create: (context) => GoalDataProvider()),
+        ChangeNotifierProvider(
+          create: (context) => BudgetDataProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CategoryDataProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => Auth(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MonthChanger(),
+        ),
+        ChangeNotifierProxyProvider<MonthChanger, Transactions>(
+          update: (buildContext, monthChanger, previousTransactions) =>
+              Transactions(
+                  monthChanger,
+                  previousTransactions == null
+                      ? []
+                      : previousTransactions.transactions),
+          create: null,
+        ),
+        // ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
+        //   update: (buildContext, monthChanger, transactions, previousBudgets) =>
+        //       Budgets(monthChanger, transactions,
+        //           previousBudgets == null ? [] : previousBudgets.budgets),
+        //   create: null,
+        // ),
+      ], child: MyApp()),
+    );
+  });
 }
 
 class MyApp extends StatelessWidget {
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
   @override
   Widget build(BuildContext context) {
+    // To Create a crash
+    //FirebaseCrashlytics.instance.crash();
     var colors = Provider.of<ColorProvider>(context);
     var isDark = colors.isDark ?? false; // default to light mode
     var colorMode = isDark ? 'dark' : 'light';
@@ -92,6 +90,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
         initialRoute: '/onboarding',
+        navigatorObservers: [
+          FirebaseAnalyticsObserver(analytics: analytics),
+        ],
         routes: {
           '/onboarding': (context) => OnBoardingPage(),
           DashboardScreen.routeName: (context) => DashboardScreen(),
