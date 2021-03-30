@@ -34,6 +34,8 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
       _transaction.setTitle('${widget.goal.getTitle()}');
       // No need to go looking for category name. All transactions created here will have their categories set to Goal.
       _transaction.setCategoryTitle('Goal');
+      _transaction.setCategoryId('GYHEkJeJsFG09HUw14p3'); // Goal Id
+      _transaction.setCategoryCodePoint(59938); // Goal (star) codepoint
 
       // Sets the date of the transaction to the date the amount was added
       _transaction.setDate(DateTime.now());
