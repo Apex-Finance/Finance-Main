@@ -4,14 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:provider/provider.dart';
 
+import './new_budget_screens/income_screen.dart';
 import '../models/budget.dart';
-import 'new_budget_screens/income_screen.dart';
+import '../models/month_changer.dart';
 import '../widgets/budget_list_tile.dart';
 import '../providers/auth.dart';
-
-import 'package:provider/provider.dart';
-import '../models/month_changer.dart';
 
 class BudgetScreen extends StatefulWidget {
   static const routeName = '/budget';
