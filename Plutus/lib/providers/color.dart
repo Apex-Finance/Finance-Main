@@ -19,17 +19,31 @@ class ColorProvider with ChangeNotifier {
         'canvasColor': Colors.black
       }
     },
+    // {
+    //   'light': {
+    //     'name': "Dark Blue",
+    //     'primarySwatch': Colors.indigo,
+    //     'primaryColor': Colors.indigo[900],
+    //     'canvasColor': Colors.indigo[50]
+    //   },
+    //   'dark': {
+    //     'name': "Dark Blue",
+    //     'primarySwatch': Colors.indigo,
+    //     'primaryColor': Colors.indigo[800],
+    //     'canvasColor': Colors.black
+    //   }
+    // },
     {
       'light': {
-        'name': "Dark Blue",
-        'primarySwatch': Colors.indigo,
-        'primaryColor': Colors.indigo[900],
-        'canvasColor': Colors.indigo[50]
+        'name': "Red",
+        'primarySwatch': Colors.red,
+        'primaryColor': Colors.red[900],
+        'canvasColor': Colors.red[50]
       },
       'dark': {
-        'name': "Dark Blue",
-        'primarySwatch': Colors.indigo,
-        'primaryColor': Colors.indigo[800],
+        'name': "Red",
+        'primarySwatch': Colors.red,
+        'primaryColor': Colors.red[800],
         'canvasColor': Colors.black
       }
     },
