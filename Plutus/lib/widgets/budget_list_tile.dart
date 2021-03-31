@@ -68,8 +68,13 @@ class _BudgetListTileState extends State<BudgetListTile> {
               }
             default:
               {
-                var transactionExpenses = transactionDataProvider
-                    .getTransactionExpenses(snapshot.data);
+                double transactionExpenses;
+                if (snapshot.hasData) {
+                  transactionExpenses = transactionDataProvider
+                      .getTransactionExpenses(snapshot.data);
+                } else {
+                  transactionExpenses = 0;
+                }
                 widget.category.calculateRemainingAmount(transactionExpenses);
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -130,13 +135,11 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                 alignment: MainAxisAlignment.center,
                                 width: MediaQuery.of(context).size.width * .8,
                                 lineHeight: 12.0,
-                                percent: snapshot.data.docs.isEmpty
-                                    ? 0.0
-                                    : transactionExpenses >
-                                            widget.category.getAmount()
-                                        ? 1
-                                        : transactionExpenses /
-                                            widget.category.getAmount(),
+                                percent: transactionExpenses >
+                                        widget.category.getAmount()
+                                    ? 1
+                                    : transactionExpenses /
+                                        widget.category.getAmount(),
                                 backgroundColor: Colors.black,
                                 progressColor: Colors.amber,
                               ),
@@ -189,7 +192,8 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                     indent: 0,
                                     endIndent: 0,
                                   ),
-                                  snapshot.data.docs.isEmpty
+                                  (!snapshot.hasData ||
+                                          snapshot.data.docs.isEmpty)
                                       ? Text(
                                           'No transaction has been added yet',
                                           style: TextStyle(
