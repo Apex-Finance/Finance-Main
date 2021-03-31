@@ -81,6 +81,8 @@ class MyApp extends StatelessWidget {
         colors.colorOptions[selectedColorIndex][colorMode]['primarySwatch'];
     var primaryColor =
         colors.colorOptions[selectedColorIndex][colorMode]['primaryColor'];
+    var greyColor =
+        colors.colorOptions[selectedColorIndex][colorMode]['greyColor'];
     var canvasColor =
         colors.colorOptions[selectedColorIndex][colorMode]['canvasColor'];
     return Builder(
@@ -89,9 +91,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: primarySwatch, //Colors.amber,
           primaryColor: primaryColor, //Colors.amber,
-          primaryColorLight: Colors.amberAccent,
-          accentColor: Colors.white,
           canvasColor: canvasColor,
+          cardColor: greyColor,
           textTheme: GoogleFonts.latoTextTheme(
             TextTheme(
               bodyText1: TextStyle(color: primaryColor, fontSize: 17),

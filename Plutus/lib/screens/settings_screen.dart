@@ -16,8 +16,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
   var isDark;
   var initialIndex;
 
-  Widget _colorOption(String name, Color foreground, Color background,
-      int index, Function setColorIndex, BuildContext context) {
+  Widget _colorOption(
+      String name,
+      Color foreground,
+      Color background,
+      int index,
+      Function setColorIndex,
+      Function setGreyColor,
+      BuildContext context) {
     return RaisedButton(
       padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
       shape: RoundedRectangleBorder(
@@ -60,6 +66,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       onPressed: () {
         setColorIndex();
+        setGreyColor();
       },
     );
   }
@@ -81,7 +88,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
       body: Card(
-        color: Colors.grey[900],
+        color: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
           top: Radius.circular(20),
@@ -91,7 +98,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               child: Container(
-                color: Colors.grey[800],
+                color: Theme.of(context).cardColor,
                 child: Container(
                   margin: EdgeInsets.all(8),
                   child: Column(
@@ -160,6 +167,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       ['canvasColor'],
                                   index,
                                   () => colors.setSelectedColorIndex(index),
+                                  () => colors.setGreyColor(colors
+                                          .colorOptions[index]
+                                      [isDark ? 'dark' : 'light']['greyColor']),
                                   context);
                             }),
                       ),

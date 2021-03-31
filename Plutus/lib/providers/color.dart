@@ -3,22 +3,23 @@ import 'package:flutter/material.dart';
 class ColorProvider with ChangeNotifier {
   var selectedColorIndex;
   var isDark;
+  var selectedGreyColor;
 
   final colorOptions = [
-    {
-      'light': {
-        'name': "Black",
-        'primarySwatch': Colors.grey,
-        'primaryColor': Colors.black,
-        'canvasColor': Colors.white
-      },
-      'dark': {
-        'name': "Black",
-        'primarySwatch': Colors.grey,
-        'primaryColor': Colors.white,
-        'canvasColor': Colors.black
-      }
-    },
+    // {
+    //   'light': {
+    //     'name': "Black",
+    //     'primarySwatch': Colors.grey,
+    //     'primaryColor': Colors.black,
+    //     'canvasColor': Colors.white
+    //   },
+    //   'dark': {
+    //     'name': "Black",
+    //     'primarySwatch': Colors.grey,
+    //     'primaryColor': Colors.white,
+    //     'canvasColor': Colors.black
+    //   }
+    // },
     // {
     //   'light': {
     //     'name': "Dark Blue",
@@ -37,14 +38,32 @@ class ColorProvider with ChangeNotifier {
       'light': {
         'name': "Red",
         'primarySwatch': Colors.red,
-        'primaryColor': Colors.red[900],
-        'canvasColor': Colors.red[50]
+        'primaryColor': Colors.red,
+        'canvasColor': Colors.red[50],
+        'greyColor': Colors.grey
       },
       'dark': {
         'name': "Red",
         'primarySwatch': Colors.red,
-        'primaryColor': Colors.red[800],
-        'canvasColor': Colors.black
+        'primaryColor': Colors.red,
+        'canvasColor': Colors.black,
+        'greyColor': Colors.grey[700]
+      }
+    },
+    {
+      'light': {
+        'name': "Orange",
+        'primarySwatch': Colors.orange,
+        'primaryColor': Colors.orange,
+        'canvasColor': Colors.orange[50],
+        'greyColor': Colors.grey
+      },
+      'dark': {
+        'name': "Red",
+        'primarySwatch': Colors.orange,
+        'primaryColor': Colors.orange,
+        'canvasColor': Colors.black,
+        'greyColor': Colors.grey[700]
       }
     },
     {
@@ -52,27 +71,15 @@ class ColorProvider with ChangeNotifier {
         'name': "Amber",
         'primarySwatch': Colors.amber,
         'primaryColor': Colors.amber,
-        'canvasColor': Colors.amber[50]
+        'canvasColor': Colors.amber[50],
+        'greyColor': Colors.grey
       },
       'dark': {
         'name': "Amber",
         'primarySwatch': Colors.amber,
         'primaryColor': Colors.amber,
-        'canvasColor': Colors.black
-      }
-    },
-    {
-      'light': {
-        'name': "Light Blue",
-        'primarySwatch': Colors.blue,
-        'primaryColor': Colors.blue[700],
-        'canvasColor': Colors.blue[50]
-      },
-      'dark': {
-        'name': "Light Blue",
-        'primarySwatch': Colors.blue,
-        'primaryColor': Colors.blue[700],
-        'canvasColor': Colors.black
+        'canvasColor': Colors.black,
+        'greyColor': Colors.grey[700]
       }
     },
     {
@@ -80,27 +87,31 @@ class ColorProvider with ChangeNotifier {
         'name': "Light Green",
         'primarySwatch': Colors.green,
         'primaryColor': Colors.green,
-        'canvasColor': Colors.green[50]
+        'canvasColor': Colors.green[50],
+        'greyColor': Colors.grey
       },
       'dark': {
         'name': "Light Green",
         'primarySwatch': Colors.green,
         'primaryColor': Colors.green,
-        'canvasColor': Colors.black
+        'canvasColor': Colors.black,
+        'greyColor': Colors.grey[700]
       }
     },
     {
       'light': {
-        'name': "Pink",
-        'primarySwatch': Colors.pink,
-        'primaryColor': Colors.pink,
-        'canvasColor': Colors.pink[50]
+        'name': "Light Blue",
+        'primarySwatch': Colors.blue,
+        'primaryColor': Colors.blue[700],
+        'canvasColor': Colors.blue[50],
+        'greyColor': Colors.grey
       },
       'dark': {
-        'name': "Pink",
-        'primarySwatch': Colors.pink,
-        'primaryColor': Colors.pink,
-        'canvasColor': Colors.black
+        'name': "Light Blue",
+        'primarySwatch': Colors.blue,
+        'primaryColor': Colors.blue[700],
+        'canvasColor': Colors.black,
+        'greyColor': Colors.grey[700]
       }
     },
     {
@@ -108,13 +119,31 @@ class ColorProvider with ChangeNotifier {
         'name': "Purple",
         'primarySwatch': Colors.purple,
         'primaryColor': Colors.purple,
-        'canvasColor': Colors.purple[50]
+        'canvasColor': Colors.purple[50],
+        'greyColor': Colors.grey
       },
       'dark': {
         'name': "Purple",
         'primarySwatch': Colors.purple,
         'primaryColor': Colors.purple,
-        'canvasColor': Colors.black
+        'canvasColor': Colors.black,
+        'greyColor': Colors.grey[700]
+      }
+    },
+    {
+      'light': {
+        'name': "Pink",
+        'primarySwatch': Colors.pink,
+        'primaryColor': Colors.pink,
+        'canvasColor': Colors.pink[50],
+        'greyColor': Colors.grey
+      },
+      'dark': {
+        'name': "Pink",
+        'primarySwatch': Colors.pink,
+        'primaryColor': Colors.pink,
+        'canvasColor': Colors.black,
+        'greyColor': Colors.grey[700]
       }
     },
   ];
@@ -126,6 +155,11 @@ class ColorProvider with ChangeNotifier {
 
   void setIsDark(bool colorMode) {
     isDark = colorMode;
+    notifyListeners();
+  }
+
+  void setGreyColor(MaterialColor greyColor) {
+    selectedGreyColor = greyColor;
     notifyListeners();
   }
 }
