@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth.dart';
+import '../models/goals.dart';
 
 class Transaction {
   String _id;
@@ -253,6 +254,24 @@ class Transactions with ChangeNotifier {
         .collection('Transactions')
         .where('goalID', isEqualTo: goalID)
         .snapshots();
+  }
+
+  void updateGoalTransactions(Goal goal, BuildContext context) {
+    var goalTransactions = FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('Transactions')
+        .where('goalID', isEqualTo: goal.getID())
+        .snapshots();
+    goalTransactions.forEach((transactionSnapshot) {
+      var transactions = transactionSnapshot.docs;
+      transactions.forEach((transaction) {
+        transaction.reference.set(
+          {'title': goal.getTitle()},
+          SetOptions(merge: true),
+        );
+      });
+    });
   }
   // Sum the expenses for the month
   // double get monthlyExpenses {

@@ -62,7 +62,6 @@ class Goal {
     //     });
     //   }
     // });
-    print("$amountSaved amountSaved");
     return amountSaved;
   }
 

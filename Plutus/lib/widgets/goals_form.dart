@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../models/goals.dart';
+import '../providers/auth.dart';
+import '../models/transaction.dart' as Transaction;
 
 // Form to add a new goal
 class GoalsForm extends StatefulWidget {
@@ -35,6 +38,8 @@ class _GoalsFormState extends State<GoalsForm> {
   void _submitGoalForm(BuildContext context) {
     var goalDataProvider =
         Provider.of<GoalDataProvider>(context, listen: false);
+    var transactionDataProvider =
+        Provider.of<Transaction.Transactions>(context, listen: false);
 
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -45,6 +50,7 @@ class _GoalsFormState extends State<GoalsForm> {
         goalDataProvider.addGoal(_goal, context);
       } else {
         goalDataProvider.updateGoal(_goal, context);
+        //transactionDataProvider.updateGoalTransactions(_goal, context);
       }
       Navigator.of(context).pop(_goal);
     }
