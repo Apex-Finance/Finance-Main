@@ -51,7 +51,7 @@ class _GoalsFormState extends State<GoalsForm> {
       } else {
         goalDataProvider.updateGoal(_goal, context);
         // TODO Troublesome function >:(
-        //transactionDataProvider.updateGoalTransactions(_goal, context);
+        transactionDataProvider.updateGoalTransactions(_goal, context);
       }
       Navigator.of(context).pop(_goal);
     }

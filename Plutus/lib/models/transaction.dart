@@ -256,22 +256,32 @@ class Transactions with ChangeNotifier {
         .snapshots();
   }
 
-  void updateGoalTransactions(Goal goal, BuildContext context) {
-    var goalTransactions = FirebaseFirestore.instance
+  void updateGoalTransactions(Goal goal, BuildContext context) async {
+    var goalTransactions = await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .collection('Transactions')
         .where('goalID', isEqualTo: goal.getID())
-        .snapshots();
-    goalTransactions.forEach((transactionSnapshot) {
-      var transactions = transactionSnapshot.docs;
-      transactions.forEach((transaction) {
-        transaction.reference.set(
+        .get();
+    try {
+      for (var doc in goalTransactions.docs) {
+        await doc.reference.set(
           {'title': goal.getTitle()},
           SetOptions(merge: true),
         );
-      });
-    });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    // goalTransactions.forEach((transactionSnapshot) {
+    //   var transactions = transactionSnapshot.docs;
+    //   transactions.forEach((transaction) {
+    //     transaction.reference.set(
+    //       {'title': goal.getTitle()},
+    //       SetOptions(merge: true),
+    //     );
+    //   });
+    // });
   }
   // Sum the expenses for the month
   // double get monthlyExpenses {
