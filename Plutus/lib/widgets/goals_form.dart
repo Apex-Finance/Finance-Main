@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -8,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../models/goals.dart';
-import '../providers/auth.dart';
 import '../models/transaction.dart' as Transaction;
 
 // Form to add a new goal
@@ -50,7 +48,6 @@ class _GoalsFormState extends State<GoalsForm> {
         goalDataProvider.addGoal(_goal, context);
       } else {
         goalDataProvider.updateGoal(_goal, context);
-        // TODO Troublesome function >:(
         transactionDataProvider.updateGoalTransactions(_goal, context);
       }
       Navigator.of(context).pop(_goal);
