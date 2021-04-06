@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+
 import '../widgets/goals_form.dart';
 import '../widgets/goals_list_tile.dart';
 import '../models/goals.dart';
 import '../providers/auth.dart';
 
+// Displays individual user goals
 class GoalScreen extends StatelessWidget {
   static const routeName = '/goal';
+
+  // Pushes the goal form onto the screen
   void _enterGoal(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -23,13 +27,13 @@ class GoalScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var goalDataProvider = Provider.of<GoalDataProvider>(context);
-
     Goal goal = Goal();
     var dbRef = FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .collection('Goals')
         .orderBy('dateOfGoal', descending: false);
+
     return StreamBuilder<QuerySnapshot>(
       stream: dbRef.snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {

@@ -69,6 +69,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
                 title: Text('Do you want to remove this goal?'),
                 content: Text(
                   'This cannot be undone later.',
+                  style: Theme.of(context).textTheme.bodyText2,
                 ),
                 actions: <Widget>[
                   FlatButton(
