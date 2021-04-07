@@ -1,23 +1,13 @@
-import 'package:Plutus/models/budget.dart';
-import 'package:Plutus/providers/auth.dart';
-import 'package:Plutus/screens/tab_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
 import './first_budget_screen.dart';
+import '../tab_screen.dart';
 import '../../models/budget.dart';
 import '../../models/month_changer.dart';
 import '../../models/category.dart' as Category;
-
-// bool test(BuildContext context, Budget budget) {
-//   var val = FirebaseFirestore.instance.collection('users').doc(Provider.of<Auth>(context, listen: false).getUserId()).collection('budgets').where('date', isEqualTo: budget.getDate());
-//   return
-// }
 
 // Screen that asks for the monthly income and creates a budget on that amount
 class IncomeScreen extends StatefulWidget {
@@ -62,8 +52,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
               TextButton(
                 child: Text('Yes'),
                 onPressed: () {
-                  // TODO Any changes made to this budget (does not include first creation) will be saved as a brand new budget
-                  // TODO Will need to be addressed once the DB is incorporated into budget.dart
                   Provider.of<BudgetDataProvider>(context, listen: false)
                       .deleteBudget(widget.budget.getID(), context);
                   Navigator.of(context).pushNamed(TabScreen.routeName);
@@ -83,7 +71,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
     return WillPopScope(
       onWillPop: () async {
-        if (widget.budget.getAmount() != null) _showDiscardBudgetDialog();
+        _showDiscardBudgetDialog();
         return true;
       },
       child: Scaffold(
