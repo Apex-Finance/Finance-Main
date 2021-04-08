@@ -8,6 +8,7 @@ import '../models/transaction.dart' as Transaction;
 import '../widgets/transaction_list_tile.dart';
 import 'package:provider/provider.dart';
 import '../models/month_changer.dart';
+import '../widgets/transaction_form.dart';
 import '../providers/auth.dart';
 
 class TransactionScreen extends StatefulWidget {
@@ -18,6 +19,17 @@ class TransactionScreen extends StatefulWidget {
 }
 
 class _TransactionScreenState extends State<TransactionScreen> {
+  // Pull up transaction form when button is tapped; add the returned transaction to the list of transactions
+  void _enterTransaction(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (_) => TransactionForm(),
+    ).then((newTransaction) {
+      if (newTransaction == null) return;
+    });
+  }
+
   var user = FirebaseAuth.instance.currentUser;
 
   CollectionReference getDbRef(
@@ -73,7 +85,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   child: Container(
                     margin: EdgeInsets.only(top: 25),
                     child: snapshot.data.docs.isEmpty
-                        ? NoTransactionsYetText()
+                        ? NoTransactionsYetText(_enterTransaction)
                         : Card(
                             color: Colors.grey[900],
                             shape: RoundedRectangleBorder(
@@ -203,18 +215,30 @@ class _TotalExpensesState extends State<TotalExpenses> {
 }
 
 class NoTransactionsYetText extends StatelessWidget {
-  const NoTransactionsYetText({
-    Key key,
-  }) : super(key: key);
+  final enterTransactionsHandler;
+
+  NoTransactionsYetText(this.enterTransactionsHandler);
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 250),
-        child: Text(
-          'No transactions have been added this month.',
-          style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
+        child: Column(
+          children: [
+            Text(
+              'No transactions have been added this month.',
+              style: TextStyle(
+                  fontSize: 18, color: Theme.of(context).primaryColor),
+              textAlign: TextAlign.center,
+            ),
+            RaisedButton(
+              child: Text('Add Transaction'),
+              color: Theme.of(context).primaryColor,
+              textColor: Theme.of(context).canvasColor,
+              onPressed: () => enterTransactionsHandler(context),
+            ),
+          ],
         ),
       ),
     );
