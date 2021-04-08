@@ -85,7 +85,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
             builder: (context, budgetSnapshot) {
               if (!budgetSnapshot.hasData || budgetSnapshot.data.docs.isEmpty) {
                 return Container(
-                  margin: EdgeInsets.only(top: 40),
+                  margin: EdgeInsets.only(top: 25),
                   child: Center(
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: 250),
@@ -138,7 +138,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                     .getBudgetCategories(context, budget.getID());
 
                 return Container(
-                  margin: EdgeInsets.only(top: 40),
+                  margin: EdgeInsets.only(top: 25),
                   child: StreamBuilder<QuerySnapshot>(
                     stream: budgetTransactions.snapshots(),
                     builder: (context, transactionSnapshots) {
