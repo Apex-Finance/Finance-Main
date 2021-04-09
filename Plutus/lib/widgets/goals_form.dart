@@ -54,6 +54,7 @@ class _GoalsFormState extends State<GoalsForm> {
     }
   }
 
+  // NOT USED
   // Gets the image from the phone gallery and displays it as an image preview
   Future getImage() async {
     final pickedFile =
@@ -108,13 +109,10 @@ class _GoalsFormState extends State<GoalsForm> {
                   GoalAmountField(
                     goal: _goal,
                   ),
-                  Row(
-                    children: [
-                      buildImageSelector(context),
-                      buildDateChanger(context),
-                      buildSubmitButton(context),
-                    ],
-                  ),
+                  //NOT USED
+                  //buildImageSelector(context),
+                  buildDateChanger(context),
+                  buildSubmitButton(context),
                 ],
               ),
             ),
@@ -124,6 +122,7 @@ class _GoalsFormState extends State<GoalsForm> {
     );
   }
 
+  // NOT USED
   // Selects an image to add to a goal
   Widget buildImageSelector(BuildContext context) {
     return Padding(
@@ -162,7 +161,7 @@ class _GoalsFormState extends State<GoalsForm> {
   // Validates required fields and sends goal data to DB
   Widget buildSubmitButton(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0, 110, 0, 0),
+      padding: EdgeInsets.fromLTRB(210, 50, 0, 0),
       child: Container(
         child: FloatingActionButton.extended(
           backgroundColor: Theme.of(context).primaryColorLight,
@@ -176,7 +175,7 @@ class _GoalsFormState extends State<GoalsForm> {
   // Changes the date of the goal
   Widget buildDateChanger(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(10, 35, 30, 0),
+      padding: EdgeInsets.fromLTRB(10, 20, 230, 0),
       child: RaisedButton(
         color: Theme.of(context).primaryColorLight,
         child: _goal.getDate() == null
