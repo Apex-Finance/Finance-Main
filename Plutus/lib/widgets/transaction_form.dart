@@ -397,13 +397,13 @@ class DescriptionTFF extends StatelessWidget {
       style: TextStyle(fontSize: 20.0, color: Theme.of(context).primaryColor),
       autofocus: true,
       inputFormatters: [
-        LengthLimitingTextInputFormatter(15),
+        LengthLimitingTextInputFormatter(20),
       ],
-      maxLength: 50,
+      maxLength: 20,
       onEditingComplete: () => FocusScope.of(context).nextFocus(),
       onSaved: (val) => _transaction.setTitle(val.trim()),
       validator: (val) {
-        if (val.trim().length > 15) return 'Description is too long.';
+        if (val.trim().length > 20) return 'Description is too long.';
         if (val.isEmpty) return 'Please enter a description.';
         return null;
       },
