@@ -72,23 +72,46 @@ class GoalScreen extends StatelessWidget {
                   ),
                 );
               default:
-                return Card(
-                  color: Colors.grey[900],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Container(
+                        width: 100,
+                        child: Container(
+                          child: RaisedButton(
+                            child: Text('Add Goal'),
+                            color: Theme.of(context).primaryColor,
+                            textColor: Theme.of(context).canvasColor,
+                            onPressed: () => _enterGoal(context),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                  child: Expanded(
-                    child: ListView.builder(
-                      itemCount: snapshot.data.docs.length,
-                      itemBuilder: (context, index) {
-                        goal = goalDataProvider
-                            .initializeGoal(snapshot.data.docs[index]);
-                        return GoalsListTile(goal);
-                      },
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(top: 25),
+                        child: Card(
+                          color: Colors.grey[900],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20),
+                            ),
+                          ),
+                          child: Expanded(
+                            child: ListView.builder(
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (context, index) {
+                                goal = goalDataProvider
+                                    .initializeGoal(snapshot.data.docs[index]);
+                                return GoalsListTile(goal);
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 );
             }
         }
