@@ -45,7 +45,7 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
       child: Container(
         height: 300,
         child: Card(
-          color: Colors.grey[850],
+          color: Theme.of(context).cardColor,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(
               10,

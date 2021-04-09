@@ -172,7 +172,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                         transactionExpenses);
                                   }
                                   return Card(
-                                    color: Colors.grey[900],
+                                    color: Theme.of(context).cardColor,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.vertical(
                                         top: Radius.circular(20),
@@ -184,7 +184,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                           borderRadius: BorderRadius.vertical(
                                               top: Radius.circular(20)),
                                           child: ListTile(
-                                            tileColor: Colors.grey[850],
+                                            tileColor: Colors.grey[600],
                                             title: Column(
                                               children: [
                                                 Text(
@@ -271,9 +271,11 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                                               budget
                                                                   .getAmount(),
                                                       backgroundColor:
-                                                          Colors.black,
+                                                          Theme.of(context)
+                                                              .canvasColor,
                                                       progressColor:
-                                                          Colors.amber,
+                                                          Theme.of(context)
+                                                              .primaryColor,
                                                     ),
                                                   ],
                                                 ),
