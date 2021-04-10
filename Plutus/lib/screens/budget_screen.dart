@@ -155,6 +155,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                               borderRadius: BorderRadius.vertical(
                                   top: Radius.circular(20)),
                               child: ListTile(
+                                onTap: () => _enterBudget(context, budget),
                                 tileColor: Colors.grey[850],
                                 title: Column(
                                   children: [
@@ -277,8 +278,15 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                                 budgetTransactions);
                                           });
                                     } else {
-                                      return Text(
-                                          'There are no categories selected for this budget.');
+                                      return Container(
+                                        margin: EdgeInsets.all(16),
+                                        child: Text(
+                                            'There are no categories selected for this budget.',
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                fontSize: 18)),
+                                      );
                                     }
                                   }),
                             ),

@@ -249,7 +249,9 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           },
                         );
                       },
-                      label: Text('Add Budget'),
+                      label: widget.budget.getID() != null
+                          ? Text('Edit Budget')
+                          : Text('Add Budget'),
                     ),
                   ),
                 ),

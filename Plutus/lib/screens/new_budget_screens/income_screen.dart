@@ -118,6 +118,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             style: Theme.of(context).textTheme.bodyText1),
                         Expanded(
                           child: TextFormField(
+                            initialValue: budget.getAmount() != null
+                                ? budget.getAmount().toStringAsFixed(2)
+                                : '',
                             style: Theme.of(context).textTheme.bodyText1,
                             autofocus: true,
                             keyboardType: TextInputType.numberWithOptions(
