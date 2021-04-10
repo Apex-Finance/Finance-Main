@@ -21,11 +21,9 @@ class BudgetScreen extends StatefulWidget {
 
 class _BudgetScreenState extends State<BudgetScreen> {
   void _enterBudget(BuildContext context, Budget budget) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (_) => IncomeScreen(budget: budget),
-    ).then((newBudget) {
+    Navigator.of(context)
+        .pushNamed('/income', arguments: budget)
+        .then((newBudget) {
       if (newBudget == null) return;
       Provider.of<BudgetDataProvider>(context, listen: false)
           .addBudget(newBudget, context); //TODO check if needed

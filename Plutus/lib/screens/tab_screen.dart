@@ -39,17 +39,18 @@ class _TabScreenState extends State<TabScreen> {
   }
 
   // Pull up budget form when FAB is tapped; add the returned budget to the list of budgets
-  void _enterBudget(BuildContext context) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (_) => IncomeScreen(),
-    ).then(
-      (newBudget) {
-        if (newBudget == null) return;
-      },
-    );
-  }
+  // doesn't work anymore but will get removed anyways because only doing transactions
+  // void _enterBudget(BuildContext context) {
+  //   showModalBottomSheet(
+  //     isScrollControlled: true,
+  //     context: context,
+  //     builder: (_) => IncomeScreen(),
+  //   ).then(
+  //     (newBudget) {
+  //       if (newBudget == null) return;
+  //     },
+  //   );
+  // }
 
   // Pull up transaction form when FAB is tapped; add the returned transaction to the list of transactions
   void _enterTransaction(BuildContext context) {
@@ -109,7 +110,7 @@ class _TabScreenState extends State<TabScreen> {
               child: IconButton(
                 color: Theme.of(context).primaryColor,
                 icon: Icon(Icons.account_balance),
-                onPressed: () => _enterBudget(context),
+                onPressed: () => {}, //_enterBudget(context),
                 splashRadius: 23,
               ),
             ),
