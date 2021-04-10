@@ -6,32 +6,40 @@ void main() {
   Transaction t1, t2, t3, t4;
 
   t1 = Transaction(
-    'a',
-    'Coffee',
-    DateTime.now(),
-    'home',
-    3.45,
+    id: 'a',
+    title: 'Coffee',
+    date: DateTime.now(),
+    categoryId: 'home',
+    categoryTitle: 'home',
+    categoryCodepoint: 5,
+    amount: 3.45,
   );
   t2 = Transaction(
-    'b',
-    'Shirt',
-    DateTime.now(),
-    'bills_and_utilities',
-    10.96,
+    id: 'b',
+    title: 'Shirt',
+    date: DateTime.now(),
+    categoryId: 'bills_and_utilities',
+    categoryTitle: 'bills_and_utilities',
+    categoryCodepoint: 5,
+    amount: 10.96,
   );
   t3 = Transaction(
-    'c',
-    'Movies',
-    DateTime.now(),
-    'home',
-    25.35,
+    id: 'c',
+    title: 'Movies',
+    date: DateTime.now(),
+    categoryId: 'home',
+    categoryTitle: 'home',
+    categoryCodepoint: 5,
+    amount: 25.35,
   );
   t4 = Transaction(
-    'd',
-    'Shoes',
-    DateTime.now(),
-    'food_and_drinks',
-    35.85,
+    id: 'd',
+    title: 'Shoes',
+    date: DateTime.now(),
+    categoryId: 'food_and_drinks',
+    categoryTitle: 'food_and_drinks',
+    categoryCodepoint: 5,
+    amount: 35.85,
   );
 
   group('getRemainingAmount', () {
