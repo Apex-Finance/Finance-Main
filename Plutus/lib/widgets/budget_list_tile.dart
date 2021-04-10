@@ -173,7 +173,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                         ),
                                       ),
                                       Text(
-                                        '\$$transactionExpenses',
+                                        '\$${transactionExpenses.toStringAsFixed(2)}',
                                         style: TextStyle(
                                             color:
                                                 Theme.of(context).primaryColor,
