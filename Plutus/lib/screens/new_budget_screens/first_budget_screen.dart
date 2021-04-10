@@ -31,9 +31,9 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
     categoryList.forEach((category) {
       amount += category.getAmount();
     });
-    // setState(() {
-    widget.budget.categoryAmount = amount;
-    // });
+    setState(() {
+      widget.budget.categoryAmount = amount;
+    });
     return;
   }
 

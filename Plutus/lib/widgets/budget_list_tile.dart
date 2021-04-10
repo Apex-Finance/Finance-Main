@@ -80,7 +80,6 @@ class _BudgetListTileState extends State<BudgetListTile> {
                       children: [
                         ListTile(
                           onTap: () {
-                            print('tapped');
                             setState(() {
                               _expanded = !_expanded;
                             });
@@ -112,7 +111,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                 child: Align(
                                   alignment: Alignment.centerRight,
                                   child: Text(
-                                    '\$${widget.category.getRemainingAmount()}',
+                                    '\$${widget.category.getAmount().toStringAsFixed(2)}',
                                     style: TextStyle(
                                         color: Theme.of(context).primaryColor,
                                         fontSize: 18),
@@ -144,7 +143,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                 height: 20,
                               ),
                               Text(
-                                '\$${widget.category.getRemainingAmount()} remaining',
+                                '\$${widget.category.getRemainingAmount().toStringAsFixed(2)} remaining',
                                 style: TextStyle(
                                     color: Theme.of(context).primaryColor,
                                     fontSize: 18),
