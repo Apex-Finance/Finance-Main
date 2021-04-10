@@ -85,40 +85,41 @@ class _BudgetListTileState extends State<BudgetListTile> {
                             });
                           },
                           tileColor: Colors.grey[850],
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              // Icon(
-                              //   IconData(
-                              //     widget.category.getCodepoint(),
-                              //   ),
-                              //   size: 20,
-                              //   color: Theme.of(context).primaryColor,
-                              // ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              AutoSizeText(
-                                widget.category.getTitle(),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: 18),
-                              ),
-                              // category budget allocated
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    '\$${widget.category.getAmount().toStringAsFixed(2)}',
-                                    style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontSize: 18),
+                          title: Container(
+                            margin: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 0.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Icon(
+                                  categoryIcon[widget.category.getCodepoint()],
+                                  size: 20,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                AutoSizeText(
+                                  widget.category.getTitle(),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: 18),
+                                ),
+                                // category budget allocated
+                                Expanded(
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      '\$${widget.category.getAmount().toStringAsFixed(2)}',
+                                      style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: 18),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           subtitle: Column(
                             children: [
@@ -142,11 +143,14 @@ class _BudgetListTileState extends State<BudgetListTile> {
                               SizedBox(
                                 height: 20,
                               ),
-                              Text(
-                                '\$${widget.category.getRemainingAmount().toStringAsFixed(2)} remaining',
-                                style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: 18),
+                              Container(
+                                margin: EdgeInsets.only(bottom: 4.0),
+                                child: Text(
+                                  '\$${widget.category.getRemainingAmount().toStringAsFixed(2)} remaining',
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: 18),
+                                ),
                               ),
                             ],
                           ),
