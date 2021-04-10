@@ -44,39 +44,17 @@ void main() {
 
   group('getRemainingAmount', () {
     test('Test if remaining amount is accurate', () {
-      double value = 1000;
-      double tempAmount = 500;
+      double budgetAmount = 1000;
       double remainingMonthlyAmount = 400;
-      double budgetExpenses = 200;
-      Budget.empty().setRemainingAmount(value - tempAmount);
-      remainingMonthlyAmount = Budget.empty().getAmount() - budgetExpenses;
+      double budgetExpenses = 600;
+      Budget testBudget = Budget.empty();
 
-      expect(Budget.empty().getRemainingAmount(), remainingMonthlyAmount);
-    });
+      testBudget.setAmount(budgetAmount);
+      testBudget.calculateRemainingAmount(budgetExpenses);
 
-    test('Amount Comparison Test', () {
-      Budget ogAmount = Budget.empty();
-      List<Transaction> newAmount = new List<Transaction>();
+      expect(testBudget.getRemainingAmount(), remainingMonthlyAmount);
 
-      ogAmount.transactions = [t2, t4];
-      newAmount = [t2, t4];
-
-      expect(ogAmount.transactions, newAmount);
-
-      newAmount = [t1, t3];
-      expect(ogAmount.transactions, isNot(newAmount));
-    });
-
-    test('Amount Null Test', () {
-      Budget ogAmount = Budget();
-      List<Transaction> newAmount = new List<Transaction>();
-
-      ogAmount.transactions = [null];
-      newAmount = [null];
-      expect(ogAmount.transactions, newAmount);
-
-      newAmount = [t1, t3];
-      expect(ogAmount.transactions, isNot(newAmount));
+      expect(testBudget.getRemainingAmount(), isNot(0));
     });
   });
 
@@ -84,15 +62,6 @@ void main() {
     test('List test', () {
       expect(t1.getCategoryId(), t1.getCategoryId());
       expect(t1.getCategoryId(), isNot(t2.getCategoryId()));
-    });
-  });
-
-  group('getCategoryTransactionsAmount', () {
-    test('Test for null', () {
-      Budget transaction = Budget();
-      transaction.transactions = null;
-      expect(
-          transaction.getCategoryTransactionsAmount(transaction, null), 0.00);
     });
   });
 }

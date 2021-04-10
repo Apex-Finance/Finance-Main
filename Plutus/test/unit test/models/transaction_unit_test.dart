@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:Plutus/models/transaction.dart';
 
 void main() {
-  Transaction ogTransaction = Transaction();
-  Transaction newTransaction = Transaction();
+  Transaction ogTransaction = Transaction.empty();
+  Transaction newTransaction = Transaction.empty();
   group('initializeTransaction', () {
     test('Test string comparison', () {
       ogTransaction.setID('1');
@@ -32,10 +32,10 @@ void main() {
   });
 
   group('getTransactionExpenses', () {
-    Transaction t1 = Transaction();
-    Transaction t2 = Transaction();
-    Transaction t3 = Transaction();
-    Transaction t4 = Transaction();
+    Transaction t1 = Transaction.empty();
+    Transaction t2 = Transaction.empty();
+    Transaction t3 = Transaction.empty();
+    Transaction t4 = Transaction.empty();
 
     test('Test accurate totals', () {
       double testTotalExpenses = 0;
