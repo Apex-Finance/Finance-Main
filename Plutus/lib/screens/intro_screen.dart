@@ -47,14 +47,14 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Welcome to Plutus",
           body: "Plutus helps you take control of your finances with ease.",
-          image: _buildImage('Welcome.jpg'),
+          image: _buildImage('Welcome 2.jpg'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Create a Budget",
           body:
               "Whether you're planning out next month's expenses or thinking about your next vacation, Plutus helps all your budgeting needs.",
-          image: _buildImage('Budget.jpg'),
+          image: _buildImage('Budget 2.jpg'),
           decoration: pageDecoration,
         ),
         PageViewModel(
@@ -68,13 +68,12 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           title: "Set a goal",
           body:
               "Saving up for that shiny new car? Plutus can help you set aside funds for that item and keep track of how close you are to achieving that goal.",
-          image: _buildImage('Goal.jpg'),
+          image: _buildImage('Goal 2.jpg'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Utilize the Quick Add Button",
-          body:
-              "Use the + button to quickly add budgets, transactions, and goals. Just tap on the corresponding icon.",
+          body: "Use the + button to quickly add transactions.",
           image: _buildImage('Quick Add Button.jpg'),
           decoration: pageDecoration,
         ),
@@ -86,7 +85,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 Navigator.of(context).pushNamed(AuthScreen.routeName),
             color: Colors.amber,
           ),
-          image: _buildImage('lets get started.jpg'),
+          image: _buildImage('Freedom.jpg'),
           decoration: pageDecoration,
         ),
       ],
