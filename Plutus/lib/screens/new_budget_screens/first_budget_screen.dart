@@ -31,9 +31,9 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
     categoryList.forEach((category) {
       amount += category.getAmount();
     });
-    // setState(() {
-    widget.budget.categoryAmount = amount;
-    // });
+    setState(() {
+      widget.budget.categoryAmount = amount;
+    });
     return;
   }
 
@@ -249,7 +249,9 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           },
                         );
                       },
-                      label: Text('Add Budget'),
+                      label: widget.budget.getID() != null
+                          ? Text('Edit Budget')
+                          : Text('Add Budget'),
                     ),
                   ),
                 ),

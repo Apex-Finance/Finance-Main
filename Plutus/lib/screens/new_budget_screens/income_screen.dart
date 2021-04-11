@@ -21,9 +21,8 @@ import '../../models/category.dart' as Category;
 
 // Screen that asks for the monthly income and creates a budget on that amount
 class IncomeScreen extends StatefulWidget {
-  final Budget budget;
-  IncomeScreen({this.budget});
   static const routeName = '/income';
+
   @override
   _IncomeScreenState createState() => _IncomeScreenState();
 }
@@ -33,6 +32,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Budget budget = ModalRoute.of(context).settings.arguments;
     var category = Category.Category();
     var monthData = Provider.of<MonthChanger>(context);
 
@@ -65,7 +65,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                   // TODO Any changes made to this budget (does not include first creation) will be saved as a brand new budget
                   // TODO Will need to be addressed once the DB is incorporated into budget.dart
                   Provider.of<BudgetDataProvider>(context, listen: false)
-                      .deleteBudget(widget.budget.getID(), context);
+                      .deleteBudget(budget.getID(), context);
                   Navigator.of(context).pushNamed(TabScreen.routeName);
                 },
               ),
@@ -83,7 +83,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
     return WillPopScope(
       onWillPop: () async {
-        if (widget.budget.getAmount() != null) _showDiscardBudgetDialog();
+        if (budget.getAmount() != null) _showDiscardBudgetDialog();
         return true;
       },
       child: Scaffold(
@@ -118,6 +118,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             style: Theme.of(context).textTheme.bodyText1),
                         Expanded(
                           child: TextFormField(
+                            initialValue: budget.getAmount() != null
+                                ? budget.getAmount().toStringAsFixed(2)
+                                : '',
                             style: Theme.of(context).textTheme.bodyText1,
                             autofocus: true,
                             keyboardType: TextInputType.numberWithOptions(
@@ -125,30 +128,28 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             onEditingComplete: () {
                               if (_formKey.currentState.validate()) {
                                 _formKey.currentState.save();
-                                widget.budget.setDate(DateTime(
-                                    monthData.selectedYear,
-                                    monthData.selectedMonth,
-                                    1));
-                                if (widget.budget.getID() != null) {
+                                budget.setDate(DateTime(monthData.selectedYear,
+                                    monthData.selectedMonth, 1));
+                                if (budget.getID() != null) {
                                   Provider.of<BudgetDataProvider>(context,
                                           listen: false)
-                                      .editBudget(widget.budget, context);
+                                      .editBudget(budget, context);
                                 } else {
                                   Provider.of<BudgetDataProvider>(context,
                                           listen: false)
-                                      .addBudget(widget.budget, context);
+                                      .addBudget(budget, context);
                                 }
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => FirstBudgetScreen(
-                                          budget: widget.budget),
+                                      builder: (context) =>
+                                          FirstBudgetScreen(budget: budget),
                                     ));
                               }
                             },
                             // Prevents users from entering budgets >= $1billion
                             maxLength: 14,
-                            onSaved: (val) => widget.budget.setAmount(
+                            onSaved: (val) => budget.setAmount(
                                 double.parse(val.replaceAll(",", ""))),
                             validator: (val) {
                               if (val.contains(

@@ -60,7 +60,7 @@ class Category {
   }
 
   double getRemainingAmount() {
-    return _remainingAmount;
+    return _remainingAmount < 0 ? 0.00 : _remainingAmount;
   }
 }
 
