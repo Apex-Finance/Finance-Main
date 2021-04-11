@@ -39,6 +39,7 @@ class _TabScreenState extends State<TabScreen> {
   }
 
   // Pull up budget form when FAB is tapped; add the returned budget to the list of budgets
+  // doesn't work anymore but will get removed anyways because only doing transactions
   // void _enterBudget(BuildContext context) {
   //   showModalBottomSheet(
   //     isScrollControlled: true,
