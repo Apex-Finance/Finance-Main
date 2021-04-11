@@ -390,7 +390,7 @@ class DescriptionTFF extends StatelessWidget {
     return TextFormField(
       initialValue: _transaction.getTitle() ?? '',
       decoration: InputDecoration(
-        labelText: 'Description',
+        labelText: 'Transaction Title',
         labelStyle: new TextStyle(
             color: Theme.of(context).primaryColor, fontSize: 16.0),
       ),

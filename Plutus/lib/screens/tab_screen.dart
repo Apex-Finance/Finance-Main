@@ -65,16 +65,16 @@ class _TabScreenState extends State<TabScreen> {
   }
 
   // Pull up goal form when FAB is tapped; add the returned goal to the list of goals
-  void _enterGoal(BuildContext context) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (_) => GoalsForm(),
-    ).then((newGoal) {
-      if (newGoal == null) return;
-    });
-    fabKey.currentState.close();
-  }
+  // void _enterGoal(BuildContext context) {
+  //   showModalBottomSheet(
+  //     isScrollControlled: true,
+  //     context: context,
+  //     builder: (_) => GoalsForm(),
+  //   ).then((newGoal) {
+  //     if (newGoal == null) return;
+  //   });
+  //   fabKey.currentState.close();
+  // }
 
   // Manages tabs
   @override
@@ -90,79 +90,97 @@ class _TabScreenState extends State<TabScreen> {
     // GestureDetector wraps entire widget to ensure that users can close the Fab_Circular_Menu from
     // anywhere in the app. Absorb Pointer prevents accidental touches to interactable widgets
     // (i.e. buttons, arrows) on other screens when Fab_Circular_Menu is open
-    return GestureDetector(
-      onTap: () {
-        if (_isOpen) fabKey.currentState.close();
-      },
-      child: Scaffold(
-        appBar: CustomAppBar(),
-        // Custom Fab_Circular_Menu used here to utilize BackdropFilter widget
-        floatingActionButton: TappableFabCircularMenu(
-          alignment: Alignment.bottomCenter,
-          animationDuration: Duration(milliseconds: 500),
-          children: <Widget>[
-            // Budget form
-            Ink(
-              decoration: const ShapeDecoration(
-                color: Color(0xFF212121), // basically Colors.grey[900]
-                shape: CircleBorder(),
-              ),
-              child: IconButton(
-                color: Theme.of(context).primaryColor,
-                icon: Icon(Icons.account_balance),
-                onPressed: () => {}, //_enterBudget(context),
-                splashRadius: 23,
-              ),
-            ),
-
-            // Transaction form
-            Ink(
-              decoration: const ShapeDecoration(
-                color: Color(0xFF212121),
-                shape: CircleBorder(),
-              ),
-              child: IconButton(
-                color: Theme.of(context).primaryColor,
-                icon: Icon(Icons.shopping_cart),
-                onPressed: () => _enterTransaction(context),
-                splashRadius: 23,
-              ),
-            ),
-            // Goal Form
-            Ink(
-              decoration: const ShapeDecoration(
-                color: Color(0xFF212121),
-                shape: CircleBorder(),
-              ),
-              child: IconButton(
-                color: Theme.of(context).primaryColor,
-                icon: Icon(Icons.star),
-                onPressed: () => _enterGoal(context),
-                splashRadius: 23,
-              ),
+    // return GestureDetector(
+    //   onTap: () {
+    //     if (_isOpen) fabKey.currentState.close();
+    //   },
+    //child:
+    return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              Navigator.of(context).pushNamed('/settings');
+            },
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.account_circle),
+              onPressed: () {
+                Navigator.of(context).pushNamed('/account');
+              },
             ),
           ],
-          onDisplayChange: (isOpen) {
-            setState(() {
-              _isOpen = !_isOpen;
-            });
-          },
-          key: fabKey,
-          ringDiameter: 300,
-          fabMargin: EdgeInsets.fromLTRB(0, 0, 40, 30),
-          fabOpenIcon: Icon(Icons.add),
-          ringColor: Colors.amber.withOpacity(0),
         ),
+        // Scale the button up in size
+        floatingActionButton: Transform.scale(
+          scale: 1.2,
+          child: FloatingActionButton(
+            onPressed: () => _enterTransaction(context),
+            child: Icon(Icons.add),
+            backgroundColor: Theme.of(context).primaryColor,
+            // TappableFabCircularMenu(
+            //   alignment: Alignment.bottomCenter,
+            //   animationDuration: Duration(milliseconds: 500),
+            //   children: <Widget>[
+            //     // Budget form
+            //     Ink(
+            //       decoration: const ShapeDecoration(
+            //         color: Color(0xFF212121), // basically Colors.grey[900]
+            //         shape: CircleBorder(),
+            //       ),
+            //       child: IconButton(
+            //         color: Theme.of(context).primaryColor,
+            //         icon: Icon(Icons.account_balance),
+            //         onPressed: () => _enterBudget(context),
+            //         splashRadius: 23,
+            //       ),
+            //     ),
 
+            //     // Transaction form
+            //     Ink(
+            //       decoration: const ShapeDecoration(
+            //         color: Color(0xFF212121),
+            //         shape: CircleBorder(),
+            //       ),
+            //       child: IconButton(
+            //         color: Theme.of(context).primaryColor,
+            //         icon: Icon(Icons.shopping_cart),
+            //         onPressed: () => _enterTransaction(context),
+            //         splashRadius: 23,
+            //       ),
+            //     ),
+            //     // Goal Form
+            //     Ink(
+            //       decoration: const ShapeDecoration(
+            //         color: Color(0xFF212121),
+            //         shape: CircleBorder(),
+            //       ),
+            //       child: IconButton(
+            //         color: Theme.of(context).primaryColor,
+            //         icon: Icon(Icons.star),
+            //         onPressed: () => _enterGoal(context),
+            //         splashRadius: 23,
+            //       ),
+            //     ),
+            //   ],
+            //   onDisplayChange: (isOpen) {
+            //     setState(() {
+            //       _isOpen = !_isOpen;
+            //     });
+            //   },
+            //   key: fabKey,
+            //   ringDiameter: 300,
+            //   fabMargin: EdgeInsets.fromLTRB(0, 0, 40, 30),
+            //   fabOpenIcon: Icon(Icons.add),
+            //   ringColor: Colors.amber.withOpacity(0),
+            // ),
+          ),
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        body: AbsorbPointer(
-            absorbing: _isOpen == true ? true : false,
-            child: _pages[_selectedPageIndex]),
-        bottomNavigationBar: AbsorbPointer(
-            absorbing: _isOpen == true ? true : false,
-            child: buildTabBar(context)),
-      ),
-    );
+        body: _pages[_selectedPageIndex],
+        bottomNavigationBar: buildTabBar(context));
+    //);
   }
 
   // Builds a BottomNavigationBar that includes tabs for Dashboard, Budget,
