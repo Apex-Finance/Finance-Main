@@ -151,10 +151,11 @@ class _GoalsListTileState extends State<GoalsListTile> {
                                 listen: false)
                             .getGoalTransactions(context, widget.goal.getID()),
                         builder: (context, snapshot) {
-                          var amountSaved = snapshot.data.docs.isEmpty
-                              ? 0
-                              : widget.goal
-                                  .getAmountSaved(context, snapshot.data);
+                          var amountSaved =
+                              !snapshot.hasData || snapshot.data.docs.isEmpty
+                                  ? 0
+                                  : widget.goal
+                                      .getAmountSaved(context, snapshot.data);
                           return new LinearPercentIndicator(
                             center: amountSaved == widget.goal.getGoalAmount()
                                 ? AutoSizeText(
