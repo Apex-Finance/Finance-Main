@@ -3,7 +3,7 @@ import 'package:Plutus/models/transaction.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  Transaction testTransaction = new Transaction();
+  Transaction testTransaction = new Transaction.empty();
 
   testTransaction.setAmount(300);
   testTransaction.setTitle("Test Title");
