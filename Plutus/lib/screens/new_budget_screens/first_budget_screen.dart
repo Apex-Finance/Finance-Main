@@ -37,7 +37,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     calculateAmountLeft(0); // index doesn't matter
   }
