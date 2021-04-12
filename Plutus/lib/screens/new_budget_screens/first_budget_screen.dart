@@ -116,10 +116,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           {
                             return Text('An issue arose.');
                           }
-                        // case ConnectionState.waiting:
-                        //   {
-                        //     return CircularProgressIndicator();
-                        //   }
                         default:
                           {
                             var tempList = List<Category>();
@@ -151,10 +147,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                         return Text(
                                             'There was an issue loading the categories.');
                                       }
-                                    // case ConnectionState.waiting:
-                                    //   {
-                                    //     return CircularProgressIndicator();
-                                    //   }
                                     default:
                                       {
                                         if (snapshot.hasData &&

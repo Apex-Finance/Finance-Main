@@ -20,7 +20,6 @@ class MonthChanger with ChangeNotifier {
   ];
 
   void changeMonth(String direction) {
-    print("month");
     if (direction == 'back') {
       if (selectedMonth == 1) {
         selectedMonth = 12;

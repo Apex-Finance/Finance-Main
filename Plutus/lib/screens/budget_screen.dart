@@ -141,7 +141,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                     stream: budgetTransactions.snapshots(),
                     builder: (context, transactionSnapshots) {
                       if (!transactionSnapshots.hasData) {
-                        return CircularProgressIndicator();
+                        return new Container(width: 0.0, height: 0.0);
                       }
 
                       var transactionExpenses = transactionDataProvider
@@ -282,15 +282,19 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                                 budgetTransactions);
                                           });
                                     } else {
-                                      return Container(
-                                        margin: EdgeInsets.all(16),
-                                        child: Text(
-                                            'There are no categories selected for this budget.',
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                                fontSize: 18)),
-                                      );
+                                      if (!categorySnapshot.hasData) {
+                                        return Container();
+                                      } else {
+                                        return Container(
+                                          margin: EdgeInsets.all(16),
+                                          child: Text(
+                                              'There are no categories selected for this budget.',
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  fontSize: 18)),
+                                        );
+                                      }
                                     }
                                   }),
                             ),
