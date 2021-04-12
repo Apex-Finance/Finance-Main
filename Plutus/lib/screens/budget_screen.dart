@@ -140,6 +140,10 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   child: StreamBuilder<QuerySnapshot>(
                     stream: budgetTransactions.snapshots(),
                     builder: (context, transactionSnapshots) {
+                      if (!transactionSnapshots.hasData) {
+                        return CircularProgressIndicator();
+                      }
+
                       var transactionExpenses = transactionDataProvider
                           .getTransactionExpenses(transactionSnapshots.data);
                       budget.calculateRemainingAmount(transactionExpenses);

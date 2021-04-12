@@ -116,10 +116,10 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           {
                             return Text('An issue arose.');
                           }
-                        case ConnectionState.waiting:
-                          {
-                            return CircularProgressIndicator();
-                          }
+                        // case ConnectionState.waiting:
+                        //   {
+                        //     return CircularProgressIndicator();
+                        //   }
                         default:
                           {
                             var tempList = List<Category>();
@@ -128,8 +128,17 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                   categoryDataProvider.initializeCategory(doc));
                             });
                             categoryList = tempList;
-                            catAmountFocusNodes = List<FocusNode>.generate(
-                                categoryList.length, (index) => FocusNode());
+                            // Append focus nodes rather than create entire new list to keep from having multiple focuses
+                            if (categoryList.length !=
+                                catAmountFocusNodes.length) {
+                              for (var index = 0;
+                                  index <
+                                      categoryList.length -
+                                          catAmountFocusNodes.length;
+                                  index++) {
+                                catAmountFocusNodes.add(FocusNode());
+                              }
+                            }
                             if (widget.budget.getID() != null) {
                               return StreamBuilder<QuerySnapshot>(
                                 stream: BudgetDataProvider()
@@ -142,10 +151,10 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                         return Text(
                                             'There was an issue loading the categories.');
                                       }
-                                    case ConnectionState.waiting:
-                                      {
-                                        return CircularProgressIndicator();
-                                      }
+                                    // case ConnectionState.waiting:
+                                    //   {
+                                    //     return CircularProgressIndicator();
+                                    //   }
                                     default:
                                       {
                                         if (snapshot.hasData &&
