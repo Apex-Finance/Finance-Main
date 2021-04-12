@@ -1,11 +1,8 @@
-import 'package:Plutus/models/budget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:provider/provider.dart';
 
-import '../../providers/auth.dart';
 import '../../widgets/category_list_tile.dart';
 import '../../models/budget.dart';
 import '../../models/category.dart';
@@ -15,6 +12,7 @@ class FirstBudgetScreen extends StatefulWidget {
   static const routeName = '/first_budget';
   final Budget budget;
   FirstBudgetScreen({this.budget});
+
   @override
   _FirstBudgetScreenState createState() => _FirstBudgetScreenState();
 }
@@ -47,8 +45,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text('First Budget', style: Theme.of(context).textTheme.bodyText1),
+        title: AutoSizeText('First Budget',
+            style: Theme.of(context).textTheme.bodyText1),
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -57,7 +55,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
             child: Column(
               children: [
                 // Title
-                Text(
+                AutoSizeText(
                   "New Monthly Budget",
                   style: TextStyle(
                     color: Colors.amber,
@@ -73,7 +71,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          AutoSizeText(
                             'Total Budget:',
                             style: TextStyle(color: Colors.amber, fontSize: 15),
                           ),
@@ -90,7 +88,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          AutoSizeText(
                             'Remaining Budget:',
                             style: TextStyle(color: Colors.amber, fontSize: 15),
                           ),
@@ -114,7 +112,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                       switch (budgetSnapshot.connectionState) {
                         case ConnectionState.none:
                           {
-                            return Text('An issue arose.');
+                            return AutoSizeText('An issue arose.');
                           }
                         case ConnectionState.waiting:
                           {
@@ -139,7 +137,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                   switch (snapshot.connectionState) {
                                     case ConnectionState.none:
                                       {
-                                        return Text(
+                                        return AutoSizeText(
                                             'There was an issue loading the categories.');
                                       }
                                     case ConnectionState.waiting:
@@ -218,7 +216,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                   behavior: SnackBarBehavior.floating,
                                   content: Padding(
                                     padding: const EdgeInsets.only(top: 5.0),
-                                    child: Text(
+                                    child: AutoSizeText(
                                       'You have budgeted more money than is available this month.',
                                       style:
                                           Theme.of(context).textTheme.bodyText1,
@@ -233,7 +231,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                   behavior: SnackBarBehavior.floating,
                                   content: Padding(
                                     padding: const EdgeInsets.only(top: 5.0),
-                                    child: Text(
+                                    child: AutoSizeText(
                                       'You have some money that still needs to be budgeted.',
                                       style:
                                           Theme.of(context).textTheme.bodyText1,
@@ -250,8 +248,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                         );
                       },
                       label: widget.budget.getID() != null
-                          ? Text('Edit Budget')
-                          : Text('Add Budget'),
+                          ? AutoSizeText('Edit Budget')
+                          : AutoSizeText('Add Budget'),
                     ),
                   ),
                 ),
