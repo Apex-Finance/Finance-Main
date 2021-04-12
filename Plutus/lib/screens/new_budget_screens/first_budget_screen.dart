@@ -36,6 +36,13 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    calculateAmountLeft(0); // index doesn't matter
+  }
+
+  @override
   Widget build(BuildContext context) {
     var categoryDataProvider = Provider.of<CategoryDataProvider>(context);
     var category = Category();
