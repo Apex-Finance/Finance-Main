@@ -29,7 +29,6 @@ class _BudgetListTileState extends State<BudgetListTile> {
   Widget build(BuildContext context) {
     var transactionDataProvider =
         Provider.of<Transaction.Transactions>(context, listen: false);
-    print(widget.category.getID());
     var categoryTransactions = widget.budgetTransactions
         .where('categoryID', isEqualTo: widget.category.getID())
         .orderBy('date', descending: true);
@@ -62,14 +61,12 @@ class _BudgetListTileState extends State<BudgetListTile> {
               {
                 return Text("There was an error loading your information");
               }
-            case ConnectionState.waiting:
-              {
-                return CircularProgressIndicator();
-              }
             default:
               {
-                var transactionExpenses = transactionDataProvider
-                    .getTransactionExpenses(snapshot.data);
+                var transactionExpenses = snapshot.hasData
+                    ? transactionDataProvider
+                        .getTransactionExpenses(snapshot.data)
+                    : 0.0;
                 widget.category.calculateRemainingAmount(transactionExpenses);
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -130,7 +127,8 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                 alignment: MainAxisAlignment.center,
                                 width: MediaQuery.of(context).size.width * .8,
                                 lineHeight: 12.0,
-                                percent: snapshot.data.docs.isEmpty
+                                percent: !snapshot.hasData ||
+                                        snapshot.data.docs.isEmpty
                                     ? 0.0
                                     : transactionExpenses >
                                             widget.category.getAmount()
@@ -231,6 +229,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                     ),
                   ),
                 );
+                // }
               }
           }
         });
