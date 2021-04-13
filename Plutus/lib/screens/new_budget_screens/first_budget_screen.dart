@@ -21,8 +21,6 @@ var categoryList = new List<Category>();
 List<FocusNode> catAmountFocusNodes = List<FocusNode>();
 
 class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
-  double activeAmount = 0;
-
   // Sets the category and amount for the current ListTile being built
   void calculateAmountLeft(int index) {
     double amount = 0.00;
@@ -35,6 +33,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
     return;
   }
 
+  // Updates Remaining Amount to current value; useful when editing
   @override
   void initState() {
     super.initState();
@@ -44,10 +43,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   @override
   Widget build(BuildContext context) {
     var categoryDataProvider = Provider.of<CategoryDataProvider>(context);
-    var category = Category();
-
-    // final Budget budget = Budget
-    //     .empty(); // budget contains the amounts; rest are null on first run of build
 
     return Scaffold(
       appBar: AppBar(
