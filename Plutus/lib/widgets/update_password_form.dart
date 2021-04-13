@@ -22,7 +22,7 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('An Error Occurred!'),
+        title: Text(message),
         content: Text(message),
         actions: <Widget>[
           FlatButton(
