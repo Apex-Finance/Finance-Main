@@ -22,7 +22,7 @@ class _UpdateEmailFormState extends State<UpdateEmailForm> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('An Error Occurred!'),
+        title: Text(message),
         content: Text(message),
         actions: <Widget>[
           FlatButton(
@@ -35,13 +35,10 @@ class _UpdateEmailFormState extends State<UpdateEmailForm> {
   }
 
   updateEmail() async {
-    authInfo.updateEmail(newEmail);
     userInfo
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .set({'email': newEmail}, SetOptions(merge: true)).catchError((error) {
-      print(error);
-    });
+        .set({'email': newEmail}, SetOptions(merge: true));
     Provider.of<Auth>(context, listen: false).setEmail(newEmail);
   }
 
@@ -59,9 +56,15 @@ class _UpdateEmailFormState extends State<UpdateEmailForm> {
           password: Provider.of<Auth>(context, listen: false).getPassword(),
         ),
       );
+      print('hello');
+      authInfo.updateEmail(newEmail);
+      print('end hello');
+
       updateEmail();
     } on FirebaseAuthException catch (error) {
       var errorMessage = 'Authentication failed.';
+      print('inside');
+      print(error.message);
       if (error.code == 'user-mismatch') {
         errorMessage = 'Credentials do not match.';
       } else if (error.code == 'user-not-found') {
@@ -79,6 +82,7 @@ class _UpdateEmailFormState extends State<UpdateEmailForm> {
       } else if (error.code == 'weak-password') {
         errorMessage = 'Please create a stronger password';
       }
+      // print(errorMessage);
       _showErrorDialog(errorMessage);
     }
     if (_formKey.currentState.validate()) {
