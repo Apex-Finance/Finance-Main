@@ -115,10 +115,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           {
                             return AutoSizeText('An issue arose.');
                           }
-                        case ConnectionState.waiting:
-                          {
-                            return CircularProgressIndicator();
-                          }
                         default:
                           {
                             var tempList = List<Category>();
@@ -127,8 +123,20 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                   categoryDataProvider.initializeCategory(doc));
                             });
                             categoryList = tempList;
-                            catAmountFocusNodes = List<FocusNode>.generate(
-                                categoryList.length, (index) => FocusNode());
+                            // This is needed since the length of the focus nodes is changing in the loop
+                            var tempCount = categoryList.length -
+                                catAmountFocusNodes.length;
+                            // Append focus nodes rather than create entire new list to keep from having multiple focuses
+                            if (categoryList.length !=
+                                catAmountFocusNodes.length) {
+                              for (var index = 0; index < tempCount; index++) {
+                                print(categoryList.length -
+                                    catAmountFocusNodes.length);
+                                catAmountFocusNodes.add(FocusNode());
+                              }
+                            }
+                            print(categoryList.length);
+                            print(catAmountFocusNodes.length);
                             if (widget.budget.getID() != null) {
                               return StreamBuilder<QuerySnapshot>(
                                 stream: BudgetDataProvider()
@@ -140,10 +148,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                       {
                                         return AutoSizeText(
                                             'There was an issue loading the categories.');
-                                      }
-                                    case ConnectionState.waiting:
-                                      {
-                                        return CircularProgressIndicator();
                                       }
                                     default:
                                       {
@@ -161,6 +165,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                             });
                                           });
                                         }
+                                        print('not else');
                                         return ListView.builder(
                                           shrinkWrap: true,
                                           itemCount: categoryList.length,
@@ -178,6 +183,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                 },
                               );
                             } else {
+                              print('else');
                               return ListView.builder(
                                 shrinkWrap: true,
                                 itemCount: categoryList.length,

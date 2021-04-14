@@ -23,6 +23,7 @@ class _GoalsFormState extends State<GoalsForm> {
   DateTime _date;
   Goal _goal = Goal.empty();
   File _goalImage; // Image selected from the phone gallery
+
   void _setDate(DateTime value) {
     if (value == null) return; // if user cancels datepicker
     setState(() {
@@ -158,24 +159,11 @@ class _GoalsFormState extends State<GoalsForm> {
     );
   }
 
-  // Validates required fields and sends goal data to DB
-  Widget buildSubmitButton(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(210, 50, 0, 0),
-      child: Container(
-        child: FloatingActionButton.extended(
-          backgroundColor: Theme.of(context).primaryColorLight,
-          onPressed: () => _submitGoalForm(context),
-          label: Text(_goal.getID() == null ? "Add Goal" : "Edit Goal"),
-        ),
-      ),
-    );
-  }
-
   // Changes the date of the goal
   Widget buildDateChanger(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(10, 20, 230, 0),
+      padding: EdgeInsets.fromLTRB(
+          0, 20, 275, 0), // Values for Samsung J4; DO NOT CHANGE
       child: RaisedButton(
         color: Theme.of(context).primaryColorLight,
         child: _goal.getDate() == null
@@ -199,6 +187,21 @@ class _GoalsFormState extends State<GoalsForm> {
           ),
         ).then(
           (value) => _setDate(value),
+        ),
+      ),
+    );
+  }
+
+  // Validates required fields and sends goal data to DB
+  Widget buildSubmitButton(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+          250, 40, 0, 0), // Values for Samsung J4; DO NOT CHANGE
+      child: Container(
+        child: FloatingActionButton.extended(
+          backgroundColor: Theme.of(context).primaryColorLight,
+          onPressed: () => _submitGoalForm(context),
+          label: Text(_goal.getID() == null ? "Add Goal" : "Edit Goal"),
         ),
       ),
     );

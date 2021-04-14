@@ -42,8 +42,6 @@ class _TransactionFormState extends State<TransactionForm> {
   void _setCategory(Category category) {
     if (category.getTitle() == null) return; // if user taps out of popup
     setState(() {
-      print(category.getTitle() + " chosen");
-      print(category.getID());
       _transaction.setCategoryId(category.getID());
       _transaction.setCategoryCodePoint(category.getCodepoint());
       _transaction.setCategoryTitle(category.getTitle());
@@ -56,10 +54,6 @@ class _TransactionFormState extends State<TransactionForm> {
   void _submitTransactionForm(BuildContext context) {
     var transactionDataProvider =
         Provider.of<Transaction.Transactions>(context, listen: false);
-    categoryIcon.forEach((key, value) {
-      print('$key, ${value.codePoint}');
-    });
-
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       if (_transaction.getID() == null) {
@@ -255,21 +249,13 @@ class _TransactionFormState extends State<TransactionForm> {
                                     categories.add(categoryDataProvider
                                         .initializeCategory(element));
                                   });
-                                  print(
-                                      "${categories.length} number of categories");
-                                  // categories = convertQuerytoList(
-                                  //     snapshot, categoryDataProvider);
-                                  // print(categories.length);
                                   return ListView.builder(
                                     scrollDirection: Axis.vertical,
                                     itemCount: snapshot.data.docs.length,
                                     itemBuilder: (context, index) {
-                                      print("$index index");
                                       category = categoryDataProvider
                                           .initializeCategory(
                                               snapshot.data.docs[index]);
-                                      print(categories[index].getTitle() +
-                                          " initializd");
                                       return ListTile(
                                         tileColor:
                                             Theme.of(context).canvasColor,

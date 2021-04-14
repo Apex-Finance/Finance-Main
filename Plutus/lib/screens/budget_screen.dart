@@ -140,6 +140,10 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   child: StreamBuilder<QuerySnapshot>(
                     stream: budgetTransactions.snapshots(),
                     builder: (context, transactionSnapshots) {
+                      if (!transactionSnapshots.hasData) {
+                        return new Container(width: 0.0, height: 0.0);
+                      }
+
                       var transactionExpenses = transactionDataProvider
                           .getTransactionExpenses(transactionSnapshots.data);
                       budget.calculateRemainingAmount(transactionExpenses);
@@ -278,15 +282,19 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                                 budgetTransactions);
                                           });
                                     } else {
-                                      return Container(
-                                        margin: EdgeInsets.all(16),
-                                        child: Text(
-                                            'There are no categories selected for this budget.',
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                                fontSize: 18)),
-                                      );
+                                      if (!categorySnapshot.hasData) {
+                                        return Container();
+                                      } else {
+                                        return Container(
+                                          margin: EdgeInsets.all(16),
+                                          child: Text(
+                                              'There are no categories selected for this budget.',
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  fontSize: 18)),
+                                        );
+                                      }
                                     }
                                   }),
                             ),
