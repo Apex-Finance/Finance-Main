@@ -134,7 +134,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                     Center(
                       child: new LinearPercentIndicator(
-                        width: MediaQuery.of(context).size.width * .82,
+                        width: MediaQuery.of(context).size.width * .80, //.82
                         animation: true,
                         lineHeight: 20.0,
                         animationDuration: 2500,
@@ -202,7 +202,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   child: Container(
                     height: 90,
-                    width: 180,
+                    width: 134, // 180
                     child: Center(
                       child: Column(
                         children: [
