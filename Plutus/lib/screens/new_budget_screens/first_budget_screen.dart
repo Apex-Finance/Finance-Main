@@ -37,7 +37,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   @override
   void initState() {
     super.initState();
-    calculateAmountLeft(0); // index doesn't matter
+    //calculateAmountLeft(0); // index doesn't matter
   }
 
   @override
@@ -135,8 +135,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                 catAmountFocusNodes.add(FocusNode());
                               }
                             }
-                            print(categoryList.length);
-                            print(catAmountFocusNodes.length);
                             if (widget.budget.getID() != null) {
                               return StreamBuilder<QuerySnapshot>(
                                 stream: BudgetDataProvider()
@@ -165,7 +163,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                             });
                                           });
                                         }
-                                        print('not else');
+
                                         return ListView.builder(
                                           shrinkWrap: true,
                                           itemCount: categoryList.length,
