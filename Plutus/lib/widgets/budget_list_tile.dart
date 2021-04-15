@@ -158,39 +158,37 @@ class _BudgetListTileState extends State<BudgetListTile> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 15, vertical: 4),
                             color: Colors.grey[550],
-                            height: min(snapshot.data.docs.length * 200.0, 250),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Total',
-                                        style: TextStyle(
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Total',
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 18,
+                                        // fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      '\$${transactionExpenses.toStringAsFixed(2)}',
+                                      style: TextStyle(
                                           color: Theme.of(context).primaryColor,
-                                          fontSize: 18,
-                                          // fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        '\$${transactionExpenses.toStringAsFixed(2)}',
-                                        style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            fontSize: 18),
-                                      ),
-                                    ],
-                                  ),
-                                  Divider(
-                                    color: Theme.of(context).primaryColor,
-                                    height: 10,
-                                    thickness: 2,
-                                    indent: 0,
-                                    endIndent: 0,
-                                  ),
-                                  snapshot.data.docs.isEmpty
+                                          fontSize: 18),
+                                    ),
+                                  ],
+                                ),
+                                Divider(
+                                  color: Theme.of(context).primaryColor,
+                                  height: 10,
+                                  thickness: 2,
+                                  indent: 0,
+                                  endIndent: 0,
+                                ),
+                                SingleChildScrollView(
+                                  child: snapshot.data.docs.isEmpty
                                       ? Text(
                                           'No transaction has been added yet',
                                           style: TextStyle(
@@ -201,10 +199,8 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                         )
                                       : Container(
                                           height: min(
-                                                  snapshot.data.docs.length *
-                                                      200.0,
-                                                  250.0) -
-                                              25,
+                                              snapshot.data.docs.length * 100.0,
+                                              200.0),
                                           child: ListView.builder(
                                             itemCount:
                                                 snapshot.data.docs.length,
@@ -221,8 +217,8 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                             },
                                           ),
                                         ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           )
                       ],
