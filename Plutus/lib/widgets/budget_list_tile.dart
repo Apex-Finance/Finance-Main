@@ -16,7 +16,8 @@ import '../models/category.dart' as Category;
 class BudgetListTile extends StatefulWidget {
   final Category.Category category;
   final Query budgetTransactions;
-  BudgetListTile(this.category, this.budgetTransactions);
+  final ValueKey key;
+  BudgetListTile(this.category, this.budgetTransactions, this.key);
 
   @override
   _BudgetListTileState createState() => _BudgetListTileState();
@@ -54,6 +55,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
     // final monthlyBudget =
     //     Provider.of<BudgetDataProvider>(context).monthlyBudget;
     return StreamBuilder<QuerySnapshot>(
+        key: widget.key,
         stream: categoryTransactions.snapshots(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {

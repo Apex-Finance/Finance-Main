@@ -273,13 +273,17 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                               categorySnapshot.data.docs.length,
                                           itemBuilder: (context, index) {
                                             return BudgetListTile(
-                                                Provider.of<CategoryDataProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .initializeCategory(
-                                                        categorySnapshot
-                                                            .data.docs[index]),
-                                                budgetTransactions);
+                                              Provider.of<CategoryDataProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .initializeCategory(
+                                                      categorySnapshot
+                                                          .data.docs[index]),
+                                              budgetTransactions,
+                                              ValueKey({
+                                                'monthData.selectedMonth': index
+                                              }), // gives a unique key to each category; necessary to stop open listtiles from one month make another month's open
+                                            );
                                           });
                                     } else {
                                       if (!categorySnapshot.hasData) {
