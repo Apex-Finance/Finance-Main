@@ -126,7 +126,7 @@ class CategoryDataProvider with ChangeNotifier {
     return categoryTransactions;
   }
 
-  Stream<QuerySnapshot> getCategories(BuildContext context) {
+  Stream<QuerySnapshot> streamCategories(BuildContext context) {
     var categoryQuery =
         FirebaseFirestore.instance.collection('DefaultCategories').where(
       'userID',

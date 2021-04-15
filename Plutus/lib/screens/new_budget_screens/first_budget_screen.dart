@@ -3,9 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:provider/provider.dart';
 
-import '../../providers/auth.dart';
 import '../../widgets/category_list_tile.dart';
 import '../../models/budget.dart';
 import '../../models/category.dart';
@@ -19,8 +17,8 @@ class FirstBudgetScreen extends StatefulWidget {
   _FirstBudgetScreenState createState() => _FirstBudgetScreenState();
 }
 
-var categoryList = new List<Category>();
-List<FocusNode> catAmountFocusNodes = List<FocusNode>();
+List<Category> categoryList = [];
+List<FocusNode> catAmountFocusNodes = [];
 
 class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   double activeAmount = 0;
@@ -109,7 +107,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                 // Scrollable category list with text fields
                 Expanded(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: categoryDataProvider.getCategories(context),
+                    stream: categoryDataProvider.streamCategories(context),
                     builder: (context, budgetSnapshot) {
                       switch (budgetSnapshot.connectionState) {
                         case ConnectionState.none:
