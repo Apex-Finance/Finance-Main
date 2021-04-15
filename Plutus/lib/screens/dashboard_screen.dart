@@ -5,6 +5,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import '../models/budget.dart';
 import '../widgets/budget_list_tile.dart';
 import '../models/transaction.dart' as Transaction;
+import '../widgets/transaction_list_tile.dart';
 import '../models/pie_chart.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -135,40 +136,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ],
             ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(20),
-                  bottom: Radius.circular(20),
-                ),
-              ),
-              child: Container(
-                width: 400,
-                height: 300,
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                        ),
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      width: 400,
-                      child: Center(
-                        child: Text(
-                          'Recent Transactions',
-                          style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            RecentTransactionsCard(3),
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(

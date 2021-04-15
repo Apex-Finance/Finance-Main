@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-import '../models/transaction.dart';
+import '../models/transaction.dart' as Transaction;
 import '../models/categories.dart';
 import '../models/category_icon.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,7 @@ import './transaction_form.dart';
 import '../models/goals.dart';
 
 class TransactionListTile extends StatefulWidget {
-  final Transaction transaction;
+  final Transaction.Transaction transaction;
 
   TransactionListTile(this.transaction);
 
@@ -20,7 +21,8 @@ class TransactionListTile extends StatefulWidget {
 }
 
 class _TransactionListTileState extends State<TransactionListTile> {
-  void _updateTransaction(BuildContext context, Transaction transaction) {
+  void _updateTransaction(
+      BuildContext context, Transaction.Transaction transaction) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -77,7 +79,7 @@ class _TransactionListTileState extends State<TransactionListTile> {
             );
           },
           onDismissed: (direction) {
-            Provider.of<Transactions>(context, listen: false)
+            Provider.of<Transaction.Transactions>(context, listen: false)
                 .deleteTransaction(widget.transaction, context);
             Scaffold.of(context)
               ..removeCurrentSnackBar()
@@ -113,5 +115,67 @@ class _TransactionListTileState extends State<TransactionListTile> {
         ),
       ),
     );
+  }
+}
+
+class RecentTransactionsCard extends StatelessWidget {
+  final int tileCount;
+  RecentTransactionsCard(this.tileCount);
+  @override
+  Widget build(BuildContext context) {
+    var transactionDataProvider =
+        Provider.of<Transaction.Transactions>(context);
+
+    return StreamBuilder<QuerySnapshot>(
+        stream:
+            transactionDataProvider.getRecentTransactions(context, tileCount),
+        builder: (context, snapshot) {
+          print(snapshot.data.docs.length);
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(20),
+                bottom: Radius.circular(20),
+              ),
+            ),
+            child: Container(
+              width: 400,
+              height: 300,
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    width: 400,
+                    child: Center(
+                      child: Text(
+                        'Recent Transactions',
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: snapshot.data.docs.length,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          // initialize the transaction document into a transaction object
+                          return TransactionListTile(
+                              transactionDataProvider.initializeTransaction(
+                                  snapshot.data.docs[index]));
+                        }),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
