@@ -126,4 +126,14 @@ class GoalDataProvider with ChangeNotifier {
         .doc(goal.getID())
         .delete();
   }
+
+  Stream<QuerySnapshot> getUpcomingGoals(BuildContext context, int count) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('Goals')
+        .orderBy('dateOfGoal', descending: true)
+        .limit(count)
+        .snapshots();
+  }
 }
