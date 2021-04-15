@@ -17,8 +17,8 @@ class FirstBudgetScreen extends StatefulWidget {
   _FirstBudgetScreenState createState() => _FirstBudgetScreenState();
 }
 
-var categoryList = new List<Category>();
-List<FocusNode> catAmountFocusNodes = List<FocusNode>();
+List<Category> categoryList = [];
+List<FocusNode> catAmountFocusNodes = [];
 
 class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   // Sets the category and amount for the current ListTile being built
@@ -108,7 +108,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                 // Scrollable category list with text fields
                 Expanded(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: categoryDataProvider.getCategories(context),
+                    stream: categoryDataProvider.streamCategories(context),
                     builder: (context, budgetSnapshot) {
                       switch (budgetSnapshot.connectionState) {
                         case ConnectionState.none:
