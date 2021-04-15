@@ -170,7 +170,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
             ),
-            UpcomingGoalCard(3),
+            UpcomingGoalCard(2),
           ],
         ),
       ],
