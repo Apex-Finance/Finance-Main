@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
-import '../models/pie_chart.dart';
+import 'package:provider/provider.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:Plutus/models/category.dart';
-import 'package:Plutus/models/transaction.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 import '../models/budget.dart';
-import 'new_budget_screens/income_screen.dart';
 import '../widgets/budget_list_tile.dart';
-import '../providers/auth.dart';
 import '../models/transaction.dart' as Transaction;
-import 'package:provider/provider.dart';
-import '../models/month_changer.dart';
+import '../models/pie_chart.dart';
 
 class DashboardScreen extends StatefulWidget {
   static const routeName = '/dashboard';

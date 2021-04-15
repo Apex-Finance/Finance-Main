@@ -15,39 +15,6 @@ class PiePiece {
 }
 
 class PieChartCard extends StatelessWidget {
-  // List<charts.Series<PiePiece, String>> _pieSeriesData;
-  // _generateData() {
-  //   var pieData = [
-  //     new PiePiece('home', 35.8, Colors.blue),
-  //     new PiePiece('food_and_drinks', 8.3, Colors.red),
-  //     new PiePiece('bills', 10.8, Colors.green),
-  //     new PiePiece('eduction', 15.6, Colors.yellow),
-  //     new PiePiece('shopping', 19.2, Colors.orange),
-  //     new PiePiece('travel', 10.3, Colors.pink),
-  //     new PiePiece('entertainment', 12.4, Colors.purple),
-  //     new PiePiece('investments', 15.7, Colors.brown),
-  //     new PiePiece('uncategorized', 24.8, Colors.indigo),
-  //   ];
-
-  //   _pieSeriesData.add(
-  //     charts.Series(
-  //       domainFn: (PiePiece piePiece, _) => piePiece.category,
-  //       measureFn: (PiePiece piePiece, _) => piePiece.amount,
-  //       colorFn: (PiePiece piePiece, _) =>
-  //           charts.ColorUtil.fromDartColor(piePiece.colorVal),
-  //       id: 'How you spent',
-  //       data: pieData,
-  //       labelAccessorFn: (PiePiece row, _) => '${row.category}',
-  //     ),
-  //   );
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _pieSeriesData = <charts.Series<PiePiece, String>>[];
-  //   _generateData();
-  // }
   @override
   Widget build(BuildContext context) {
     var transactionDataProvider =
