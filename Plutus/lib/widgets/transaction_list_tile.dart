@@ -1,15 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import '../models/transaction.dart' as Transaction;
-import '../models/categories.dart';
 import '../models/category_icon.dart';
-import 'package:provider/provider.dart';
 import './transaction_form.dart';
-import '../models/goals.dart';
 
 class TransactionListTile extends StatefulWidget {
   final Transaction.Transaction transaction;
@@ -130,7 +127,6 @@ class RecentTransactionsCard extends StatelessWidget {
         stream:
             transactionDataProvider.getRecentTransactions(context, tileCount),
         builder: (context, snapshot) {
-          print(snapshot.data.docs.length);
           return Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
@@ -161,17 +157,20 @@ class RecentTransactionsCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: ListView.builder(
-                        itemCount: snapshot.data.docs.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          // initialize the transaction document into a transaction object
-                          return TransactionListTile(
-                              transactionDataProvider.initializeTransaction(
-                                  snapshot.data.docs[index]));
-                        }),
-                  ),
+                  (!snapshot.hasData || snapshot.data.docs.isEmpty)
+                      ? Container()
+                      : Expanded(
+                          child: ListView.builder(
+                              itemCount: snapshot.data.docs.length,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                // initialize the transaction document into a transaction object
+                                return TransactionListTile(
+                                    transactionDataProvider
+                                        .initializeTransaction(
+                                            snapshot.data.docs[index]));
+                              }),
+                        ),
                 ],
               ),
             ),
