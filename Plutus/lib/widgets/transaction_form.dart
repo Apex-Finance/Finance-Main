@@ -230,7 +230,8 @@ class _TransactionFormState extends State<TransactionForm> {
                       height: 600,
                       width: 400,
                       child: StreamBuilder(
-                          stream: categoryDataProvider.getCategories(context),
+                          stream:
+                              categoryDataProvider.streamCategories(context),
                           builder:
                               (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                             switch (snapshot.connectionState) {

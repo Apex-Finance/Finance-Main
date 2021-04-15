@@ -109,7 +109,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                 // Scrollable category list with text fields
                 Expanded(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: categoryDataProvider.getCategories(context),
+                    stream: categoryDataProvider.streamCategories(context),
                     builder: (context, budgetSnapshot) {
                       switch (budgetSnapshot.connectionState) {
                         case ConnectionState.none:
