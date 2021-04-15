@@ -158,7 +158,9 @@ class _BudgetListTileState extends State<BudgetListTile> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 15, vertical: 4),
                             color: Colors.grey[550],
-                            height: min(snapshot.data.docs.length * 200.0, 250),
+                            height: snapshot.data.docs.isEmpty
+                                ? 100
+                                : min(snapshot.data.docs.length * 200.0, 250),
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
