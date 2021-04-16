@@ -1,3 +1,4 @@
+// Imported Flutter packages
 import 'package:flutter/foundation.dart';
 
 // Our main categories

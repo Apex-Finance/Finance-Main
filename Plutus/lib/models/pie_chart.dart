@@ -1,8 +1,10 @@
+// Imported Flutter packages
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
+// Imported Plutus files
 import '../models/transaction.dart' as Transaction;
 import '../models/category.dart';
 

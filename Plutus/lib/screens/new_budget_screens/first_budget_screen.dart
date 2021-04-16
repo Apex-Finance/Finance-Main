@@ -1,8 +1,10 @@
+// Imported Flutter packages
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
+// Imported Plutus files
 import '../../widgets/category_list_tile.dart';
 import '../../models/budget.dart';
 import '../../models/category.dart';
@@ -127,7 +129,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           }
                         default:
                           {
-                            var tempList = List<Category>();
+                            var tempList = <Category>[];
                             budgetSnapshot.data.docs.forEach((doc) {
                               tempList.add(
                                   categoryDataProvider.initializeCategory(doc));
@@ -229,7 +231,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                         setState(
                           () {
                             if (widget.budget.getRemainingAmountNew() < -0.001)
-                              Scaffold.of(context).showSnackBar(
+                              ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   behavior: SnackBarBehavior.floating,
                                   content: Padding(
@@ -244,7 +246,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                               );
                             else if (widget.budget.getRemainingAmountNew() >
                                 0.001) {
-                              Scaffold.of(context).showSnackBar(
+                              ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   behavior: SnackBarBehavior.floating,
                                   content: Padding(
