@@ -1,11 +1,14 @@
+// Imported Dart packages
 import 'dart:convert';
 import 'dart:async';
 
+// Imported Flutter packages
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+// Imported Plutus files
 import '../screens/auth_screen.dart';
 
 class Auth with ChangeNotifier {

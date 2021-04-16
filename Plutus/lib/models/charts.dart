@@ -1,3 +1,4 @@
+// Imported Flutter packages
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -102,16 +103,6 @@ class NormalBarChart extends StatelessWidget {
     final desktopSalesData = [
       new OrdinalSales('2014', 5),
       new OrdinalSales('2015', 25),
-    ];
-
-    final tableSalesData = [
-      new OrdinalSales('2014', 25),
-      new OrdinalSales('2015', 50),
-    ];
-
-    final mobileSalesData = [
-      new OrdinalSales('2014', 10),
-      new OrdinalSales('2015', 15),
     ];
 
     return [

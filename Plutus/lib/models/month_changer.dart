@@ -1,3 +1,4 @@
+// Imported Flutter packages
 import 'package:flutter/material.dart';
 
 class MonthChanger with ChangeNotifier {
@@ -5,6 +6,7 @@ class MonthChanger with ChangeNotifier {
   var selectedYear = DateTime.now().year;
 
   static const months = [
+    // Static list of months
     'January',
     'February',
     'March',

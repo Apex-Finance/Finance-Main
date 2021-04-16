@@ -1,8 +1,9 @@
+// Imported Flutte packages
 import 'package:flutter/material.dart';
 
 class ColorProvider with ChangeNotifier {
   var selectedColorIndex;
-  var isDark;
+  var isDark; // Dark mode variable
 
   final colorOptions = [
     {
