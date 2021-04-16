@@ -46,7 +46,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   @override
   void initState() {
     super.initState();
-    //calculateAmountLeft(0); // index doesn't matter
+    widget.budget.categoryAmount = 0;
+    calculateAmountLeft(0); // index doesn't matter
   }
 
   @override

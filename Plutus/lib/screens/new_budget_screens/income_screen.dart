@@ -67,16 +67,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
     return WillPopScope(
       onWillPop: () async {
-        // If editing, will not delete the budget if no new income is entered
-        // If new income is entered, user must
-        if (budget.getID() != null) if (budget.getAmount() ==
-            budget.getRemainingAmountNew())
-          Navigator.of(context).pop();
-        else {
-          _showDiscardBudgetDialog();
-        }
-        else
-          Navigator.of(context).pop();
+        _showDiscardBudgetDialog();
         return true;
       },
       child: Scaffold(
