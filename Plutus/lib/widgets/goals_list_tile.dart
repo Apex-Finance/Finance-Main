@@ -9,6 +9,7 @@ import '../models/goals.dart';
 import '../widgets/goals_form.dart';
 import '../screens/add_goal_money_screen.dart';
 import '../models/transaction.dart' as Transaction;
+import '../models/goals.dart';
 
 // List Tile that displays each individual goal
 class GoalsListTile extends StatefulWidget {
@@ -156,30 +157,33 @@ class _GoalsListTileState extends State<GoalsListTile> {
                                   ? 0
                                   : widget.goal
                                       .getAmountSaved(context, snapshot.data);
-                          return new LinearPercentIndicator(
-                            center: amountSaved == widget.goal.getGoalAmount()
-                                ? AutoSizeText(
-                                    'Completed!',
-                                    style: TextStyle(
-                                      color: Theme.of(context).accentColor,
+                          return Expanded(
+                            child: new LinearPercentIndicator(
+                              center: amountSaved == widget.goal.getGoalAmount()
+                                  ? AutoSizeText(
+                                      'Completed!',
+                                      style: TextStyle(
+                                        color: Theme.of(context).accentColor,
+                                      ),
+                                    )
+                                  : AutoSizeText(
+                                      '\$ ${amountSaved.toStringAsFixed(2)} of \$ ${widget.goal.getGoalAmount().toStringAsFixed(2)}',
+                                      style: TextStyle(
+                                        color: Theme.of(context).accentColor,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                  )
-                                : AutoSizeText(
-                                    '\$ ${amountSaved.toStringAsFixed(2)} of \$ ${widget.goal.getGoalAmount().toStringAsFixed(2)}',
-                                    style: TextStyle(
-                                      color: Theme.of(context).accentColor,
-                                    ),
-                                  ),
-                            percent: amountSaved == null
-                                ? 0.0
-                                : amountSaved > widget.goal.getGoalAmount()
-                                    ? 1
-                                    : amountSaved / widget.goal.getGoalAmount(),
-                            alignment: MainAxisAlignment.start,
-                            width: MediaQuery.of(context).size.width * .46,
-                            lineHeight: 20,
-                            backgroundColor: Colors.black,
-                            progressColor: Theme.of(context).primaryColor,
+                              percent: amountSaved == null
+                                  ? 0.0
+                                  : amountSaved > widget.goal.getGoalAmount()
+                                      ? 1
+                                      : amountSaved /
+                                          widget.goal.getGoalAmount(),
+                              alignment: MainAxisAlignment.start,
+                              lineHeight: 20,
+                              backgroundColor: Colors.black,
+                              progressColor: Theme.of(context).primaryColor,
+                            ),
                           );
                         }),
                   ),
@@ -209,5 +213,67 @@ class _GoalsListTileState extends State<GoalsListTile> {
         ),
       ),
     );
+  }
+}
+
+class UpcomingGoalCard extends StatelessWidget {
+  final int tileCount;
+
+  UpcomingGoalCard(this.tileCount);
+
+  @override
+  Widget build(BuildContext context) {
+    var goalDataProvider =
+        Provider.of<GoalDataProvider>(context, listen: false);
+    return StreamBuilder<QuerySnapshot>(
+        stream: goalDataProvider.getUpcomingGoals(context, tileCount),
+        builder: (context, snapshot) {
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(20),
+                bottom: Radius.circular(20),
+              ),
+            ),
+            child: Container(
+              width: 400,
+              height: 300,
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    width: 400,
+                    child: Center(
+                      child: Text(
+                        'Upcoming Goals',
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: (!snapshot.hasData || snapshot.data.docs.isEmpty)
+                        ? Container()
+                        : ListView.builder(
+                            itemCount: snapshot.data.docs.length,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              // initialize the transaction document into a transaction object
+                              return GoalsListTile(goalDataProvider
+                                  .initializeGoal(snapshot.data.docs[index]));
+                            }),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
