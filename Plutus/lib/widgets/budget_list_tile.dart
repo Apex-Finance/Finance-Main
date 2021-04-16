@@ -185,56 +185,58 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                                 Theme.of(context).primaryColor,
                                             fontSize: 18),
                                       ),
-                                    ),
-                                    Text(
-                                      '\$${transactionExpenses.toStringAsFixed(2)}',
-                                      style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                          fontSize: 18),
-                                    ),
-                                  ],
-                                ),
-                                Divider(
-                                  color: Theme.of(context).primaryColor,
-                                  height: 10,
-                                  thickness: 2,
-                                  indent: 0,
-                                  endIndent: 0,
-                                ),
-                                SingleChildScrollView(
-                                  child: snapshot.data.docs.isEmpty
-                                      ? Text(
-                                          'No transaction has been added yet',
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                              fontSize: 18),
-                                          textAlign: TextAlign.center,
-                                        )
-                                      : Container(
-                                          height: min(
-                                              snapshot.data.docs.length * 100.0,
-                                              200.0),
-                                          child: ListView.builder(
-                                            itemCount:
-                                                snapshot.data.docs.length,
-                                            itemBuilder: (context, index) {
-                                              return TransactionListTile(
-                                                  Provider.of<
-                                                              Transaction
-                                                                  .Transactions>(
-                                                          context,
-                                                          listen: false)
-                                                      .initializeTransaction(
-                                                          snapshot.data
-                                                              .docs[index]));
-                                            },
+                                      Text(
+                                        '\$${transactionExpenses.toStringAsFixed(2)}',
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                  Divider(
+                                    color: Theme.of(context).primaryColor,
+                                    height: 10,
+                                    thickness: 2,
+                                    indent: 0,
+                                    endIndent: 0,
+                                  ),
+                                  SingleChildScrollView(
+                                    child: snapshot.data.docs.isEmpty
+                                        ? Text(
+                                            'No transaction has been added yet',
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                fontSize: 18),
+                                            textAlign: TextAlign.center,
+                                          )
+                                        : Container(
+                                            height: min(
+                                                snapshot.data.docs.length *
+                                                    100.0,
+                                                200.0),
+                                            child: ListView.builder(
+                                              itemCount:
+                                                  snapshot.data.docs.length,
+                                              itemBuilder: (context, index) {
+                                                return TransactionListTile(
+                                                    Provider.of<
+                                                                Transaction
+                                                                    .Transactions>(
+                                                            context,
+                                                            listen: false)
+                                                        .initializeTransaction(
+                                                            snapshot.data
+                                                                .docs[index]));
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                ),
-                              ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          )
+                          ),
                       ],
                     ),
                   ),
