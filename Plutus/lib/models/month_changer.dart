@@ -36,4 +36,46 @@ class MonthChanger with ChangeNotifier {
     notifyListeners();
     return;
   }
+
+  Row buildMonthChanger(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        if (selectedMonth > DateTime.now().month ||
+            selectedYear >= DateTime.now().year)
+          IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Theme.of(context).primaryColor,
+              ),
+              onPressed: () => changeMonth('back')),
+        if (selectedMonth == DateTime.now().month &&
+            selectedYear ==
+                DateTime.now().year -
+                    1) // keep width constant if looking at earliest available month
+          SizedBox(width: 32.0, height: 32.0),
+        Text(
+          '${MonthChanger.months[selectedMonth - 1]}' +
+              (selectedYear == DateTime.now().year ? '' : ' $selectedYear'),
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+            fontSize: 16,
+          ),
+        ),
+        if (selectedMonth < DateTime.now().month ||
+            selectedYear <= DateTime.now().year)
+          IconButton(
+              icon: Icon(
+                Icons.arrow_forward,
+                color: Theme.of(context).primaryColor,
+              ),
+              onPressed: () => changeMonth('forward')),
+        if (selectedMonth == DateTime.now().month &&
+            selectedYear ==
+                DateTime.now().year +
+                    1) // keep width constant if looking at latest available month
+          SizedBox(width: 32.0, height: 32.0),
+      ],
+    );
+  }
 }

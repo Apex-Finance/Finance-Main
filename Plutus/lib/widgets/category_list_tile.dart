@@ -13,9 +13,10 @@ class CategoryListTile extends StatefulWidget {
   List<FocusNode> focusNode;
   int index;
   Budget budget;
+  Function activeCategoryHandler;
 
   CategoryListTile(this.categoryList, this.categoryHandler, this.focusNode,
-      this.index, this.budget);
+      this.index, this.budget, this.activeCategoryHandler);
 
   @override
   _CategoryListTileState createState() => _CategoryListTileState();
@@ -101,7 +102,6 @@ class _CategoryListTileState extends State<CategoryListTile> {
                       );
                       _controller.text = '';
                     } // valides for text that is copy/pasted in
-                    // TODO find a way to make this less redundant
                     else if (_controller.text.isEmpty) {
                       _controller.text = '0.00';
                       widget.categoryList[widget.index]
@@ -143,7 +143,11 @@ class _CategoryListTileState extends State<CategoryListTile> {
                   style: Theme.of(context).textTheme.bodyText1,
                   keyboardType: TextInputType.number,
                   controller: _controller,
-                  onChanged: (_) => {},
+                  onChanged: (_) => {
+                    widget.activeCategoryHandler(
+                        widget.categoryList[widget.index],
+                        double.tryParse(_controller.text)),
+                  },
                 ),
               ),
             ),

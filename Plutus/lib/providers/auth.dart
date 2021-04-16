@@ -6,6 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../screens/auth_screen.dart';
+
 class Auth with ChangeNotifier {
   User authInfo = FirebaseAuth.instance.currentUser;
   FirebaseFirestore userInfo = FirebaseFirestore.instance;
@@ -55,7 +57,10 @@ class Auth with ChangeNotifier {
 
   Future<void> logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
-    Navigator.of(context).pushNamed('/auth');
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        AuthScreen.routeName,
+        (Route<dynamic> route) =>
+            false); // remove all screens so user can't hit back button and be logged in
 
     notifyListeners();
   }

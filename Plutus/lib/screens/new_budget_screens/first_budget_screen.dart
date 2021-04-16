@@ -1,4 +1,3 @@
-import 'package:Plutus/models/budget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +12,7 @@ class FirstBudgetScreen extends StatefulWidget {
   static const routeName = '/first_budget';
   final Budget budget;
   FirstBudgetScreen({this.budget});
+
   @override
   _FirstBudgetScreenState createState() => _FirstBudgetScreenState();
 }
@@ -22,6 +22,13 @@ List<FocusNode> catAmountFocusNodes = [];
 
 class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   double activeAmount = 0;
+  Category activeCategory = Category();
+
+  void setActiveCategory(Category category, double amount) {
+    activeCategory = category;
+    activeAmount = amount ?? 0;
+    return;
+  }
 
   // Sets the category and amount for the current ListTile being built
   void calculateAmountLeft(int index) {
@@ -35,18 +42,22 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
     return;
   }
 
+  // Updates Remaining Amount to current value; useful when editing
+  @override
+  void initState() {
+    super.initState();
+    widget.budget.categoryAmount = 0;
+    calculateAmountLeft(0); // index doesn't matter
+  }
+
   @override
   Widget build(BuildContext context) {
     var categoryDataProvider = Provider.of<CategoryDataProvider>(context);
-    var category = Category();
-
-    // final Budget budget = Budget
-    //     .empty(); // budget contains the amounts; rest are null on first run of build
 
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text('First Budget', style: Theme.of(context).textTheme.bodyText1),
+        title: AutoSizeText('First Budget',
+            style: Theme.of(context).textTheme.bodyText1),
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -55,7 +66,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
             child: Column(
               children: [
                 // Title
-                Text(
+                AutoSizeText(
                   "New Monthly Budget",
                   style: TextStyle(
                     color: Colors.amber,
@@ -71,7 +82,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          AutoSizeText(
                             'Total Budget:',
                             style: TextStyle(color: Colors.amber, fontSize: 15),
                           ),
@@ -88,7 +99,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          AutoSizeText(
                             'Remaining Budget:',
                             style: TextStyle(color: Colors.amber, fontSize: 15),
                           ),
@@ -112,7 +123,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                       switch (budgetSnapshot.connectionState) {
                         case ConnectionState.none:
                           {
-                            return Text('An issue arose.');
+                            return AutoSizeText('An issue arose.');
                           }
                         default:
                           {
@@ -134,8 +145,6 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                 catAmountFocusNodes.add(FocusNode());
                               }
                             }
-                            print(categoryList.length);
-                            print(catAmountFocusNodes.length);
                             if (widget.budget.getID() != null) {
                               return StreamBuilder<QuerySnapshot>(
                                 stream: BudgetDataProvider()
@@ -145,7 +154,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                   switch (snapshot.connectionState) {
                                     case ConnectionState.none:
                                       {
-                                        return Text(
+                                        return AutoSizeText(
                                             'There was an issue loading the categories.');
                                       }
                                     default:
@@ -164,7 +173,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                             });
                                           });
                                         }
-                                        print('not else');
+
                                         return ListView.builder(
                                           shrinkWrap: true,
                                           itemCount: categoryList.length,
@@ -175,6 +184,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                             catAmountFocusNodes,
                                             index,
                                             widget.budget,
+                                            setActiveCategory,
                                           ),
                                         );
                                       }
@@ -193,6 +203,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                   catAmountFocusNodes,
                                   index,
                                   widget.budget,
+                                  setActiveCategory,
                                 ),
                               );
                             }
@@ -208,12 +219,13 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                   child: Builder(
                     builder: (context) => FloatingActionButton.extended(
                       backgroundColor: Theme.of(context).primaryColor,
-                      onPressed: () {
-                        // Provider.of<CategoryDataProvider>(context,
-                        //         listen:
-                        //             false) //TODO ALEX no setcategoryamount() for budget yet
-                        //     .uploadCategory(
-                        //         widget.budget.getID(), category, context);
+                      onPressed: () async {
+                        await categoryDataProvider.setCategoryAmount(
+                            widget.budget.getID(),
+                            activeCategory,
+                            activeAmount,
+                            context);
+                        calculateAmountLeft(0);
                         setState(
                           () {
                             if (widget.budget.getRemainingAmountNew() < -0.001)
@@ -222,7 +234,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                   behavior: SnackBarBehavior.floating,
                                   content: Padding(
                                     padding: const EdgeInsets.only(top: 5.0),
-                                    child: Text(
+                                    child: AutoSizeText(
                                       'You have budgeted more money than is available this month.',
                                       style:
                                           Theme.of(context).textTheme.bodyText1,
@@ -237,7 +249,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                   behavior: SnackBarBehavior.floating,
                                   content: Padding(
                                     padding: const EdgeInsets.only(top: 5.0),
-                                    child: Text(
+                                    child: AutoSizeText(
                                       'You have some money that still needs to be budgeted.',
                                       style:
                                           Theme.of(context).textTheme.bodyText1,
@@ -254,8 +266,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                         );
                       },
                       label: widget.budget.getID() != null
-                          ? Text('Edit Budget')
-                          : Text('Add Budget'),
+                          ? AutoSizeText('Edit Budget')
+                          : AutoSizeText('Add Budget'),
                     ),
                   ),
                 ),

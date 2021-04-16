@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import './first_budget_screen.dart';
 import '../tab_screen.dart';
 import '../../models/budget.dart';
 import '../../models/month_changer.dart';
-import '../../models/category.dart' as Category;
 
 // Screen that asks for the monthly income and creates a budget on that amount
 class IncomeScreen extends StatefulWidget {
@@ -23,7 +23,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
   @override
   Widget build(BuildContext context) {
     final Budget budget = ModalRoute.of(context).settings.arguments;
-    var category = Category.Category();
     var monthData = Provider.of<MonthChanger>(context);
 
     // Creates an AlertDialog Box that notifies the user of discard changes
@@ -34,14 +33,14 @@ class _IncomeScreenState extends State<IncomeScreen> {
         builder: (BuildContext context) {
           return AlertDialog(
             backgroundColor: Colors.grey[800],
-            title: Text(
+            title: AutoSizeText(
               'Cancel',
               style: Theme.of(context).textTheme.headline1,
             ),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
-                  Text(
+                  AutoSizeText(
                     'Would you like to discard these changes?',
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
@@ -50,7 +49,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
             ),
             actions: <Widget>[
               TextButton(
-                child: Text('Yes'),
+                child: AutoSizeText('Yes'),
                 onPressed: () {
                   Provider.of<BudgetDataProvider>(context, listen: false)
                       .deleteBudget(budget.getID(), context);
@@ -58,11 +57,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 },
               ),
               TextButton(
-                child: Text('No'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
+                  child: AutoSizeText('No'),
+                  onPressed: () => Navigator.of(context).pop()),
             ],
           );
         },
@@ -71,13 +67,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
     return WillPopScope(
       onWillPop: () async {
-        if (budget.getAmount() != null) _showDiscardBudgetDialog();
+        _showDiscardBudgetDialog();
         return true;
       },
       child: Scaffold(
         appBar: AppBar(
-          title:
-              Text('New Budget', style: Theme.of(context).textTheme.bodyText1),
+          title: AutoSizeText('New Budget',
+              style: Theme.of(context).textTheme.bodyText1),
         ),
         body: Padding(
           padding: EdgeInsets.fromLTRB(20, 50, 20, 0),
@@ -89,7 +85,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 child: Column(
                   children: [
                     // Title
-                    Text(
+                    AutoSizeText(
                       "Monthly Income",
                       style: TextStyle(
                         color: Colors.amber,
@@ -102,7 +98,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                     Row(
                       children: [
                         // Textfield where monthly income is entered
-                        Text('\$',
+                        AutoSizeText('\$',
                             style: Theme.of(context).textTheme.bodyText1),
                         Expanded(
                           child: TextFormField(

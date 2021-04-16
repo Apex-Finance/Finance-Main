@@ -283,6 +283,16 @@ class Transactions with ChangeNotifier {
     //   });
     // });
   }
+
+  Stream<QuerySnapshot> getRecentTransactions(BuildContext context, int count) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('Transactions')
+        .orderBy("date", descending: true)
+        .limit(count)
+        .snapshots();
+  }
   // Sum the expenses for the month
   // double get monthlyExpenses {
   //   var sum = 0.00;
