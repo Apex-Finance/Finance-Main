@@ -1,12 +1,13 @@
-import 'package:Plutus/models/category.dart';
-import 'package:Plutus/models/transaction.dart';
+// Imported Flutter packages
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
 
-import './new_budget_screens/income_screen.dart';
+// Imported Plutus files
+import '../models/category.dart';
+import '../models/transaction.dart';
 import '../models/budget.dart';
 import '../models/month_changer.dart';
 import '../widgets/budget_list_tile.dart';
@@ -63,7 +64,6 @@ class _BudgetScreenState extends State<BudgetScreen> {
   Widget build(BuildContext context) {
     final budgetDataProvider = Provider.of<BudgetDataProvider>(context);
     var monthData = Provider.of<MonthChanger>(context);
-    var monthlyTransactions = Provider.of<Transactions>(context);
     var transactionDataProvider =
         Provider.of<Transactions>(context, listen: false);
 
@@ -96,10 +96,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                 color: Theme.of(context).primaryColor),
                             textAlign: TextAlign.center,
                           ),
-                          RaisedButton(
+                          ElevatedButton(
                             child: Text('Add Budget'),
-                            color: Theme.of(context).primaryColor,
-                            textColor: Theme.of(context).canvasColor,
+                            style: ElevatedButton.styleFrom(
+                              primary: Theme.of(context).primaryColor,
+                              onPrimary: Theme.of(context).canvasColor,
+                            ),
                             onPressed: () =>
                                 _enterBudget(context, new Budget.empty()),
                           ),

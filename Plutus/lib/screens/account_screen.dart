@@ -2,11 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:Plutus/widgets/update_email_form.dart';
-import 'package:Plutus/widgets/update_password_form.dart';
 
 // Imported Plutus files
 import '../providers/auth.dart';
+import '../widgets/update_email_form.dart';
+import '../widgets/update_password_form.dart';
 
 class AccountScreen extends StatefulWidget {
   static const routeName = '/account';

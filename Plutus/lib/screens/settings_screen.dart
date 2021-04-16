@@ -1,7 +1,9 @@
+// Imported Flutter packages
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:provider/provider.dart';
 
+// Imported Plutus files
 import '../providers/color.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -18,15 +20,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Widget _colorOption(String name, Color foreground, Color background,
       int index, Function setColorIndex, BuildContext context) {
-    return RaisedButton(
-      padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-          bottom: Radius.circular(20),
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+            bottom: Radius.circular(20),
+          ),
         ),
+        primary:
+            Colors.grey[600], // TODO Does this need to be hard-coded colors
       ),
-      color: Colors.grey[600],
       child: Row(
         children: [
           Icon(Icons.circle,
@@ -163,14 +168,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   context);
                             }),
                       ),
-                      RaisedButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
-                            bottom: Radius.circular(20),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20),
+                              bottom: Radius.circular(20),
+                            ),
                           ),
+                          primary: Colors
+                              .amber, //TODO is this supposed to be hard-coded?
                         ),
-                        color: Colors.amber,
                         child: Text(
                           'Default',
                           style: TextStyle(

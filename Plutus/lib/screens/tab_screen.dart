@@ -1,14 +1,16 @@
+// Imported Dart packages
 import 'dart:ui';
-import 'package:Plutus/widgets/goals_form.dart';
+
+// Imported Flutter packages
 import 'package:flutter/material.dart';
 
+// Imported Plutus files
 import './budget_screen.dart';
 import './transaction_screen.dart';
 import './dashboard_screen.dart';
 import './goal_screen.dart';
 import '../widgets/transaction_form.dart';
 import '../widgets/tappable_fab_circular_menu.dart';
-import 'new_budget_screens/income_screen.dart';
 
 bool _isOpen = false; // Determines if Fab_Circular_Menu is open
 
@@ -36,8 +38,8 @@ class _TabScreenState extends State<TabScreen> {
     setState(() {
       _selectedPageIndex = index;
     });
-  }
 
+  // TODO Find out why this is commented out
   // Pull up budget form when FAB is tapped; add the returned budget to the list of budgets
   // doesn't work anymore but will get removed anyways because only doing transactions
   // void _enterBudget(BuildContext context) {
@@ -64,6 +66,7 @@ class _TabScreenState extends State<TabScreen> {
     fabKey.currentState.close();
   }
 
+  // TODO Find out why this is commented out
   // Pull up goal form when FAB is tapped; add the returned goal to the list of goals
   // void _enterGoal(BuildContext context) {
   //   showModalBottomSheet(
@@ -87,6 +90,7 @@ class _TabScreenState extends State<TabScreen> {
       GoalScreen(),
     ];
 
+    // TODO Find out why this is commented out
     // GestureDetector wraps entire widget to ensure that users can close the Fab_Circular_Menu from
     // anywhere in the app. Absorb Pointer prevents accidental touches to interactable widgets
     // (i.e. buttons, arrows) on other screens when Fab_Circular_Menu is open
@@ -112,13 +116,14 @@ class _TabScreenState extends State<TabScreen> {
             ),
           ],
         ),
-        // Scale the button up in size
+        // TODO Scale the button up in size
         floatingActionButton: Transform.scale(
           scale: 1.2,
           child: FloatingActionButton(
             onPressed: () => _enterTransaction(context),
             child: Icon(Icons.add),
             backgroundColor: Theme.of(context).primaryColor,
+            // TODO Find out why this is commented out
             // TappableFabCircularMenu(
             //   alignment: Alignment.bottomCenter,
             //   animationDuration: Duration(milliseconds: 500),
@@ -138,6 +143,8 @@ class _TabScreenState extends State<TabScreen> {
             //     ),
 
             //     // Transaction form
+            // 
+            // TODO Find out why this is commented out
             //     Ink(
             //       decoration: const ShapeDecoration(
             //         color: Color(0xFF212121),
