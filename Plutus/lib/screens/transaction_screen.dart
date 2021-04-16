@@ -57,7 +57,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
           padding: const EdgeInsets.only(top: 20.0),
           child: Container(
             width: 250,
-            child: buildMonthChanger(context, monthData),
+            child: monthData.buildMonthChanger(context),
           ),
         ),
         StreamBuilder<QuerySnapshot>(
@@ -105,41 +105,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
       ],
     );
   }
-}
-
-Row buildMonthChanger(BuildContext context, MonthChanger monthData) {
-  return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-    if (monthData.selectedMonth > DateTime.now().month ||
-        monthData.selectedYear >= DateTime.now().year)
-      IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Theme.of(context).primaryColor,
-          ),
-          onPressed: () => monthData.changeMonth('back')),
-    Expanded(
-      child: Center(
-        child: Text(
-          '${MonthChanger.months[monthData.selectedMonth - 1]}' +
-              (monthData.selectedYear == DateTime.now().year
-                  ? ''
-                  : ' ${monthData.selectedYear}'),
-          style: TextStyle(
-            color: Theme.of(context).primaryColor,
-            fontSize: 16,
-          ),
-        ),
-      ),
-    ),
-    if (monthData.selectedMonth < DateTime.now().month ||
-        monthData.selectedYear <= DateTime.now().year)
-      IconButton(
-          icon: Icon(
-            Icons.arrow_forward,
-            color: Theme.of(context).primaryColor,
-          ),
-          onPressed: () => monthData.changeMonth('forward')),
-  ]);
 }
 
 class TransactionsCard extends StatefulWidget {

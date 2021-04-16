@@ -21,6 +21,15 @@ List<Category> categoryList = [];
 List<FocusNode> catAmountFocusNodes = [];
 
 class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
+  double activeAmount = 0;
+  Category activeCategory = Category();
+
+  void setActiveCategory(Category category, double amount) {
+    activeCategory = category;
+    activeAmount = amount ?? 0;
+    return;
+  }
+
   // Sets the category and amount for the current ListTile being built
   void calculateAmountLeft(int index) {
     double amount = 0.00;
@@ -174,6 +183,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                             catAmountFocusNodes,
                                             index,
                                             widget.budget,
+                                            setActiveCategory,
                                           ),
                                         );
                                       }
@@ -192,6 +202,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                   catAmountFocusNodes,
                                   index,
                                   widget.budget,
+                                  setActiveCategory,
                                 ),
                               );
                             }
@@ -207,12 +218,13 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                   child: Builder(
                     builder: (context) => FloatingActionButton.extended(
                       backgroundColor: Theme.of(context).primaryColor,
-                      onPressed: () {
-                        // Provider.of<CategoryDataProvider>(context,
-                        //         listen:
-                        //             false) //TODO ALEX no setcategoryamount() for budget yet
-                        //     .uploadCategory(
-                        //         widget.budget.getID(), category, context);
+                      onPressed: () async {
+                        await categoryDataProvider.setCategoryAmount(
+                            widget.budget.getID(),
+                            activeCategory,
+                            activeAmount,
+                            context);
+                        calculateAmountLeft(0);
                         setState(
                           () {
                             if (widget.budget.getRemainingAmountNew() < -0.001)
