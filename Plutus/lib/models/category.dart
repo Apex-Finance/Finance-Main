@@ -81,7 +81,7 @@ class CategoryDataProvider with ChangeNotifier {
     return category;
   }
 
-  void uploadCategory(
+  Future uploadCategory(
       String budgetID, Category category, BuildContext context) async {
     await FirebaseFirestore.instance
         .collection('users')
@@ -100,7 +100,19 @@ class CategoryDataProvider with ChangeNotifier {
     );
   }
 
-  void removeCategory(
+  Future setCategoryAmount(String budgetId, Category category, double amount,
+      BuildContext context) async {
+    category.setAmount(amount);
+    if (amount > 0) {
+      await uploadCategory(budgetId, category, context);
+    }
+    if (amount == 0) {
+      await removeCategory(budgetId, category, context);
+    }
+    notifyListeners();
+  }
+
+  Future removeCategory(
       String budgetID, Category category, BuildContext context) async {
     await FirebaseFirestore.instance
         .collection('users')
