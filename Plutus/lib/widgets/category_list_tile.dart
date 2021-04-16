@@ -13,9 +13,10 @@ class CategoryListTile extends StatefulWidget {
   List<FocusNode> focusNode;
   int index;
   Budget budget;
+  Function activeCategoryHandler;
 
   CategoryListTile(this.categoryList, this.categoryHandler, this.focusNode,
-      this.index, this.budget);
+      this.index, this.budget, this.activeCategoryHandler);
 
   @override
   _CategoryListTileState createState() => _CategoryListTileState();
@@ -143,7 +144,11 @@ class _CategoryListTileState extends State<CategoryListTile> {
                   style: Theme.of(context).textTheme.bodyText1,
                   keyboardType: TextInputType.number,
                   controller: _controller,
-                  onChanged: (_) => {},
+                  onChanged: (_) => {
+                    widget.activeCategoryHandler(
+                        widget.categoryList[widget.index],
+                        double.tryParse(_controller.text)),
+                  },
                 ),
               ),
             ),
