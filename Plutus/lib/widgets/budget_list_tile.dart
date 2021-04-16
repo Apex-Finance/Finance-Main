@@ -160,18 +160,30 @@ class _BudgetListTileState extends State<BudgetListTile> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 15, vertical: 4),
                             color: Colors.grey[550],
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Total',
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontSize: 18,
-                                        // fontWeight: FontWeight.bold,
+                            height: snapshot.data.docs.isEmpty
+                                ? 100
+                                : min(snapshot.data.docs.length * 200.0, 250),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Total',
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: 18,
+                                          // fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        '\$${transactionExpenses.toStringAsFixed(2)}',
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: 18),
                                       ),
                                     ),
                                     Text(
