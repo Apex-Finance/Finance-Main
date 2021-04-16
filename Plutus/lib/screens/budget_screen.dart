@@ -73,7 +73,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
           padding: const EdgeInsets.only(top: 20.0),
           child: Container(
             width: 250,
-            child: buildMonthChanger(context, monthData),
+            child: monthData.buildMonthChanger(context),
           ),
         ),
         Expanded(
@@ -273,13 +273,17 @@ class _BudgetScreenState extends State<BudgetScreen> {
                                               categorySnapshot.data.docs.length,
                                           itemBuilder: (context, index) {
                                             return BudgetListTile(
-                                                Provider.of<CategoryDataProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .initializeCategory(
-                                                        categorySnapshot
-                                                            .data.docs[index]),
-                                                budgetTransactions);
+                                              Provider.of<CategoryDataProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .initializeCategory(
+                                                      categorySnapshot
+                                                          .data.docs[index]),
+                                              budgetTransactions,
+                                              ValueKey({
+                                                'monthData.selectedMonth': index
+                                              }), // gives a unique key to each category; necessary to stop open listtiles from one month make another month's open
+                                            );
                                           });
                                     } else {
                                       if (!categorySnapshot.hasData) {
@@ -311,39 +315,4 @@ class _BudgetScreenState extends State<BudgetScreen> {
       ],
     );
   }
-}
-
-Row buildMonthChanger(BuildContext context, MonthChanger monthData) {
-  return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-    if (monthData.selectedMonth > DateTime.now().month ||
-        monthData.selectedYear >= DateTime.now().year)
-      IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Theme.of(context).primaryColor,
-          ),
-          onPressed: () => monthData.changeMonth('back')),
-    Expanded(
-      child: Center(
-        child: Text(
-          '${MonthChanger.months[monthData.selectedMonth - 1]}' +
-              (monthData.selectedYear == DateTime.now().year
-                  ? ''
-                  : ' ${monthData.selectedYear}'),
-          style: TextStyle(
-            color: Theme.of(context).primaryColor,
-            fontSize: 16,
-          ),
-        ),
-      ),
-    ),
-    if (monthData.selectedMonth < DateTime.now().month ||
-        monthData.selectedYear <= DateTime.now().year)
-      IconButton(
-          icon: Icon(
-            Icons.arrow_forward,
-            color: Theme.of(context).primaryColor,
-          ),
-          onPressed: () => monthData.changeMonth('forward')),
-  ]);
 }

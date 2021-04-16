@@ -81,15 +81,16 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           title: "Ready to start your journey to financial freedom?",
           bodyWidget: RaisedButton(
             child: Text('Sign me up!'),
-            onPressed: () =>
-                Navigator.of(context).pushNamed(AuthScreen.routeName),
+            onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                AuthScreen.routeName, (Route<dynamic> route) => false),
             color: Colors.amber,
           ),
           image: _buildImage('Freedom.jpg'),
           decoration: pageDecoration,
         ),
       ],
-      onDone: () => Navigator.of(context).pushNamed(AuthScreen.routeName),
+      onDone: () => Navigator.of(context).pushNamedAndRemoveUntil(
+          AuthScreen.routeName, (Route<dynamic> route) => false),
       onSkip: () => introKey.currentState
           ?.animateScroll(5), // You can override onSkip callback
       showSkipButton: true,
