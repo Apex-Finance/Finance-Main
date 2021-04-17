@@ -157,86 +157,87 @@ class _BudgetListTileState extends State<BudgetListTile> {
                         ),
                         if (_expanded)
                           Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 4),
-                            color: Colors.grey[550],
-                            height: snapshot.data.docs.isEmpty
-                                ? 100
-                                : min(snapshot.data.docs.length * 200.0, 250),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Total',
-                                        style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                          fontSize: 18,
-                                          // fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        '\$${transactionExpenses.toStringAsFixed(2)}',
-                                        style: TextStyle(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 4),
+                              color: Colors.grey[550],
+                              height: snapshot.data.docs.isEmpty
+                                  ? 100
+                                  : min(snapshot.data.docs.length * 200.0, 250),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Total',
+                                          style: TextStyle(
                                             color:
                                                 Theme.of(context).primaryColor,
-                                            fontSize: 18),
-                                      ),
-                                      Text(
-                                        '\$${transactionExpenses.toStringAsFixed(2)}',
-                                        style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            fontSize: 18),
-                                      ),
-                                    ],
-                                  ),
-                                  Divider(
-                                    color: Theme.of(context).primaryColor,
-                                    height: 10,
-                                    thickness: 2,
-                                    indent: 0,
-                                    endIndent: 0,
-                                  ),
-                                  SingleChildScrollView(
-                                    child: snapshot.data.docs.isEmpty
-                                        ? Text(
-                                            'No transaction has been added yet',
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                                fontSize: 18),
-                                            textAlign: TextAlign.center,
-                                          )
-                                        : Container(
-                                            height: min(
-                                                snapshot.data.docs.length *
-                                                    100.0,
-                                                200.0),
-                                            child: ListView.builder(
-                                              itemCount:
-                                                  snapshot.data.docs.length,
-                                              itemBuilder: (context, index) {
-                                                return TransactionListTile(
-                                                    Provider.of<
-                                                                Transaction
-                                                                    .Transactions>(
-                                                            context,
-                                                            listen: false)
-                                                        .initializeTransaction(
-                                                            snapshot.data
-                                                                .docs[index]));
-                                              },
-                                            ),
+                                            fontSize: 18,
+                                            // fontWeight: FontWeight.bold,
                                           ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                                        ),
+                                        Text(
+                                          '\$${transactionExpenses.toStringAsFixed(2)}',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 18),
+                                        ),
+                                        Text(
+                                          '\$${transactionExpenses.toStringAsFixed(2)}',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 18),
+                                        ),
+                                      ],
+                                    ),
+                                    Divider(
+                                      color: Theme.of(context).primaryColor,
+                                      height: 10,
+                                      thickness: 2,
+                                      indent: 0,
+                                      endIndent: 0,
+                                    ),
+                                    SingleChildScrollView(
+                                      child: snapshot.data.docs.isEmpty
+                                          ? Text(
+                                              'No transaction has been added yet',
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  fontSize: 18),
+                                              textAlign: TextAlign.center,
+                                            )
+                                          : Container(
+                                              height: min(
+                                                  snapshot.data.docs.length *
+                                                      100.0,
+                                                  200.0),
+                                              child: ListView.builder(
+                                                itemCount:
+                                                    snapshot.data.docs.length,
+                                                itemBuilder: (context, index) {
+                                                  return TransactionListTile(
+                                                      Provider.of<
+                                                                  Transaction
+                                                                      .Transactions>(
+                                                              context,
+                                                              listen: false)
+                                                          .initializeTransaction(
+                                                              snapshot.data
+                                                                      .docs[
+                                                                  index]));
+                                                },
+                                              ),
+                                            ),
+                                    ),
+                                  ],
+                                ),
+                              )),
                       ],
                     ),
                   ),

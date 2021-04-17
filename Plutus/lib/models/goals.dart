@@ -1,6 +1,9 @@
+// Imported Flutter packages
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+// Imported Plutus files
 import '../providers/auth.dart';
 
 class Goal {
@@ -50,6 +53,7 @@ class Goal {
     for (var doc in snapshot.docs) {
       amountSaved += doc.data()['amount'];
     }
+    // TODO Find out why this is commented out
     // goalTransactions.listen((snapshot) {
     //   if (snapshot.docs.isNotEmpty) {
     //     print(snapshot.docs.length);
@@ -125,5 +129,15 @@ class GoalDataProvider with ChangeNotifier {
         .collection('Goals')
         .doc(goal.getID())
         .delete();
+  }
+
+  Stream<QuerySnapshot> getUpcomingGoals(BuildContext context, int count) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('Goals')
+        .orderBy('dateOfGoal', descending: true)
+        .limit(count)
+        .snapshots();
   }
 }
