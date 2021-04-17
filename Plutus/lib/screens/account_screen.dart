@@ -1,8 +1,11 @@
+// Imported Flutter packages
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Plutus/widgets/update_email_form.dart';
 import 'package:Plutus/widgets/update_password_form.dart';
+
+// Imported Plutus files
 import '../providers/auth.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -32,6 +35,7 @@ class _AccountScreenState extends State<AccountScreen> {
             color: Theme.of(context).canvasColor,
           ),
         ),
+        // TODO Do we need this commented?
         // IconButton(
         //icon:
         actions: [
@@ -48,6 +52,7 @@ class _AccountScreenState extends State<AccountScreen> {
         ],
         // ),
       ),
+      // TODO Find out why this is commented out
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {
       //     Navigator.of(context).pushNamed('/dashboard');
@@ -112,14 +117,16 @@ class _AccountScreenState extends State<AccountScreen> {
                           size: 200,
                           color: Theme.of(context).primaryColor,
                         ),
-                        RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(20),
-                              bottom: Radius.circular(20),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
+                                bottom: Radius.circular(20),
+                              ),
                             ),
+                            primary: Theme.of(context).primaryColor,
                           ),
-                          color: Theme.of(context).primaryColor,
                           child: Text(
                             'Change Password',
                             style: TextStyle(

@@ -1,15 +1,11 @@
+// Imported Flutter packages
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-import './transaction.dart' as Transaction;
-import './categories.dart';
-import './month_changer.dart';
+// Imported Plutus files
 import '../providers/auth.dart';
-import '../models/category.dart' as Category;
-
-import 'dart:io';
 
 class Budget {
   String _id;
@@ -70,6 +66,7 @@ class Budget {
     return _date;
   }
 
+  // TODO Find out why this is commented out
   // void setUnbudgetedCategory() {
   //   // adds categories that were not budgeted but expenses were made
   //   for (var transaction in transactions)
@@ -189,4 +186,16 @@ class BudgetDataProvider with ChangeNotifier {
         .get()
         .then((querySnapshot) => querySnapshot.docs.first.id);
   }
+  // TODO Find out why this is commented out
+  // String getBudgetID(DateTime date, BuildContext context) {
+  //   var something = FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(Provider.of<Auth>(context, listen: false).getUserId())
+  //       .collection('budgets')
+  //       .where('date', isEqualTo: date)
+  //       .snapshots()
+  //       .first;
+
+  //   something.whenComplete((item) => return item)
+  // }
 }

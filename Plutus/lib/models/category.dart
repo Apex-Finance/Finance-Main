@@ -1,8 +1,10 @@
+// Imported Flutter packages
 import 'package:Plutus/models/categories.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+// Imported Plutus files
 import '../providers/auth.dart';
 import './categories.dart';
 
@@ -147,6 +149,7 @@ class CategoryDataProvider with ChangeNotifier {
         Provider.of<Auth>(context).getUserId(),
       ],
     ).snapshots();
+    // TODO Find out why this is commented out
     // var defaultCategories = getDefaultCategories();
     // var customCategories = getCustomCategories(context);
 

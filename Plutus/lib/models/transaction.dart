@@ -1,9 +1,11 @@
+// Imported Flutter packages
 import 'package:Plutus/models/month_changer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
+// Imported Plutus files
 import '../providers/auth.dart';
 import '../models/goals.dart';
 
@@ -209,12 +211,14 @@ class Transactions with ChangeNotifier {
         .collection('Transactions')
         .doc(transaction.getID())
         .delete();
+    // TODO Find out why this is commented out
     // final transactionIndex =
     //     _transactions.indexWhere((transaction) => transaction.id == id);
     // _transactions.removeAt(transactionIndex);
     notifyListeners();
   }
 
+  // TODO Find out why this is commented out
   // // Take all transactions, filter out only the ones from the selected month, and reverse the order from newest to oldest
   // List<Transaction> getMonthlyTransactions() {
   //   var unsorted = _transactions
@@ -299,6 +303,7 @@ class Transactions with ChangeNotifier {
     } catch (e) {
       print(e.toString());
     }
+    // TODO Find out why this is commented out
     // goalTransactions.forEach((transactionSnapshot) {
     //   var transactions = transactionSnapshot.docs;
     //   transactions.forEach((transaction) {
@@ -319,6 +324,7 @@ class Transactions with ChangeNotifier {
         .limit(count)
         .snapshots();
   }
+  // TODO Find out why this is commented out
   // Sum the expenses for the month
   // double get monthlyExpenses {
   //   var sum = 0.00;

@@ -33,6 +33,10 @@ void main() async {
       .then((_) async {
     await Firebase.initializeApp();
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    ErrorWidget.builder = (FlutterErrorDetails details) => Scaffold(
+        body: Center(
+            child: (Text("Ooops something happened here!",
+                style: TextStyle(color: Colors.black)))));
     runApp(
       MultiProvider(providers: [
         ChangeNotifierProvider(create: (context) => TabProvider()),
