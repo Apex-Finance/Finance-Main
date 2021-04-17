@@ -177,15 +177,16 @@ class BudgetDataProvider with ChangeNotifier {
         .delete();
   }
 
-  // String getBudgetID(DateTime date, BuildContext context) {
-  //   var something = FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(Provider.of<Auth>(context, listen: false).getUserId())
-  //       .collection('budgets')
-  //       .where('date', isEqualTo: date)
-  //       .snapshots()
-  //       .first;
-
-  //   something.whenComplete((item) => return item)
-  // }
+  Future<String> getBudgetID(DateTime date, BuildContext context) async {
+    return await FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('Budgets')
+        .where(
+          'date',
+          isEqualTo: DateTime(date.year, date.month),
+        )
+        .get()
+        .then((querySnapshot) => querySnapshot.docs.first.id);
+  }
 }

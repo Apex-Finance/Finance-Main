@@ -130,10 +130,49 @@ class _BudgetScreenState extends State<BudgetScreen> {
                         1,
                       ),
                     );
-
                 // Get the categories selected by the user for this budget
                 var budgetCategories = BudgetDataProvider()
                     .getBudgetCategories(context, budget.getID());
+
+                // Gets unbudgeted categories where transactions were made
+                var budgetCat = FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(Provider.of<Auth>(context, listen: false).getUserId())
+                    .collection('Budgets')
+                    .doc(budget.getID())
+                    .collection('categories');
+
+                List<String> categoryIds = [];
+
+                budgetCat.get().then((catSnapshot) {
+                  if (catSnapshot.docs.isNotEmpty)
+                    catSnapshot.docs.forEach((doc) {
+                      categoryIds.add(doc.id);
+                    });
+                });
+                categoryIds.forEach((element) {
+                  print(element);
+                });
+                budgetTransactions.get().then((transSnapshot) {
+                  transSnapshot.docs.forEach((doc) async {
+                    if (transSnapshot.docs.isNotEmpty) {
+                      if (!categoryIds.contains(doc.data()['categoryID'])) {
+                        // initialize category with relevant data from transaction
+                        var category = Category();
+                        category.setID(doc.data()['categoryID']);
+                        category.setTitle(doc.data()['categoryTitle']);
+                        category.setCodepoint(doc.data()['categoryCodepoint']);
+                        category.setAmount(0.00); // 0 because unbudgeted
+
+                        await Provider.of<CategoryDataProvider>(context,
+                                listen: false)
+                            .uploadCategory(budget.getID(), category, context);
+
+                        categoryIds.add(doc.data()['categoryID']);
+                      }
+                    }
+                  });
+                });
 
                 return Container(
                   margin: EdgeInsets.only(top: 25),
