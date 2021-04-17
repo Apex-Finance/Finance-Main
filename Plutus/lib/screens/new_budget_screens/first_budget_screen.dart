@@ -234,8 +234,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                         setState(
                           () {
                             if (widget.budget.getRemainingAmountNew() < -0.001)
-                              Scaffold.of(context).showSnackBar(
-                                //ScaffoldMessenger.of(context).showSnackBar(
+
+                              ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   behavior: SnackBarBehavior.floating,
                                   content: Padding(
@@ -250,8 +250,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                               );
                             else if (widget.budget.getRemainingAmountNew() >
                                 0.001) {
-                              Scaffold.of(context).showSnackBar(
-                                //ScaffoldMessenger.of(context).showSnackBar(
+                              ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   behavior: SnackBarBehavior.floating,
                                   content: Padding(
