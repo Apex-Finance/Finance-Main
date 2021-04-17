@@ -9,6 +9,8 @@ import './goal_screen.dart';
 import '../widgets/transaction_form.dart';
 import '../widgets/tappable_fab_circular_menu.dart';
 import 'new_budget_screens/income_screen.dart';
+import '../providers/tab.dart';
+import 'package:provider/provider.dart';
 
 bool _isOpen = false; // Determines if Fab_Circular_Menu is open
 
@@ -27,14 +29,16 @@ class _TabScreenState extends State<TabScreen> {
   }
 
   List<Widget> _pages = []; // List of screens for the BottomNavigationBar
-  int _selectedPageIndex = 0; // Defaults to Dashboard screen
+  int _selectedPageIndex;
 
   // Select a screen from the list of screens; manages tabs
   void _selectPage(int index) {
     if (index == 2)
       return; // if blank "tab" is selected, ignore it; a workaround to give FAB more space
     setState(() {
-      _selectedPageIndex = index;
+      Provider.of<TabProvider>(context, listen: false)
+          .setSelectedPageIndex(index);
+      // _selectedPageIndex = index;
     });
   }
 
@@ -79,6 +83,8 @@ class _TabScreenState extends State<TabScreen> {
   // Manages tabs
   @override
   Widget build(BuildContext context) {
+    _selectedPageIndex = Provider.of<TabProvider>(context)
+        .getSelectedPageIndex(); // Defaults to Dashboard screen
     _pages = [
       DashboardScreen(),
       BudgetScreen(),

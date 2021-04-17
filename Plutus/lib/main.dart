@@ -25,6 +25,7 @@ import './screens/tab_screen.dart';
 import './screens/goal_screen.dart';
 import './screens/new_budget_screens/first_budget_screen.dart';
 import './screens/auth_screen.dart';
+import './providers/tab.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,6 +35,7 @@ void main() async {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     runApp(
       MultiProvider(providers: [
+        ChangeNotifierProvider(create: (context) => TabProvider()),
         ChangeNotifierProvider(create: (context) => ColorProvider()),
         ChangeNotifierProvider(create: (context) => GoalDataProvider()),
         ChangeNotifierProvider(
