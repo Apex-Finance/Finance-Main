@@ -63,7 +63,10 @@ class _TabScreenState extends State<TabScreen> {
       context: context,
       builder: (_) => TransactionForm(),
     ).then((newTransaction) {
-      if (newTransaction == null) return;
+      if (newTransaction == null)
+        return;
+      else
+        setState(() {}); // updates budget if transaction is made
     });
     fabKey.currentState.close();
   }

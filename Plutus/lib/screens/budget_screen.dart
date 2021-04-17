@@ -134,42 +134,72 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 var budgetCategories = BudgetDataProvider()
                     .getBudgetCategories(context, budget.getID());
 
+                // TODO: Alex, please check below code; specifically add error handling if mine is insufficient (like if db doesn't respond) and check that my async/await and .then() are all used properly and nothing will break if db is slow (this was an issue when programming it, I think I got it now though); additionally check for efficiency of db calls
                 // Gets unbudgeted categories where transactions were made
-                var budgetCat = FirebaseFirestore.instance
+
+                List<String> categoryIds = [];
+                List<String> unbudgetedCategoriesIdsWithoutTransactions = [];
+
+                // Gets budgeted categories and adds those to a list
+                FirebaseFirestore.instance
                     .collection('users')
                     .doc(Provider.of<Auth>(context, listen: false).getUserId())
                     .collection('Budgets')
                     .doc(budget.getID())
-                    .collection('categories');
-
-                List<String> categoryIds = [];
-
-                budgetCat.get().then((catSnapshot) {
-                  if (catSnapshot.docs.isNotEmpty)
+                    .collection('categories')
+                    .get()
+                    .then((catSnapshot) {
+                  //.then is necessary to make sure db completes before moving on, otherwise budget gets messed up
+                  if (catSnapshot.docs.isNotEmpty) {
                     catSnapshot.docs.forEach((doc) {
-                      categoryIds.add(doc.id);
-                    });
-                });
-                categoryIds.forEach((element) {
-                  print(element);
-                });
-                budgetTransactions.get().then((transSnapshot) {
-                  transSnapshot.docs.forEach((doc) async {
-                    if (transSnapshot.docs.isNotEmpty) {
-                      if (!categoryIds.contains(doc.data()['categoryID'])) {
-                        // initialize category with relevant data from transaction
-                        var category = Category();
-                        category.setID(doc.data()['categoryID']);
-                        category.setTitle(doc.data()['categoryTitle']);
-                        category.setCodepoint(doc.data()['categoryCodepoint']);
-                        category.setAmount(0.00); // 0 because unbudgeted
+                      categoryIds.add(doc
+                          .id); //categoryIds will hold all categories currently in budget (only budgeted ones on first run; both budgeted, and those added to the budget because transactions were made, on future runs)
 
+                      if (doc.data()['amount'] ==
+                          0.00) //gets categories that were unbudgeted but transactions were made
+                        unbudgetedCategoriesIdsWithoutTransactions.add(doc.id);
+                    });
+                  }
+                }).then((catSnap) {
+                  // gets transactions made for that month and adds those categories if they were unbudgeted for
+                  budgetTransactions.get().then((transSnapshot) {
+                    if (transSnapshot.docs.isNotEmpty) {
+                      transSnapshot.docs.forEach((doc) async {
+                        if (!categoryIds.contains(doc.data()['categoryID'])) {
+                          // if a transaction is found whose category is not budgeted for, add that category to the budget
+                          // initialize category with relevant data from transaction
+                          var category = Category();
+                          category.setID(doc.data()['categoryID']);
+                          category.setTitle(doc.data()['categoryTitle']);
+                          category
+                              .setCodepoint(doc.data()['categoryCodepoint']);
+                          category.setAmount(0.00); // 0 because unbudgeted
+
+                          await Provider.of<CategoryDataProvider>(context,
+                                  listen: false)
+                              .uploadCategory(
+                                  budget.getID(), category, context);
+
+                          categoryIds.add(doc.data()['categoryID']);
+                        }
+                        // else will remove categories that were unbudgeted, a transaction was made in that category,
+                        // thus it becomes part of the budget with 0.00 amount, but then that transaction(s) was deleted
+                        else {
+                          // transaction's category is in categoryIds
+                          if (unbudgetedCategoriesIdsWithoutTransactions
+                              .contains(doc.data()[
+                                  'categoryID'])) // if a budget category has 0.00 amount, but there is a transaction with that category, remove it
+                            unbudgetedCategoriesIdsWithoutTransactions
+                                .remove(doc.data()['categoryID']);
+                        }
+                      });
+                      // unbudgetedCat... only contains categories where amount is 0 and no transactions were made for it; remove those from budget
+                      unbudgetedCategoriesIdsWithoutTransactions
+                          .forEach((catID) async {
                         await Provider.of<CategoryDataProvider>(context,
                                 listen: false)
-                            .uploadCategory(budget.getID(), category, context);
-
-                        categoryIds.add(doc.data()['categoryID']);
-                      }
+                            .removeCategory(budget.getID(), catID, context);
+                      });
                     }
                   });
                 });
