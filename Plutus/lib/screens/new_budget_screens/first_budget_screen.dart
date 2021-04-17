@@ -38,9 +38,12 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
     categoryList.forEach((category) {
       amount += category.getAmount();
     });
-    setState(() {
+    if (mounted)
+      setState(() {
+        widget.budget.categoryAmount = amount;
+      });
+    else
       widget.budget.categoryAmount = amount;
-    });
     return;
   }
 
@@ -231,7 +234,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                         setState(
                           () {
                             if (widget.budget.getRemainingAmountNew() < -0.001)
-                              ScaffoldMessenger.of(context).showSnackBar(
+                              Scaffold.of(context).showSnackBar(
+                                //ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   behavior: SnackBarBehavior.floating,
                                   content: Padding(
@@ -246,7 +250,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                               );
                             else if (widget.budget.getRemainingAmountNew() >
                                 0.001) {
-                              ScaffoldMessenger.of(context).showSnackBar(
+                              Scaffold.of(context).showSnackBar(
+                                //ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   behavior: SnackBarBehavior.floating,
                                   content: Padding(
