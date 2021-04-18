@@ -38,6 +38,7 @@ class _TabScreenState extends State<TabScreen> {
     setState(() {
       _selectedPageIndex = index;
     });
+  }
 
   // TODO Find out why this is commented out
   // Pull up budget form when FAB is tapped; add the returned budget to the list of budgets
@@ -143,7 +144,7 @@ class _TabScreenState extends State<TabScreen> {
             //     ),
 
             //     // Transaction form
-            // 
+            //
             // TODO Find out why this is commented out
             //     Ink(
             //       decoration: const ShapeDecoration(

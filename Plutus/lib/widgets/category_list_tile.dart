@@ -1,9 +1,10 @@
+// Imported Flutter packages
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
 
+// Imported Plutus files
 import '../models/category.dart';
-import '../models/category_icon.dart';
 import '../models/budget.dart';
 
 // ignore: must_be_immutable
@@ -31,6 +32,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
             : '');
     return ListTile(
       tileColor: Colors.grey[850],
+      // TODO Do we need this still?
       // leading: CircleAvatar(child: Icon(IcondData(categoryIcon[widget.category.getCodepoint()]))),
       title: AutoSizeText(
         widget.categoryList[widget.index].getTitle(),
@@ -53,7 +55,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                       if (double.parse(double.parse(_controller.text)
                               .toStringAsFixed(2)) <
                           0.00) {
-                        Scaffold.of(context).showSnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             behavior: SnackBarBehavior.floating,
                             content: Padding(
@@ -88,7 +90,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                       widget.categoryHandler(widget.index);
                     } // validates for numbers < 0
                     else if (_controller.text.isNotEmpty) {
-                      Scaffold.of(context).showSnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           behavior: SnackBarBehavior.floating,
                           content: Padding(
