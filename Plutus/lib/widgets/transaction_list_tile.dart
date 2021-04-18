@@ -1,9 +1,11 @@
+// Imported Flutter packages
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
+// Imported Plutus files
 import '../models/transaction.dart' as Transaction;
 import '../models/category_icon.dart';
 import './transaction_form.dart';
@@ -59,13 +61,13 @@ class _TransactionListTileState extends State<TransactionListTile> {
                   'This cannot be undone later.',
                 ),
                 actions: <Widget>[
-                  FlatButton(
+                  TextButton(
                     child: Text('No'),
                     onPressed: () {
                       Navigator.of(ctx).pop(false);
                     },
                   ),
-                  FlatButton(
+                  TextButton(
                     child: Text('Yes'),
                     onPressed: () {
                       Navigator.of(ctx).pop(true);
@@ -78,7 +80,7 @@ class _TransactionListTileState extends State<TransactionListTile> {
           onDismissed: (direction) {
             Provider.of<Transaction.Transactions>(context, listen: false)
                 .deleteTransaction(widget.transaction, context);
-            Scaffold.of(context)
+            ScaffoldMessenger.of(context)
               ..removeCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(

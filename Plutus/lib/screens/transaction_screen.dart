@@ -1,15 +1,15 @@
-import 'package:Plutus/models/month_changer.dart';
+// Imported Flutter packages
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
+// Imported Plutus files
+import '../models/month_changer.dart';
 import '../models/transaction.dart' as Transaction;
 import '../widgets/transaction_list_tile.dart';
-import 'package:provider/provider.dart';
-import '../models/month_changer.dart';
 import '../widgets/transaction_form.dart';
-import '../providers/auth.dart';
 
 class TransactionScreen extends StatefulWidget {
   static const routeName = '/transaction';
@@ -197,10 +197,12 @@ class NoTransactionsYetText extends StatelessWidget {
                   fontSize: 18, color: Theme.of(context).primaryColor),
               textAlign: TextAlign.center,
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Add Transaction'),
-              color: Theme.of(context).primaryColor,
-              textColor: Theme.of(context).canvasColor,
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).primaryColor,
+                onPrimary: Theme.of(context).canvasColor,
+              ),
               onPressed: () => enterTransactionsHandler(context),
             ),
           ],
