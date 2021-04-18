@@ -31,15 +31,13 @@ class PieChartCard extends StatelessWidget {
         return StreamBuilder<QuerySnapshot>(
           stream: categoryDataProvider.streamCategories(context),
           builder: (context, catSnapshot) {
-            if (!tranSnapshot.hasData ||
-                !catSnapshot.hasData ||
-                tranSnapshot.data.docs.isEmpty ||
-                catSnapshot.data.docs.isEmpty) {
-              return Container();
-            } else {
+            List<charts.Series<PiePiece, String>> pieSeriesData = [];
+            if (tranSnapshot.hasData &&
+                catSnapshot.hasData &&
+                tranSnapshot.data.docs.isNotEmpty &&
+                catSnapshot.data.docs.isNotEmpty) {
               List<PiePiece> pieData =
                   getPieData(tranSnapshot.data.docs, catSnapshot.data.docs);
-              List<charts.Series<PiePiece, String>> pieSeriesData = [];
 
               pieSeriesData.add(
                 charts.Series(
@@ -52,56 +50,62 @@ class PieChartCard extends StatelessWidget {
                   labelAccessorFn: (PiePiece row, _) => '${row.category}',
                 ),
               );
-
-              return Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(20),
-                    bottom: Radius.circular(20),
-                  ),
-                ),
-                child: Container(
-                  width: 400,
-                  height: 500,
-                  child: Column(
-                    children: [
-                      Text(
-                        'Dashboard chart',
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      SizedBox(height: 10),
-                      Expanded(
-                        child: charts.PieChart(
-                          pieSeriesData,
-                          animate: true,
-                          animationDuration: Duration(seconds: 2),
-                          behaviors: [
-                            new charts.DatumLegend(
-                              horizontalFirst: false,
-                              desiredMaxRows: 4,
-                              cellPadding:
-                                  new EdgeInsets.only(right: 4, bottom: 4),
-                              entryTextStyle: charts.TextStyleSpec(
-                                  color: charts
-                                      .MaterialPalette.purple.shadeDefault,
-                                  fontFamily: 'Georgia',
-                                  fontSize: 11),
-                            )
-                          ],
-                          defaultRenderer: new charts.ArcRendererConfig(
-                            arcWidth: 100,
-                            arcRendererDecorators: [
-                              new charts.ArcLabelDecorator(
-                                  labelPosition: charts.ArcLabelPosition.inside)
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
             }
+
+            return Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20),
+                  bottom: Radius.circular(20),
+                ),
+              ),
+              child: Container(
+                width: 400,
+                height: 500,
+                child: Column(
+                  children: [
+                    Text(
+                      'Dashboard chart',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                    SizedBox(height: 10),
+                    (!tranSnapshot.hasData ||
+                            !catSnapshot.hasData ||
+                            tranSnapshot.data.docs.isEmpty ||
+                            catSnapshot.data.docs.isEmpty)
+                        ? Container()
+                        : Expanded(
+                            child: charts.PieChart(
+                              pieSeriesData,
+                              animate: true,
+                              animationDuration: Duration(milliseconds: 500),
+                              behaviors: [
+                                new charts.DatumLegend(
+                                  horizontalFirst: false,
+                                  desiredMaxRows: 4,
+                                  cellPadding:
+                                      new EdgeInsets.only(right: 4, bottom: 4),
+                                  entryTextStyle: charts.TextStyleSpec(
+                                      color: charts
+                                          .MaterialPalette.purple.shadeDefault,
+                                      fontFamily: 'Georgia',
+                                      fontSize: 11),
+                                )
+                              ],
+                              defaultRenderer: new charts.ArcRendererConfig(
+                                arcWidth: 100,
+                                arcRendererDecorators: [
+                                  new charts.ArcLabelDecorator(
+                                      labelPosition:
+                                          charts.ArcLabelPosition.inside)
+                                ],
+                              ),
+                            ),
+                          ),
+                  ],
+                ),
+              ),
+            );
           },
         );
       },
