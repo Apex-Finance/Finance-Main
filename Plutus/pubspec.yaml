@@ -64,18 +64,18 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
-  flutter_launcher_icons: ^0.8.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.8.1
 
 flutter_icons:
   android: true
   ios: false # will become true when we incorporate ios code
-  image_path: "dev_assets/plutus48.png"
-  adaptive_icon_backround: "#000000" #black background
-  adaptive_icon_foreground: "dev_assets/plutus48.png"
+  image_path: "dev_assets/plutus02.png"
+  adaptive_icon_backround: "#191919" #black background
+  adaptive_icon_foreground: "dev_assets/plutus02.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
