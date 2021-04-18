@@ -13,7 +13,8 @@ import '../../models/category.dart';
 class FirstBudgetScreen extends StatefulWidget {
   static const routeName = '/first_budget';
   final Budget budget;
-  FirstBudgetScreen({this.budget});
+  final bool isNewBudget;
+  FirstBudgetScreen({this.budget, this.isNewBudget});
 
   @override
   _FirstBudgetScreenState createState() => _FirstBudgetScreenState();
@@ -271,9 +272,9 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           },
                         );
                       },
-                      label: widget.budget.getID() != null
-                          ? AutoSizeText('Edit Budget')
-                          : AutoSizeText('Add Budget'),
+                      label: widget.isNewBudget
+                          ? AutoSizeText('Add Budget')
+                          : AutoSizeText('Edit Budget'),
                     ),
                   ),
                 ),
