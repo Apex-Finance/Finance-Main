@@ -21,6 +21,7 @@ class IncomeScreen extends StatefulWidget {
 
 class _IncomeScreenState extends State<IncomeScreen> {
   final _formKey = GlobalKey<FormState>();
+  bool isNewBudget = false;
 
   @override
   Widget build(BuildContext context) {
@@ -124,12 +125,15 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                   Provider.of<BudgetDataProvider>(context,
                                           listen: false)
                                       .addBudget(budget, context);
+                                  isNewBudget = true;
                                 }
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          FirstBudgetScreen(budget: budget),
+                                      builder: (context) => FirstBudgetScreen(
+                                        budget: budget,
+                                        isNewBudget: isNewBudget,
+                                      ),
                                     ));
                               }
                             },
