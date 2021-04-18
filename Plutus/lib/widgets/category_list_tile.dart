@@ -53,7 +53,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                       if (double.parse(double.parse(_controller.text)
                               .toStringAsFixed(2)) <
                           0.00) {
-                        Scaffold.of(context).showSnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             behavior: SnackBarBehavior.floating,
                             content: Padding(
@@ -88,7 +88,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                       widget.categoryHandler(widget.index);
                     } // validates for numbers < 0
                     else if (_controller.text.isNotEmpty) {
-                      Scaffold.of(context).showSnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           behavior: SnackBarBehavior.floating,
                           content: Padding(

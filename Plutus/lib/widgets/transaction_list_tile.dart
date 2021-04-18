@@ -78,10 +78,11 @@ class _TransactionListTileState extends State<TransactionListTile> {
           onDismissed: (direction) {
             Provider.of<Transaction.Transactions>(context, listen: false)
                 .deleteTransaction(widget.transaction, context);
-            Scaffold.of(context)
+            ScaffoldMessenger.of(context)
               ..removeCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
+                  behavior: SnackBarBehavior.floating,
                   content: Text('Transaction deleted.'),
                 ),
               );

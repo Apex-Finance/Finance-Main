@@ -92,10 +92,11 @@ class _GoalsListTileState extends State<GoalsListTile> {
           onDismissed: (direction) {
             Provider.of<GoalDataProvider>(context, listen: false)
                 .removeGoal(widget.goal, context);
-            Scaffold.of(context)
+            ScaffoldMessenger.of(context)
               ..removeCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
+                  behavior: SnackBarBehavior.floating,
                   content: Text('Goal deleted.'),
                 ),
               );
