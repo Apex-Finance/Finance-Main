@@ -175,14 +175,10 @@ class _GoalsFormState extends State<GoalsForm> {
           context: context,
           initialDate:
               _goal.getDate() == null ? DateTime.now() : _goal.getDate(),
-          firstDate: DateTime.now().subtract(
-            Duration(
-              days: 365,
-            ),
-          ),
+          firstDate: DateTime.now(),
           lastDate: DateTime.now().add(
             Duration(
-              days: 365,
+              days: 3652, // ~=10 years
             ),
           ),
         ).then(

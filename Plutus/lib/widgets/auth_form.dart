@@ -209,7 +209,7 @@ class _AuthFormState extends State<AuthForm> {
                 RaisedButton(
                   child: Text(
                     _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP',
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style: Theme.of(context).textTheme.subtitle2,
                   ),
                   onPressed: _submit,
                   shape: RoundedRectangleBorder(

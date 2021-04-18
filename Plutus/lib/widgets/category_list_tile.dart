@@ -46,7 +46,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
             Expanded(
               child: Focus(
                 key: ValueKey(widget.categoryList[widget.index].getAmount()),
-                onFocusChange: (hasFocus) {
+                onFocusChange: (hasFocus) async {
                   if (!hasFocus) {
                     if (_controller.text
                         .contains(new RegExp(r'-?[0-9]\d*(\.\d+)?$'))) {
@@ -70,18 +70,18 @@ class _CategoryListTileState extends State<CategoryListTile> {
                           .setAmount(double.parse(_controller.text));
                       if (widget.categoryList[widget.index].getAmount() >
                           0.00) {
-                        Provider.of<CategoryDataProvider>(context,
+                        await Provider.of<CategoryDataProvider>(context,
                                 listen: false)
                             .uploadCategory(widget.budget.getID(),
                                 widget.categoryList[widget.index], context);
                       } else if (widget.categoryList[widget.index]
                               .getAmount() ==
                           0.00) {
-                        Provider.of<CategoryDataProvider>(context,
+                        await Provider.of<CategoryDataProvider>(context,
                                 listen: false)
                             .removeCategory(
                           widget.budget.getID(),
-                          widget.categoryList[widget.index],
+                          widget.categoryList[widget.index].getID(),
                           context,
                         );
                       }
@@ -108,11 +108,11 @@ class _CategoryListTileState extends State<CategoryListTile> {
                           .setAmount(double.parse(_controller.text));
                       if (widget.categoryList[widget.index].getAmount() ==
                           0.00) {
-                        Provider.of<CategoryDataProvider>(context,
+                        await Provider.of<CategoryDataProvider>(context,
                                 listen: false)
                             .removeCategory(
                           widget.budget.getID(),
-                          widget.categoryList[widget.index],
+                          widget.categoryList[widget.index].getID(),
                           context,
                         );
                       }
