@@ -1,5 +1,8 @@
+// Imported Flutter packages
 import 'package:flutter_test/flutter_test.dart';
-import 'package:Plutus/models/transaction.dart';
+
+// Imported Plutus files
+import '../../../lib/models/transaction.dart';
 
 void main() {
   Transaction ogTransaction = Transaction.empty();
