@@ -35,6 +35,8 @@ class _TabScreenState extends State<TabScreen> {
   void _selectPage(int index) {
     if (index == 2)
       return; // if blank "tab" is selected, ignore it; a workaround to give FAB more space
+    if (index == _selectedPageIndex)
+      return; // don't rebuild screen if already on it
     setState(() {
       Provider.of<TabProvider>(context, listen: false)
           .setSelectedPageIndex(index);
