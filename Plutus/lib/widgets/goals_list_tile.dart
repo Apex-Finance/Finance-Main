@@ -97,6 +97,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
               ..removeCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
+                  behavior: SnackBarBehavior.floating,
                   content: Text('Goal deleted.'),
                 ),
               );

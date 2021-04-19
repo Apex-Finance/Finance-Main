@@ -41,6 +41,7 @@ class GoalScreen extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
         switch (snapshot.connectionState) {
+          // ok to leave this waiting state since only ever waits on initial load
           case ConnectionState.waiting:
             return Center(
               child: Text(

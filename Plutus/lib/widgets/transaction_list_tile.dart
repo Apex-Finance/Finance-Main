@@ -84,6 +84,7 @@ class _TransactionListTileState extends State<TransactionListTile> {
               ..removeCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
+                  behavior: SnackBarBehavior.floating,
                   content: Text('Transaction deleted.'),
                 ),
               );

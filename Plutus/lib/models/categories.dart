@@ -14,7 +14,7 @@ enum MainCategory {
   //health_and_fitness,
   investments,
   //fees_and_charges,
-  //gifts_and_donations,
+  gifts_and_donations,
   //kids,
   //pets,
   //business,

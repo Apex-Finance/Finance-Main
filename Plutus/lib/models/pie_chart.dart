@@ -35,7 +35,26 @@ class PieChartCard extends StatelessWidget {
                 !catSnapshot.hasData ||
                 tranSnapshot.data.docs.isEmpty ||
                 catSnapshot.data.docs.isEmpty) {
-              return Container();
+              // card with same dimensions as the one when data is present
+              // prevents screen from shifting
+              return Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(20),
+                    bottom: Radius.circular(20),
+                  ),
+                ),
+                child: Container(
+                  width: 400,
+                  height: 500,
+                  child: Column(children: [
+                    Text(
+                      'Dashboard chart',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ]),
+                ),
+              );
             } else {
               List<PiePiece> pieData =
                   getPieData(tranSnapshot.data.docs, catSnapshot.data.docs);
