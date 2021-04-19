@@ -51,58 +51,57 @@ class _TransactionScreenState extends State<TransactionScreen> {
     var transactionDataProvider =
         Provider.of<Transaction.Transactions>(context);
     var monthData = Provider.of<MonthChanger>(context);
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 20.0),
-          child: Container(
-            width: 250,
-            child: monthData.buildMonthChanger(context),
-          ),
-        ),
-        StreamBuilder<QuerySnapshot>(
-          stream: transactionDataProvider
-              .getMonthlyTransactions(
-                  context,
-                  DateTime(
-                    monthData.selectedYear,
-                    monthData.selectedMonth,
-                  ))
-              .snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+    return StreamBuilder<QuerySnapshot>(
+      stream: transactionDataProvider
+          .getMonthlyTransactions(
+              context,
+              DateTime(
+                monthData.selectedYear,
+                monthData.selectedMonth,
+              ))
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) return Text('Error: ${snapshot.error}');
 
-            switch (snapshot.connectionState) {
-              case ConnectionState
-                  .waiting: // not sure if this is a good solution... keeps the screen from shifting left though... needs to be improved to stop screen from flashing on month change
-                return Row(
-                  children: [],
-                  mainAxisSize: MainAxisSize.max,
-                );
-              default:
-                return Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 25),
-                    child: snapshot.data.docs.isEmpty
-                        ? NoTransactionsYetText(_enterTransaction)
-                        : Card(
-                            color: Colors.grey[900],
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(20),
-                              ),
-                            ),
-                            child: TransactionsCard(
-                              transactionsSnapshot: snapshot.data,
+        switch (snapshot.connectionState) {
+          // no waiting state to avoid flashing of screen on month change or transaction deletion
+          // fallback to generic red screen error widget in main instead
+          // case ConnectionState
+          //     .waiting: // not sure if this is a good solution... keeps the screen from shifting left though... needs to be improved to stop screen from flashing on month change
+          //   return Row(
+          //     children: [],
+          //     mainAxisSize: MainAxisSize.max,
+          //   );
+          default:
+            return Column(children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: Container(
+                  width: 250,
+                  child: monthData.buildMonthChanger(context),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(top: 25),
+                  child: snapshot.data.docs.isEmpty
+                      ? NoTransactionsYetText(_enterTransaction)
+                      : Card(
+                          color: Colors.grey[900],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20),
                             ),
                           ),
-                  ),
-                );
-            }
-          },
-        ),
-      ],
+                          child: TransactionsCard(
+                            transactionsSnapshot: snapshot.data,
+                          ),
+                        ),
+                ),
+              ),
+            ]);
+        }
+      },
     );
   }
 }
