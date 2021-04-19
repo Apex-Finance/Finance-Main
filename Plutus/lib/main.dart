@@ -1,3 +1,4 @@
+// Imported Flutter packages
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -7,16 +8,17 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+// Imported Plutus files
+import './providers/color.dart';
+import './providers/auth.dart';
+import './models/budget.dart';
+import './models/goals.dart';
+import './models/month_changer.dart';
+import './models/category.dart';
+import './models/transaction.dart';
 import './screens/new_budget_screens/income_screen.dart';
 import './screens/account_screen.dart';
 import './screens/settings_screen.dart';
-import './models/budget.dart';
-import './providers/auth.dart';
-import './models/goals.dart';
-import './models/month_changer.dart';
-import './providers/color.dart';
-import './models/category.dart';
-import './models/transaction.dart';
 import './screens/intro_screen.dart';
 import './screens/budget_screen.dart';
 import './screens/dashboard_screen.dart';
@@ -25,6 +27,7 @@ import './screens/tab_screen.dart';
 import './screens/goal_screen.dart';
 import './screens/new_budget_screens/first_budget_screen.dart';
 import './screens/auth_screen.dart';
+import './providers/tab.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,6 +41,7 @@ void main() async {
                 style: TextStyle(color: Colors.black)))));
     runApp(
       MultiProvider(providers: [
+        ChangeNotifierProvider(create: (context) => TabProvider()),
         ChangeNotifierProvider(create: (context) => ColorProvider()),
         ChangeNotifierProvider(create: (context) => GoalDataProvider()),
         ChangeNotifierProvider(
@@ -61,6 +65,7 @@ void main() async {
                       : previousTransactions.transactions),
           create: null,
         ),
+        // TODO Do we still need this?
         // ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
         //   update: (buildContext, monthChanger, transactions, previousBudgets) =>
         //       Budgets(monthChanger, transactions,
@@ -78,8 +83,6 @@ class MyApp extends StatelessWidget {
       FirebaseAnalyticsObserver(analytics: analytics);
   @override
   Widget build(BuildContext context) {
-    // To Create a crash
-    //FirebaseCrashlytics.instance.crash();
     var colors = Provider.of<ColorProvider>(context);
     var isDark = colors.isDark ?? false; // default to light mode
     var colorMode = isDark ? 'dark' : 'light';
@@ -103,7 +106,8 @@ class MyApp extends StatelessWidget {
             TextTheme(
               bodyText1: TextStyle(color: primaryColor, fontSize: 17),
               bodyText2: TextStyle(color: Colors.black, fontSize: 17),
-              subtitle1: TextStyle(color: Colors.white, fontSize: 17),
+              subtitle1: TextStyle(color: Colors.black, fontSize: 17),
+              subtitle2: TextStyle(color: Colors.white, fontSize: 17),
               headline1: TextStyle(color: primaryColor, fontSize: 25),
             ),
           ),

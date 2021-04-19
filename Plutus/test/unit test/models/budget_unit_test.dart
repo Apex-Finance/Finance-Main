@@ -1,9 +1,12 @@
+// Imported Flutter packages
 import 'package:flutter_test/flutter_test.dart';
-import 'package:Plutus/models/budget.dart';
-import 'package:Plutus/models/transaction.dart';
+
+// Imported Plutus files
+import '../../../lib/models/budget.dart';
+import '../../../lib/models/transaction.dart';
 
 void main() {
-  Transaction t1, t2, t3, t4;
+  Transaction t1, t2;
 
   t1 = Transaction(
     id: 'a',
@@ -22,24 +25,6 @@ void main() {
     categoryTitle: 'bills_and_utilities',
     categoryCodepoint: 5,
     amount: 10.96,
-  );
-  t3 = Transaction(
-    id: 'c',
-    title: 'Movies',
-    date: DateTime.now(),
-    categoryId: 'home',
-    categoryTitle: 'home',
-    categoryCodepoint: 5,
-    amount: 25.35,
-  );
-  t4 = Transaction(
-    id: 'd',
-    title: 'Shoes',
-    date: DateTime.now(),
-    categoryId: 'food_and_drinks',
-    categoryTitle: 'food_and_drinks',
-    categoryCodepoint: 5,
-    amount: 35.85,
   );
 
   group('getRemainingAmount', () {

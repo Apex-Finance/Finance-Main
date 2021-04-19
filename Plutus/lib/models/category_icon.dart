@@ -11,6 +11,7 @@ Map<int, IconData> categoryIcon = {
   58762: Icons.airplanemode_active,
   59922: Icons.sports_esports,
   58822: Icons.attach_money,
+  60114: Icons.volunteer_activism,
   59938: Icons.star,
   58947: Icons.category,
 };

@@ -21,6 +21,7 @@ class IncomeScreen extends StatefulWidget {
 
 class _IncomeScreenState extends State<IncomeScreen> {
   final _formKey = GlobalKey<FormState>();
+  bool isNewBudget = false;
 
   @override
   Widget build(BuildContext context) {
@@ -124,12 +125,15 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                   Provider.of<BudgetDataProvider>(context,
                                           listen: false)
                                       .addBudget(budget, context);
+                                  isNewBudget = true;
                                 }
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          FirstBudgetScreen(budget: budget),
+                                      builder: (context) => FirstBudgetScreen(
+                                        budget: budget,
+                                        isNewBudget: isNewBudget,
+                                      ),
                                     ));
                               }
                             },
@@ -140,6 +144,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             validator: (val) {
                               if (val.contains(
                                   new RegExp(r'^-?\d+(\.\d{1,2})?$'))) {
+                                // TODO Does this need to be commented out?
                                 // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
                                 // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
                                 if (double.parse(

@@ -1,3 +1,4 @@
+// Imported Flutter packages
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +7,7 @@ import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
+// Imported Plutus files
 import '../models/goals.dart';
 import '../models/transaction.dart' as Transaction;
 
@@ -55,6 +57,7 @@ class _GoalsFormState extends State<GoalsForm> {
     }
   }
 
+  // TODO If we are not using should we comment out or get rid of entirely?
   // NOT USED
   // Gets the image from the phone gallery and displays it as an image preview
   Future getImage() async {
@@ -123,6 +126,7 @@ class _GoalsFormState extends State<GoalsForm> {
     );
   }
 
+  // TODO If we are not using should we comment out or get rid of entirely?
   // NOT USED
   // Selects an image to add to a goal
   Widget buildImageSelector(BuildContext context) {
@@ -164,8 +168,10 @@ class _GoalsFormState extends State<GoalsForm> {
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 20, 230, 0),
       //0, 20, 275, 0), // Values for Samsung J4; DO NOT CHANGE
-      child: RaisedButton(
-        color: Theme.of(context).primaryColorLight,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Theme.of(context).primaryColorLight,
+        ),
         child: _goal.getDate() == null
             ? Text('Due Date')
             : Text(
@@ -175,14 +181,10 @@ class _GoalsFormState extends State<GoalsForm> {
           context: context,
           initialDate:
               _goal.getDate() == null ? DateTime.now() : _goal.getDate(),
-          firstDate: DateTime.now().subtract(
-            Duration(
-              days: 365,
-            ),
-          ),
+          firstDate: DateTime.now(),
           lastDate: DateTime.now().add(
             Duration(
-              days: 365,
+              days: 3652, // ~=10 years
             ),
           ),
         ).then(

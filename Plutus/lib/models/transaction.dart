@@ -137,6 +137,32 @@ class Transactions with ChangeNotifier {
       'categoryCodepoint': transaction.getCategoryCodePoint(),
       'goalID': goalID,
     });
+    // // if category is not budgeted for, add it to budget
+    // if (await FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(Provider.of<Auth>(context, listen: false).getUserId())
+    //     .collection('Budgets')
+    //     .doc(await Provider.of<BudgetDataProvider>(context)
+    //         .getBudgetID(transaction.getDate(), context))
+    //     .collection('categories')
+    //     .where('id', isEqualTo: transaction.getCategoryId())
+    //     .get()
+    //     .then((querySnapshot) => querySnapshot.docs.isEmpty)) {
+    //   print('2');
+    // // initialize category with relevant data from transaction
+    // var category = Category.Category();
+    // category.setID(transaction.getCategoryId());
+    // category.setTitle(transaction.getCategoryTitle());
+    // category.setCodepoint(transaction.getCategoryCodePoint());
+    // category.setAmount(0.00); // 0 because unbudgeted
+
+    // // upload category to respective budget
+    // await Provider.of<Category.CategoryDataProvider>(context).uploadCategory(
+    //     await Provider.of<BudgetDataProvider>(context)
+    //         .getBudgetID(transaction.getDate(), context),
+    //     category,
+    //     context);
+    // }
   }
 
   void editTransaction(Transaction transaction, BuildContext context) async {

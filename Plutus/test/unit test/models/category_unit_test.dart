@@ -1,6 +1,8 @@
-//import 'package:Plutus/models/categories.dart';
+// Imported Flutter packages
 import 'package:flutter_test/flutter_test.dart';
-import 'package:Plutus/models/category.dart';
+
+// Imported Plutus files
+import '../../../lib/models/category.dart';
 
 void main() {
   Category ogCategory = Category();
