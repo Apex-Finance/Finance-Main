@@ -1,12 +1,10 @@
+// Imported Flutter packages
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-import '../models/budget.dart';
-import '../widgets/budget_list_tile.dart';
-import '../models/transaction.dart' as Transaction;
-import '../widgets/transaction_list_tile.dart';
+// Imported Plutus files
 import '../models/pie_chart.dart';
+import '../widgets/transaction_list_tile.dart';
 import '../widgets/goals_list_tile.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -60,6 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     SizedBox(
                       height: 20,
                     ),
+                    // TODO Find out why this is commented out
                     /*new LinearPercentIndicator(
                       alignment: MainAxisAlignment.center,
                       width: 310.0,

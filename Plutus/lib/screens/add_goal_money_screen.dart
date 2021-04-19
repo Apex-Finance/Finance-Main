@@ -1,9 +1,11 @@
+// Imported Flutter packages
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
 
+// Imported Plutus files
 import '../models/goals.dart';
 import '../models/transaction.dart' as Transaction;
 
@@ -147,6 +149,7 @@ class GoalAmountField extends StatelessWidget {
       },
       validator: (val) {
         if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
+          // TODO does this need to be commented out?
           // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
           // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
           if (double.parse(double.parse(val).toStringAsFixed(2)) <=

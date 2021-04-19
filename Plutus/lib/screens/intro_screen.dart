@@ -1,6 +1,8 @@
+// Imported Flutter packages
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
+// Imported Plutus files
 import './auth_screen.dart';
 
 // First screens the user sees upon installing the app. Offers a concise overview of what Plutus has to offer
@@ -79,11 +81,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         ),
         PageViewModel(
           title: "Ready to start your journey to financial freedom?",
-          bodyWidget: RaisedButton(
+          bodyWidget: ElevatedButton(
             child: Text('Sign me up!'),
             onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
                 AuthScreen.routeName, (Route<dynamic> route) => false),
-            color: Colors.amber,
+            style: ElevatedButton.styleFrom(
+              primary: Colors.amber,
+            ),
           ),
           image: _buildImage('Freedom.jpg'),
           decoration: pageDecoration,

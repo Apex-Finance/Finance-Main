@@ -1,12 +1,13 @@
-import 'package:Plutus/models/category.dart';
-import 'package:Plutus/models/transaction.dart';
+// Imported Flutter packages
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
 
-import './new_budget_screens/income_screen.dart';
+// Imported Plutus files
+import '../models/category.dart';
+import '../models/transaction.dart';
 import '../models/budget.dart';
 import '../models/month_changer.dart';
 import '../widgets/budget_list_tile.dart';
@@ -116,8 +117,13 @@ class BudgetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     var budget =
         budgetDataProvider.initializeBudget(budgetSnapshot.data.docs.first);
+    final budgetDataProvider = Provider.of<BudgetDataProvider>(context);
+    var monthData = Provider.of<MonthChanger>(context);
+    var transactionDataProvider =
+        Provider.of<Transactions>(context, listen: false);
 
     // Get the transactions for the budget
     var budgetTransactions = FirebaseFirestore.instance
@@ -140,6 +146,66 @@ class BudgetCard extends StatelessWidget {
     // Get the categories selected by the user for this budget
     var budgetCategories =
         BudgetDataProvider().getBudgetCategories(context, budget.getID());
+        ),
+        Expanded(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: budgetDataProvider.getmonthlyBudget(context,
+                DateTime(monthData.selectedYear, monthData.selectedMonth)),
+            builder: (context, budgetSnapshot) {
+              if (!budgetSnapshot.hasData || budgetSnapshot.data.docs.isEmpty) {
+                return Container(
+                  margin: EdgeInsets.only(top: 25),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 250),
+                      child: Column(
+                        children: [
+                          Text(
+                            'No budget has been added this month.',
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Theme.of(context).primaryColor),
+                            textAlign: TextAlign.center,
+                          ),
+                          ElevatedButton(
+                            child: Text('Add Budget'),
+                            style: ElevatedButton.styleFrom(
+                              primary: Theme.of(context).primaryColor,
+                              onPrimary: Theme.of(context).canvasColor,
+                            ),
+                            onPressed: () =>
+                                _enterBudget(context, new Budget.empty()),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              } else {
+                var budget = budgetDataProvider
+                    .initializeBudget(budgetSnapshot.data.docs.first);
+
+                // Get the transactions for the budget
+                var budgetTransactions = FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(Provider.of<Auth>(context, listen: false).getUserId())
+                    .collection('Transactions')
+                    .where(
+                      'date',
+                      isGreaterThanOrEqualTo: DateTime(
+                        budget.getDate().year,
+                        budget.getDate().month,
+                        1,
+                      ),
+                      isLessThan: DateTime(
+                        budget.getDate().year,
+                        budget.getDate().month + 1,
+                        1,
+                      ),
+                    );
+                // Get the categories selected by the user for this budget
+                var budgetCategories = BudgetDataProvider()
+                    .getBudgetCategories(context, budget.getID());
 
     // TODO: Alex, please check below code; specifically add error handling if mine is insufficient (like if db doesn't respond) and check that my async/await and .then() are all used properly and nothing will break if db is slow (this was an issue when programming it, I think I got it now though); additionally check for efficiency of db calls
     // Gets unbudgeted categories where transactions were made
