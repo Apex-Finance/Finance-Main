@@ -1,9 +1,7 @@
-// Imported Flutter packages
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
-// Imported Plutus files
 import '../widgets/goals_form.dart';
 import '../widgets/goals_list_tile.dart';
 import '../models/goals.dart';
@@ -65,12 +63,10 @@ class GoalScreen extends StatelessWidget {
                             color: Theme.of(context).primaryColor),
                         textAlign: TextAlign.center,
                       ),
-                      ElevatedButton(
+                      RaisedButton(
                         child: Text('Add Goal'),
-                        style: ElevatedButton.styleFrom(
-                          primary: Theme.of(context).primaryColor,
-                          onPrimary: Theme.of(context).canvasColor,
-                        ),
+                        color: Theme.of(context).primaryColor,
+                        textColor: Theme.of(context).canvasColor,
                         onPressed: () => _enterGoal(context),
                       ),
                     ],
@@ -84,12 +80,10 @@ class GoalScreen extends StatelessWidget {
                       child: Container(
                         width: 100,
                         child: Container(
-                          child: ElevatedButton(
+                          child: RaisedButton(
                             child: Text('Add Goal'),
-                            style: ElevatedButton.styleFrom(
-                              primary: Theme.of(context).primaryColor,
-                              onPrimary: Theme.of(context).canvasColor,
-                            ),
+                            color: Theme.of(context).primaryColor,
+                            textColor: Theme.of(context).canvasColor,
                             onPressed: () => _enterGoal(context),
                           ),
                         ),

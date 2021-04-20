@@ -1,11 +1,9 @@
-// Imported Flutter packages
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
 
-// Imported Plutus files
 import '../providers/auth.dart';
 
 class UpdateEmailForm extends StatefulWidget {
@@ -27,7 +25,7 @@ class _UpdateEmailFormState extends State<UpdateEmailForm> {
         title: Text(message),
         content: Text(message),
         actions: <Widget>[
-          TextButton(
+          FlatButton(
             child: Text('Okay'),
             onPressed: () => Navigator.pop(context),
           )
@@ -131,19 +129,17 @@ class _UpdateEmailFormState extends State<UpdateEmailForm> {
                     SizedBox(
                       height: 20,
                     ),
-                    ElevatedButton(
+                    RaisedButton(
                       child: Text('Change Email'),
                       onPressed: _submit,
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 30.0, vertical: 8.0),
-                        primary: Theme.of(context).primaryColor,
-                        onPrimary:
-                            Theme.of(context).primaryTextTheme.button.color,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
                       ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+                      color: Theme.of(context).primaryColor,
+                      textColor:
+                          Theme.of(context).primaryTextTheme.button.color,
                     ),
                   ],
                 ),

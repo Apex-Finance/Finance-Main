@@ -1,14 +1,15 @@
-// Imported Flutter packages
+import 'package:Plutus/models/categories.dart';
+import 'package:Plutus/widgets/transaction_list_tile.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/percent_indicator.dart';
-import 'package:provider/provider.dart';
 import 'dart:math';
 
-// Imported Plutus files
-import '../widgets/transaction_list_tile.dart';
+import '../providers/auth.dart';
+import '../models/budget.dart';
 import '../models/transaction.dart' as Transaction;
+import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
 import '../models/category_icon.dart';
 import '../models/category.dart' as Category;
 
@@ -32,7 +33,6 @@ class _BudgetListTileState extends State<BudgetListTile> {
     var categoryTransactions = widget.budgetTransactions
         .where('categoryID', isEqualTo: widget.category.getID())
         .orderBy('date', descending: true);
-    // TODO Findout why this is commented out
     // FirebaseFirestore.instance
     //     .collection('users')
     //     .doc(Provider.of<Auth>(context, listen: false).getUserId())
@@ -176,7 +176,6 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                             color:
                                                 Theme.of(context).primaryColor,
                                             fontSize: 18,
-                                            // TODO Commented out, why?
                                             // fontWeight: FontWeight.bold,
                                           ),
                                         ),

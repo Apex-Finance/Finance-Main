@@ -1,4 +1,3 @@
-// Imported Flutter packages
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -8,17 +7,16 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-// Imported Plutus files
-import './providers/color.dart';
-import './providers/auth.dart';
-import './models/budget.dart';
-import './models/goals.dart';
-import './models/month_changer.dart';
-import './models/category.dart';
-import './models/transaction.dart';
 import './screens/new_budget_screens/income_screen.dart';
 import './screens/account_screen.dart';
 import './screens/settings_screen.dart';
+import './models/budget.dart';
+import './providers/auth.dart';
+import './models/goals.dart';
+import './models/month_changer.dart';
+import './providers/color.dart';
+import './models/category.dart';
+import './models/transaction.dart';
 import './screens/intro_screen.dart';
 import './screens/budget_screen.dart';
 import './screens/dashboard_screen.dart';
@@ -65,7 +63,6 @@ void main() async {
                       : previousTransactions.transactions),
           create: null,
         ),
-        // TODO Do we still need this?
         // ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
         //   update: (buildContext, monthChanger, transactions, previousBudgets) =>
         //       Budgets(monthChanger, transactions,
@@ -83,6 +80,8 @@ class MyApp extends StatelessWidget {
       FirebaseAnalyticsObserver(analytics: analytics);
   @override
   Widget build(BuildContext context) {
+    // To Create a crash
+    //FirebaseCrashlytics.instance.crash();
     var colors = Provider.of<ColorProvider>(context);
     var isDark = colors.isDark ?? false; // default to light mode
     var colorMode = isDark ? 'dark' : 'light';

@@ -1,14 +1,15 @@
-// Imported Flutter packages
+import 'package:Plutus/models/category.dart';
+import 'package:Plutus/models/transaction.dart' as Transaction;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
-// Imported Plutus files
+import '../models/category_icon.dart';
+import '../providers/auth.dart';
 import '../models/category.dart';
-import '../models/transaction.dart' as Transaction;
 
 // Form to add a new transaction
 class TransactionForm extends StatefulWidget {
@@ -30,7 +31,6 @@ class _TransactionFormState extends State<TransactionForm> {
     if (value == null) return; // if user cancels datepicker
     setState(() {
       _transaction.setDate(_date = value);
-      // TODO DO we still need this?
       // _transaction.date =
       //     _date = value;
       // update date if date changes since no onsave property
@@ -45,7 +45,6 @@ class _TransactionFormState extends State<TransactionForm> {
       _transaction.setCategoryId(category.getID());
       _transaction.setCategoryCodePoint(category.getCodepoint());
       _transaction.setCategoryTitle(category.getTitle());
-      // TODO DO we still need this?
       // _transaction.category = category =
       //     value; // update category if category changes since no onsave property
     });
@@ -83,7 +82,6 @@ class _TransactionFormState extends State<TransactionForm> {
       _transaction.setCategoryCodePoint(58947);
     }
 
-    // TODO DO we still need this?
     // _transaction.category =
     //     category; // initialize date and category since no onsave property
     // _transaction.date = _date;
@@ -99,7 +97,6 @@ class _TransactionFormState extends State<TransactionForm> {
       _transaction
           .setCategoryCodePoint(widget.transaction.getCategoryCodePoint());
 
-      // TODO DO we still need this?
       // _transaction.id = widget.transaction.id;
       // _transaction.title = widget.transaction.title;
       // _transaction.category = category = widget.transaction.category;
@@ -173,10 +170,8 @@ class _TransactionFormState extends State<TransactionForm> {
             ),
           ),
         ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Theme.of(context).primaryColorLight,
-          ),
+        RaisedButton(
+          color: Theme.of(context).primaryColorLight,
           child: Text('Pick Date'),
           onPressed: () => showDatePicker(
             context: context,
@@ -203,7 +198,7 @@ class _TransactionFormState extends State<TransactionForm> {
     Category category = new Category();
     var categoryDataProvider = Provider.of<CategoryDataProvider>(context);
     //TODO this will need to be rebuilt to stream the default categories in the database so we can tie the title and id to the transaction; this will eventually help with custom categories
-    var categories = <Category>[];
+    var categories = new List<Category>();
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
