@@ -25,7 +25,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Budget budget = ModalRoute.of(context).settings.arguments;
+    final Budget budget =
+        Budget.copy(ModalRoute.of(context).settings.arguments);
     var monthData = Provider.of<MonthChanger>(context);
 
     // Creates an AlertDialog Box that notifies the user of discard changes
