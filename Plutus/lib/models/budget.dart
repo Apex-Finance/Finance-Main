@@ -18,6 +18,12 @@ class Budget {
 
   Budget.empty();
 
+  Budget.copy(Budget budgetCopied) {
+    _id = budgetCopied.getID();
+    _amount = budgetCopied.getAmount();
+    _date = budgetCopied.getDate();
+  }
+
   Budget();
 
   double getRemainingAmountNew() {
@@ -173,6 +179,7 @@ class BudgetDataProvider with ChangeNotifier {
         .doc(budgetID)
         .delete();
   }
+
 // I thought I would need this, so I made it; not being called
   Future<String> getBudgetID(DateTime date, BuildContext context) async {
     return await FirebaseFirestore.instance
