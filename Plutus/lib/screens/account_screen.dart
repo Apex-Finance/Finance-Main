@@ -97,19 +97,20 @@ class _AccountScreenState extends State<AccountScreen> {
                               '$email',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.create_sharp,
-                                size: 25,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              onPressed: () {
-                                pullChangeEmailForm(context);
-                              },
-                            ),
+                            // commented out because no longer editing emails
+                            // SizedBox(
+                            //   width: 10,
+                            // ),
+                            // IconButton(
+                            //   icon: Icon(
+                            //     Icons.create_sharp,
+                            //     size: 25,
+                            //     color: Theme.of(context).primaryColor,
+                            //   ),
+                            //   onPressed: () {
+                            //     pullChangeEmailForm(context);
+                            //   },
+                            // ),
                           ],
                         ),
                         Icon(
@@ -147,13 +148,13 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 }
-
-Future<Widget> pullChangeEmailForm(BuildContext context) async {
-  return showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (_) => UpdateEmailForm());
-}
+// this function no longer used
+// Future<Widget> pullChangeEmailForm(BuildContext context) async {
+//   return showModalBottomSheet(
+//       isScrollControlled: true,
+//       context: context,
+//       builder: (_) => UpdateEmailForm());
+// }
 
 Future<Widget> pullChangePasswordForm(BuildContext context) async {
   return showModalBottomSheet(
