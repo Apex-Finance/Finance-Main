@@ -40,9 +40,7 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .set({'password': newPassword}, SetOptions(merge: true)).catchError(
-            (error) {
-      print(error);
-    });
+            (error) {});
     Provider.of<Auth>(context, listen: false).setPassword(newPassword);
   }
 

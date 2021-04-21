@@ -103,7 +103,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
                         .editBudget(originalBudget, context);
                   }
                   // removes all screens until tab screen (i.e., removes IS and FBS so can't re-edit the deleted/edited budget)
-                  Navigator.popUntil(context, ModalRoute.withName('/tab'));
+                  Navigator.popUntil(
+                      context, ModalRoute.withName(TabScreen.routeName));
                 },
               ),
               TextButton(

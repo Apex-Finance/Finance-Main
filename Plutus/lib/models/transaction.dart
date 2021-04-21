@@ -148,7 +148,6 @@ class Transactions with ChangeNotifier {
     //     .where('id', isEqualTo: transaction.getCategoryId())
     //     .get()
     //     .then((querySnapshot) => querySnapshot.docs.isEmpty)) {
-    //   print('2');
     // // initialize category with relevant data from transaction
     // var category = Category.Category();
     // category.setID(transaction.getCategoryId());

@@ -171,7 +171,9 @@ class _GoalsFormState extends State<GoalsForm> {
         child: _goal.getDate() == null
             ? Text('Due Date')
             : Text(
-                '${DateFormat.MMMd().format(_goal.getDate())}',
+                _goal.getDate().year == DateTime.now().year
+                    ? '${DateFormat.MMMd().format(_goal.getDate())}'
+                    : '${DateFormat.yMMMd().format(_goal.getDate())}',
               ),
         onPressed: () => showDatePicker(
           context: context,

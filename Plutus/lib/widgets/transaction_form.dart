@@ -154,9 +154,11 @@ class _TransactionFormState extends State<TransactionForm> {
       mainAxisSize: MainAxisSize.max,
       children: [
         Container(
-          width: 125,
+          width: _transaction.getDate().year == DateTime.now().year ? 125 : 175,
           child: Text(
-            'Date: ${DateFormat.MMMd().format(_transaction.getDate())}',
+            _transaction.getDate().year == DateTime.now().year
+                ? 'Date: ${DateFormat.MMMd().format(_transaction.getDate())}'
+                : 'Date: ${DateFormat.yMMMd().format(_transaction.getDate())}',
             style: TextStyle(
               fontSize: 16,
               color: Theme.of(context).primaryColor,

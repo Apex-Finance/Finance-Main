@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 // Imported Plutus files
+import '../tab_screen.dart';
 import '../../widgets/category_list_tile.dart';
 import '../../models/budget.dart';
 import '../../models/category.dart';
@@ -327,8 +328,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             );
                             // removes screens until tab screen is reached (i.e., removes IS and FBS so can't re-edit budget)
                           } else {
-                            Navigator.popUntil(
-                                context, ModalRoute.withName('/tab'));
+                            Navigator.popUntil(context,
+                                ModalRoute.withName(TabScreen.routeName));
                           }
                         },
                         label: widget.isNewBudget
