@@ -9,6 +9,18 @@ import '../providers/auth.dart';
 import './categories.dart';
 
 class Category {
+  Category(
+      [this._codepoint,
+      this._id,
+      this._title,
+      this._amount,
+      this._categoryName,
+      this._remainingAmount]);
+
+  Category.deepCopy(Category category)
+      : this(category._codepoint, category._id, category._title,
+            category._amount);
+
   int _codepoint; // Codepoint to store the icon info
   String _id;
   String _title;
