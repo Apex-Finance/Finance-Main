@@ -25,7 +25,7 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
         title: Text(message),
         content: Text(message),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text('Okay'),
             onPressed: () => Navigator.pop(context),
           )
@@ -127,17 +127,21 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
                     SizedBox(
                       height: 20,
                     ),
-                    RaisedButton(
+                    ElevatedButton(
                       child: Text('Change Password'),
                       onPressed: _submit,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 30.0, vertical: 8.0),
+                        primary: Theme.of(context).primaryColor,
+                        textStyle: TextStyle(
+                          color:
+                              Theme.of(context).primaryTextTheme.button.color,
+                        ),
                       ),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
-                      color: Theme.of(context).primaryColor,
-                      textColor:
-                          Theme.of(context).primaryTextTheme.button.color,
                     ),
                   ],
                 ),

@@ -20,13 +20,7 @@ class BudgetScreen extends StatefulWidget {
 
 class _BudgetScreenState extends State<BudgetScreen> {
   void _enterBudget(BuildContext context, Budget budget) {
-    Navigator.of(context)
-        .pushNamed('/income', arguments: budget)
-        .then((newBudget) {
-      if (newBudget == null) return;
-      Provider.of<BudgetDataProvider>(context, listen: false)
-          .addBudget(newBudget, context); //TODO check if needed
-    });
+    Navigator.of(context).pushNamed('/income', arguments: budget);
   }
 
   @override
@@ -385,10 +379,12 @@ class NoBudgetYetText extends StatelessWidget {
                     fontSize: 18, color: Theme.of(context).primaryColor),
                 textAlign: TextAlign.center,
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Add Budget'),
-                color: Theme.of(context).primaryColor,
-                textColor: Theme.of(context).canvasColor,
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  textStyle: TextStyle(color: Theme.of(context).canvasColor),
+                ),
                 onPressed: () =>
                     enterBudgetHandler(context, new Budget.empty()),
               ),

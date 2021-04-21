@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:Plutus/widgets/update_email_form.dart';
 import 'package:Plutus/widgets/update_password_form.dart';
 
 // Imported Plutus files
@@ -35,9 +34,6 @@ class _AccountScreenState extends State<AccountScreen> {
             color: Theme.of(context).canvasColor,
           ),
         ),
-        // TODO Do we need this commented?
-        // IconButton(
-        //icon:
         actions: [
           IconButton(
             icon: Icon(
@@ -52,7 +48,7 @@ class _AccountScreenState extends State<AccountScreen> {
         ],
         // ),
       ),
-      // TODO Find out why this is commented out
+      // extra back button if wanted in future
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {
       //     Navigator.of(context).pushNamed('/dashboard');

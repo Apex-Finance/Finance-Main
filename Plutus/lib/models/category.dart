@@ -161,10 +161,6 @@ class CategoryDataProvider with ChangeNotifier {
         Provider.of<Auth>(context).getUserId(),
       ],
     ).snapshots();
-    // TODO Find out why this is commented out
-    // var defaultCategories = getDefaultCategories();
-    // var customCategories = getCustomCategories(context);
-
     return categoryQuery;
   }
 }

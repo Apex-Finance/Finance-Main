@@ -63,10 +63,13 @@ class GoalScreen extends StatelessWidget {
                             color: Theme.of(context).primaryColor),
                         textAlign: TextAlign.center,
                       ),
-                      RaisedButton(
+                      ElevatedButton(
                         child: Text('Add Goal'),
-                        color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).canvasColor,
+                        style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).primaryColor,
+                          textStyle:
+                              TextStyle(color: Theme.of(context).canvasColor),
+                        ),
                         onPressed: () => _enterGoal(context),
                       ),
                     ],
@@ -80,10 +83,13 @@ class GoalScreen extends StatelessWidget {
                       child: Container(
                         width: 100,
                         child: Container(
-                          child: RaisedButton(
+                          child: ElevatedButton(
                             child: Text('Add Goal'),
-                            color: Theme.of(context).primaryColor,
-                            textColor: Theme.of(context).canvasColor,
+                            style: ElevatedButton.styleFrom(
+                              primary: Theme.of(context).primaryColor,
+                              textStyle: TextStyle(
+                                  color: Theme.of(context).canvasColor),
+                            ),
                             onPressed: () => _enterGoal(context),
                           ),
                         ),

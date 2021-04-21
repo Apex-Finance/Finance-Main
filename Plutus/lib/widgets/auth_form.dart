@@ -31,7 +31,7 @@ class _AuthFormState extends State<AuthForm> {
       builder: (ctx) => AlertDialog(
         content: Text(message),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text('Okay'),
             onPressed: () => Navigator.pop(context),
           )
@@ -209,29 +209,35 @@ class _AuthFormState extends State<AuthForm> {
               else
                 Column(children: [
                   // LOGIN/SIGNUP UP button
-                  RaisedButton(
+                  ElevatedButton(
                     child: Text(
                       _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP',
                       style: Theme.of(context).textTheme.subtitle2,
                     ),
                     onPressed: _submit,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                    style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).primaryColor,
+                      textStyle: TextStyle(
+                          color:
+                              Theme.of(context).primaryTextTheme.button.color),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                     ),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
-                    color: Theme.of(context).primaryColor,
-                    textColor: Theme.of(context).primaryTextTheme.button.color,
                   ),
                   // Button to switch AuthModes
-                  FlatButton(
+                  TextButton(
                     child: Text(
                         '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
                     onPressed: _switchAuthMode,
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    textColor: Theme.of(context).primaryColor,
+                    style: TextButton.styleFrom(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
+                      primary: Theme.of(context).primaryColor,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
                   ),
                 ])
             ],

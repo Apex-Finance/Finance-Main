@@ -59,13 +59,13 @@ class _TransactionListTileState extends State<TransactionListTile> {
                   'This cannot be undone later.',
                 ),
                 actions: <Widget>[
-                  FlatButton(
+                  TextButton(
                     child: Text('No'),
                     onPressed: () {
                       Navigator.of(ctx).pop(false);
                     },
                   ),
-                  FlatButton(
+                  TextButton(
                     child: Text('Yes'),
                     onPressed: () {
                       Navigator.of(ctx).pop(true);

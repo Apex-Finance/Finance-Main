@@ -211,24 +211,9 @@ class Transactions with ChangeNotifier {
         .collection('Transactions')
         .doc(transaction.getID())
         .delete();
-    // TODO Find out why this is commented out
-    // final transactionIndex =
-    //     _transactions.indexWhere((transaction) => transaction.id == id);
-    // _transactions.removeAt(transactionIndex);
+
     notifyListeners();
   }
-
-  // TODO Find out why this is commented out
-  // // Take all transactions, filter out only the ones from the selected month, and reverse the order from newest to oldest
-  // List<Transaction> getMonthlyTransactions() {
-  //   var unsorted = _transactions
-  //       .where((transaction) =>
-  //           transaction.getDate().month == monthChanger.selectedMonth &&
-  //           transaction.getDate().year == monthChanger.selectedYear)
-  //       .toList();
-  //   unsorted.sort((a, b) => (b.getDate()).compareTo(a.getDate()));
-  //   return unsorted;
-  // }
 
   Query getMonthlyTransactions(BuildContext context, DateTime date) {
     return FirebaseFirestore.instance
@@ -303,16 +288,6 @@ class Transactions with ChangeNotifier {
     } catch (e) {
       print(e.toString());
     }
-    // TODO Find out why this is commented out
-    // goalTransactions.forEach((transactionSnapshot) {
-    //   var transactions = transactionSnapshot.docs;
-    //   transactions.forEach((transaction) {
-    //     transaction.reference.set(
-    //       {'title': goal.getTitle()},
-    //       SetOptions(merge: true),
-    //     );
-    //   });
-    // });
   }
 
   Stream<QuerySnapshot> getRecentTransactions(BuildContext context, int count) {
@@ -324,13 +299,4 @@ class Transactions with ChangeNotifier {
         .limit(count)
         .snapshots();
   }
-  // TODO Find out why this is commented out
-  // Sum the expenses for the month
-  // double get monthlyExpenses {
-  //   var sum = 0.00;
-  //   for (var transaction in monthlyTransactions) {
-  //     sum += transaction.getAmount();
-  //   }
-  //   return sum;
-  // }
 }

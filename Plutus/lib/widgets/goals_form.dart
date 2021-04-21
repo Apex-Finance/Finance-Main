@@ -164,8 +164,10 @@ class _GoalsFormState extends State<GoalsForm> {
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 20, 230, 0),
       //0, 20, 275, 0), // Values for Samsung J4; DO NOT CHANGE
-      child: RaisedButton(
-        color: Theme.of(context).primaryColorLight,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Theme.of(context).primaryColorLight,
+        ),
         child: _goal.getDate() == null
             ? Text('Due Date')
             : Text(

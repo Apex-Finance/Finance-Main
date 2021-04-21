@@ -18,15 +18,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Widget _colorOption(String name, Color foreground, Color background,
       int index, Function setColorIndex, BuildContext context) {
-    return RaisedButton(
-      padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-          bottom: Radius.circular(20),
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        primary: Colors.grey[600],
+        padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+            bottom: Radius.circular(20),
+          ),
         ),
       ),
-      color: Colors.grey[600],
       child: Row(
         children: [
           Icon(Icons.circle,
@@ -163,14 +165,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   context);
                             }),
                       ),
-                      RaisedButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
-                            bottom: Radius.circular(20),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20),
+                              bottom: Radius.circular(20),
+                            ),
                           ),
+                          primary: Colors.amber,
                         ),
-                        color: Colors.amber,
                         child: Text(
                           'Default',
                           style: TextStyle(

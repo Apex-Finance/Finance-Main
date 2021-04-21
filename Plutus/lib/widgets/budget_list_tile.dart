@@ -1,12 +1,9 @@
-import 'package:Plutus/models/categories.dart';
 import 'package:Plutus/widgets/transaction_list_tile.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-import '../providers/auth.dart';
-import '../models/budget.dart';
 import '../models/transaction.dart' as Transaction;
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';

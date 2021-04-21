@@ -3,7 +3,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
 
 import '../models/category.dart';
-import '../models/category_icon.dart';
 import '../models/budget.dart';
 
 // ignore: must_be_immutable
