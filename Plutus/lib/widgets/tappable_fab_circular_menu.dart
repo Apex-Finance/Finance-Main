@@ -1,6 +1,6 @@
-// Imported Flutter packages
+//JOSIAH- DOCUMENT PROPERLY (WE NEED TO "CITE" OUR SOURCE)
 import 'dart:math';
-import 'dart:ui'; // PLUTUS CODE
+import 'dart:ui'; // APEX CODE
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math.dart' as vector;
@@ -27,8 +27,6 @@ class TappableFabCircularMenu extends StatefulWidget {
   final Curve animationCurve;
   final DisplayChange onDisplayChange;
 
-  // SOURCE: https://www.codingflutter.com/2020/08/flutter-circular-menu-package.html
-  // Author: Naseer Aziz Ullah
   TappableFabCircularMenu(
       {Key key,
       this.alignment = Alignment.bottomRight,
@@ -131,14 +129,14 @@ class TappableFabCircularMenuState extends State<TappableFabCircularMenu>
     }
 
     return BackdropFilter(
-      // PLUTUS CODE
-      filter: isOpen // PLUTUS CODE
+      // APEX CODE
+      filter: isOpen // APEX CODE
           ? ImageFilter.blur(
-              // PLUTUS CODE
-              sigmaX: 5.0, // PLUTUS CODE
-              sigmaY: 5.0, // PLUTUS CODE
-            ) // PLUTUS CODE
-          : ImageFilter.blur(sigmaX: 0, sigmaY: 0), // PLUTUS CODE
+              // APEX CODE
+              sigmaX: 5.0, // APEX CODE
+              sigmaY: 5.0, // APEX CODE
+            ) // APEX CODE
+          : ImageFilter.blur(sigmaX: 0, sigmaY: 0), // APEX CODE
       child: Container(
         margin: widget.fabMargin,
         // Removes the default FAB margin

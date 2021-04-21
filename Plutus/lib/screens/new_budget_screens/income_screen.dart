@@ -10,6 +10,7 @@ import './first_budget_screen.dart';
 import '../tab_screen.dart';
 import '../../models/budget.dart';
 import '../../models/month_changer.dart';
+import '../../models/category.dart';
 
 // Screen that asks for the monthly income and creates a budget on that amount
 class IncomeScreen extends StatefulWidget {
@@ -22,28 +23,49 @@ class IncomeScreen extends StatefulWidget {
 class _IncomeScreenState extends State<IncomeScreen> {
   final _formKey = GlobalKey<FormState>();
   bool isNewBudget = false;
+  bool init = true;
+  List<Category> uneditedBudget = []; // starts out as empty list
+  Budget originalBudget;
+
+  // using didChangeDependencies with init "trick" since ModalRoute cant be called in initstate
+  // only runs once, right after initstate
+  @override
+  void didChangeDependencies() {
+    if (init) {
+      // make a deep copy of the budget (specifically, to store the original amount)
+      originalBudget = Budget.copy(ModalRoute.of(context).settings.arguments);
+
+      // check if new or edited budget to display Add or Edit Budget
+      if (originalBudget.getID() != null) {
+        isNewBudget = false;
+      } else
+        isNewBudget = true;
+      init = false;
+    }
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
     final Budget budget = ModalRoute.of(context).settings.arguments;
     var monthData = Provider.of<MonthChanger>(context);
-
     // Creates an AlertDialog Box that notifies the user of discard changes
-    Future<void> _showDiscardBudgetDialog() async {
+    Future<void> _showDiscardBudgetDialog(
+        bool isNewBudget, List<Category> uneditedBudget) async {
       return showDialog<void>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
             backgroundColor: Colors.grey[800],
-            title: AutoSizeText(
+            title: Text(
               'Cancel',
               style: Theme.of(context).textTheme.headline1,
             ),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
-                  AutoSizeText(
+                  Text(
                     'Would you like to discard these changes?',
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
@@ -52,15 +74,31 @@ class _IncomeScreenState extends State<IncomeScreen> {
             ),
             actions: <Widget>[
               TextButton(
-                child: AutoSizeText('Yes'),
-                onPressed: () {
-                  Provider.of<BudgetDataProvider>(context, listen: false)
-                      .deleteBudget(budget.getID(), context);
+                child: Text('Yes'),
+                onPressed: () async {
+                  if (isNewBudget) {
+                    // delete the new budget
+                    Provider.of<BudgetDataProvider>(context, listen: false)
+                        .deleteBudget(budget.getID(), context);
+                  } else {
+                    //edited budget
+                    if (uneditedBudget.isNotEmpty) {
+                      // if changes were made to edited budget amounts, revert them
+                      uneditedBudget.forEach((category) async {
+                        await Provider.of<CategoryDataProvider>(context,
+                                listen: false)
+                            .uploadCategory(budget.getID(), category, context);
+                      });
+                    }
+                    //push the original budget's amount in case it changed
+                    Provider.of<BudgetDataProvider>(context, listen: false)
+                        .editBudget(originalBudget, context);
+                  }
                   Navigator.of(context).pushNamed(TabScreen.routeName);
                 },
               ),
               TextButton(
-                  child: AutoSizeText('No'),
+                  child: Text('No'),
                   onPressed: () => Navigator.of(context).pop()),
             ],
           );
@@ -70,7 +108,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
     return WillPopScope(
       onWillPop: () async {
-        _showDiscardBudgetDialog();
+        _showDiscardBudgetDialog(isNewBudget, uneditedBudget);
         return true;
       },
       child: Scaffold(
@@ -133,8 +171,14 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                       builder: (context) => FirstBudgetScreen(
                                         budget: budget,
                                         isNewBudget: isNewBudget,
+                                        uneditedBudget: uneditedBudget,
                                       ),
-                                    ));
+                                    )).then((arguments) {
+                                  uneditedBudget =
+                                      arguments; //receive the original categories and amounts
+                                  // will be passed back to FirstBudgetScreen if they decide to go back again
+                                  // needed or else won't discard changes if they go to FBS and make changes, back to IS, again to FBS, back to IS then discard
+                                });
                               }
                             },
                             // Prevents users from entering budgets >= $1billion
@@ -144,7 +188,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             validator: (val) {
                               if (val.contains(
                                   new RegExp(r'^-?\d+(\.\d{1,2})?$'))) {
-                                // TODO Does this need to be commented out?
                                 // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
                                 // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
                                 if (double.parse(

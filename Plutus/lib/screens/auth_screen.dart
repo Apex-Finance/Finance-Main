@@ -1,7 +1,5 @@
-// Imported Flutter packages
 import 'package:flutter/material.dart';
 
-// Imported Plutus files
 import '../widgets/auth_form.dart';
 
 // Login Screen

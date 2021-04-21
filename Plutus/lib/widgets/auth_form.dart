@@ -1,10 +1,8 @@
-// Imported Flutter packages
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
-// Imported Plutus files
 import '../screens/tab_screen.dart';
 import '../providers/auth.dart';
 
@@ -34,7 +32,7 @@ class _AuthFormState extends State<AuthForm> {
         title: Text(message),
         content: Text(message),
         actions: <Widget>[
-          TextButton(
+          FlatButton(
             child: Text('Okay'),
             onPressed: () => Navigator.pop(context),
           )
@@ -208,32 +206,28 @@ class _AuthFormState extends State<AuthForm> {
                 CircularProgressIndicator()
               else
                 // LOGIN/SIGNUP UP button
-                ElevatedButton(
+                RaisedButton(
                   child: Text(
                     _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP',
                     style: Theme.of(context).textTheme.subtitle2,
                   ),
                   onPressed: _submit,
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
-                    primary: Theme.of(context).primaryColor,
-                    onPrimary: Theme.of(context).primaryTextTheme.button.color,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
                   ),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+                  color: Theme.of(context).primaryColor,
+                  textColor: Theme.of(context).primaryTextTheme.button.color,
                 ),
               // Button to switch AuthModes
-              TextButton(
+              FlatButton(
                 child: Text(
                     '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
                 onPressed: _switchAuthMode,
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
-                  primary: Theme.of(context).primaryColor,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                textColor: Theme.of(context).primaryColor,
               ),
             ],
           ),
