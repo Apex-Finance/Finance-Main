@@ -250,7 +250,6 @@ String stringToUserString(String category) =>
     category.substring(1).replaceAll('_', ' ');
 
 String enumCategoryFromUserString(String category) {
-  print('${category.toLowerCase().replaceAll(' ', '_')}');
   return category.toLowerCase().replaceAll(' ', '_');
 }
 

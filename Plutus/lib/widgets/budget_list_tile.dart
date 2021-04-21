@@ -1,12 +1,9 @@
-import 'package:Plutus/models/categories.dart';
 import 'package:Plutus/widgets/transaction_list_tile.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-import '../providers/auth.dart';
-import '../models/budget.dart';
 import '../models/transaction.dart' as Transaction;
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
@@ -70,6 +67,9 @@ class _BudgetListTileState extends State<BudgetListTile> {
                         .getTransactionExpenses(snapshot.data)
                     : 0.0;
                 widget.category.calculateRemainingAmount(transactionExpenses);
+                var remaining = widget.category.getRemainingAmount() < 0
+                    ? 'overspent'
+                    : 'remaining';
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ClipRRect(
@@ -109,7 +109,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                 Expanded(
                                   child: Align(
                                     alignment: Alignment.centerRight,
-                                    child: Text(
+                                    child: AutoSizeText(
                                       '\$${widget.category.getAmount().toStringAsFixed(2)}',
                                       style: TextStyle(
                                           color: Theme.of(context).primaryColor,
@@ -145,8 +145,8 @@ class _BudgetListTileState extends State<BudgetListTile> {
                               ),
                               Container(
                                 margin: EdgeInsets.only(bottom: 4.0),
-                                child: Text(
-                                  '\$${widget.category.getRemainingAmount().toStringAsFixed(2)} remaining',
+                                child: AutoSizeText(
+                                  '\$${widget.category.getRemainingAmount().abs().toStringAsFixed(2)} $remaining',
                                   style: TextStyle(
                                       color: Theme.of(context).primaryColor,
                                       fontSize: 18),
@@ -179,7 +179,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                             // fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Text(
+                                        AutoSizeText(
                                           '\$${transactionExpenses.toStringAsFixed(2)}',
                                           style: TextStyle(
                                               color: Theme.of(context)

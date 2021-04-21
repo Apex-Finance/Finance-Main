@@ -1,4 +1,5 @@
 import 'package:Plutus/models/month_changer.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,7 +10,6 @@ import '../widgets/transaction_list_tile.dart';
 import 'package:provider/provider.dart';
 import '../models/month_changer.dart';
 import '../widgets/transaction_form.dart';
-import '../providers/auth.dart';
 
 class TransactionScreen extends StatefulWidget {
   static const routeName = '/transaction';
@@ -170,7 +170,7 @@ class _TotalExpensesState extends State<TotalExpenses> {
         'Total Expenses',
         style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
       ),
-      trailing: Text(
+      trailing: AutoSizeText(
         '\$${widget.monthlyExpenses.toStringAsFixed(2)}',
         style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
       ),
@@ -196,10 +196,12 @@ class NoTransactionsYetText extends StatelessWidget {
                   fontSize: 18, color: Theme.of(context).primaryColor),
               textAlign: TextAlign.center,
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Add Transaction'),
-              color: Theme.of(context).primaryColor,
-              textColor: Theme.of(context).canvasColor,
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).primaryColor,
+                textStyle: TextStyle(color: Theme.of(context).canvasColor),
+              ),
               onPressed: () => enterTransactionsHandler(context),
             ),
           ],

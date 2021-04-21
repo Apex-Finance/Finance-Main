@@ -1,14 +1,11 @@
 import 'package:Plutus/models/category.dart';
 import 'package:Plutus/models/transaction.dart' as Transaction;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../models/category_icon.dart';
-import '../providers/auth.dart';
 import '../models/category.dart';
 
 // Form to add a new transaction
@@ -38,15 +35,12 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   // Change the category of the transaction
-  //TODO this may need to be heavily revised after we set up the stream for categories
   void _setCategory(Category category) {
     if (category.getTitle() == null) return; // if user taps out of popup
     setState(() {
       _transaction.setCategoryId(category.getID());
       _transaction.setCategoryCodePoint(category.getCodepoint());
       _transaction.setCategoryTitle(category.getTitle());
-      // _transaction.category = category =
-      //     value; // update category if category changes since no onsave property
     });
   }
 
@@ -77,8 +71,7 @@ class _TransactionFormState extends State<TransactionForm> {
       _transaction.setDate(_date);
       _transaction.setCategoryId(
           "CbPdG5AksSODRfuf7319"); // id for uncategorized category
-      _transaction
-          .setCategoryTitle("Uncategorized"); // TODO: grab these two from db
+      _transaction.setCategoryTitle("Uncategorized");
       _transaction.setCategoryCodePoint(58947);
     }
 
@@ -170,8 +163,10 @@ class _TransactionFormState extends State<TransactionForm> {
             ),
           ),
         ),
-        RaisedButton(
-          color: Theme.of(context).primaryColorLight,
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Theme.of(context).primaryColorLight,
+          ),
           child: Text('Pick Date'),
           onPressed: () => showDatePicker(
             context: context,
@@ -197,8 +192,7 @@ class _TransactionFormState extends State<TransactionForm> {
   Widget buildCategoryChanger(BuildContext context) {
     Category category = new Category();
     var categoryDataProvider = Provider.of<CategoryDataProvider>(context);
-    //TODO this will need to be rebuilt to stream the default categories in the database so we can tie the title and id to the transaction; this will eventually help with custom categories
-    var categories = new List<Category>();
+    List<Category> categories = [];
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [

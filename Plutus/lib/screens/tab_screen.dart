@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:Plutus/widgets/goals_form.dart';
 import 'package:flutter/material.dart';
 
 import './budget_screen.dart';
@@ -8,7 +7,6 @@ import './dashboard_screen.dart';
 import './goal_screen.dart';
 import '../widgets/transaction_form.dart';
 import '../widgets/tappable_fab_circular_menu.dart';
-import 'new_budget_screens/income_screen.dart';
 import '../providers/tab.dart';
 import 'package:provider/provider.dart';
 

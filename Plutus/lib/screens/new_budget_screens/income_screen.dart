@@ -26,6 +26,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
   bool init = true;
   List<Category> uneditedBudget = []; // starts out as empty list
   Budget originalBudget;
+  bool fbsInit = true;
 
   // using didChangeDependencies with init "trick" since ModalRoute cant be called in initstate
   // only runs once, right after initstate
@@ -51,7 +52,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
     var monthData = Provider.of<MonthChanger>(context);
     // Creates an AlertDialog Box that notifies the user of discard changes
     Future<void> _showDiscardBudgetDialog(
-        bool isNewBudget, List<Category> uneditedBudget) async {
+        bool isNewBudget, List<Category> uneditedBudget,
+        [bool delete = false]) async {
       return showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -59,14 +61,16 @@ class _IncomeScreenState extends State<IncomeScreen> {
           return AlertDialog(
             backgroundColor: Colors.grey[800],
             title: Text(
-              'Cancel',
+              delete ? 'Do you want to delete this budget?' : 'Cancel',
               style: Theme.of(context).textTheme.headline1,
             ),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
                   Text(
-                    'Would you like to discard these changes?',
+                    delete
+                        ? 'This cannot be undone later.'
+                        : 'Would you like to discard these changes?',
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
@@ -76,7 +80,11 @@ class _IncomeScreenState extends State<IncomeScreen> {
               TextButton(
                 child: Text('Yes'),
                 onPressed: () async {
-                  if (isNewBudget) {
+                  if (delete) {
+                    // delete the new budget
+                    Provider.of<BudgetDataProvider>(context, listen: false)
+                        .deleteBudget(budget.getID(), context);
+                  } else if (isNewBudget) {
                     // delete the new budget
                     Provider.of<BudgetDataProvider>(context, listen: false)
                         .deleteBudget(budget.getID(), context);
@@ -115,6 +123,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
         appBar: AppBar(
           title: AutoSizeText('New Budget',
               style: Theme.of(context).textTheme.bodyText1),
+          actions: [
+            IconButton(
+                icon: Icon(Icons.delete),
+                tooltip: 'Delete budget',
+                onPressed: () => _showDiscardBudgetDialog(
+                    isNewBudget, uneditedBudget, true)),
+          ],
         ),
         body: Padding(
           padding: EdgeInsets.fromLTRB(20, 50, 20, 0),
@@ -164,6 +179,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                           listen: false)
                                       .addBudget(budget, context);
                                   isNewBudget = true;
+                                  if (originalBudget.getAmount() == null) {
+                                    originalBudget.setAmount(0.00);
+                                  }
                                 }
                                 Navigator.push(
                                     context,
@@ -172,10 +190,14 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                         budget: budget,
                                         isNewBudget: isNewBudget,
                                         uneditedBudget: uneditedBudget,
+                                        init: fbsInit,
+                                        originalAmount:
+                                            originalBudget.getAmount(),
                                       ),
                                     )).then((arguments) {
-                                  uneditedBudget =
-                                      arguments; //receive the original categories and amounts
+                                  fbsInit = false;
+                                  uneditedBudget = arguments;
+                                  //receive the original categories and amounts
                                   // will be passed back to FirstBudgetScreen if they decide to go back again
                                   // needed or else won't discard changes if they go to FBS and make changes, back to IS, again to FBS, back to IS then discard
                                 });

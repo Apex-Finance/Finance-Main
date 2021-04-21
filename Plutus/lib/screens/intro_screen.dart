@@ -79,11 +79,14 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         ),
         PageViewModel(
           title: "Ready to start your journey to financial freedom?",
-          bodyWidget: RaisedButton(
+          bodyWidget: ElevatedButton(
             child: Text('Sign me up!'),
             onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
                 AuthScreen.routeName, (Route<dynamic> route) => false),
-            color: Colors.amber,
+            style: ElevatedButton.styleFrom(
+              primary: Colors.amber,
+              textStyle: TextStyle(color: Theme.of(context).canvasColor),
+            ),
           ),
           image: _buildImage('Freedom.jpg'),
           decoration: pageDecoration,
