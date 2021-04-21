@@ -114,7 +114,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   child: Container(
                     height: 90,
-                    width: 134, // 180
+                    width: 180, // 180
                     child: Center(
                       child: Column(
                         children: [
