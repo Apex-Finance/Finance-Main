@@ -1,6 +1,6 @@
-//JOSIAH- DOCUMENT PROPERLY (WE NEED TO "CITE" OUR SOURCE)
+// Imported Flutter packages
 import 'dart:math';
-import 'dart:ui'; // APEX CODE
+import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math.dart' as vector;

@@ -1,7 +1,9 @@
+// Imported Flutter packages
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
 
+// Imported Plutus files
 import '../models/category.dart';
 import '../models/budget.dart';
 

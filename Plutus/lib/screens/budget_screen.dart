@@ -1,11 +1,13 @@
-import 'package:Plutus/models/category.dart';
-import 'package:Plutus/models/transaction.dart';
+// Imported Flutter packages
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
 
+// Imported Plutus files
+import '../models/category.dart';
+import '../models/transaction.dart';
 import '../models/budget.dart';
 import '../models/month_changer.dart';
 import '../widgets/budget_list_tile.dart';

@@ -1,7 +1,9 @@
+// Imported Flutter packages
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
+// Imported Plutus files
 import '../widgets/goals_form.dart';
 import '../widgets/goals_list_tile.dart';
 import '../models/goals.dart';

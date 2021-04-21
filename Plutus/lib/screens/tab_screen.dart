@@ -1,6 +1,8 @@
+// Imported Flutter packages
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
+// Imported Plutus files
 import './budget_screen.dart';
 import './transaction_screen.dart';
 import './dashboard_screen.dart';

@@ -1,9 +1,11 @@
+// Imported Flutter packages
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
 
+// Imported Plutus files
 import '../providers/auth.dart';
 
 class UpdatePasswordForm extends StatefulWidget {

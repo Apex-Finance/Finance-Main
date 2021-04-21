@@ -1,4 +1,4 @@
-// Imported Flutte packages
+// Imported Flutter packages
 import 'package:flutter/material.dart';
 
 class ColorProvider with ChangeNotifier {

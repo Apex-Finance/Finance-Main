@@ -1,12 +1,14 @@
-import 'package:Plutus/models/category.dart';
-import 'package:Plutus/models/transaction.dart' as Transaction;
+// Imported Flutter packages
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
+// Imported Plutus files
 import '../models/category.dart';
+import '../models/transaction.dart' as Transaction;
 
 // Form to add a new transaction
 class TransactionForm extends StatefulWidget {

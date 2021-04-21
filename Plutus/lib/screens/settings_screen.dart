@@ -1,7 +1,9 @@
+// Imported Flutter packages
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:provider/provider.dart';
 
+// Imported Plutus files
 import '../providers/color.dart';
 
 class SettingsScreen extends StatefulWidget {

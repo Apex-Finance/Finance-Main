@@ -1,3 +1,4 @@
+// Imported Flutter packages
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +7,7 @@ import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
+// Imported Plutus files
 import '../models/goals.dart';
 import '../models/transaction.dart' as Transaction;
 

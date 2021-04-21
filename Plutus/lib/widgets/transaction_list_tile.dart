@@ -1,9 +1,11 @@
+// Imported Flutter packages
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
+// Imported Plutus files
 import '../models/transaction.dart' as Transaction;
 import '../models/category_icon.dart';
 import './transaction_form.dart';

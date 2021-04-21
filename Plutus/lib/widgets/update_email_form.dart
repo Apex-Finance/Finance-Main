@@ -1,4 +1,4 @@
-// This widget is no longer in use
+// THIS WIDGET IS NO LONGER IN USE
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

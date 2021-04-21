@@ -1,12 +1,14 @@
-import 'package:Plutus/widgets/transaction_list_tile.dart';
+// Imported Flutter packages
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
-
-import '../models/transaction.dart' as Transaction;
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
+import 'dart:math';
+
+// Imported Plutus files
+import '../widgets/transaction_list_tile.dart';
+import '../models/transaction.dart' as Transaction;
 import '../models/category_icon.dart';
 import '../models/category.dart' as Category;
 

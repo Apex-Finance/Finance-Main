@@ -1,14 +1,15 @@
-import 'package:Plutus/models/month_changer.dart';
+// Imported Flutter packages
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
+// Imported Plutus files
+import '../models/month_changer.dart';
 import '../models/transaction.dart' as Transaction;
 import '../widgets/transaction_list_tile.dart';
-import 'package:provider/provider.dart';
-import '../models/month_changer.dart';
 import '../widgets/transaction_form.dart';
 
 class TransactionScreen extends StatefulWidget {

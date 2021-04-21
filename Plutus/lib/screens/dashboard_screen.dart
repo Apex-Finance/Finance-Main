@@ -1,6 +1,8 @@
+// Imported Flutter packages
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
+// Imported Plutus files
 import '../widgets/transaction_list_tile.dart';
 import '../models/pie_chart.dart';
 import '../widgets/goals_list_tile.dart';
