@@ -325,10 +325,10 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                 ),
                               ),
                             );
-                            // removes all screens besides tab (useful after intro or just normal budget creation)
+                            // removes screens until tab screen is reached (i.e., removes IS and FBS so can't re-edit budget)
                           } else {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/tab', (Route<dynamic> route) => false);
+                            Navigator.popUntil(
+                                context, ModalRoute.withName('/tab'));
                           }
                         },
                         label: widget.isNewBudget

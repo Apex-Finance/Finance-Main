@@ -102,7 +102,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
                     Provider.of<BudgetDataProvider>(context, listen: false)
                         .editBudget(originalBudget, context);
                   }
-                  Navigator.of(context).pushNamed(TabScreen.routeName);
+                  // removes all screens until tab screen (i.e., removes IS and FBS so can't re-edit the deleted/edited budget)
+                  Navigator.popUntil(context, ModalRoute.withName('/tab'));
                 },
               ),
               TextButton(
