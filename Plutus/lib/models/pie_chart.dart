@@ -104,7 +104,7 @@ class PieChartCard extends StatelessWidget {
                                   color: charts
                                       .MaterialPalette.purple.shadeDefault,
                                   fontFamily: 'Georgia',
-                                  fontSize: 11),
+                                  fontSize: 10),
                             )
                           ],
                           defaultRenderer: new charts.ArcRendererConfig(
