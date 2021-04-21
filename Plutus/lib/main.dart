@@ -32,11 +32,8 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) async {
     await Firebase.initializeApp();
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-    ErrorWidget.builder = (FlutterErrorDetails details) => Scaffold(
-        body: Center(
-            child: (Text("Ooops something happened here!",
-                style: TextStyle(color: Colors.black)))));
+    //FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    ErrorWidget.builder = (FlutterErrorDetails details) => Scaffold();
     runApp(
       MultiProvider(providers: [
         ChangeNotifierProvider(create: (context) => TabProvider()),
