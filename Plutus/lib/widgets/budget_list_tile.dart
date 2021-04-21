@@ -109,7 +109,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                 Expanded(
                                   child: Align(
                                     alignment: Alignment.centerRight,
-                                    child: Text(
+                                    child: AutoSizeText(
                                       '\$${widget.category.getAmount().toStringAsFixed(2)}',
                                       style: TextStyle(
                                           color: Theme.of(context).primaryColor,
@@ -145,7 +145,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                               ),
                               Container(
                                 margin: EdgeInsets.only(bottom: 4.0),
-                                child: Text(
+                                child: AutoSizeText(
                                   '\$${widget.category.getRemainingAmount().toStringAsFixed(2)} remaining',
                                   style: TextStyle(
                                       color: Theme.of(context).primaryColor,
@@ -179,7 +179,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                             // fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Text(
+                                        AutoSizeText(
                                           '\$${transactionExpenses.toStringAsFixed(2)}',
                                           style: TextStyle(
                                               color: Theme.of(context)
