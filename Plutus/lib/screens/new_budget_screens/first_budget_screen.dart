@@ -14,9 +14,16 @@ class FirstBudgetScreen extends StatefulWidget {
   static const routeName = '/first_budget';
   final Budget budget;
   final bool isNewBudget;
+  final bool init;
+  final double originalAmount;
   final List<Category>
       uneditedBudget; // receive the uneditedBudget (starts out as empty List on first time to FBS, then as the originalBudget)
-  FirstBudgetScreen({this.budget, this.isNewBudget, this.uneditedBudget});
+  FirstBudgetScreen(
+      {this.budget,
+      this.isNewBudget,
+      this.uneditedBudget,
+      this.init,
+      this.originalAmount});
 
   @override
   _FirstBudgetScreenState createState() => _FirstBudgetScreenState();
@@ -30,6 +37,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   Category activeCategory = Category();
   List<Category> originalList = [];
   bool init = true;
+  bool fbsInit = true;
 
   void setActiveCategory(Category category, double amount) {
     activeCategory = category;
@@ -49,6 +57,26 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
       });
     else
       widget.budget.categoryAmount = amount;
+
+    // on the very first time FBS is reached, set the remainingAmount to be the difference b/w the previous remainingAmount and whatever they changed it to this time
+    // will not be called if the user goes back to IS and then again to FBS
+    // this assumes that the budget was created appropriately the first time (i.e., no anomaly took place like quitting the app); otherwise remainingAmount will be wrong initially but correct itself
+    if (widget.init && fbsInit) {
+      // note: init and widget.init are different values for different things
+      widget.budget.setRemainingAmountNew(
+          widget.budget.getAmount() - widget.originalAmount);
+      fbsInit =
+          false; // make sure remaining amount is calculated normally while on FBS
+      // used new variable because setting widget.init to false causes a warning
+    } else if (mounted)
+      // every time except the first time FBS is reached, do normal calculations to get remainingAmount
+      // cannot be done every time since setstate cannot be called this early and/or categoryList is not fully updated
+      setState(() {
+        widget.budget.calculateRemainingAmountNew();
+      });
+    else
+      widget.budget.calculateRemainingAmountNew();
+
     return;
   }
 
@@ -194,22 +222,27 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                               });
                                             });
                                             // if this is the first time they visited the FBS, run this once
-                                            if (widget.uneditedBudget.isEmpty &&
-                                                init) {
-                                              //init is needed or this branch is executed twice
+                                            if (widget.uneditedBudget != null) {
+                                              // need this check for adding new budget
+                                              if (widget
+                                                      .uneditedBudget.isEmpty &&
+                                                  init) {
+                                                //init is needed or this branch is executed twice
 
-                                              //do a deep copy of each attribute of category, but only on first initialization
-                                              categoryList.forEach((category) {
-                                                originalList.add(
-                                                    Category.deepCopy(
-                                                        category));
-                                              });
-                                              init = false;
-                                            } else if (widget.uneditedBudget
-                                                .isNotEmpty) // on revisit of FBS, reset the original list to the uneditedBudget
-                                              //which was originally set to the original list...
-                                              originalList =
-                                                  widget.uneditedBudget;
+                                                //do a deep copy of each attribute of category, but only on first initialization
+                                                categoryList
+                                                    .forEach((category) {
+                                                  originalList.add(
+                                                      Category.deepCopy(
+                                                          category));
+                                                });
+                                                init = false;
+                                              } else if (widget.uneditedBudget
+                                                  .isNotEmpty) // on revisit of FBS, reset the original list to the uneditedBudget
+                                                //which was originally set to the original list...
+                                                originalList =
+                                                    widget.uneditedBudget;
+                                            }
                                           }
 
                                           return ListView.builder(
@@ -263,47 +296,40 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                               activeAmount,
                               context);
                           calculateAmountLeft(0);
-                          setState(
-                            () {
-                              if (widget.budget.getRemainingAmountNew() <
-                                  -0.001)
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    behavior: SnackBarBehavior.floating,
-                                    content: Padding(
-                                      padding: const EdgeInsets.only(top: 5.0),
-                                      child: AutoSizeText(
-                                        'You have budgeted more money than is available this month.',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1,
-                                      ),
-                                    ),
+                          if (widget.budget.getRemainingAmountNew() < -0.001)
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                content: Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: AutoSizeText(
+                                    'You have budgeted more money than is available this month.',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
                                   ),
-                                );
-                              else if (widget.budget.getRemainingAmountNew() >
-                                  0.001) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    behavior: SnackBarBehavior.floating,
-                                    content: Padding(
-                                      padding: const EdgeInsets.only(top: 5.0),
-                                      child: AutoSizeText(
-                                        'You have some money that still needs to be budgeted.',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1,
-                                      ),
-                                    ),
+                                ),
+                              ),
+                            );
+                          else if (widget.budget.getRemainingAmountNew() >
+                              0.001) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                content: Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: AutoSizeText(
+                                    'You have some money that still needs to be budgeted.',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
                                   ),
-                                );
-                                // removes all screens besides tab (useful after intro or just normal budget creation)
-                              } else {
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    '/tab', (Route<dynamic> route) => false);
-                              }
-                            },
-                          );
+                                ),
+                              ),
+                            );
+                            // removes all screens besides tab (useful after intro or just normal budget creation)
+                          } else {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/tab', (Route<dynamic> route) => false);
+                          }
                         },
                         label: widget.isNewBudget
                             ? AutoSizeText('Add Budget')

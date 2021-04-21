@@ -13,6 +13,7 @@ class Budget {
   double _amount;
   DateTime _date;
   double _remainingMonthlyAmount = 0;
+  double _remainingAmountNew;
 
   double categoryAmount = 0;
 
@@ -27,7 +28,15 @@ class Budget {
   }
 
   double getRemainingAmountNew() {
-    return _amount - categoryAmount;
+    return _remainingAmountNew;
+  }
+
+  void setRemainingAmountNew(remainingAmountNew) {
+    _remainingAmountNew = remainingAmountNew;
+  }
+
+  void calculateRemainingAmountNew() {
+    _remainingAmountNew = _amount - categoryAmount;
   }
 
   void setID(String idValue) {
