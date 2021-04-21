@@ -29,7 +29,6 @@ class _AuthFormState extends State<AuthForm> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(message),
         content: Text(message),
         actions: <Widget>[
           FlatButton(
@@ -49,6 +48,7 @@ class _AuthFormState extends State<AuthForm> {
       return;
     }
     _formKey.currentState.save();
+    FocusScope.of(context).unfocus();
     setState(() {
       _isLoading = true;
     });
@@ -203,32 +203,37 @@ class _AuthFormState extends State<AuthForm> {
                 height: 20,
               ),
               if (_isLoading)
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                  backgroundColor: Theme.of(context).primaryColor,
+                )
               else
-                // LOGIN/SIGNUP UP button
-                RaisedButton(
-                  child: Text(
-                    _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP',
-                    style: Theme.of(context).textTheme.subtitle2,
+                Column(children: [
+                  // LOGIN/SIGNUP UP button
+                  RaisedButton(
+                    child: Text(
+                      _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP',
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                    onPressed: _submit,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+                    color: Theme.of(context).primaryColor,
+                    textColor: Theme.of(context).primaryTextTheme.button.color,
                   ),
-                  onPressed: _submit,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                  // Button to switch AuthModes
+                  FlatButton(
+                    child: Text(
+                        '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
+                    onPressed: _switchAuthMode,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    textColor: Theme.of(context).primaryColor,
                   ),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
-                  color: Theme.of(context).primaryColor,
-                  textColor: Theme.of(context).primaryTextTheme.button.color,
-                ),
-              // Button to switch AuthModes
-              FlatButton(
-                child: Text(
-                    '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
-                onPressed: _switchAuthMode,
-                padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                textColor: Theme.of(context).primaryColor,
-              ),
+                ])
             ],
           ),
         ),

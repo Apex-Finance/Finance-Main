@@ -70,6 +70,9 @@ class _BudgetListTileState extends State<BudgetListTile> {
                         .getTransactionExpenses(snapshot.data)
                     : 0.0;
                 widget.category.calculateRemainingAmount(transactionExpenses);
+                var remaining = widget.category.getRemainingAmount() < 0
+                    ? 'overspent'
+                    : 'remaining';
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ClipRRect(
@@ -146,7 +149,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                               Container(
                                 margin: EdgeInsets.only(bottom: 4.0),
                                 child: AutoSizeText(
-                                  '\$${widget.category.getRemainingAmount().toStringAsFixed(2)} remaining',
+                                  '\$${widget.category.getRemainingAmount().abs().toStringAsFixed(2)} $remaining',
                                   style: TextStyle(
                                       color: Theme.of(context).primaryColor,
                                       fontSize: 18),
