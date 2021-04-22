@@ -1,12 +1,10 @@
 // Imported Flutter packages
-import 'package:Plutus/models/categories.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 // Imported Plutus files
 import '../providers/auth.dart';
-import './categories.dart';
 
 class Category {
   Category(
@@ -14,7 +12,6 @@ class Category {
       this._id,
       this._title,
       this._amount,
-      this._categoryName,
       this._remainingAmount]);
 
   Category.deepCopy(Category category)
@@ -24,14 +21,12 @@ class Category {
   int _codepoint; // Codepoint to store the icon info
   String _id;
   String _title;
-  MainCategory _categoryName;
   double _amount;
   double _remainingAmount; // this will be calculated when streaming
 
   Map<String, dynamic> toMap() {
     return {
       'id': getID(),
-      'categoryName': _categoryName,
       'amount': getAmount(),
       'remainingAmount': getRemainingAmount(),
     };
@@ -153,14 +148,17 @@ class CategoryDataProvider with ChangeNotifier {
   }
 
   Stream<QuerySnapshot> streamCategories(BuildContext context) {
-    var categoryQuery =
-        FirebaseFirestore.instance.collection('DefaultCategories').where(
-      'userID',
-      whereIn: [
-        'default',
-        Provider.of<Auth>(context).getUserId(),
-      ],
-    ).snapshots();
+    var categoryQuery = FirebaseFirestore.instance
+        .collection('DefaultCategories')
+        .where(
+          'userID',
+          whereIn: [
+            'default',
+            Provider.of<Auth>(context).getUserId(),
+          ],
+        )
+        .orderBy('title')
+        .snapshots();
     return categoryQuery;
   }
 
@@ -175,6 +173,7 @@ class CategoryDataProvider with ChangeNotifier {
           ],
         )
         .where('title', isNotEqualTo: 'Goal')
+        .orderBy('title')
         .snapshots();
     return categoryQuery;
   }

@@ -115,6 +115,7 @@ class BudgetDataProvider with ChangeNotifier {
         .collection('Budgets')
         .doc(budgetID)
         .collection('categories')
+        .orderBy('title')
         .snapshots();
   }
 
