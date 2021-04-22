@@ -163,4 +163,19 @@ class CategoryDataProvider with ChangeNotifier {
     ).snapshots();
     return categoryQuery;
   }
+
+  Stream<QuerySnapshot> streamCategoriesWithoutGoal(BuildContext context) {
+    var categoryQuery = FirebaseFirestore.instance
+        .collection('DefaultCategories')
+        .where(
+          'userID',
+          whereIn: [
+            'default',
+            Provider.of<Auth>(context).getUserId(),
+          ],
+        )
+        .where('title', isNotEqualTo: 'Goal')
+        .snapshots();
+    return categoryQuery;
+  }
 }

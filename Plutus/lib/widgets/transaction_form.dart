@@ -232,7 +232,7 @@ class _TransactionFormState extends State<TransactionForm> {
                             width: 400,
                             child: StreamBuilder(
                                 stream: categoryDataProvider
-                                    .streamCategories(context),
+                                    .streamCategoriesWithoutGoal(context),
                                 builder: (context,
                                     AsyncSnapshot<QuerySnapshot> snapshot) {
                                   switch (snapshot.connectionState) {
