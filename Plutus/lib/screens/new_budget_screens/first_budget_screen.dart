@@ -261,9 +261,29 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                                 setActiveCategory,
                                               ),
                                             );
+                                          } else if (snapshot
+                                              .data.docs.isEmpty) {
+                                            // if the user did not select any categories before quitting the app, make all the category amounts 0.00
+                                            categoryList.forEach((category) {
+                                              category.setAmount(0.0);
+                                            });
+                                            return ListView.builder(
+                                              shrinkWrap: true,
+                                              itemCount: categoryList.length,
+                                              itemBuilder: (context, index) =>
+                                                  CategoryListTile(
+                                                categoryList,
+                                                calculateAmountLeft,
+                                                catAmountFocusNodes,
+                                                index,
+                                                widget.budget,
+                                                setActiveCategory,
+                                              ),
+                                            );
                                           }
                                         }
-                                    } // fixes error of category amounts not having updated data right away
+                                    }
+                                    // fixes error of category amounts not having updated data right away
                                     // it's making the listtile wait to build until snapshot has data
                                     return Container();
                                   },
@@ -331,10 +351,20 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                 ),
                               ),
                             );
+                          } else {
+                            // fixes bug where budget screen would display all categories if it were empty
+                            // specifically if there was an error earlier in creation/editing
+                            categoryList.forEach((category) async {
+                              if (category.getAmount() == 0) {
+                                await categoryDataProvider.removeCategory(
+                                    widget.budget.getID(),
+                                    category.getID(),
+                                    context);
+                              }
+                            });
                             // removes all screens except login (i.e., removes IS and FBS so can't re-edit budget; and technically any settings or account screen)
                             // use this and not popUntil to fix bug where if user tapped a unbudgeted category in FBS, it would get removed from budget
                             // and then budget screen needed to be refreshed
-                          } else {
                             Navigator.pushNamedAndRemoveUntil(
                                 context,
                                 TabScreen.routeName,

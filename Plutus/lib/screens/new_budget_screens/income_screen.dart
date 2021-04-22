@@ -98,6 +98,15 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                 listen: false)
                             .uploadCategory(budget.getID(), category, context);
                       });
+                      // remove categories of 0 amount
+                      uneditedBudget.forEach((category) async {
+                        if (category.getAmount() == 0) {
+                          await Provider.of<CategoryDataProvider>(context,
+                                  listen: false)
+                              .removeCategory(
+                                  budget.getID(), category.getID(), context);
+                        }
+                      });
                     }
                     //push the original budget's amount in case it changed
                     Provider.of<BudgetDataProvider>(context, listen: false)
