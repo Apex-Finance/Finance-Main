@@ -333,4 +333,27 @@ class Transactions with ChangeNotifier {
   //   }
   //   return sum;
   // }
+
+  Stream<QuerySnapshot> getMonthlyGoalTransactions(BuildContext context) {
+    var monthlyGoalTransactions = FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('Transactions')
+        .where(
+          'date',
+          isGreaterThanOrEqualTo: DateTime(
+            DateTime.now().year,
+            DateTime.now().month,
+            1,
+          ),
+          isLessThan: DateTime(
+            DateTime.now().year,
+            DateTime.now().month + 1,
+            1,
+          ),
+        )
+        .snapshots();
+
+    return monthlyGoalTransactions;
+  }
 }
