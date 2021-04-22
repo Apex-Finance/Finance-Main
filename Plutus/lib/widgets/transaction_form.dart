@@ -90,12 +90,6 @@ class _TransactionFormState extends State<TransactionForm> {
       _transaction
           .setCategoryCodePoint(widget.transaction.getCategoryCodePoint());
       _transaction.setGoalId(widget.transaction.getGoalId());
-
-      // _transaction.id = widget.transaction.id;
-      // _transaction.title = widget.transaction.title;
-      // _transaction.category = category = widget.transaction.category;
-      // _transaction.amount = widget.transaction.amount;
-      // _transaction.date = _date = widget.transaction.date;
     }
     super.initState();
   }

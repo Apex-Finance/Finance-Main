@@ -6,7 +6,7 @@ import './transaction_screen.dart';
 import './dashboard_screen.dart';
 import './goal_screen.dart';
 import '../widgets/transaction_form.dart';
-import '../widgets/tappable_fab_circular_menu.dart';
+//import '../widgets/tappable_fab_circular_menu.dart';
 import '../providers/tab.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +20,7 @@ class TabScreen extends StatefulWidget {
 }
 
 class _TabScreenState extends State<TabScreen> {
-  final GlobalKey<TappableFabCircularMenuState> fabKey = GlobalKey();
+  //final GlobalKey<TappableFabCircularMenuState> fabKey = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -68,7 +68,7 @@ class _TabScreenState extends State<TabScreen> {
       else
         setState(() {}); // updates budget if transaction is made
     });
-    fabKey.currentState.close();
+    // fabKey.currentState.close();
   }
 
   // Pull up goal form when FAB is tapped; add the returned goal to the list of goals
@@ -128,6 +128,7 @@ class _TabScreenState extends State<TabScreen> {
             onPressed: () => _enterTransaction(context),
             child: Icon(Icons.add),
             backgroundColor: Theme.of(context).primaryColor,
+            // keeping for future reference if we ever use it
             // TappableFabCircularMenu(
             //   alignment: Alignment.bottomCenter,
             //   animationDuration: Duration(milliseconds: 500),

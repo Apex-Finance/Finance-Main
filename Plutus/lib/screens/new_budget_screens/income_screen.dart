@@ -217,8 +217,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             validator: (val) {
                               if (val.contains(
                                   new RegExp(r'^-?\d+(\.\d{1,2})?$'))) {
-                                // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
-                                // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
+                                //  accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
                                 if (double.parse(
                                         double.parse(val).toStringAsFixed(2)) <=
                                     0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00

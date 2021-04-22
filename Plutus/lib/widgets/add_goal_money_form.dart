@@ -8,17 +8,17 @@ import '../models/goals.dart';
 import '../models/transaction.dart' as Transaction;
 
 // Form for adding money to a goal
-class AddGoalMoneyScreen extends StatefulWidget {
+class AddGoalMoneyForm extends StatefulWidget {
   final Goal goal;
   @override
-  _AddGoalMoneyScreenState createState() => _AddGoalMoneyScreenState();
-  AddGoalMoneyScreen({this.goal});
+  _AddGoalMoneyFormState createState() => _AddGoalMoneyFormState();
+  AddGoalMoneyForm({this.goal});
 }
 
 double amountSaved =
     0.0; // Amount currently saved up for a goal; is calculated in runtime
 
-class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
+class _AddGoalMoneyFormState extends State<AddGoalMoneyForm> {
   Transaction.Transaction _transaction = new Transaction.Transaction.empty();
   final _formKey = GlobalKey<FormState>();
 
@@ -149,8 +149,7 @@ class GoalAmountField extends StatelessWidget {
       },
       validator: (val) {
         if (val.contains(new RegExp(r'^\d*(\.\d*)?$'))) {
-          // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
-          // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
+          // only accept any number of digits followed by 0 or 1 decimals followed by 0 or more digits
           if (double.parse(double.parse(val).toStringAsFixed(2)) <=
               0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
             return 'Please enter an amount greater than 0.';

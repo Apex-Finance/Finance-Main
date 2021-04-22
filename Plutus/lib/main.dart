@@ -52,19 +52,9 @@ void main() async {
         ),
         ChangeNotifierProxyProvider<MonthChanger, Transactions>(
           update: (buildContext, monthChanger, previousTransactions) =>
-              Transactions(
-                  monthChanger,
-                  previousTransactions == null
-                      ? []
-                      : previousTransactions.transactions),
+              Transactions(monthChanger),
           create: null,
         ),
-        // ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
-        //   update: (buildContext, monthChanger, transactions, previousBudgets) =>
-        //       Budgets(monthChanger, transactions,
-        //           previousBudgets == null ? [] : previousBudgets.budgets),
-        //   create: null,
-        // ),
       ], child: MyApp()),
     );
   });

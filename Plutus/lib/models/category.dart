@@ -24,14 +24,6 @@ class Category {
   double _amount;
   double _remainingAmount; // this will be calculated when streaming
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': getID(),
-      'amount': getAmount(),
-      'remainingAmount': getRemainingAmount(),
-    };
-  }
-
   void setCodepoint(int codepointValue) {
     _codepoint = codepointValue;
   }
