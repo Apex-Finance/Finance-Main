@@ -48,7 +48,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                 onFocusChange: (hasFocus) async {
                   if (!hasFocus) {
                     if (_controller.text
-                        .contains(new RegExp(r'-?[0-9]\d*(\.\d+)?$'))) {
+                        .contains(new RegExp(r'-?[0-9]\d*(\.\d*)?$'))) {
                       if (double.parse(double.parse(_controller.text)
                               .toStringAsFixed(2)) <
                           0.00) {
@@ -93,7 +93,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                           content: Padding(
                             padding: const EdgeInsets.only(top: 5.0),
                             child: Text(
-                              'Please enter a number',
+                              'Please enter a valid number',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                           ),

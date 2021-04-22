@@ -224,7 +224,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                   return 'Max amount is \$999,999,999.99'; // no budget >= $1billion
                                 return null;
                               } else {
-                                return 'Please enter a number.';
+                                return 'Please enter a valid number.';
                               }
                             },
                           ),

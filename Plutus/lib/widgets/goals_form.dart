@@ -271,7 +271,7 @@ class GoalAmountField extends StatelessWidget {
       onSaved: (val) => _goal.goalAmount = double.parse(val),
       validator: (val) {
         if (val.isEmpty) return 'Please enter an amount.';
-        if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
+        if (val.contains(new RegExp(r'^\d*(\.\d*)?$'))) {
           // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
           if (double.parse(double.parse(val).toStringAsFixed(2)) <=
               0.00) // seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
@@ -280,7 +280,7 @@ class GoalAmountField extends StatelessWidget {
             return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
           return null;
         } else {
-          return 'Please enter a number.';
+          return 'Please enter a valid number.';
         }
       },
     );

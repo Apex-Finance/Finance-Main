@@ -86,7 +86,9 @@ class _AddGoalMoneyScreenState extends State<AddGoalMoneyScreen> {
                             : widget.goal
                                 .getAmountSaved(context, snapshot.data);
                         return AutoSizeText(
-                          '\$ ${(widget.goal.getGoalAmount() - amountSaved).toStringAsFixed(2)} left to go',
+                          widget.goal.getGoalAmount() - amountSaved < 0
+                              ? '\$ ${(widget.goal.getGoalAmount() - amountSaved).abs().toStringAsFixed(2)} extra saved'
+                              : '\$ ${(widget.goal.getGoalAmount() - amountSaved).toStringAsFixed(2)} left to go',
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                           ),
@@ -146,18 +148,19 @@ class GoalAmountField extends StatelessWidget {
         amountSaved = double.parse(val);
       },
       validator: (val) {
-        if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
+        if (val.contains(new RegExp(r'^\d*(\.\d*)?$'))) {
           // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
           // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
           if (double.parse(double.parse(val).toStringAsFixed(2)) <=
               0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
             return 'Please enter an amount greater than 0.';
-          if (double.parse(double.parse(val).toStringAsFixed(2)) >
-              _goal.getGoalAmount())
-            return 'Amount cannot be greater than the Goal Amount';
+          // Let user save more than goal amount
+          // if (double.parse(double.parse(val).toStringAsFixed(2)) >
+          //     _goal.getGoalAmount())
+          //   return 'Amount cannot be greater than the Goal Amount';
           return null;
         } else {
-          return 'Please enter a number.';
+          return 'Please enter a valid number.';
         }
       },
     );
