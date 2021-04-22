@@ -119,6 +119,13 @@ class _AuthFormState extends State<AuthForm> {
   }
 
   @override
+  void dispose() {
+    _passwordController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Adjusts based on the size of the device
     final deviceSize = MediaQuery.of(context).size;

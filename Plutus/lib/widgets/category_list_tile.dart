@@ -36,6 +36,12 @@ class _CategoryListTileState extends State<CategoryListTile> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListTile(
       tileColor: Colors.grey[850],
