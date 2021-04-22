@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 // Imported Plutus files
+import '../auth_screen.dart';
 import './first_budget_screen.dart';
 import '../tab_screen.dart';
 import '../../models/budget.dart';
@@ -102,9 +103,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
                     Provider.of<BudgetDataProvider>(context, listen: false)
                         .editBudget(originalBudget, context);
                   }
-                  // removes all screens until tab screen (i.e., removes IS and FBS so can't re-edit the deleted/edited budget)
-                  Navigator.popUntil(
-                      context, ModalRoute.withName(TabScreen.routeName));
+                  // removes all screens except login (i.e., removes IS and FBS so can't re-edit deleted/edited budget; and technically any settings or account screen)
+                  // use this and not popUntil to fix bug where if user tapped a unbudgeted category in FBS, it would get removed from budget
+                  // and then budget screen needed to be refreshed
+                  Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      TabScreen.routeName,
+                      ModalRoute.withName(AuthScreen.routeName));
                 },
               ),
               TextButton(

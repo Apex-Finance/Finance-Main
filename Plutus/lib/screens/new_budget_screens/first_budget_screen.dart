@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 // Imported Plutus files
+import '../auth_screen.dart';
 import '../tab_screen.dart';
 import '../../widgets/category_list_tile.dart';
 import '../../models/budget.dart';
@@ -175,22 +176,25 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                             }
                           default:
                             {
-                              var tempList = <Category>[];
-                              budgetSnapshot.data.docs.forEach((doc) {
-                                tempList.add(categoryDataProvider
-                                    .initializeCategory(doc));
-                              });
-                              categoryList = tempList;
-                              // This is needed since the length of the focus nodes is changing in the loop
-                              var tempCount = categoryList.length -
-                                  catAmountFocusNodes.length;
-                              // Append focus nodes rather than create entire new list to keep from having multiple focuses
-                              if (categoryList.length !=
-                                  catAmountFocusNodes.length) {
-                                for (var index = 0;
-                                    index < tempCount;
-                                    index++) {
-                                  catAmountFocusNodes.add(FocusNode());
+                              if (budgetSnapshot.hasData &&
+                                  budgetSnapshot.data.docs.isNotEmpty) {
+                                var tempList = <Category>[];
+                                budgetSnapshot.data.docs.forEach((doc) {
+                                  tempList.add(categoryDataProvider
+                                      .initializeCategory(doc));
+                                });
+                                categoryList = tempList;
+                                // This is needed since the length of the focus nodes is changing in the loop
+                                var tempCount = categoryList.length -
+                                    catAmountFocusNodes.length;
+                                // Append focus nodes rather than create entire new list to keep from having multiple focuses
+                                if (categoryList.length !=
+                                    catAmountFocusNodes.length) {
+                                  for (var index = 0;
+                                      index < tempCount;
+                                      index++) {
+                                    catAmountFocusNodes.add(FocusNode());
+                                  }
                                 }
                               }
                               if (widget.budget.getID() != null) {
@@ -244,23 +248,24 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                                 originalList =
                                                     widget.uneditedBudget;
                                             }
+                                            return ListView.builder(
+                                              shrinkWrap: true,
+                                              itemCount: categoryList.length,
+                                              itemBuilder: (context, index) =>
+                                                  CategoryListTile(
+                                                categoryList,
+                                                calculateAmountLeft,
+                                                catAmountFocusNodes,
+                                                index,
+                                                widget.budget,
+                                                setActiveCategory,
+                                              ),
+                                            );
                                           }
-
-                                          return ListView.builder(
-                                            shrinkWrap: true,
-                                            itemCount: categoryList.length,
-                                            itemBuilder: (context, index) =>
-                                                CategoryListTile(
-                                              categoryList,
-                                              calculateAmountLeft,
-                                              catAmountFocusNodes,
-                                              index,
-                                              widget.budget,
-                                              setActiveCategory,
-                                            ),
-                                          );
                                         }
-                                    }
+                                    } // fixes error of category amounts not having updated data right away
+                                    // it's making the listtile wait to build until snapshot has data
+                                    return Container();
                                   },
                                 );
                               } else {
@@ -326,10 +331,14 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                 ),
                               ),
                             );
-                            // removes screens until tab screen is reached (i.e., removes IS and FBS so can't re-edit budget)
+                            // removes all screens except login (i.e., removes IS and FBS so can't re-edit budget; and technically any settings or account screen)
+                            // use this and not popUntil to fix bug where if user tapped a unbudgeted category in FBS, it would get removed from budget
+                            // and then budget screen needed to be refreshed
                           } else {
-                            Navigator.popUntil(context,
-                                ModalRoute.withName(TabScreen.routeName));
+                            Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                TabScreen.routeName,
+                                ModalRoute.withName(AuthScreen.routeName));
                           }
                         },
                         label: widget.isNewBudget
