@@ -20,6 +20,7 @@ class Transaction {
   int _categoryCodePoint; // Int value to display icon for category
   double _amount;
   DateTime _date;
+  String _goalId;
 
   Transaction.empty();
 
@@ -31,6 +32,7 @@ class Transaction {
     @required double amount,
     @required String categoryTitle,
     @required int categoryCodepoint,
+    String goalId,
   }) {
     _id = id;
     _title = title;
@@ -39,6 +41,7 @@ class Transaction {
     _categoryId = categoryId;
     _categoryTitle = categoryTitle;
     _categoryCodePoint = categoryCodepoint;
+    _goalId = goalId;
   }
 
   void setID(String idValue) {
@@ -96,6 +99,14 @@ class Transaction {
   DateTime getDate() {
     return _date;
   }
+
+  void setGoalId(String goalId) {
+    _goalId = goalId;
+  }
+
+  String getGoalId() {
+    return _goalId;
+  }
 }
 
 class Transactions with ChangeNotifier {
@@ -116,6 +127,7 @@ class Transactions with ChangeNotifier {
       categoryTitle: doc.data()['categoryTitle'],
       categoryCodepoint: doc.data()['categoryCodepoint'],
       amount: doc.data()['amount'],
+      goalId: doc.data()['goalID'],
     );
   }
 

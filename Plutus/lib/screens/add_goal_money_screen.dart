@@ -130,10 +130,10 @@ class GoalAmountField extends StatelessWidget {
   GoalAmountField({
     Key key,
     @required Goal goal,
-  })  : _goal = goal,
+  }) : //_goal = goal,
         super(key: key);
 
-  final Goal _goal;
+  //final Goal _goal;
   @override
   Widget build(BuildContext context) {
     return TextFormField(

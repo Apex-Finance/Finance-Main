@@ -89,6 +89,7 @@ class _TransactionFormState extends State<TransactionForm> {
       _transaction.setCategoryTitle(widget.transaction.getCategoryTitle());
       _transaction
           .setCategoryCodePoint(widget.transaction.getCategoryCodePoint());
+      _transaction.setGoalId(widget.transaction.getGoalId());
 
       // _transaction.id = widget.transaction.id;
       // _transaction.title = widget.transaction.title;
@@ -202,95 +203,102 @@ class _TransactionFormState extends State<TransactionForm> {
           'Category: ',
           style: TextStyle(
             fontSize: 16,
-            color: Theme.of(context).primaryColor,
+            color: _transaction.getGoalId() != null
+                ? Colors.grey
+                : Theme.of(context).primaryColor,
           ),
         ),
         GestureDetector(
-          onTap: () => showDialog(
-            context: context,
-            builder: (bctx) => SimpleDialog(
-              backgroundColor: Theme.of(context).primaryColor,
-              title: Text(
-                'Choose Category',
-                style: TextStyle(
-                  fontSize: 25,
-                  fontFamily: 'Anton',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 600,
-                      width: 400,
-                      child: StreamBuilder(
-                          stream:
-                              categoryDataProvider.streamCategories(context),
-                          builder:
-                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                            switch (snapshot.connectionState) {
-                              case ConnectionState.none:
-                                {
-                                  return Text(
-                                      'There was an error loading your categories.');
-                                }
-                              case ConnectionState.waiting:
-                                {
-                                  return CircularProgressIndicator();
-                                }
-                              default:
-                                {
-                                  snapshot.data.docs.forEach((element) {
-                                    categories.add(categoryDataProvider
-                                        .initializeCategory(element));
-                                  });
-                                  return ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: snapshot.data.docs.length,
-                                    itemBuilder: (context, index) {
-                                      category = categoryDataProvider
-                                          .initializeCategory(
-                                              snapshot.data.docs[index]);
-                                      return ListTile(
-                                        tileColor:
-                                            Theme.of(context).canvasColor,
-                                        leading: Icon(
-                                          IconData(
-                                            categories[index].getCodepoint(),
-                                            fontFamily: 'MaterialIcons',
-                                          ),
-                                          size: 30,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                        title: Text(
-                                          '${categories[index].getTitle()}',
-                                          style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            fontSize: 18,
-                                            fontFamily: 'Anton',
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        onTap: () {
-                                          _setCategory(categories[index]);
-
-                                          Navigator.of(context).pop(category);
-                                        },
-                                      );
-                                    },
-                                  );
-                                }
-                            }
-                          }),
+          onTap: () => _transaction.getGoalId() != null
+              ? null
+              : showDialog(
+                  context: context,
+                  builder: (bctx) => SimpleDialog(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    title: Text(
+                      'Choose Category',
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontFamily: 'Anton',
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ],
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 600,
+                            width: 400,
+                            child: StreamBuilder(
+                                stream: categoryDataProvider
+                                    .streamCategories(context),
+                                builder: (context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  switch (snapshot.connectionState) {
+                                    case ConnectionState.none:
+                                      {
+                                        return Text(
+                                            'There was an error loading your categories.');
+                                      }
+                                    case ConnectionState.waiting:
+                                      {
+                                        return CircularProgressIndicator();
+                                      }
+                                    default:
+                                      {
+                                        snapshot.data.docs.forEach((element) {
+                                          categories.add(categoryDataProvider
+                                              .initializeCategory(element));
+                                        });
+                                        return ListView.builder(
+                                          scrollDirection: Axis.vertical,
+                                          itemCount: snapshot.data.docs.length,
+                                          itemBuilder: (context, index) {
+                                            category = categoryDataProvider
+                                                .initializeCategory(
+                                                    snapshot.data.docs[index]);
+                                            return ListTile(
+                                              tileColor:
+                                                  Theme.of(context).canvasColor,
+                                              leading: Icon(
+                                                IconData(
+                                                  categories[index]
+                                                      .getCodepoint(),
+                                                  fontFamily: 'MaterialIcons',
+                                                ),
+                                                size: 30,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                              title: Text(
+                                                '${categories[index].getTitle()}',
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  fontSize: 18,
+                                                  fontFamily: 'Anton',
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              onTap: () {
+                                                _setCategory(categories[index]);
+
+                                                Navigator.of(context)
+                                                    .pop(category);
+                                              },
+                                            );
+                                          },
+                                        );
+                                      }
+                                  }
+                                }),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
           child: Chip(
             avatar: CircleAvatar(
               backgroundColor: Colors.black,
@@ -300,13 +308,18 @@ class _TransactionFormState extends State<TransactionForm> {
                   fontFamily: 'MaterialIcons',
                 ),
                 size: 22,
+                color: _transaction.getGoalId() != null
+                    ? Colors.grey
+                    : Theme.of(context).primaryColor,
               ),
             ),
             label: Text(
               '${_transaction.getCategoryTitle()}',
               style: TextStyle(color: Colors.black),
             ),
-            backgroundColor: Theme.of(context).primaryColorLight,
+            backgroundColor: _transaction.getGoalId() != null
+                ? Colors.grey
+                : Theme.of(context).primaryColorLight,
           ),
         ),
       ],
@@ -339,6 +352,7 @@ class AmountTFF extends StatelessWidget {
       style: TextStyle(fontSize: 20.0, color: Theme.of(context).primaryColor),
       keyboardType: TextInputType.number,
       maxLength: null,
+      autofocus: _transaction.getGoalId() != null,
       onEditingComplete: () => FocusScope.of(context).unfocus(),
       onSaved: (val) => _transaction.setAmount(double.parse(val)),
       validator: (val) {
@@ -371,18 +385,27 @@ class DescriptionTFF extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: _transaction.getGoalId() == null,
       initialValue: _transaction.getTitle() ?? '',
       decoration: InputDecoration(
         labelText: 'Transaction Title',
         labelStyle: new TextStyle(
-            color: Theme.of(context).primaryColor, fontSize: 16.0),
+            color: _transaction.getGoalId() != null
+                ? Colors.grey
+                : Theme.of(context).primaryColor,
+            fontSize: 16.0),
       ),
-      style: TextStyle(fontSize: 20.0, color: Theme.of(context).primaryColor),
-      autofocus: true,
+      style: TextStyle(
+          fontSize: 20.0,
+          color: _transaction.getGoalId() != null
+              ? Colors.grey
+              : Theme.of(context).primaryColor),
+      autofocus: _transaction.getGoalId() == null,
       inputFormatters: [
         LengthLimitingTextInputFormatter(20),
       ],
       maxLength: 20,
+      readOnly: _transaction.getGoalId() != null,
       onEditingComplete: () => FocusScope.of(context).nextFocus(),
       onSaved: (val) => _transaction.setTitle(val.trim()),
       validator: (val) {
