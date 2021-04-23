@@ -1,4 +1,5 @@
 // Imported Flutter packages
+import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -51,6 +52,11 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
+    var budgetDataProvider = Provider.of<BudgetDataProvider>(context);
+    var transactionDataProvider = Provider.of<Transactions>(context);
+    var budgetAmount = 0.00;
+    double transactionExpenses = 0.00;
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -64,7 +70,7 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
           title: Column(
             children: [
               Text(
-                'Total Budget this month',
+                'Total Budget Used',
                 style: TextStyle(
                     fontSize: 22, color: Theme.of(context).primaryColor),
               ),
@@ -73,17 +79,62 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
               ),
               Center(
                 child: StreamBuilder<QuerySnapshot>(
-                  stream: null,
-                  builder: (context, snapshot) {
-                    return new LinearPercentIndicator(
-                      width: MediaQuery.of(context).size.width * .75, // 82
-                      animation: true,
-                      lineHeight: 20.0,
-                      animationDuration: 2500,
-                      percent: 0.8,
-                      center: Text("80.0%"),
-                      linearStrokeCap: LinearStrokeCap.roundAll,
-                      progressColor: Theme.of(context).primaryColor,
+                  stream: budgetDataProvider.getmonthlyBudget(
+                      context, DateTime.now()),
+                  builder: (context, budgetSnapshot) {
+                    return StreamBuilder<QuerySnapshot>(
+                      stream: transactionDataProvider
+                          .getMonthlyTransactions(context, DateTime.now())
+                          .snapshots(),
+                      builder: (context, transactionSnapshot) {
+                        if (!budgetSnapshot.hasData ||
+                            !transactionSnapshot.hasData) {
+                          // loading data... show empty percent indicator to prevent screen shifting
+                          return LinearPercentIndicator(
+                            width:
+                                MediaQuery.of(context).size.width * .75, // 82
+                            animation: true,
+                            lineHeight: 20.0,
+                            animationDuration: 2500,
+                            percent: 0,
+                            center: Text(''),
+                            linearStrokeCap: LinearStrokeCap.roundAll,
+                            progressColor: Theme.of(context).primaryColor,
+                          );
+                        } else if (budgetSnapshot.data.docs.isEmpty) {
+                          // no budget created yet... don't show LPI
+                          return Text(
+                            'No budget created yet.',
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor),
+                          );
+                        } else {
+                          budgetAmount = budgetDataProvider
+                              .initializeBudget(budgetSnapshot.data.docs.first)
+                              .getAmount();
+                          transactionExpenses = transactionDataProvider
+                              .getTransactionExpenses(transactionSnapshot.data);
+
+                          return LinearPercentIndicator(
+                            width:
+                                MediaQuery.of(context).size.width * .75, // 82
+                            animation: true,
+                            lineHeight: 20.0,
+                            animationDuration: 2500,
+                            // if budget is 0 (somehow) show empty; if expenses > budget, show full; otherwise show correct % spent
+                            percent: budgetAmount > 0
+                                ? (transactionExpenses > budgetAmount
+                                    ? 1
+                                    : transactionExpenses / budgetAmount)
+                                : 0,
+                            center: Text(budgetAmount > 0
+                                ? '${(transactionExpenses / budgetAmount * 100).toStringAsFixed(1)}%'
+                                : ''),
+                            linearStrokeCap: LinearStrokeCap.roundAll,
+                            progressColor: Theme.of(context).primaryColor,
+                          );
+                        }
+                      },
                     );
                   },
                 ),
