@@ -594,7 +594,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.1"
+    version: "1.8.0"
   stack_trace:
     dependency: transitive
     description:
@@ -629,7 +629,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.0"
+    version: "0.2.19"
   toggle_switch:
     dependency: "direct main"
     description:
@@ -687,5 +687,5 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
-  dart: ">=2.12.0 <3.0.0"
+  dart: ">=2.12.0-0.0 <3.0.0"
   flutter: ">=1.17.0"
