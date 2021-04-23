@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 // Imported Plutus files
 import '../widgets/transaction_list_tile.dart';
@@ -18,7 +19,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
-    var deviceSize = MediaQuery.of(context).size;
+    //var deviceSize = MediaQuery.of(context).size;
     return ListView(
       shrinkWrap: true,
       padding: EdgeInsets.all(15.0),
