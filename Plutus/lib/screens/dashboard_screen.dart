@@ -11,6 +11,7 @@ import '../widgets/transaction_list_tile.dart';
 import '../models/pie_chart.dart';
 import '../widgets/goals_list_tile.dart';
 import '../models/transaction.dart';
+import '../models/goals.dart';
 
 class DashboardScreen extends StatefulWidget {
   static const routeName = '/dashboard';
@@ -280,5 +281,67 @@ class TotalSpentCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class UpcomingGoalCard extends StatelessWidget {
+  final int tileCount;
+
+  UpcomingGoalCard(this.tileCount);
+
+  @override
+  Widget build(BuildContext context) {
+    var goalDataProvider =
+        Provider.of<GoalDataProvider>(context, listen: false);
+    return StreamBuilder<QuerySnapshot>(
+        stream: goalDataProvider.getUpcomingGoals(context, tileCount),
+        builder: (context, snapshot) {
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(20),
+                bottom: Radius.circular(20),
+              ),
+            ),
+            child: Container(
+              width: 400,
+              height: 260,
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    width: 400,
+                    child: Center(
+                      child: Text(
+                        'Upcoming Goals',
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: (!snapshot.hasData || snapshot.data.docs.isEmpty)
+                        ? Container()
+                        : ListView.builder(
+                            itemCount: snapshot.data.docs.length,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              // initialize the transaction document into a transaction object
+                              return GoalsListTile(goalDataProvider
+                                  .initializeGoal(snapshot.data.docs[index]));
+                            }),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }

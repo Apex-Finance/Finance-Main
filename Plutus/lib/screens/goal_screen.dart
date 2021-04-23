@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import '../widgets/goals_form.dart';
 import '../widgets/goals_list_tile.dart';
 import '../models/goals.dart';
-import '../providers/auth.dart';
 
 // Displays individual user goals
 class GoalScreen extends StatelessWidget {
@@ -30,14 +29,9 @@ class GoalScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var goalDataProvider = Provider.of<GoalDataProvider>(context);
     Goal goal = Goal();
-    var dbRef = FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('Goals')
-        .orderBy('dateOfGoal', descending: false);
 
     return StreamBuilder<QuerySnapshot>(
-      stream: dbRef.snapshots(),
+      stream: goalDataProvider.getUpcomingGoals(context),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
         switch (snapshot.connectionState) {
