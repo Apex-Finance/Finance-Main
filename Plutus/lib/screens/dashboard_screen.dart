@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 // Imported Plutus files
 import '../widgets/transaction_list_tile.dart';
@@ -127,7 +128,7 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
                                     ? 1
                                     : transactionExpenses / budgetAmount)
                                 : 0,
-                            center: Text(budgetAmount > 0
+                            center: AutoSizeText(budgetAmount > 0
                                 ? '${(transactionExpenses / budgetAmount * 100).toStringAsFixed(1)}%'
                                 : ''),
                             linearStrokeCap: LinearStrokeCap.roundAll,
