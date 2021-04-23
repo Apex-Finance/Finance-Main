@@ -19,7 +19,6 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
-    //var deviceSize = MediaQuery.of(context).size;
     return ListView(
       shrinkWrap: true,
       padding: EdgeInsets.all(15.0),
@@ -67,9 +66,7 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
               Text(
                 'Total Budget this month',
                 style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColor),
+                    fontSize: 22, color: Theme.of(context).primaryColor),
               ),
               SizedBox(
                 height: 10,
@@ -145,7 +142,10 @@ class TotalSavedCard extends StatelessWidget {
               ),
               StreamBuilder<QuerySnapshot>(
                   stream: Provider.of<Transactions>(context, listen: false)
-                      .getMonthlyGoalTransactions(context),
+                      .getCategoryTransactions(
+                          'GYHEkJeJsFG09HUw14p3',
+                          DateTime.now(),
+                          context), // gets goal transactions for this month
                   builder: (context, snapshot) {
                     double amountSaved;
                     if (!snapshot.hasData)
@@ -153,7 +153,8 @@ class TotalSavedCard extends StatelessWidget {
                     else
                       amountSaved =
                           Provider.of<Transactions>(context, listen: false)
-                              .getTransactionExpenses(snapshot.data);
+                              .getTransactionExpenses(snapshot
+                                  .data); // sums the goal transaction amounts
                     return FittedBox(
                       fit: BoxFit.contain,
                       child: Text(
