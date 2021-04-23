@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// Imported Flutter packages
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../models/budget.dart';
-import '../widgets/budget_list_tile.dart';
-import '../models/transaction.dart' as Transaction;
+// Imported Plutus files
 import '../widgets/transaction_list_tile.dart';
 import '../models/pie_chart.dart';
 import '../widgets/goals_list_tile.dart';

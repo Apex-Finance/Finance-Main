@@ -13,6 +13,7 @@ class Budget {
   double _amount;
   DateTime _date;
   double _remainingMonthlyAmount = 0;
+  double _remainingAmountNew;
 
   double categoryAmount = 0;
 
@@ -20,8 +21,22 @@ class Budget {
 
   Budget();
 
+  Budget.copy(Budget budgetCopied) {
+    _id = budgetCopied.getID();
+    _amount = budgetCopied.getAmount();
+    _date = budgetCopied.getDate();
+  }
+
   double getRemainingAmountNew() {
-    return _amount - categoryAmount;
+    return _remainingAmountNew;
+  }
+
+  void setRemainingAmountNew(remainingAmountNew) {
+    _remainingAmountNew = remainingAmountNew;
+  }
+
+  void calculateRemainingAmountNew() {
+    _remainingAmountNew = _amount - categoryAmount;
   }
 
   void setID(String idValue) {
@@ -65,44 +80,6 @@ class Budget {
   DateTime getDate() {
     return _date;
   }
-
-  // TODO Find out why this is commented out
-  // void setUnbudgetedCategory() {
-  //   // adds categories that were not budgeted but expenses were made
-  //   for (var transaction in transactions)
-  //     if (categoryAmount[transaction.category] == null)
-  //       categoryAmount[transaction.category] = 0.00;
-  //   notifyListeners();
-  // }
-
-  // static Budget getMonthlyBudget() {
-  //   MonthChanger monthChanger;
-  //   Transaction.Transactions transactions;
-  //   List<Transaction.Transaction> monthlyTransactions =
-  //       transactions.monthlyTransactions;
-  //   var budgetWithTransactions = budgets.firstWhere(
-  //     (budget) =>
-  //         DateTime.parse(budget.title).month == monthChanger.selectedMonth &&
-  //         DateTime.parse(budget.title).year == monthChanger.selectedYear,
-  //     orElse: () => Budget(
-  //         id: null,
-  //         title: null,
-  //         amount: null,
-  //         transactions: null,
-  //         categoryAmount: null),
-  //   );
-  //   if (budgetWithTransactions.amount != null) {
-  //     //b/c of the way data is set up, initializing properties here, but should eventually be getters in Budget Provider
-  //     budgetWithTransactions.transactions = monthlyTransactions;
-  //     budgetWithTransactions.remainingMonthlyAmount =
-  //         budgetWithTransactions.amount - transactions.monthlyExpenses;
-  //   }
-  //   return budgetWithTransactions;
-  // }
-
-  // List<MainCategory> get budgetedAndUnbudgetedCategories {
-  //   return budgetedCategory;
-  // }
 }
 
 class BudgetDataProvider with ChangeNotifier {
@@ -138,6 +115,7 @@ class BudgetDataProvider with ChangeNotifier {
         .collection('Budgets')
         .doc(budgetID)
         .collection('categories')
+        .orderBy('title')
         .snapshots();
   }
 
@@ -173,29 +151,4 @@ class BudgetDataProvider with ChangeNotifier {
         .doc(budgetID)
         .delete();
   }
-// I thought I would need this, so I made it; not being called
-  Future<String> getBudgetID(DateTime date, BuildContext context) async {
-    return await FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('Budgets')
-        .where(
-          'date',
-          isEqualTo: DateTime(date.year, date.month),
-        )
-        .get()
-        .then((querySnapshot) => querySnapshot.docs.first.id);
-  }
-  // TODO Find out why this is commented out
-  // String getBudgetID(DateTime date, BuildContext context) {
-  //   var something = FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(Provider.of<Auth>(context, listen: false).getUserId())
-  //       .collection('budgets')
-  //       .where('date', isEqualTo: date)
-  //       .snapshots()
-  //       .first;
-
-  //   something.whenComplete((item) => return item)
-  // }
 }

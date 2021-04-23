@@ -1,9 +1,11 @@
+// Imported Flutter packages
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
+// Imported Plutus files
 import '../models/transaction.dart' as Transaction;
 import '../models/category_icon.dart';
 import './transaction_form.dart';
@@ -59,13 +61,13 @@ class _TransactionListTileState extends State<TransactionListTile> {
                   'This cannot be undone later.',
                 ),
                 actions: <Widget>[
-                  FlatButton(
+                  TextButton(
                     child: Text('No'),
                     onPressed: () {
                       Navigator.of(ctx).pop(false);
                     },
                   ),
-                  FlatButton(
+                  TextButton(
                     child: Text('Yes'),
                     onPressed: () {
                       Navigator.of(ctx).pop(true);
@@ -101,10 +103,13 @@ class _TransactionListTileState extends State<TransactionListTile> {
               style: TextStyle(
                   color: Theme.of(context).primaryColor, fontSize: 18),
             ),
-            subtitle: Text(
-                '${widget.transaction.getCategoryTitle()} | ${DateFormat.MMMd().format(widget.transaction.getDate())}',
-                style: TextStyle(color: Theme.of(context).primaryColorLight)),
-            trailing: Text(
+            subtitle: AutoSizeText(
+              '${widget.transaction.getCategoryTitle()} | ${DateFormat.MMMd().format(widget.transaction.getDate())}',
+              style: TextStyle(color: Theme.of(context).primaryColorLight),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: AutoSizeText(
               '\$${widget.transaction.getAmount().toStringAsFixed(2)}',
               style: TextStyle(
                   color: Theme.of(context).primaryColor, fontSize: 18),

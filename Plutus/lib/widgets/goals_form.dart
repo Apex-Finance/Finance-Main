@@ -1,11 +1,12 @@
-import 'dart:io';
+//import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
+//import 'package:image_picker/image_picker.dart';
 
+// Imported Plutus files
 import '../models/goals.dart';
 import '../models/transaction.dart' as Transaction;
 
@@ -22,7 +23,7 @@ class _GoalsFormState extends State<GoalsForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime _date;
   Goal _goal = Goal.empty();
-  File _goalImage; // Image selected from the phone gallery
+  //File _goalImage; // Image selected from the phone gallery
 
   void _setDate(DateTime value) {
     if (value == null) return; // if user cancels datepicker
@@ -57,15 +58,15 @@ class _GoalsFormState extends State<GoalsForm> {
 
   // NOT USED
   // Gets the image from the phone gallery and displays it as an image preview
-  Future getImage() async {
-    final pickedFile =
-        await ImagePicker().getImage(source: ImageSource.gallery);
-    setState(() {
-      if (pickedFile != null) {
-        _goalImage = File(pickedFile.path);
-      }
-    });
-  }
+  // Future getImage() async {
+  //   final pickedFile =
+  //       await ImagePicker().getImage(source: ImageSource.gallery);
+  //   setState(() {
+  //     if (pickedFile != null) {
+  //       _goalImage = File(pickedFile.path);
+  //     }
+  //   });
+  // }
 
   @override
   // If editing, store previous values in goal to display previous values and submit them later
@@ -125,51 +126,55 @@ class _GoalsFormState extends State<GoalsForm> {
 
   // NOT USED
   // Selects an image to add to a goal
-  Widget buildImageSelector(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        top: 40,
-      ),
-      child: GestureDetector(
-        onTap: () => getImage(),
-        child: Container(
-          color: Theme.of(context).primaryColorLight,
-          width: 85,
-          height: 85,
-          child: _goalImage == null
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.camera_alt),
-                    Text(
-                      "Add a picture",
-                      style: TextStyle(
-                        // Has to be hardcoded since no textTheme has any fontsize smaller than 17
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                )
-              : FittedBox(
-                  fit: BoxFit.cover,
-                  child: Image.file(_goalImage),
-                ),
-        ),
-      ),
-    );
-  }
+  // Widget buildImageSelector(BuildContext context) {
+  //   return Padding(
+  //     padding: EdgeInsets.only(
+  //       top: 40,
+  //     ),
+  //     child: GestureDetector(
+  //       onTap: () => getImage(),
+  //       child: Container(
+  //         color: Theme.of(context).primaryColorLight,
+  //         width: 85,
+  //         height: 85,
+  //         child: _goalImage == null
+  //             ? Column(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   Icon(Icons.camera_alt),
+  //                   Text(
+  //                     "Add a picture",
+  //                     style: TextStyle(
+  //                       // Has to be hardcoded since no textTheme has any fontsize smaller than 17
+  //                       fontSize: 12,
+  //                     ),
+  //                   ),
+  //                 ],
+  //               )
+  //             : FittedBox(
+  //                 fit: BoxFit.cover,
+  //                 child: Image.file(_goalImage),
+  //               ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   // Changes the date of the goal
   Widget buildDateChanger(BuildContext context) {
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 20, 230, 0),
       //0, 20, 275, 0), // Values for Samsung J4; DO NOT CHANGE
-      child: RaisedButton(
-        color: Theme.of(context).primaryColorLight,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Theme.of(context).primaryColorLight,
+        ),
         child: _goal.getDate() == null
             ? Text('Due Date')
             : Text(
-                '${DateFormat.MMMd().format(_goal.getDate())}',
+                _goal.getDate().year == DateTime.now().year
+                    ? '${DateFormat.MMMd().format(_goal.getDate())}'
+                    : '${DateFormat.yMMMd().format(_goal.getDate())}',
               ),
         onPressed: () => showDatePicker(
           context: context,
@@ -267,7 +272,7 @@ class GoalAmountField extends StatelessWidget {
       onSaved: (val) => _goal.goalAmount = double.parse(val),
       validator: (val) {
         if (val.isEmpty) return 'Please enter an amount.';
-        if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
+        if (val.contains(new RegExp(r'^\d*(\.\d*)?$'))) {
           // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
           if (double.parse(double.parse(val).toStringAsFixed(2)) <=
               0.00) // seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
@@ -276,7 +281,7 @@ class GoalAmountField extends StatelessWidget {
             return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
           return null;
         } else {
-          return 'Please enter a number.';
+          return 'Please enter a valid number.';
         }
       },
     );

@@ -15,12 +15,3 @@ Map<int, IconData> categoryIcon = {
   59938: Icons.star,
   58947: Icons.category,
 };
-
-// TODO Find out why this is commented out
-//MainCategory.transportation: Icons.directions_car,
-//MainCategory.health_and_fitness: Icons.run_circle,
-//MainCategory.fees_and_charges: Icons.credit_card,
-//MainCategory.gifts_and_donations: Icons.cake,
-//MainCategory.kids: Icons.stroller,
-//MainCategory.pets: Icons.pets,
-//MainCategory.business: Icons.business_center,

@@ -1,29 +1,28 @@
 // Imported Flutter packages
-import 'package:Plutus/models/categories.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 // Imported Plutus files
 import '../providers/auth.dart';
-import './categories.dart';
 
 class Category {
+  Category(
+      [this._codepoint,
+      this._id,
+      this._title,
+      this._amount,
+      this._remainingAmount]);
+
+  Category.deepCopy(Category category)
+      : this(category._codepoint, category._id, category._title,
+            category._amount);
+
   int _codepoint; // Codepoint to store the icon info
   String _id;
   String _title;
-  MainCategory _categoryName;
   double _amount;
   double _remainingAmount; // this will be calculated when streaming
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': getID(),
-      'categoryName': _categoryName,
-      'amount': getAmount(),
-      'remainingAmount': getRemainingAmount(),
-    };
-  }
 
   void setCodepoint(int codepointValue) {
     _codepoint = codepointValue;
@@ -62,7 +61,7 @@ class Category {
   }
 
   double getRemainingAmount() {
-    return _remainingAmount < 0 ? 0.00 : _remainingAmount;
+    return _remainingAmount;
   }
 }
 
@@ -141,18 +140,33 @@ class CategoryDataProvider with ChangeNotifier {
   }
 
   Stream<QuerySnapshot> streamCategories(BuildContext context) {
-    var categoryQuery =
-        FirebaseFirestore.instance.collection('DefaultCategories').where(
-      'userID',
-      whereIn: [
-        'default',
-        Provider.of<Auth>(context).getUserId(),
-      ],
-    ).snapshots();
-    // TODO Find out why this is commented out
-    // var defaultCategories = getDefaultCategories();
-    // var customCategories = getCustomCategories(context);
+    var categoryQuery = FirebaseFirestore.instance
+        .collection('DefaultCategories')
+        .where(
+          'userID',
+          whereIn: [
+            'default',
+            Provider.of<Auth>(context).getUserId(),
+          ],
+        )
+        .orderBy('title')
+        .snapshots();
+    return categoryQuery;
+  }
 
+  Stream<QuerySnapshot> streamCategoriesWithoutGoal(BuildContext context) {
+    var categoryQuery = FirebaseFirestore.instance
+        .collection('DefaultCategories')
+        .where(
+          'userID',
+          whereIn: [
+            'default',
+            Provider.of<Auth>(context).getUserId(),
+          ],
+        )
+        .where('title', isNotEqualTo: 'Goal')
+        .orderBy('title')
+        .snapshots();
     return categoryQuery;
   }
 }

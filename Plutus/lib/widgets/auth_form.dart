@@ -1,8 +1,10 @@
+// Imported Flutter packages
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
+// Imported Plutus files
 import '../screens/tab_screen.dart';
 import '../providers/auth.dart';
 
@@ -23,16 +25,16 @@ class _AuthFormState extends State<AuthForm> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
+  var _iserror = false;
 
   // Displays a popup informing the user that an issue occurred
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(message),
         content: Text(message),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text('Okay'),
             onPressed: () => Navigator.pop(context),
           )
@@ -45,10 +47,17 @@ class _AuthFormState extends State<AuthForm> {
   Future<void> _submit() async {
     UserCredential credentialResult;
     if (!_formKey.currentState.validate()) {
+      setState(() {
+        _iserror = true;
+      });
       // Invalid!
       return;
     }
+    setState(() {
+      _iserror = false;
+    });
     _formKey.currentState.save();
+    FocusScope.of(context).unfocus();
     setState(() {
       _isLoading = true;
     });
@@ -112,6 +121,13 @@ class _AuthFormState extends State<AuthForm> {
   }
 
   @override
+  void dispose() {
+    _passwordController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Adjusts based on the size of the device
     final deviceSize = MediaQuery.of(context).size;
@@ -123,9 +139,10 @@ class _AuthFormState extends State<AuthForm> {
       elevation: 8.0,
       child: Container(
         // Signup card is bigger due to extra textfield
-        height: _authMode == AuthMode.Signup ? 400 : 340,
-        constraints:
-            BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
+        height: _iserror
+            ? (_authMode == AuthMode.Signup ? 435 : 350)
+            : (_authMode == AuthMode.Signup ? 365 : 300),
+
         width: deviceSize.width * 0.75,
         padding: EdgeInsets.all(16.0),
         child: Form(
@@ -173,7 +190,7 @@ class _AuthFormState extends State<AuthForm> {
                 // ignore: missing_return
                 validator: (value) {
                   if (value.isEmpty || value.trim().length < 6) {
-                    return 'Password is too short!';
+                    return 'Password must be at least 6 characters!';
                   }
                 },
                 onSaved: (value) {
@@ -203,32 +220,43 @@ class _AuthFormState extends State<AuthForm> {
                 height: 20,
               ),
               if (_isLoading)
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                  backgroundColor: Theme.of(context).primaryColor,
+                )
               else
-                // LOGIN/SIGNUP UP button
-                RaisedButton(
-                  child: Text(
-                    _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP',
-                    style: Theme.of(context).textTheme.subtitle2,
+                Column(children: [
+                  // LOGIN/SIGNUP UP button
+                  ElevatedButton(
+                    child: Text(
+                      _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP',
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                    onPressed: _submit,
+                    style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).primaryColor,
+                      textStyle: TextStyle(
+                          color:
+                              Theme.of(context).primaryTextTheme.button.color),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
                   ),
-                  onPressed: _submit,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                  // Button to switch AuthModes
+                  TextButton(
+                    child: Text(
+                        '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
+                    onPressed: _switchAuthMode,
+                    style: TextButton.styleFrom(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
+                      primary: Theme.of(context).primaryColor,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
                   ),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
-                  color: Theme.of(context).primaryColor,
-                  textColor: Theme.of(context).primaryTextTheme.button.color,
-                ),
-              // Button to switch AuthModes
-              FlatButton(
-                child: Text(
-                    '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
-                onPressed: _switchAuthMode,
-                padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                textColor: Theme.of(context).primaryColor,
-              ),
+                ])
             ],
           ),
         ),

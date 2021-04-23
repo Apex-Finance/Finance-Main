@@ -23,7 +23,7 @@ class Goal {
     this.dateOfGoal,
   });
 
-  // will need to add databse code to obtain id from document
+  // will need to add database code to obtain id from document
   void setID(String idValue) {
     id = idValue;
   }
@@ -53,19 +53,6 @@ class Goal {
     for (var doc in snapshot.docs) {
       amountSaved += doc.data()['amount'];
     }
-    // TODO Find out why this is commented out
-    // goalTransactions.listen((snapshot) {
-    //   if (snapshot.docs.isNotEmpty) {
-    //     print(snapshot.docs.length);
-    //     snapshot.docs.forEach((doc) {
-    //       var amount = doc.data()['amount'];
-    //       print("amount  $amount");
-    //       amountSaved += amount;
-    //       count += 1;
-    //       print("$count count");
-    //     });
-    //   }
-    // });
     return amountSaved;
   }
 

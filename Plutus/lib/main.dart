@@ -1,12 +1,13 @@
+// Imported Flutter packages
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+// Imported Plutus files
 import './screens/new_budget_screens/income_screen.dart';
 import './screens/account_screen.dart';
 import './screens/settings_screen.dart';
@@ -32,11 +33,8 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) async {
     await Firebase.initializeApp();
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-    ErrorWidget.builder = (FlutterErrorDetails details) => Scaffold(
-        body: Center(
-            child: (Text("Ooops something happened here!",
-                style: TextStyle(color: Colors.black)))));
+    //FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    ErrorWidget.builder = (FlutterErrorDetails details) => Scaffold();
     runApp(
       MultiProvider(providers: [
         ChangeNotifierProvider(create: (context) => TabProvider()),
@@ -56,19 +54,9 @@ void main() async {
         ),
         ChangeNotifierProxyProvider<MonthChanger, Transactions>(
           update: (buildContext, monthChanger, previousTransactions) =>
-              Transactions(
-                  monthChanger,
-                  previousTransactions == null
-                      ? []
-                      : previousTransactions.transactions),
+              Transactions(monthChanger),
           create: null,
         ),
-        // ChangeNotifierProxyProvider2<MonthChanger, Transactions, Budgets>(
-        //   update: (buildContext, monthChanger, transactions, previousBudgets) =>
-        //       Budgets(monthChanger, transactions,
-        //           previousBudgets == null ? [] : previousBudgets.budgets),
-        //   create: null,
-        // ),
       ], child: MyApp()),
     );
   });

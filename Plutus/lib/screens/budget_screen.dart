@@ -1,12 +1,13 @@
-import 'package:Plutus/models/category.dart';
-import 'package:Plutus/models/transaction.dart';
+// Imported Flutter packages
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
 
-import './new_budget_screens/income_screen.dart';
+// Imported Plutus files
+import '../models/category.dart';
+import '../models/transaction.dart';
 import '../models/budget.dart';
 import '../models/month_changer.dart';
 import '../widgets/budget_list_tile.dart';
@@ -21,13 +22,7 @@ class BudgetScreen extends StatefulWidget {
 
 class _BudgetScreenState extends State<BudgetScreen> {
   void _enterBudget(BuildContext context, Budget budget) {
-    Navigator.of(context)
-        .pushNamed('/income', arguments: budget)
-        .then((newBudget) {
-      if (newBudget == null) return;
-      Provider.of<BudgetDataProvider>(context, listen: false)
-          .addBudget(newBudget, context); //TODO check if needed
-    });
+    Navigator.of(context).pushNamed('/income', arguments: budget);
   }
 
   @override
@@ -141,6 +136,43 @@ class BudgetCard extends StatelessWidget {
     var budgetCategories =
         BudgetDataProvider().getBudgetCategories(context, budget.getID());
 
+    double budgetedCategoriesAmount =
+        0.0; // gets the amount the user actually budgeted into all his categories
+
+    // if budget was not made/edited properly, make the user fix it
+    // NOTE: remainingAmount will initially be wrong (minor bug)
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('Budgets')
+        .doc(budget.getID())
+        .collection('categories')
+        .get()
+        .then((budgetCategories) => budgetCategories.docs.forEach((doc) {
+              budgetedCategoriesAmount += doc.data()['amount'];
+            }))
+        .then((_) {
+      if (budget.getAmount() != budgetedCategoriesAmount) {
+        showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) => WillPopScope(
+            onWillPop: () async => false,
+            child: AlertDialog(
+              title: Text('Uh oh.'),
+              content: Text('There was an issue making your budget.'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      enterBudgetHandler(context, budget);
+                    },
+                    child: Text('Fix Budget'))
+              ],
+            ),
+          ),
+        );
+      }
+    });
     // TODO: Alex, please check below code; specifically add error handling if mine is insufficient (like if db doesn't respond) and check that my async/await and .then() are all used properly and nothing will break if db is slow (this was an issue when programming it, I think I got it now though); additionally check for efficiency of db calls
     // Gets unbudgeted categories where transactions were made
 
@@ -231,94 +263,94 @@ class BudgetCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                   child: ListTile(
-                    onTap: () => enterBudgetHandler(context, budget),
-                    tileColor: Colors.grey[850],
-                    title: Column(
-                      children: [
-                        Text(
-                          'Total Budget',
-                          style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Remaining',
-                                  style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 18),
-                                ),
-                                AutoSizeText(
-                                  '\$${budget.getAmount() < transactionExpenses ? 0.00.toStringAsFixed(2) : budget.getRemainingAmount().toStringAsFixed(2)}',
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 18),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Available per day',
-                                  style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 18),
-                                ),
-                                AutoSizeText(
-                                  '\$${_getRemainingAmountPerDay(monthData, budget.getRemainingAmount()).toStringAsFixed(2)}',
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 18),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            new LinearPercentIndicator(
-                              alignment: MainAxisAlignment.center,
-                              width: 310.0,
-                              lineHeight: 14.0,
-                              percent: transactionExpenses > budget.getAmount()
-                                  ? 1
-                                  : transactionExpenses / budget.getAmount(),
-                              backgroundColor: Colors.black,
-                              progressColor: Colors.amber,
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            AutoSizeText(
-                              '\$${transactionExpenses.toStringAsFixed(2)} of \$${budget.getAmount().toStringAsFixed(2)}',
-                              maxLines: 1,
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontSize: 18),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                      onTap: () => enterBudgetHandler(context, budget),
+                      tileColor: Colors.grey[850],
+                      title: Column(
+                        children: [
+                          Text(
+                            'Total Budget',
+                            style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).primaryColor),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Remaining',
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 18),
+                                  ),
+                                  AutoSizeText(
+                                    '\$${budget.getAmount() < transactionExpenses ? 0.00.toStringAsFixed(2) : budget.getRemainingAmount().toStringAsFixed(2)}',
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 18),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Available per day',
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 18),
+                                  ),
+                                  AutoSizeText(
+                                    '\$${_getRemainingAmountPerDay(monthData, budget.getRemainingAmount()).toStringAsFixed(2)}',
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 18),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              new LinearPercentIndicator(
+                                alignment: MainAxisAlignment.center,
+                                width: 310.0,
+                                lineHeight: 14.0,
+                                percent: transactionExpenses >
+                                        budget.getAmount()
+                                    ? 1
+                                    : transactionExpenses / budget.getAmount(),
+                                backgroundColor: Colors.black,
+                                progressColor: Colors.amber,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              AutoSizeText(
+                                '\$${transactionExpenses.toStringAsFixed(2)} of \$${budget.getAmount().toStringAsFixed(2)}',
+                                maxLines: 1,
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: 18),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )),
                 ),
                 Divider(height: 10),
                 Expanded(
@@ -368,7 +400,6 @@ class BudgetCard extends StatelessWidget {
 
 class NoBudgetYetText extends StatelessWidget {
   final enterBudgetHandler;
-
   NoBudgetYetText(this.enterBudgetHandler);
 
   @override
@@ -386,10 +417,12 @@ class NoBudgetYetText extends StatelessWidget {
                     fontSize: 18, color: Theme.of(context).primaryColor),
                 textAlign: TextAlign.center,
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Add Budget'),
-                color: Theme.of(context).primaryColor,
-                textColor: Theme.of(context).canvasColor,
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  textStyle: TextStyle(color: Theme.of(context).canvasColor),
+                ),
                 onPressed: () =>
                     enterBudgetHandler(context, new Budget.empty()),
               ),

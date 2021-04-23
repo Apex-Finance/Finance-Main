@@ -1,9 +1,11 @@
+// Imported Flutter packages
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
 
+// Imported Plutus files
 import '../providers/auth.dart';
 
 class UpdatePasswordForm extends StatefulWidget {
@@ -25,7 +27,7 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
         title: Text(message),
         content: Text(message),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text('Okay'),
             onPressed: () => Navigator.pop(context),
           )
@@ -40,9 +42,7 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .set({'password': newPassword}, SetOptions(merge: true)).catchError(
-            (error) {
-      print(error);
-    });
+            (error) {});
     Provider.of<Auth>(context, listen: false).setPassword(newPassword);
   }
 
@@ -75,7 +75,7 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
       } else if (error.code == 'email-already-in-use') {
         errorMessage = 'This email is already use.';
       } else if (error.code == 'requires-recent-login') {
-        errorMessage = 'Submit yur credentials before updating them.';
+        errorMessage = 'Submit your credentials before updating them.';
       } else if (error.code == 'weak-password') {
         errorMessage = 'Please create a stronger password';
       }
@@ -86,6 +86,12 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
       Navigator.of(context).pop();
       return;
     }
+  }
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -127,17 +133,21 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
                     SizedBox(
                       height: 20,
                     ),
-                    RaisedButton(
+                    ElevatedButton(
                       child: Text('Change Password'),
                       onPressed: _submit,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 30.0, vertical: 8.0),
+                        primary: Theme.of(context).primaryColor,
+                        textStyle: TextStyle(
+                          color:
+                              Theme.of(context).primaryTextTheme.button.color,
+                        ),
                       ),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
-                      color: Theme.of(context).primaryColor,
-                      textColor:
-                          Theme.of(context).primaryTextTheme.button.color,
                     ),
                   ],
                 ),

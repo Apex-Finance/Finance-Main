@@ -1,15 +1,16 @@
+// Imported Flutter packages
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
+// Imported Plutus files
 import 'package:percent_indicator/percent_indicator.dart';
 import '../models/goals.dart';
 import '../widgets/goals_form.dart';
-import '../screens/add_goal_money_screen.dart';
+import './add_goal_money_form.dart';
 import '../models/transaction.dart' as Transaction;
-import '../models/goals.dart';
 
 // List Tile that displays each individual goal
 class GoalsListTile extends StatefulWidget {
@@ -34,7 +35,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (_) => AddGoalMoneyScreen(goal: goal),
+      builder: (_) => AddGoalMoneyForm(goal: goal),
     );
   }
 
@@ -73,13 +74,13 @@ class _GoalsListTileState extends State<GoalsListTile> {
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 actions: <Widget>[
-                  FlatButton(
+                  TextButton(
                     child: Text('No'),
                     onPressed: () {
                       Navigator.of(ctx).pop(false);
                     },
                   ),
-                  FlatButton(
+                  TextButton(
                     child: Text('Yes'),
                     onPressed: () {
                       Navigator.of(ctx).pop(true);

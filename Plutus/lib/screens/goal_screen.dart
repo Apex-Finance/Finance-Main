@@ -1,7 +1,9 @@
+// Imported Flutter packages
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
+// Imported Plutus files
 import '../widgets/goals_form.dart';
 import '../widgets/goals_list_tile.dart';
 import '../models/goals.dart';
@@ -42,13 +44,13 @@ class GoalScreen extends StatelessWidget {
           // ok to leave this waiting state since only ever waits on initial load
           case ConnectionState.waiting:
             return Center(
-              child: Text(
-                'Loading...',
-                style: TextStyle(
-                    fontSize: 18, color: Theme.of(context).primaryColor),
-                textAlign: TextAlign.center,
-              ),
-            );
+                // child: Text(
+                //   'Loading...',
+                //   style: TextStyle(
+                //       fontSize: 18, color: Theme.of(context).primaryColor),
+                //   textAlign: TextAlign.center,
+                // ),
+                );
           default:
             switch (snapshot.data.docs.isEmpty) {
               case true:
@@ -63,10 +65,13 @@ class GoalScreen extends StatelessWidget {
                             color: Theme.of(context).primaryColor),
                         textAlign: TextAlign.center,
                       ),
-                      RaisedButton(
+                      ElevatedButton(
                         child: Text('Add Goal'),
-                        color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).canvasColor,
+                        style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).primaryColor,
+                          textStyle:
+                              TextStyle(color: Theme.of(context).canvasColor),
+                        ),
                         onPressed: () => _enterGoal(context),
                       ),
                     ],
@@ -80,10 +85,13 @@ class GoalScreen extends StatelessWidget {
                       child: Container(
                         width: 100,
                         child: Container(
-                          child: RaisedButton(
+                          child: ElevatedButton(
                             child: Text('Add Goal'),
-                            color: Theme.of(context).primaryColor,
-                            textColor: Theme.of(context).canvasColor,
+                            style: ElevatedButton.styleFrom(
+                              primary: Theme.of(context).primaryColor,
+                              textStyle: TextStyle(
+                                  color: Theme.of(context).canvasColor),
+                            ),
                             onPressed: () => _enterGoal(context),
                           ),
                         ),
