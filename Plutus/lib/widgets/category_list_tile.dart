@@ -24,12 +24,27 @@ class CategoryListTile extends StatefulWidget {
 }
 
 class _CategoryListTileState extends State<CategoryListTile> {
+  TextEditingController _controller;
+
+  // only initialize controller once (after previous snapshots resolve);
+  // initializing in build will mess up focusnodes
   @override
-  Widget build(BuildContext context) {
-    final _controller = TextEditingController(
+  void initState() {
+    _controller = TextEditingController(
         text: widget.categoryList[widget.index].getAmount() != null
             ? widget.categoryList[widget.index].getAmount().toStringAsFixed(2)
             : '');
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return ListTile(
       tileColor: Colors.grey[850],
       // leading: CircleAvatar(child: Icon(IcondData(categoryIcon[widget.category.getCodepoint()]))),
@@ -50,7 +65,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                 onFocusChange: (hasFocus) async {
                   if (!hasFocus) {
                     if (_controller.text
-                        .contains(new RegExp(r'-?[0-9]\d*(\.\d+)?$'))) {
+                        .contains(new RegExp(r'-?[0-9]\d*(\.\d*)?$'))) {
                       if (double.parse(double.parse(_controller.text)
                               .toStringAsFixed(2)) <
                           0.00) {
@@ -87,6 +102,9 @@ class _CategoryListTileState extends State<CategoryListTile> {
                         );
                       }
                       widget.categoryHandler(widget.index);
+                      // make the number they entered, have 2 decimals
+                      _controller.text =
+                          double.parse(_controller.text).toStringAsFixed(2);
                     } // validates for numbers < 0
                     else if (_controller.text.isNotEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -95,7 +113,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                           content: Padding(
                             padding: const EdgeInsets.only(top: 5.0),
                             child: Text(
-                              'Please enter a number',
+                              'Please enter a valid number',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                           ),
@@ -103,6 +121,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                       );
                       _controller.text = '';
                     } // valides for text that is copy/pasted in
+                    // or for a category amount that was deleted, set it to 0, and update remainingAmount
                     else if (_controller.text.isEmpty) {
                       _controller.text = '0.00';
                       widget.categoryList[widget.index]
@@ -117,6 +136,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                           context,
                         );
                       }
+                      widget.categoryHandler(widget.index);
                     } // if amount is cleared, set to 0 so that remainingBudget can update
                   } else {
                     // gaining focus

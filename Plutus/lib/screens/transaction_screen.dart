@@ -26,9 +26,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
       isScrollControlled: true,
       context: context,
       builder: (_) => TransactionForm(),
-    ).then((newTransaction) {
-      if (newTransaction == null) return;
-    });
+    );
   }
 
   var user = FirebaseAuth.instance.currentUser;

@@ -23,7 +23,7 @@ class Goal {
     this.dateOfGoal,
   });
 
-  // will need to add databse code to obtain id from document
+  // will need to add database code to obtain id from document
   void setID(String idValue) {
     id = idValue;
   }

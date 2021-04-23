@@ -42,9 +42,7 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .set({'password': newPassword}, SetOptions(merge: true)).catchError(
-            (error) {
-      print(error);
-    });
+            (error) {});
     Provider.of<Auth>(context, listen: false).setPassword(newPassword);
   }
 
@@ -77,7 +75,7 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
       } else if (error.code == 'email-already-in-use') {
         errorMessage = 'This email is already use.';
       } else if (error.code == 'requires-recent-login') {
-        errorMessage = 'Submit yur credentials before updating them.';
+        errorMessage = 'Submit your credentials before updating them.';
       } else if (error.code == 'weak-password') {
         errorMessage = 'Please create a stronger password';
       }
@@ -88,6 +86,12 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
       Navigator.of(context).pop();
       return;
     }
+  }
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override

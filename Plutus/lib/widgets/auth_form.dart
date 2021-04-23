@@ -25,6 +25,7 @@ class _AuthFormState extends State<AuthForm> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
+  var _iserror = false;
 
   // Displays a popup informing the user that an issue occurred
   void _showErrorDialog(String message) {
@@ -46,9 +47,15 @@ class _AuthFormState extends State<AuthForm> {
   Future<void> _submit() async {
     UserCredential credentialResult;
     if (!_formKey.currentState.validate()) {
+      setState(() {
+        _iserror = true;
+      });
       // Invalid!
       return;
     }
+    setState(() {
+      _iserror = false;
+    });
     _formKey.currentState.save();
     FocusScope.of(context).unfocus();
     setState(() {
@@ -114,6 +121,13 @@ class _AuthFormState extends State<AuthForm> {
   }
 
   @override
+  void dispose() {
+    _passwordController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Adjusts based on the size of the device
     final deviceSize = MediaQuery.of(context).size;
@@ -127,9 +141,10 @@ class _AuthFormState extends State<AuthForm> {
       elevation: 8.0,
       child: Container(
         // Signup card is bigger due to extra textfield
-        height: _authMode == AuthMode.Signup ? 400 : 340,
-        constraints:
-            BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
+        height: _iserror
+            ? (_authMode == AuthMode.Signup ? 435 : 350)
+            : (_authMode == AuthMode.Signup ? 365 : 300),
+
         width: deviceSize.width * 0.75,
         padding: EdgeInsets.all(16.0),
         child: Form(
@@ -178,7 +193,7 @@ class _AuthFormState extends State<AuthForm> {
                 // ignore: missing_return
                 validator: (value) {
                   if (value.isEmpty || value.trim().length < 6) {
-                    return 'Password is too short!';
+                    return 'Password must be at least 6 characters!';
                   }
                 },
                 onSaved: (value) {
