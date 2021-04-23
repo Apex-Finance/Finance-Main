@@ -1,11 +1,13 @@
 // Imported Flutter packages
 import 'package:flutter/material.dart';
 
+// Provides all color combinations available
 class ColorProvider with ChangeNotifier {
   var selectedColorIndex;
   var isDark; // Dark mode variable
 
   final colorOptions = [
+    // Amber
     {
       'light': {
         'name': "Amber",
@@ -22,6 +24,7 @@ class ColorProvider with ChangeNotifier {
         'cardColor': Colors.white,
       }
     },
+    // Light Blue
     {
       'light': {
         'name': "Light Blue",
@@ -38,6 +41,7 @@ class ColorProvider with ChangeNotifier {
         'cardColor': Colors.white,
       }
     },
+    // Light Green
     {
       'light': {
         'name': "Light Green",
@@ -54,6 +58,7 @@ class ColorProvider with ChangeNotifier {
         'cardColor': Colors.white,
       }
     },
+    // Pink
     {
       'light': {
         'name': "Pink",
@@ -70,6 +75,7 @@ class ColorProvider with ChangeNotifier {
         'cardColor': Colors.white,
       }
     },
+    // Purple
     {
       'light': {
         'name': "Purple",

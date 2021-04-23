@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 // Imported Plutus files
 import '../providers/color.dart';
 
+// Screen that changes the color mode and theme.
 class SettingsScreen extends StatefulWidget {
   static const routeName = '/settings';
 
@@ -18,6 +19,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   var isDark;
   var initialIndex;
 
+  // Chooses the color theme and mode. This honestly should be another widget - Juan
   Widget _colorOption(String name, Color foreground, Color background,
       int index, Function setColorIndex, BuildContext context) {
     return ElevatedButton(
@@ -33,6 +35,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       child: Row(
         children: [
+          // Chosen color
           Icon(Icons.circle,
               color: selectedColorIndex ==
                       index // if user selects this color, make the icon the same color
@@ -41,17 +44,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
           SizedBox(
             width: 10,
           ),
+          // Color name
           Expanded(
             child: Text(
               name,
               style: Theme.of(context).textTheme.bodyText1,
             ),
           ),
+          // Primary color
           Container(
             width: 40,
             height: 40,
             color: foreground,
           ),
+          // Secondary color
           Container(
             width: 40,
             height: 40,
@@ -76,6 +82,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     selectedColorIndex = colors.selectedColorIndex ??
         2; // set active color to user's last preference; if none found (or initial load), default to amber
     initialIndex = isDark ? 0 : 1; //set toggle to match dark mode
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
