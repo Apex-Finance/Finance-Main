@@ -88,7 +88,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   child: snapshot.data.docs.isEmpty
                       ? NoTransactionsYetText(_enterTransaction)
                       : Card(
-                          color: Colors.grey[900],
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(
                               top: Radius.circular(20),
@@ -166,7 +165,6 @@ class _TotalExpensesState extends State<TotalExpenses> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      tileColor: Colors.grey[900],
       title: Text(
         'Total Expenses',
         style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),

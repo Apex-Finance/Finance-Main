@@ -85,7 +85,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
       body: Card(
-        color: Colors.grey[900],
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
           top: Radius.circular(20),
@@ -175,7 +174,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               bottom: Radius.circular(20),
                             ),
                           ),
-                          primary: Colors.amber,
+                          primary: Colors
+                              .amber, // Default color is amber, hence it is hardcoded
                         ),
                         child: Text(
                           'Default',
@@ -183,8 +183,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             color: Colors.black,
                           ),
                         ),
+                        // Default is Amber/Light mode
                         onPressed: () {
-                          colors.setSelectedColorIndex(2);
+                          colors.setSelectedColorIndex(0);
                           colors.setIsDark(false);
                         },
                       ),

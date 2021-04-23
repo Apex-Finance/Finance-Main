@@ -216,7 +216,6 @@ class BudgetCard extends StatelessWidget {
               .getTransactionExpenses(transactionSnapshots.data);
           budget.calculateRemainingAmount(transactionExpenses);
           return Card(
-            color: Colors.grey[900],
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(
               top: Radius.circular(20),
@@ -292,7 +291,7 @@ class BudgetCard extends StatelessWidget {
                                   ? 1
                                   : transactionExpenses / budget.getAmount(),
                               backgroundColor: Colors.black,
-                              progressColor: Colors.amber,
+                              progressColor: Theme.of(context).primaryColor,
                             ),
                           ],
                         ),

@@ -22,7 +22,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: [
         Column(
           children: [
-            PieChartCard(),
+            PieChart(),
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(

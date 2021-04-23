@@ -119,6 +119,8 @@ class _AuthFormState extends State<AuthForm> {
     final deviceSize = MediaQuery.of(context).size;
 
     return Card(
+      color: Colors
+          .white, // Needs to be white; will be otherwise black if Light mode is on
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
@@ -138,7 +140,8 @@ class _AuthFormState extends State<AuthForm> {
               Text(
                 'Plutus',
                 style: TextStyle(
-                  color: Theme.of(context).primaryColor,
+                  color: Colors
+                      .amber, // Needs to be Amber to fit with Amber gradient
                   fontSize: 25,
                   fontFamily: 'Anton',
                   fontWeight: FontWeight.bold,
@@ -218,7 +221,8 @@ class _AuthFormState extends State<AuthForm> {
                     ),
                     onPressed: _submit,
                     style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).primaryColor,
+                      primary: Colors
+                          .amber, // Needs to be Amber to fit with Amber gradient
                       textStyle: TextStyle(
                           color:
                               Theme.of(context).primaryTextTheme.button.color),
@@ -237,7 +241,8 @@ class _AuthFormState extends State<AuthForm> {
                     style: TextButton.styleFrom(
                       padding:
                           EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
-                      primary: Theme.of(context).primaryColor,
+                      primary: Colors
+                          .amber, // Needs to be Amber to fit with Amber gradient
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                   ),

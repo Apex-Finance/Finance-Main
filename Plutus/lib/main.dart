@@ -83,13 +83,15 @@ class MyApp extends StatelessWidget {
     var colors = Provider.of<ColorProvider>(context);
     var isDark = colors.isDark ?? false; // default to light mode
     var colorMode = isDark ? 'dark' : 'light';
-    var selectedColorIndex = colors.selectedColorIndex ?? 2; // default to amber
+    var selectedColorIndex = colors.selectedColorIndex ?? 0; // default to amber
     var primarySwatch =
         colors.colorOptions[selectedColorIndex][colorMode]['primarySwatch'];
     var primaryColor =
         colors.colorOptions[selectedColorIndex][colorMode]['primaryColor'];
     var canvasColor =
         colors.colorOptions[selectedColorIndex][colorMode]['canvasColor'];
+    var cardColor =
+        colors.colorOptions[selectedColorIndex][colorMode]['cardColor'];
     return Builder(
       builder: (context) => MaterialApp(
         title: 'Plutus',
@@ -99,6 +101,7 @@ class MyApp extends StatelessWidget {
           primaryColorLight: Colors.amberAccent,
           accentColor: Colors.white,
           canvasColor: canvasColor,
+          cardColor: cardColor, // Background card color
           textTheme: GoogleFonts.latoTextTheme(
             TextTheme(
               bodyText1: TextStyle(color: primaryColor, fontSize: 17),

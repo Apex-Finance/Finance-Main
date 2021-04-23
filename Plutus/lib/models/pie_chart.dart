@@ -16,7 +16,7 @@ class PiePiece {
   PiePiece(this.category, this.amount, this.colorVal);
 }
 
-class PieChartCard extends StatelessWidget {
+class PieChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var transactionDataProvider =
@@ -50,7 +50,10 @@ class PieChartCard extends StatelessWidget {
                   child: Column(children: [
                     Text(
                       'Dashboard chart',
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColor),
                     ),
                   ]),
                 ),

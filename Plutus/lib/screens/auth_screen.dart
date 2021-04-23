@@ -21,8 +21,8 @@ class AuthScreen extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Colors.white,
-                  Colors.amber,
+                  Colors.white, // Static color
+                  Colors.amber, // Static color
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,

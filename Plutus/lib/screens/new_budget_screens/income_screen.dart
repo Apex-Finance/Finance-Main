@@ -144,7 +144,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                     AutoSizeText(
                       "Monthly Income",
                       style: TextStyle(
-                        color: Colors.amber,
+                        color: Theme.of(context).primaryColor,
                         fontSize: 35,
                       ),
                     ),

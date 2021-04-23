@@ -121,6 +121,7 @@ class _TransactionListTileState extends State<TransactionListTile> {
   }
 }
 
+// Displays the 3 most recent transactions in the Dashboard Screen
 class RecentTransactionsCard extends StatelessWidget {
   final int tileCount;
   RecentTransactionsCard(this.tileCount);

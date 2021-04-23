@@ -101,7 +101,6 @@ class GoalScreen extends StatelessWidget {
                       child: Container(
                         margin: EdgeInsets.only(top: 25),
                         child: Card(
-                          color: Colors.grey[900],
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(
                               top: Radius.circular(20),
