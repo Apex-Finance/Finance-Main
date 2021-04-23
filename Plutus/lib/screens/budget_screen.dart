@@ -22,7 +22,9 @@ class BudgetScreen extends StatefulWidget {
 
 class _BudgetScreenState extends State<BudgetScreen> {
   void _enterBudget(BuildContext context, Budget budget) {
-    Navigator.of(context).pushNamed('/income', arguments: budget);
+    Navigator.of(context).pushReplacementNamed('/income', arguments: budget);
+    // replacement stops the function on budget screen from running in the background to see if the budget was made properly
+    // works properly now and won't throw error if adding a budget
   }
 
   @override
