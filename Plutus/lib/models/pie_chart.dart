@@ -89,30 +89,33 @@ class PieChartCard extends StatelessWidget {
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                       SizedBox(height: 10),
-                      Expanded(
-                        child: charts.PieChart(
-                          pieSeriesData,
-                          animate: true,
-                          animationDuration: Duration(seconds: 2),
-                          behaviors: [
-                            new charts.DatumLegend(
-                              horizontalFirst: false,
-                              desiredMaxRows: 4,
-                              cellPadding:
-                                  new EdgeInsets.only(right: 4, bottom: 4),
-                              entryTextStyle: charts.TextStyleSpec(
-                                  color: charts
-                                      .MaterialPalette.purple.shadeDefault,
-                                  fontFamily: 'Georgia',
-                                  fontSize: 10),
-                            )
-                          ],
-                          defaultRenderer: new charts.ArcRendererConfig(
-                            arcWidth: 100,
-                            arcRendererDecorators: [
-                              new charts.ArcLabelDecorator(
-                                  labelPosition: charts.ArcLabelPosition.inside)
+                      Center(
+                        child: Expanded(
+                          child: charts.PieChart(
+                            pieSeriesData,
+                            animate: true,
+                            animationDuration: Duration(seconds: 2),
+                            behaviors: [
+                              new charts.DatumLegend(
+                                horizontalFirst: false,
+                                desiredMaxRows: 4,
+                                cellPadding:
+                                    new EdgeInsets.only(right: 4, bottom: 4),
+                                entryTextStyle: charts.TextStyleSpec(
+                                    color: charts
+                                        .MaterialPalette.purple.shadeDefault,
+                                    fontFamily: 'Georgia',
+                                    fontSize: 10),
+                              )
                             ],
+                            defaultRenderer: new charts.ArcRendererConfig(
+                              arcWidth: 100,
+                              arcRendererDecorators: [
+                                new charts.ArcLabelDecorator(
+                                    labelPosition:
+                                        charts.ArcLabelPosition.inside)
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -142,6 +145,7 @@ List<PiePiece> getPieData(List<QueryDocumentSnapshot> tranSnapshot,
       if (category.id.toString() == transaction['categoryID'].toString()) {
         data.add(new PiePiece(category['title'].toString(), catAmount,
             Color(category['pieColor'].toInt())));
+        break;
       }
     }
   }
