@@ -44,13 +44,13 @@ class GoalScreen extends StatelessWidget {
           // ok to leave this waiting state since only ever waits on initial load
           case ConnectionState.waiting:
             return Center(
-              child: Text(
-                'Loading...',
-                style: TextStyle(
-                    fontSize: 18, color: Theme.of(context).primaryColor),
-                textAlign: TextAlign.center,
-              ),
-            );
+                // child: Text(
+                //   'Loading...',
+                //   style: TextStyle(
+                //       fontSize: 18, color: Theme.of(context).primaryColor),
+                //   textAlign: TextAlign.center,
+                // ),
+                );
           default:
             switch (snapshot.data.docs.isEmpty) {
               case true:

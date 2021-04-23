@@ -32,27 +32,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
     var categoryTransactions = widget.budgetTransactions
         .where('categoryID', isEqualTo: widget.category.getID())
         .orderBy('date', descending: true);
-    // FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(Provider.of<Auth>(context, listen: false).getUserId())
-    //     .collection('Transactions')
-    //     .where('categoryID', isEqualTo: widget.category.getID())
-    // .where(
-    //   'date',
-    //   isGreaterThanOrEqualTo: DateTime(
-    //     widget.DateTime.now().year,
-    //     widget.budgetDate.month,
-    //     1,
-    //   ),
-    //   isLessThan: DateTime(
-    //     widget.budgetDate.year,
-    //     widget.budgetDate.month + 1,
-    //     1,
-    //   ),
 
-    //     .snapshots();
-    // final monthlyBudget =
-    //     Provider.of<BudgetDataProvider>(context).monthlyBudget;
     return StreamBuilder<QuerySnapshot>(
         key: widget.key,
         stream: categoryTransactions.snapshots(),
@@ -237,7 +217,6 @@ class _BudgetListTileState extends State<BudgetListTile> {
                     ),
                   ),
                 );
-                // }
               }
           }
         });

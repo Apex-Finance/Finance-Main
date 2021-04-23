@@ -20,6 +20,7 @@ class Transaction {
   int _categoryCodePoint; // Int value to display icon for category
   double _amount;
   DateTime _date;
+  String _goalId;
 
   Transaction.empty();
 
@@ -31,6 +32,7 @@ class Transaction {
     @required double amount,
     @required String categoryTitle,
     @required int categoryCodepoint,
+    String goalId,
   }) {
     _id = id;
     _title = title;
@@ -39,6 +41,7 @@ class Transaction {
     _categoryId = categoryId;
     _categoryTitle = categoryTitle;
     _categoryCodePoint = categoryCodepoint;
+    _goalId = goalId;
   }
 
   void setID(String idValue) {
@@ -96,15 +99,20 @@ class Transaction {
   DateTime getDate() {
     return _date;
   }
+
+  void setGoalId(String goalId) {
+    _goalId = goalId;
+  }
+
+  String getGoalId() {
+    return _goalId;
+  }
 }
 
 class Transactions with ChangeNotifier {
-  List<Transaction> _transactions = [];
   MonthChanger monthChanger;
 
-  Transactions(this.monthChanger, this._transactions);
-
-  List<Transaction> get transactions => [..._transactions];
+  Transactions(this.monthChanger);
 
   Transaction initializeTransaction(DocumentSnapshot doc) {
     // Initialize a transaction with document data
@@ -116,6 +124,7 @@ class Transactions with ChangeNotifier {
       categoryTitle: doc.data()['categoryTitle'],
       categoryCodepoint: doc.data()['categoryCodepoint'],
       amount: doc.data()['amount'],
+      goalId: doc.data()['goalID'],
     );
   }
 
@@ -137,32 +146,6 @@ class Transactions with ChangeNotifier {
       'categoryCodepoint': transaction.getCategoryCodePoint(),
       'goalID': goalID,
     });
-    // // if category is not budgeted for, add it to budget
-    // if (await FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(Provider.of<Auth>(context, listen: false).getUserId())
-    //     .collection('Budgets')
-    //     .doc(await Provider.of<BudgetDataProvider>(context)
-    //         .getBudgetID(transaction.getDate(), context))
-    //     .collection('categories')
-    //     .where('id', isEqualTo: transaction.getCategoryId())
-    //     .get()
-    //     .then((querySnapshot) => querySnapshot.docs.isEmpty)) {
-    //   print('2');
-    // // initialize category with relevant data from transaction
-    // var category = Category.Category();
-    // category.setID(transaction.getCategoryId());
-    // category.setTitle(transaction.getCategoryTitle());
-    // category.setCodepoint(transaction.getCategoryCodePoint());
-    // category.setAmount(0.00); // 0 because unbudgeted
-
-    // // upload category to respective budget
-    // await Provider.of<Category.CategoryDataProvider>(context).uploadCategory(
-    //     await Provider.of<BudgetDataProvider>(context)
-    //         .getBudgetID(transaction.getDate(), context),
-    //     category,
-    //     context);
-    // }
   }
 
   void editTransaction(Transaction transaction, BuildContext context) async {
@@ -182,13 +165,6 @@ class Transactions with ChangeNotifier {
       },
       SetOptions(merge: true),
     );
-
-    final transactionIndex = _transactions.indexWhere(
-        (transaction) => transaction.getID() == transaction.getID());
-    if (transactionIndex >= 0) {
-      _transactions[transactionIndex] = transaction;
-      notifyListeners();
-    }
   }
 
   double getTransactionExpenses(QuerySnapshot snapshot) {

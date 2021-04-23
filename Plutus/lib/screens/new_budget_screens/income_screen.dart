@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 // Imported Plutus files
+import '../auth_screen.dart';
 import './first_budget_screen.dart';
 import '../tab_screen.dart';
 import '../../models/budget.dart';
@@ -97,12 +98,27 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                 listen: false)
                             .uploadCategory(budget.getID(), category, context);
                       });
+                      // remove categories of 0 amount
+                      uneditedBudget.forEach((category) async {
+                        if (category.getAmount() == 0) {
+                          await Provider.of<CategoryDataProvider>(context,
+                                  listen: false)
+                              .removeCategory(
+                                  budget.getID(), category.getID(), context);
+                        }
+                      });
                     }
                     //push the original budget's amount in case it changed
                     Provider.of<BudgetDataProvider>(context, listen: false)
                         .editBudget(originalBudget, context);
                   }
-                  Navigator.of(context).pushNamed(TabScreen.routeName);
+                  // removes all screens except login (i.e., removes IS and FBS so can't re-edit deleted/edited budget; and technically any settings or account screen)
+                  // use this and not popUntil to fix bug where if user tapped a unbudgeted category in FBS, it would get removed from budget
+                  // and then budget screen needed to be refreshed
+                  Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      TabScreen.routeName,
+                      ModalRoute.withName(AuthScreen.routeName));
                 },
               ),
               TextButton(
@@ -210,8 +226,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             validator: (val) {
                               if (val.contains(
                                   new RegExp(r'^-?\d+(\.\d{1,2})?$'))) {
-                                // OLD REGEX r'-?[0-9]\d*(\.\d+)?$'
-                                // only accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
+                                //  accept any number of digits followed by 0 or 1 decimals followed by 1 or 2 numbers
                                 if (double.parse(
                                         double.parse(val).toStringAsFixed(2)) <=
                                     0.00) //seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
@@ -222,7 +237,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                   return 'Max amount is \$999,999,999.99'; // no budget >= $1billion
                                 return null;
                               } else {
-                                return 'Please enter a number.';
+                                return 'Please enter a valid number.';
                               }
                             },
                           ),

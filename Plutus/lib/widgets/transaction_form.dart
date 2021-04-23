@@ -91,12 +91,7 @@ class _TransactionFormState extends State<TransactionForm> {
       _transaction.setCategoryTitle(widget.transaction.getCategoryTitle());
       _transaction
           .setCategoryCodePoint(widget.transaction.getCategoryCodePoint());
-
-      // _transaction.id = widget.transaction.id;
-      // _transaction.title = widget.transaction.title;
-      // _transaction.category = category = widget.transaction.category;
-      // _transaction.amount = widget.transaction.amount;
-      // _transaction.date = _date = widget.transaction.date;
+      _transaction.setGoalId(widget.transaction.getGoalId());
     }
     super.initState();
   }
@@ -156,9 +151,11 @@ class _TransactionFormState extends State<TransactionForm> {
       mainAxisSize: MainAxisSize.max,
       children: [
         Container(
-          width: 125,
+          width: _transaction.getDate().year == DateTime.now().year ? 125 : 175,
           child: Text(
-            'Date: ${DateFormat.MMMd().format(_transaction.getDate())}',
+            _transaction.getDate().year == DateTime.now().year
+                ? 'Date: ${DateFormat.MMMd().format(_transaction.getDate())}'
+                : 'Date: ${DateFormat.yMMMd().format(_transaction.getDate())}',
             style: TextStyle(
               fontSize: 16,
               color: Theme.of(context).primaryColor,
@@ -202,95 +199,102 @@ class _TransactionFormState extends State<TransactionForm> {
           'Category: ',
           style: TextStyle(
             fontSize: 16,
-            color: Theme.of(context).primaryColor,
+            color: _transaction.getGoalId() != null
+                ? Colors.grey
+                : Theme.of(context).primaryColor,
           ),
         ),
         GestureDetector(
-          onTap: () => showDialog(
-            context: context,
-            builder: (bctx) => SimpleDialog(
-              backgroundColor: Theme.of(context).primaryColor,
-              title: Text(
-                'Choose Category',
-                style: TextStyle(
-                  fontSize: 25,
-                  fontFamily: 'Anton',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 600,
-                      width: 400,
-                      child: StreamBuilder(
-                          stream:
-                              categoryDataProvider.streamCategories(context),
-                          builder:
-                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                            switch (snapshot.connectionState) {
-                              case ConnectionState.none:
-                                {
-                                  return Text(
-                                      'There was an error loading your categories.');
-                                }
-                              case ConnectionState.waiting:
-                                {
-                                  return CircularProgressIndicator();
-                                }
-                              default:
-                                {
-                                  snapshot.data.docs.forEach((element) {
-                                    categories.add(categoryDataProvider
-                                        .initializeCategory(element));
-                                  });
-                                  return ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: snapshot.data.docs.length,
-                                    itemBuilder: (context, index) {
-                                      category = categoryDataProvider
-                                          .initializeCategory(
-                                              snapshot.data.docs[index]);
-                                      return ListTile(
-                                        tileColor:
-                                            Theme.of(context).canvasColor,
-                                        leading: Icon(
-                                          IconData(
-                                            categories[index].getCodepoint(),
-                                            fontFamily: 'MaterialIcons',
-                                          ),
-                                          size: 30,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                        title: Text(
-                                          '${categories[index].getTitle()}',
-                                          style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            fontSize: 18,
-                                            fontFamily: 'Anton',
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        onTap: () {
-                                          _setCategory(categories[index]);
-
-                                          Navigator.of(context).pop(category);
-                                        },
-                                      );
-                                    },
-                                  );
-                                }
-                            }
-                          }),
+          onTap: () => _transaction.getGoalId() != null
+              ? null
+              : showDialog(
+                  context: context,
+                  builder: (bctx) => SimpleDialog(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    title: Text(
+                      'Choose Category',
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontFamily: 'Anton',
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ],
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 600,
+                            width: 400,
+                            child: StreamBuilder(
+                                stream: categoryDataProvider
+                                    .streamCategoriesWithoutGoal(context),
+                                builder: (context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  switch (snapshot.connectionState) {
+                                    case ConnectionState.none:
+                                      {
+                                        return Text(
+                                            'There was an error loading your categories.');
+                                      }
+                                    case ConnectionState.waiting:
+                                      {
+                                        return CircularProgressIndicator();
+                                      }
+                                    default:
+                                      {
+                                        snapshot.data.docs.forEach((element) {
+                                          categories.add(categoryDataProvider
+                                              .initializeCategory(element));
+                                        });
+                                        return ListView.builder(
+                                          scrollDirection: Axis.vertical,
+                                          itemCount: snapshot.data.docs.length,
+                                          itemBuilder: (context, index) {
+                                            category = categoryDataProvider
+                                                .initializeCategory(
+                                                    snapshot.data.docs[index]);
+                                            return ListTile(
+                                              tileColor:
+                                                  Theme.of(context).canvasColor,
+                                              leading: Icon(
+                                                IconData(
+                                                  categories[index]
+                                                      .getCodepoint(),
+                                                  fontFamily: 'MaterialIcons',
+                                                ),
+                                                size: 30,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                              title: Text(
+                                                '${categories[index].getTitle()}',
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  fontSize: 18,
+                                                  fontFamily: 'Anton',
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              onTap: () {
+                                                _setCategory(categories[index]);
+
+                                                Navigator.of(context)
+                                                    .pop(category);
+                                              },
+                                            );
+                                          },
+                                        );
+                                      }
+                                  }
+                                }),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
           child: Chip(
             avatar: CircleAvatar(
               backgroundColor: Colors.black,
@@ -300,13 +304,18 @@ class _TransactionFormState extends State<TransactionForm> {
                   fontFamily: 'MaterialIcons',
                 ),
                 size: 22,
+                color: _transaction.getGoalId() != null
+                    ? Colors.grey
+                    : Theme.of(context).primaryColor,
               ),
             ),
             label: Text(
               '${_transaction.getCategoryTitle()}',
               style: TextStyle(color: Colors.black),
             ),
-            backgroundColor: Theme.of(context).primaryColorLight,
+            backgroundColor: _transaction.getGoalId() != null
+                ? Colors.grey
+                : Theme.of(context).primaryColorLight,
           ),
         ),
       ],
@@ -339,11 +348,12 @@ class AmountTFF extends StatelessWidget {
       style: TextStyle(fontSize: 20.0, color: Theme.of(context).primaryColor),
       keyboardType: TextInputType.number,
       maxLength: null,
+      autofocus: _transaction.getGoalId() != null,
       onEditingComplete: () => FocusScope.of(context).unfocus(),
       onSaved: (val) => _transaction.setAmount(double.parse(val)),
       validator: (val) {
         if (val.isEmpty) return 'Please enter an amount.';
-        if (val.contains(new RegExp(r'^\d*(\.\d+)?$'))) {
+        if (val.contains(new RegExp(r'^\d*(\.\d*)?$'))) {
           // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
           if (double.parse(double.parse(val).toStringAsFixed(2)) <=
               0.00) // seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00
@@ -352,7 +362,7 @@ class AmountTFF extends StatelessWidget {
             return 'Max amount is \$999,999,999.99'; // no transactions >= $1billion
           return null;
         } else {
-          return 'Please enter a number.';
+          return 'Please enter a valid number.';
         }
       },
     );
@@ -371,18 +381,27 @@ class DescriptionTFF extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: _transaction.getGoalId() == null,
       initialValue: _transaction.getTitle() ?? '',
       decoration: InputDecoration(
         labelText: 'Transaction Title',
         labelStyle: new TextStyle(
-            color: Theme.of(context).primaryColor, fontSize: 16.0),
+            color: _transaction.getGoalId() != null
+                ? Colors.grey
+                : Theme.of(context).primaryColor,
+            fontSize: 16.0),
       ),
-      style: TextStyle(fontSize: 20.0, color: Theme.of(context).primaryColor),
-      autofocus: true,
+      style: TextStyle(
+          fontSize: 20.0,
+          color: _transaction.getGoalId() != null
+              ? Colors.grey
+              : Theme.of(context).primaryColor),
+      autofocus: _transaction.getGoalId() == null,
       inputFormatters: [
         LengthLimitingTextInputFormatter(20),
       ],
       maxLength: 20,
+      readOnly: _transaction.getGoalId() != null,
       onEditingComplete: () => FocusScope.of(context).nextFocus(),
       onSaved: (val) => _transaction.setTitle(val.trim()),
       validator: (val) {
