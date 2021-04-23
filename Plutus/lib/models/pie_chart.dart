@@ -68,7 +68,7 @@ class PieChartCard extends StatelessWidget {
                       charts.ColorUtil.fromDartColor(piePiece.colorVal),
                   id: 'How you spent',
                   data: pieData,
-                  labelAccessorFn: (PiePiece row, _) => '${row.category}',
+                  // labelAccessorFn: (PiePiece row, _) => '${row.category}',
                 ),
               );
 
@@ -138,8 +138,12 @@ List<PiePiece> getPieData(List<QueryDocumentSnapshot> tranSnapshot,
             i['categoryTitle'].toString() == category['title'].toString())
         .toList()
         .fold(0.0, (a, b) => a + b['amount']);
-    data.add(new PiePiece(category['title'].toString(), catAmount,
-        Color(category['pieColor'].toInt())));
+    for (var transaction in tranSnapshot) {
+      if (category.id.toString() == transaction['categoryID'].toString()) {
+        data.add(new PiePiece(category['title'].toString(), catAmount,
+            Color(category['pieColor'].toInt())));
+      }
+    }
   }
   return data;
 }
