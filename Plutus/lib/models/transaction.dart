@@ -275,4 +275,36 @@ class Transactions with ChangeNotifier {
         .limit(count)
         .snapshots();
   }
+  // TODO Find out why this is commented out
+  // Sum the expenses for the month
+  // double get monthlyExpenses {
+  //   var sum = 0.00;
+  //   for (var transaction in monthlyTransactions) {
+  //     sum += transaction.getAmount();
+  //   }
+  //   return sum;
+  // }
+
+  Stream<QuerySnapshot> getMonthlyGoalTransactions(BuildContext context) {
+    var monthlyGoalTransactions = FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<Auth>(context, listen: false).getUserId())
+        .collection('Transactions')
+        .where(
+          'date',
+          isGreaterThanOrEqualTo: DateTime(
+            DateTime.now().year,
+            DateTime.now().month,
+            1,
+          ),
+          isLessThan: DateTime(
+            DateTime.now().year,
+            DateTime.now().month + 1,
+            1,
+          ),
+        )
+        .snapshots();
+
+    return monthlyGoalTransactions;
+  }
 }
