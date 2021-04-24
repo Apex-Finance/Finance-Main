@@ -106,6 +106,11 @@ class PieChartCard extends StatelessWidget {
                   getPieData(tranSnapshot.data.docs, catSnapshot.data.docs);
               List<charts.Series<PiePiece, String>> pieSeriesData = [];
 
+              var totalExpenses = 0.00;
+              pieData.forEach((piePiece) {
+                totalExpenses += piePiece.amount;
+              });
+
               pieSeriesData.add(
                 charts.Series(
                   domainFn: (PiePiece piePiece, _) => piePiece.category,
@@ -114,7 +119,11 @@ class PieChartCard extends StatelessWidget {
                       charts.ColorUtil.fromDartColor(piePiece.colorVal),
                   id: 'How you spent',
                   data: pieData,
-                  labelAccessorFn: (PiePiece row, _) => '${row.category}',
+                  labelAccessorFn: (PiePiece row, _) => (row.amount /
+                              totalExpenses) >
+                          .15 // big enough for our longest category to fit without overflowing
+                      ? '${row.category}'
+                      : '',
                 ),
               );
               bool fewCategories = pieData.length <= 6;
@@ -142,9 +151,10 @@ class PieChartCard extends StatelessWidget {
                         child: charts.PieChart(
                           pieSeriesData,
                           animate: true,
-                          animationDuration: Duration(seconds: 2),
+                          animationDuration:
+                              Duration(seconds: 1, milliseconds: 500),
                           behaviors: [
-                            new charts.DatumLegend(
+                            charts.DatumLegend(
                               horizontalFirst: true,
                               desiredMaxColumns: fewCategories
                                   ? 2
@@ -165,7 +175,8 @@ class PieChartCard extends StatelessWidget {
                           defaultRenderer: new charts.ArcRendererConfig(
                             arcWidth: 100,
                             arcRendererDecorators: [
-                              new charts.ArcLabelDecorator(
+                              charts.ArcLabelDecorator(
+                                  labelPadding: 1,
                                   labelPosition: charts.ArcLabelPosition.inside)
                             ],
                           ),

@@ -122,7 +122,8 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
                                 MediaQuery.of(context).size.width * .75, // 82
                             animation: true,
                             lineHeight: 20.0,
-                            animationDuration: 2500,
+                            animationDuration:
+                                1750, // slightly longer than pieChart animationDuration b/c needs a delay to let the pieChart get more data from db
                             // if budget is 0 (somehow) show empty; if expenses > budget, show full; otherwise show correct % spent
                             percent: budgetAmount > 0
                                 ? (transactionExpenses > budgetAmount
@@ -144,16 +145,6 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              /*new LinearPercentIndicator(
-              alignment: MainAxisAlignment.center,
-              width: 310.0,
-              lineHeight: 14.0,
-              percent: transactionExpenses > budget.getAmount()
-                  ? 1
-                  : transactionExpenses / budget.getAmount(),
-              backgroundColor: Colors.black,
-              progressColor: Colors.amber,
-            ),*/
             ],
           ),
         ),
