@@ -165,7 +165,10 @@ class _TotalExpensesState extends State<TotalExpenses> {
     return ListTile(
       title: Text(
         'Total Expenses',
-        style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
+        style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).primaryColor),
       ),
       trailing: AutoSizeText(
         '\$${widget.monthlyExpenses.toStringAsFixed(2)}',

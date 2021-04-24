@@ -80,7 +80,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     isDark = colors.isDark ??
         false; // set isDark to user's last preference; if none found (or initial load), default to light mode
     selectedColorIndex = colors.selectedColorIndex ??
-        2; // set active color to user's last preference; if none found (or initial load), default to amber
+        0; // set active color to user's last preference; if none found (or initial load), default to amber
     initialIndex = isDark ? 0 : 1; //set toggle to match dark mode
 
     return Scaffold(

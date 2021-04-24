@@ -106,7 +106,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
             ListTile(
               onTap: () => _updateGoal(context, widget.goal),
               contentPadding: EdgeInsets.all(4),
-              tileColor: Colors.grey[850],
+              tileColor: Theme.of(context).backgroundColor,
               leading: Container(
                 width: 80,
                 decoration: BoxDecoration(

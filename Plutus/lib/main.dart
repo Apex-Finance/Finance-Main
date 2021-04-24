@@ -86,8 +86,9 @@ class MyApp extends StatelessWidget {
       builder: (context) => MaterialApp(
         title: 'Plutus',
         theme: ThemeData(
-          primarySwatch: primarySwatch, //Colors.amber,
+          primarySwatch: primarySwatch, // Colors.amber
           primaryColor: primaryColor, //Colors.amber,
+          backgroundColor: Colors.grey[500], // ListTile color
           primaryColorLight: Colors.amberAccent,
           accentColor: Colors.white,
           canvasColor: canvasColor,

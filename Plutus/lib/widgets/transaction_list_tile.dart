@@ -91,7 +91,7 @@ class _TransactionListTileState extends State<TransactionListTile> {
           },
           child: ListTile(
             onTap: () => _updateTransaction(context, widget.transaction),
-            tileColor: Colors.grey[850],
+            tileColor: Theme.of(context).backgroundColor,
             leading: CircleAvatar(
               child:
                   Icon(categoryIcon[widget.transaction.getCategoryCodePoint()]),
