@@ -55,7 +55,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Create a Budget",
           body:
-              "Whether you're planning out next month's expenses or thinking about your next vacation, Plutus helps all your budgeting needs.",
+              "Whether you're planning out next month's expenses or thinking about your next vacation, Plutus helps you with all your budgeting needs.",
           image: _buildImage('Budget 2.jpg'),
           decoration: pageDecoration,
         ),
@@ -67,7 +67,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Set a goal",
+          title: "Set Goals",
           body:
               "Saving up for that shiny new car? Plutus can help you set aside funds for that item and keep track of how close you are to achieving that goal.",
           image: _buildImage('Goal 2.jpg'),

@@ -72,7 +72,7 @@ class _AddGoalMoneyFormState extends State<AddGoalMoneyForm> {
                 children: <Widget>[
                   // Title
                   AutoSizeText(
-                    'Add money to ${widget.goal.getTitle()}',
+                    'Put money toward ${widget.goal.getTitle()}',
                     style: Theme.of(context).textTheme.headline1,
                     overflow: TextOverflow.visible,
                     textAlign: TextAlign.center,
@@ -89,8 +89,8 @@ class _AddGoalMoneyFormState extends State<AddGoalMoneyForm> {
                                 .getAmountSaved(context, snapshot.data);
                         return AutoSizeText(
                           widget.goal.getGoalAmount() - amountSaved < 0
-                              ? '\$ ${(widget.goal.getGoalAmount() - amountSaved).abs().toStringAsFixed(2)} extra saved'
-                              : '\$ ${(widget.goal.getGoalAmount() - amountSaved).toStringAsFixed(2)} left to go',
+                              ? '\$${(widget.goal.getGoalAmount() - amountSaved).abs().toStringAsFixed(2)} extra saved'
+                              : '\$${(widget.goal.getGoalAmount() - amountSaved).toStringAsFixed(2)} left to go',
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                           ),

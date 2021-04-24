@@ -118,13 +118,15 @@ class GoalDataProvider with ChangeNotifier {
         .delete();
   }
 
-  Stream<QuerySnapshot> getUpcomingGoals(BuildContext context, int count) {
-    return FirebaseFirestore.instance
+  Stream<QuerySnapshot> getUpcomingGoals(BuildContext context, [int count]) {
+    var goals = FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .collection('Goals')
-        .orderBy('dateOfGoal', descending: true)
-        .limit(count)
-        .snapshots();
+        .orderBy('dateOfGoal', descending: false);
+    if (count != null)
+      goals =
+          goals.limit(count); // only limit the goals if on recent goals card
+    return goals.snapshots();
   }
 }

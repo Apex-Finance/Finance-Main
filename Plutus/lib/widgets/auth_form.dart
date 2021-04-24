@@ -88,15 +88,13 @@ class _AuthFormState extends State<AuthForm> {
     } on FirebaseAuthException catch (error) {
       var errorMessage = 'Authentication failed';
       if (error.code == 'invalid-email') {
-        errorMessage = 'This is not a valid email address';
+        errorMessage = 'This is not a valid email address.';
       } else if (error.code == 'user-not-found') {
         errorMessage = 'This user is not found.';
       } else if (error.code == 'wrong-password') {
-        errorMessage = 'Incorrect password';
+        errorMessage = 'Incorrect password.';
       } else if (error.code == 'email-already-in-use') {
         errorMessage = 'This email address is already in use.';
-      } else if (error.code == 'invalid-email') {
-        errorMessage = 'This is not a valid email address';
       } else if (error.code == 'weak-password') {
         errorMessage = 'This password is too weak.';
       }
@@ -169,7 +167,16 @@ class _AuthFormState extends State<AuthForm> {
                 onEditingComplete: () => FocusScope.of(context).nextFocus(),
                 controller: _emailController,
                 validator: (value) {
-                  if (value.isEmpty || !value.contains('@')) {
+                  if (value.isEmpty) return 'Please enter an email address.';
+                  if (!value.trim().contains(RegExp(
+                      r'^[a-zA-Z0-9]+([.]?[a-zA-Z0-9]+){0,2}@[a-zA-Z0-9]+([.][a-zA-Z0-9]{2,}){1,2}$')))
+                  // after removing leading/trailing whitespace, regex checks for:
+                  // one or more characters followed by
+                  // 0-2 (.(1+characters) followed by
+                  // @ followed by
+                  // one or more characters followed by
+                  // 1-2 (.(2+ characters))
+                  {
                     return 'Invalid email!';
                   }
                   return null;

@@ -1,14 +1,17 @@
 // Imported Flutter packages
+import 'package:Plutus/models/budget.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 // Imported Plutus files
 import '../widgets/transaction_list_tile.dart';
 import '../models/pie_chart.dart';
 import '../widgets/goals_list_tile.dart';
 import '../models/transaction.dart';
+import '../models/goals.dart';
 
 class DashboardScreen extends StatefulWidget {
   static const routeName = '/dashboard';
@@ -19,7 +22,6 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
-    //var deviceSize = MediaQuery.of(context).size;
     return ListView(
       shrinkWrap: true,
       padding: EdgeInsets.all(15.0),
@@ -52,6 +54,11 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
+    var budgetDataProvider = Provider.of<BudgetDataProvider>(context);
+    var transactionDataProvider = Provider.of<Transactions>(context);
+    var budgetAmount = 0.00;
+    double transactionExpenses = 0.00;
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -65,28 +72,72 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
           title: Column(
             children: [
               Text(
-                'Total Budget this month',
+                'Total Budget Used',
                 style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColor),
+                    fontSize: 22, color: Theme.of(context).primaryColor),
               ),
               SizedBox(
                 height: 10,
               ),
               Center(
                 child: StreamBuilder<QuerySnapshot>(
-                  stream: null,
-                  builder: (context, snapshot) {
-                    return new LinearPercentIndicator(
-                      width: MediaQuery.of(context).size.width * .75, // 82
-                      animation: true,
-                      lineHeight: 20.0,
-                      animationDuration: 2500,
-                      percent: 0.8,
-                      center: Text("80.0%"),
-                      linearStrokeCap: LinearStrokeCap.roundAll,
-                      progressColor: Theme.of(context).primaryColor,
+                  stream: budgetDataProvider.getmonthlyBudget(
+                      context, DateTime.now()),
+                  builder: (context, budgetSnapshot) {
+                    return StreamBuilder<QuerySnapshot>(
+                      stream: transactionDataProvider
+                          .getMonthlyTransactions(context, DateTime.now())
+                          .snapshots(),
+                      builder: (context, transactionSnapshot) {
+                        if (!budgetSnapshot.hasData ||
+                            !transactionSnapshot.hasData) {
+                          // loading data... show empty percent indicator to prevent screen shifting
+                          return LinearPercentIndicator(
+                            width:
+                                MediaQuery.of(context).size.width * .75, // 82
+                            animation: true,
+                            lineHeight: 20.0,
+                            animationDuration: 2500,
+                            percent: 0,
+                            center: Text(''),
+                            linearStrokeCap: LinearStrokeCap.roundAll,
+                            progressColor: Theme.of(context).primaryColor,
+                          );
+                        } else if (budgetSnapshot.data.docs.isEmpty) {
+                          // no budget created yet... don't show LPI
+                          return Text(
+                            'No budget created yet.',
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor),
+                          );
+                        } else {
+                          budgetAmount = budgetDataProvider
+                              .initializeBudget(budgetSnapshot.data.docs.first)
+                              .getAmount();
+                          transactionExpenses = transactionDataProvider
+                              .getTransactionExpenses(transactionSnapshot.data);
+
+                          return LinearPercentIndicator(
+                            width:
+                                MediaQuery.of(context).size.width * .75, // 82
+                            animation: true,
+                            lineHeight: 20.0,
+                            animationDuration:
+                                1750, // slightly longer than pieChart animationDuration b/c needs a delay to let the pieChart get more data from db
+                            // if budget is 0 (somehow) show empty; if expenses > budget, show full; otherwise show correct % spent
+                            percent: budgetAmount > 0
+                                ? (transactionExpenses > budgetAmount
+                                    ? 1
+                                    : transactionExpenses / budgetAmount)
+                                : 0,
+                            center: AutoSizeText(budgetAmount > 0
+                                ? '${(transactionExpenses / budgetAmount * 100).toStringAsFixed(1)}%'
+                                : ''),
+                            linearStrokeCap: LinearStrokeCap.roundAll,
+                            progressColor: Theme.of(context).primaryColor,
+                          );
+                        }
+                      },
                     );
                   },
                 ),
@@ -94,16 +145,6 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              /*new LinearPercentIndicator(
-              alignment: MainAxisAlignment.center,
-              width: 310.0,
-              lineHeight: 14.0,
-              percent: transactionExpenses > budget.getAmount()
-                  ? 1
-                  : transactionExpenses / budget.getAmount(),
-              backgroundColor: Colors.black,
-              progressColor: Colors.amber,
-            ),*/
             ],
           ),
         ),
@@ -120,6 +161,8 @@ class TotalSavedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
+    var transactionDataProvider = Provider.of<Transactions>(context);
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -144,23 +187,26 @@ class TotalSavedCard extends StatelessWidget {
                 height: 10,
               ),
               StreamBuilder<QuerySnapshot>(
-                  stream: Provider.of<Transactions>(context, listen: false)
-                      .getMonthlyGoalTransactions(context),
+                  stream: transactionDataProvider.getCategoryTransactions(
+                      'GYHEkJeJsFG09HUw14p3',
+                      DateTime.now(),
+                      context), // gets goal transactions for this month
                   builder: (context, snapshot) {
                     double amountSaved;
                     if (!snapshot.hasData)
                       return Container();
-                    else
-                      amountSaved =
-                          Provider.of<Transactions>(context, listen: false)
-                              .getTransactionExpenses(snapshot.data);
-                    return FittedBox(
-                      fit: BoxFit.contain,
-                      child: Text(
-                        '\$${amountSaved.toStringAsFixed(2)}',
-                        style: Theme.of(context).textTheme.headline1,
-                      ),
-                    );
+                    else {
+                      amountSaved = transactionDataProvider
+                          .getTransactionExpenses(snapshot
+                              .data); // sums the goal transaction amounts
+                      return FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          '\$${amountSaved.toStringAsFixed(2)}',
+                          style: Theme.of(context).textTheme.headline1,
+                        ),
+                      );
+                    }
                   }),
             ],
           ),
@@ -178,6 +224,7 @@ class TotalSpentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
+    var transactionDataProvider = Provider.of<Transactions>(context);
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -202,30 +249,197 @@ class TotalSpentCard extends StatelessWidget {
                 height: 10,
               ),
               StreamBuilder<QuerySnapshot>(
-                stream: Provider.of<Transactions>(context, listen: false)
-                    .getMonthlyTransactions(context, DateTime.now())
-                    .snapshots(),
-                builder: (context, tranSnap) {
-                  double transactionExpenses;
-                  if (!tranSnap.hasData)
-                    return Container();
-                  else
-                    transactionExpenses =
-                        Provider.of<Transactions>(context, listen: false)
-                            .getTransactionExpenses(tranSnap.data);
-                  return FittedBox(
-                    fit: BoxFit.contain,
-                    child: Text(
-                      '\$${transactionExpenses.toStringAsFixed(2)}',
-                      style: Theme.of(context).textTheme.headline1,
-                    ),
-                  );
-                },
-              ),
+                  stream: transactionDataProvider
+                      .getMonthlyTransactions(context, DateTime.now())
+                      .snapshots(),
+                  builder: (context, tranSnap) {
+                    return StreamBuilder<QuerySnapshot>(
+                      stream: transactionDataProvider.getCategoryTransactions(
+                          'GYHEkJeJsFG09HUw14p3',
+                          DateTime.now(),
+                          context), // gets goal transactions for this month
+                      builder: (context, goalSnap) {
+                        if (!goalSnap.hasData ||
+                            !tranSnap.hasData) // loading data
+                          // don't need to check if snapshots are empty b/c it will just calculate 0 for that if so
+                          return Container();
+                        else {
+                          double amountSaved = transactionDataProvider
+                              .getTransactionExpenses(goalSnap
+                                  .data); // sums the goal transaction amounts
+
+                          double transactionExpenses = transactionDataProvider
+                              .getTransactionExpenses(tranSnap.data);
+                          return FittedBox(
+                            fit: BoxFit.contain,
+                            child: Text(
+                              '\$${(transactionExpenses - amountSaved).toStringAsFixed(2)}',
+                              style: Theme.of(context).textTheme.headline1,
+                            ),
+                          );
+                        }
+                      },
+                    );
+                  }),
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+class RecentTransactionsCard extends StatelessWidget {
+  final int tileCount;
+  RecentTransactionsCard(this.tileCount);
+  @override
+  Widget build(BuildContext context) {
+    var transactionDataProvider = Provider.of<Transactions>(context);
+
+    return StreamBuilder<QuerySnapshot>(
+        stream: transactionDataProvider
+            .getMonthlyTransactions(context, DateTime.now(), tileCount)
+            .snapshots(),
+        builder: (context, snapshot) {
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(20),
+                bottom: Radius.circular(20),
+              ),
+            ),
+            child: Container(
+              width: 400,
+              height: 300,
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    width: 400,
+                    child: Center(
+                      child: Text(
+                        'Recent Transactions',
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  if (!snapshot.hasData)
+                    //loading data (shouldn't matter b/c below the fold but just in case)
+                    Container()
+                  else if (snapshot.data.docs.isEmpty)
+                    // no transactions this month
+                    Expanded(
+                      child: Center(
+                        child: ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: 250),
+                            child: Text(
+                              'No transactions have been added this month.',
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor),
+                            )),
+                      ),
+                    )
+                  else // load transactions
+                    Expanded(
+                      child: ListView.builder(
+                          itemCount: snapshot.data.docs.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            // initialize the transaction document into a transaction object
+                            return TransactionListTile(
+                                transactionDataProvider.initializeTransaction(
+                                    snapshot.data.docs[index]));
+                          }),
+                    ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+}
+
+class UpcomingGoalCard extends StatelessWidget {
+  final int tileCount;
+
+  UpcomingGoalCard(this.tileCount);
+
+  @override
+  Widget build(BuildContext context) {
+    var goalDataProvider =
+        Provider.of<GoalDataProvider>(context, listen: false);
+    return StreamBuilder<QuerySnapshot>(
+        stream: goalDataProvider.getUpcomingGoals(context, tileCount),
+        builder: (context, snapshot) {
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(20),
+                bottom: Radius.circular(20),
+              ),
+            ),
+            child: Container(
+              width: 400,
+              height: 260,
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    width: 400,
+                    child: Center(
+                      child: Text(
+                        'Upcoming Goals',
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  if (!snapshot.hasData)
+                    //loading data (shouldn't matter b/c below the fold but just in case)
+                    Container()
+                  else if (snapshot.data.docs.isEmpty)
+                    // no goals
+                    Expanded(
+                      child: Center(
+                        child: ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: 250),
+                            child: Text(
+                              'No goals have been created.',
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor),
+                            )),
+                      ),
+                    )
+                  else // load goals
+                    Expanded(
+                      child: ListView.builder(
+                          itemCount: snapshot.data.docs.length,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            // initialize the transaction document into a transaction object
+                            return GoalsListTile(goalDataProvider
+                                .initializeGoal(snapshot.data.docs[index]));
+                          }),
+                    ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
