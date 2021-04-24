@@ -93,6 +93,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
   @override
   Widget build(BuildContext context) {
     var categoryDataProvider = Provider.of<CategoryDataProvider>(context);
+    var keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
     // if they hit back button on phone or appbar, pass the originalList back
     // will be assigned to uneditedBudget in IS
@@ -310,7 +311,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                   ),
                   // Add budget button
                   Container(
-                    padding: EdgeInsets.fromLTRB(30, 30, 0, 50),
+                    padding: EdgeInsets.fromLTRB(
+                        30, keyboardOpen ? 20 : 30, 0, keyboardOpen ? 10 : 50),
                     alignment: Alignment.bottomRight,
                     child: Builder(
                       builder: (context) => FloatingActionButton.extended(

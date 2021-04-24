@@ -171,6 +171,7 @@ class TotalSavedCard extends StatelessWidget {
         ),
       ),
       child: Container(
+        padding: EdgeInsets.all(4.0),
         height: 90,
         width: deviceSize.width * 0.4, // 180
         child: Center(
@@ -233,6 +234,7 @@ class TotalSpentCard extends StatelessWidget {
         ),
       ),
       child: Container(
+        padding: EdgeInsets.all(4.0),
         height: 90,
         width: deviceSize.width * 0.4,
         child: Center(

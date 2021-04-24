@@ -85,37 +85,39 @@ class _GoalsFormState extends State<GoalsForm> {
   @override
   Widget build(BuildContext context) {
     return KeyboardAvoider(
-      child: Container(
-        height: 390, // large enough to accommodate all errors
-        child: Card(
-          color: Colors.grey[850],
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(
-              10,
-              20,
-              10,
-              0,
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  // Title Text Field
-                  GoalTitleField(
-                    goal: _goal,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  // Goal Amount Text Field
-                  GoalAmountField(
-                    goal: _goal,
-                  ),
-                  //NOT USED
-                  //buildImageSelector(context),
-                  buildDateChanger(context),
-                  buildSubmitButton(context),
-                ],
+      child: SingleChildScrollView(
+        child: Container(
+          height: 390, // large enough to accommodate all errors
+          child: Card(
+            color: Colors.grey[850],
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                10,
+                20,
+                10,
+                0,
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    // Title Text Field
+                    GoalTitleField(
+                      goal: _goal,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    // Goal Amount Text Field
+                    GoalAmountField(
+                      goal: _goal,
+                    ),
+                    //NOT USED
+                    //buildImageSelector(context),
+                    buildDateChanger(context),
+                    buildSubmitButton(context),
+                  ],
+                ),
               ),
             ),
           ),
@@ -162,34 +164,39 @@ class _GoalsFormState extends State<GoalsForm> {
 
   // Changes the date of the goal
   Widget buildDateChanger(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(10, 20, 230, 0),
-      //0, 20, 275, 0), // Values for Samsung J4; DO NOT CHANGE
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: Theme.of(context).primaryColorLight,
-        ),
-        child: _goal.getDate() == null
-            ? Text('Due Date')
-            : Text(
-                _goal.getDate().year == DateTime.now().year
-                    ? '${DateFormat.MMMd().format(_goal.getDate())}'
-                    : '${DateFormat.yMMMd().format(_goal.getDate())}',
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.fromLTRB(20, 20, 0, 0),
+          //0, 20, 275, 0), // Values for Samsung J4; DO NOT CHANGE
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).primaryColorLight,
+            ),
+            child: _goal.getDate() == null
+                ? Text('Due Date')
+                : Text(
+                    _goal.getDate().year == DateTime.now().year
+                        ? '${DateFormat.MMMd().format(_goal.getDate())}'
+                        : '${DateFormat.yMMMd().format(_goal.getDate())}',
+                  ),
+            onPressed: () => showDatePicker(
+              context: context,
+              initialDate:
+                  _goal.getDate() == null ? DateTime.now() : _goal.getDate(),
+              firstDate: DateTime.now(),
+              lastDate: DateTime.now().add(
+                Duration(
+                  days: 3652, // ~=10 years
+                ),
               ),
-        onPressed: () => showDatePicker(
-          context: context,
-          initialDate:
-              _goal.getDate() == null ? DateTime.now() : _goal.getDate(),
-          firstDate: DateTime.now(),
-          lastDate: DateTime.now().add(
-            Duration(
-              days: 3652, // ~=10 years
+            ).then(
+              (value) => _setDate(value),
             ),
           ),
-        ).then(
-          (value) => _setDate(value),
         ),
-      ),
+      ],
     );
   }
 
@@ -197,8 +204,9 @@ class _GoalsFormState extends State<GoalsForm> {
   Widget buildSubmitButton(BuildContext context) {
     return Padding(
       padding: EdgeInsets.fromLTRB(
-          250, 40, 0, 0), // Values for Samsung J4; DO NOT CHANGE
+          0, 40, 0, 0), // Values for Samsung J4; DO NOT CHANGE
       child: Container(
+        alignment: Alignment.bottomRight,
         child: FloatingActionButton.extended(
           backgroundColor: Theme.of(context).primaryColorLight,
           onPressed: () => _submitGoalForm(context),

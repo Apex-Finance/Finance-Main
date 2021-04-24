@@ -100,30 +100,32 @@ class _TransactionFormState extends State<TransactionForm> {
   Widget build(BuildContext context) {
     return KeyboardAvoider(
       // stops keyboard from overlapping form
-      child: Container(
-        height: 390, // large enough to accommodate all errors
-        child: Card(
-          color: Colors.grey[850],
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(
-              10,
-              20,
-              10,
-              0,
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  DescriptionTFF(transaction: _transaction),
-                  AmountTFF(transaction: _transaction),
-                  buildCategoryChanger(context),
-                  buildDateChanger(context),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  buildSubmitButton(context, _transaction.getID()),
-                ],
+      child: SingleChildScrollView(
+        child: Container(
+          height: 390, // large enough to accommodate all errors
+          child: Card(
+            color: Colors.grey[850],
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                10,
+                20,
+                10,
+                0,
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    DescriptionTFF(transaction: _transaction),
+                    AmountTFF(transaction: _transaction),
+                    buildCategoryChanger(context),
+                    buildDateChanger(context),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    buildSubmitButton(context, _transaction.getID()),
+                  ],
+                ),
               ),
             ),
           ),
