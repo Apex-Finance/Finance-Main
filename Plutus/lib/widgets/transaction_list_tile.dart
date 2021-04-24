@@ -1,5 +1,4 @@
 // Imported Flutter packages
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -118,69 +117,5 @@ class _TransactionListTileState extends State<TransactionListTile> {
         ),
       ),
     );
-  }
-}
-
-class RecentTransactionsCard extends StatelessWidget {
-  final int tileCount;
-  RecentTransactionsCard(this.tileCount);
-  @override
-  Widget build(BuildContext context) {
-    var transactionDataProvider =
-        Provider.of<Transaction.Transactions>(context);
-
-    return StreamBuilder<QuerySnapshot>(
-        stream:
-            transactionDataProvider.getRecentTransactions(context, tileCount),
-        builder: (context, snapshot) {
-          return Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(20),
-                bottom: Radius.circular(20),
-              ),
-            ),
-            child: Container(
-              width: 400,
-              height: 300,
-              child: Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(20),
-                      ),
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    width: 400,
-                    child: Center(
-                      child: Text(
-                        'Recent Transactions',
-                        style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ),
-                  ),
-                  (!snapshot.hasData || snapshot.data.docs.isEmpty)
-                      ? Container()
-                      : Expanded(
-                          child: ListView.builder(
-                              itemCount: snapshot.data.docs.length,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                // initialize the transaction document into a transaction object
-                                return TransactionListTile(
-                                    transactionDataProvider
-                                        .initializeTransaction(
-                                            snapshot.data.docs[index]));
-                              }),
-                        ),
-                ],
-              ),
-            ),
-          );
-        });
   }
 }

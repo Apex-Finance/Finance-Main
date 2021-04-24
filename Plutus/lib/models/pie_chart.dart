@@ -90,7 +90,7 @@ class PieChartCard extends StatelessWidget {
                         child: ConstrainedBox(
                           constraints: BoxConstraints(maxWidth: 200),
                           child: Text(
-                            'No transactions have been made this month.',
+                            'No transactions have been added this month.',
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor),
                           ),
