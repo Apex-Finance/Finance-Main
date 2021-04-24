@@ -180,7 +180,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         child: Text(
                           'Default',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Theme.of(context).accentColor,
                           ),
                         ),
                         // Default is Amber/Light mode
