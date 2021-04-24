@@ -109,7 +109,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
                       });
                     }
                     //push the original budget's amount in case it changed
-                    Provider.of<BudgetDataProvider>(context, listen: false)
+                    await Provider.of<BudgetDataProvider>(context,
+                            listen: false)
                         .editBudget(originalBudget, context);
                   }
                   // removes all screens except login (i.e., removes IS and FBS so can't re-edit deleted/edited budget; and technically any settings or account screen)
@@ -181,17 +182,17 @@ class _IncomeScreenState extends State<IncomeScreen> {
                             autofocus: true,
                             keyboardType: TextInputType.numberWithOptions(
                                 decimal: true, signed: false),
-                            onEditingComplete: () {
+                            onEditingComplete: () async {
                               if (_formKey.currentState.validate()) {
                                 _formKey.currentState.save();
                                 budget.setDate(DateTime(monthData.selectedYear,
                                     monthData.selectedMonth, 1));
                                 if (budget.getID() != null) {
-                                  Provider.of<BudgetDataProvider>(context,
+                                  await Provider.of<BudgetDataProvider>(context,
                                           listen: false)
                                       .editBudget(budget, context);
                                 } else {
-                                  Provider.of<BudgetDataProvider>(context,
+                                  await Provider.of<BudgetDataProvider>(context,
                                           listen: false)
                                       .addBudget(budget, context);
                                   isNewBudget = true;

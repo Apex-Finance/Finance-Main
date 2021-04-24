@@ -119,7 +119,7 @@ class BudgetDataProvider with ChangeNotifier {
         .snapshots();
   }
 
-  void addBudget(Budget budget, BuildContext context) async {
+  Future addBudget(Budget budget, BuildContext context) async {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
@@ -131,7 +131,7 @@ class BudgetDataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void editBudget(Budget budget, BuildContext context) async {
+  Future editBudget(Budget budget, BuildContext context) async {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
