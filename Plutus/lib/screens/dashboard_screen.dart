@@ -170,6 +170,8 @@ class TotalSavedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
+    var transactionDataProvider = Provider.of<Transactions>(context);
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -194,27 +196,26 @@ class TotalSavedCard extends StatelessWidget {
                 height: 10,
               ),
               StreamBuilder<QuerySnapshot>(
-                  stream: Provider.of<Transactions>(context, listen: false)
-                      .getCategoryTransactions(
-                          'GYHEkJeJsFG09HUw14p3',
-                          DateTime.now(),
-                          context), // gets goal transactions for this month
+                  stream: transactionDataProvider.getCategoryTransactions(
+                      'GYHEkJeJsFG09HUw14p3',
+                      DateTime.now(),
+                      context), // gets goal transactions for this month
                   builder: (context, snapshot) {
                     double amountSaved;
                     if (!snapshot.hasData)
                       return Container();
-                    else
-                      amountSaved =
-                          Provider.of<Transactions>(context, listen: false)
-                              .getTransactionExpenses(snapshot
-                                  .data); // sums the goal transaction amounts
-                    return FittedBox(
-                      fit: BoxFit.contain,
-                      child: Text(
-                        '\$${amountSaved.toStringAsFixed(2)}',
-                        style: Theme.of(context).textTheme.headline1,
-                      ),
-                    );
+                    else {
+                      amountSaved = transactionDataProvider
+                          .getTransactionExpenses(snapshot
+                              .data); // sums the goal transaction amounts
+                      return FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          '\$${amountSaved.toStringAsFixed(2)}',
+                          style: Theme.of(context).textTheme.headline1,
+                        ),
+                      );
+                    }
                   }),
             ],
           ),
@@ -232,6 +233,7 @@ class TotalSpentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
+    var transactionDataProvider = Provider.of<Transactions>(context);
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -256,26 +258,38 @@ class TotalSpentCard extends StatelessWidget {
                 height: 10,
               ),
               StreamBuilder<QuerySnapshot>(
-                stream: Provider.of<Transactions>(context, listen: false)
-                    .getMonthlyTransactions(context, DateTime.now())
-                    .snapshots(),
-                builder: (context, tranSnap) {
-                  double transactionExpenses;
-                  if (!tranSnap.hasData)
-                    return Container();
-                  else
-                    transactionExpenses =
-                        Provider.of<Transactions>(context, listen: false)
-                            .getTransactionExpenses(tranSnap.data);
-                  return FittedBox(
-                    fit: BoxFit.contain,
-                    child: Text(
-                      '\$${transactionExpenses.toStringAsFixed(2)}',
-                      style: Theme.of(context).textTheme.headline1,
-                    ),
-                  );
-                },
-              ),
+                  stream: transactionDataProvider
+                      .getMonthlyTransactions(context, DateTime.now())
+                      .snapshots(),
+                  builder: (context, tranSnap) {
+                    return StreamBuilder<QuerySnapshot>(
+                      stream: transactionDataProvider.getCategoryTransactions(
+                          'GYHEkJeJsFG09HUw14p3',
+                          DateTime.now(),
+                          context), // gets goal transactions for this month
+                      builder: (context, goalSnap) {
+                        if (!goalSnap.hasData ||
+                            !tranSnap.hasData) // loading data
+                          // don't need to check if snapshots are empty b/c it will just calculate 0 for that if so
+                          return Container();
+                        else {
+                          double amountSaved = transactionDataProvider
+                              .getTransactionExpenses(goalSnap
+                                  .data); // sums the goal transaction amounts
+
+                          double transactionExpenses = transactionDataProvider
+                              .getTransactionExpenses(tranSnap.data);
+                          return FittedBox(
+                            fit: BoxFit.contain,
+                            child: Text(
+                              '\$${(transactionExpenses - amountSaved).toStringAsFixed(2)}',
+                              style: Theme.of(context).textTheme.headline1,
+                            ),
+                          );
+                        }
+                      },
+                    );
+                  }),
             ],
           ),
         ),
