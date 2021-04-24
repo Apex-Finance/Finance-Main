@@ -135,136 +135,140 @@ class _AuthFormState extends State<AuthForm> {
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 8.0,
-      child: Container(
-        // Signup card is bigger due to extra textfield
-        height: _iserror
-            ? (_authMode == AuthMode.Signup ? 435 : 350)
-            : (_authMode == AuthMode.Signup ? 365 : 300),
+      child: SingleChildScrollView(
+        child: Container(
+          // Signup card is bigger due to extra textfield
+          height: _iserror
+              ? (_authMode == AuthMode.Signup ? 435 : 350)
+              : (_authMode == AuthMode.Signup ? 365 : 300),
 
-        width: deviceSize.width * 0.75,
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              // Title
-              Text(
-                'Plutus',
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontSize: 25,
-                  fontFamily: 'Anton',
-                  fontWeight: FontWeight.bold,
+          width: deviceSize.width * 0.75,
+          padding: EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                // Title
+                Text(
+                  'Plutus',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 25,
+                    fontFamily: 'Anton',
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              // E-mail
-              TextFormField(
-                decoration: InputDecoration(labelText: 'E-Mail'),
-                keyboardType: TextInputType.emailAddress,
-                onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                controller: _emailController,
-                validator: (value) {
-                  if (value.isEmpty) return 'Please enter an email address.';
-                  if (!value.trim().contains(RegExp(
-                      r'^[a-zA-Z0-9]+([.]?[a-zA-Z0-9]+){0,2}@[a-zA-Z0-9]+([.][a-zA-Z0-9]{2,}){1,2}$')))
-                  // after removing leading/trailing whitespace, regex checks for:
-                  // one or more characters followed by
-                  // 0-2 (.(1+characters) followed by
-                  // @ followed by
-                  // one or more characters followed by
-                  // 1-2 (.(2+ characters))
-                  {
-                    return 'Invalid email!';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  email = value.trim();
-                },
-                style: Theme.of(context).textTheme.bodyText2,
-              ),
-              // Password
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Password'),
-                onEditingComplete: () => {
-                  if (_authMode == AuthMode.Signup)
-                    {FocusScope.of(context).nextFocus()}
-                  else
-                    {FocusScope.of(context).unfocus()}
-                },
-                obscureText: true,
-                controller: _passwordController,
-                // ignore: missing_return
-                validator: (value) {
-                  if (value.isEmpty || value.trim().length < 6) {
-                    return 'Password must be at least 6 characters!';
-                  }
-                },
-                onSaved: (value) {
-                  password = value.trim();
-                },
-                style: Theme.of(context).textTheme.bodyText2,
-              ),
-              // Default is Login
-              if (_authMode == AuthMode.Signup)
-                // Confirm Password
+                // E-mail
                 TextFormField(
-                  enabled: _authMode == AuthMode.Signup,
-                  decoration: InputDecoration(labelText: 'Confirm Password'),
-                  onEditingComplete: () => FocusScope.of(context).unfocus(),
-                  obscureText: true,
-                  validator: _authMode == AuthMode.Signup
-                      // ignore: missing_return
-                      ? (value) {
-                          if (value != _passwordController.text.trim()) {
-                            return 'Passwords do not match!';
-                          }
-                        }
-                      : null,
+                  decoration: InputDecoration(labelText: 'E-Mail'),
+                  keyboardType: TextInputType.emailAddress,
+                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                  controller: _emailController,
+                  validator: (value) {
+                    if (value.isEmpty) return 'Please enter an email address.';
+                    if (!value.trim().contains(RegExp(
+                        r'^[a-zA-Z0-9]+([.]?[a-zA-Z0-9]+){0,2}@[a-zA-Z0-9]+([.][a-zA-Z0-9]{2,}){1,2}$')))
+                    // after removing leading/trailing whitespace, regex checks for:
+                    // one or more characters followed by
+                    // 0-2 (.(1+characters) followed by
+                    // @ followed by
+                    // one or more characters followed by
+                    // 1-2 (.(2+ characters))
+                    {
+                      return 'Invalid email!';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    email = value.trim();
+                  },
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
-              SizedBox(
-                height: 20,
-              ),
-              if (_isLoading)
-                CircularProgressIndicator(
-                  backgroundColor: Theme.of(context).primaryColor,
-                )
-              else
-                Column(children: [
-                  // LOGIN/SIGNUP UP button
-                  ElevatedButton(
-                    child: Text(
-                      _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP',
-                      style: Theme.of(context).textTheme.subtitle2,
-                    ),
-                    onPressed: _submit,
-                    style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).primaryColor,
-                      textStyle: TextStyle(
-                          color:
-                              Theme.of(context).primaryTextTheme.button.color),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                // Password
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Password'),
+                  onEditingComplete: () => {
+                    if (_authMode == AuthMode.Signup)
+                      {FocusScope.of(context).nextFocus()}
+                    else
+                      {FocusScope.of(context).unfocus()}
+                  },
+                  obscureText: true,
+                  controller: _passwordController,
+                  // ignore: missing_return
+                  validator: (value) {
+                    if (value.isEmpty || value.trim().length < 6) {
+                      return 'Password must be at least 6 characters!';
+                    }
+                  },
+                  onSaved: (value) {
+                    password = value.trim();
+                  },
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+                // Default is Login
+                if (_authMode == AuthMode.Signup)
+                  // Confirm Password
+                  TextFormField(
+                    enabled: _authMode == AuthMode.Signup,
+                    decoration: InputDecoration(labelText: 'Confirm Password'),
+                    onEditingComplete: () => FocusScope.of(context).unfocus(),
+                    obscureText: true,
+                    validator: _authMode == AuthMode.Signup
+                        // ignore: missing_return
+                        ? (value) {
+                            if (value != _passwordController.text.trim()) {
+                              return 'Passwords do not match!';
+                            }
+                          }
+                        : null,
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
+                SizedBox(
+                  height: 20,
+                ),
+                if (_isLoading)
+                  CircularProgressIndicator(
+                    backgroundColor: Theme.of(context).primaryColor,
+                  )
+                else
+                  Column(children: [
+                    // LOGIN/SIGNUP UP button
+                    ElevatedButton(
+                      child: Text(
+                        _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP',
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
+                      onPressed: _submit,
+                      style: ElevatedButton.styleFrom(
+                        primary: Theme.of(context).primaryColor,
+                        textStyle: TextStyle(
+                            color: Theme.of(context)
+                                .primaryTextTheme
+                                .button
+                                .color),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 30.0, vertical: 8.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
                       ),
                     ),
-                  ),
-                  // Button to switch AuthModes
-                  TextButton(
-                    child: Text(
-                        '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
-                    onPressed: _switchAuthMode,
-                    style: TextButton.styleFrom(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
-                      primary: Theme.of(context).primaryColor,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    // Button to switch AuthModes
+                    TextButton(
+                      child: Text(
+                          '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
+                      onPressed: _switchAuthMode,
+                      style: TextButton.styleFrom(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
+                        primary: Theme.of(context).primaryColor,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
                     ),
-                  ),
-                ])
-            ],
+                  ])
+              ],
+            ),
           ),
         ),
       ),

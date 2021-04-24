@@ -99,8 +99,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       onSkip: () => introKey.currentState
           ?.animateScroll(5), // You can override onSkip callback
       showSkipButton: true,
-      skipFlex: 0,
-      nextFlex: 0,
+      skipFlex: 1,
+      nextFlex: 1,
       skip: const Text(
         'Skip',
         style: TextStyle(color: Colors.amber),
@@ -114,6 +114,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             fontWeight: FontWeight.w600,
             color: Colors.amber,
           )),
+      dotsFlex: 2,
       dotsDecorator: const DotsDecorator(
         activeColor: Colors.amber,
         size: Size(10.0, 10.0),

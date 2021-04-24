@@ -325,7 +325,7 @@ class BudgetCard extends StatelessWidget {
                             children: [
                               new LinearPercentIndicator(
                                 alignment: MainAxisAlignment.center,
-                                width: 310.0,
+                                width: MediaQuery.of(context).size.width * .8,
                                 lineHeight: 14.0,
                                 percent: transactionExpenses >
                                         budget.getAmount()
