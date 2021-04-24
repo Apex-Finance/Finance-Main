@@ -191,8 +191,9 @@ class Transactions with ChangeNotifier {
     notifyListeners();
   }
 
-  Query getMonthlyTransactions(BuildContext context, DateTime date) {
-    return FirebaseFirestore.instance
+  Query getMonthlyTransactions(BuildContext context, DateTime date,
+      [int count]) {
+    var monthlyTransactions = FirebaseFirestore.instance
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .collection('Transactions')
@@ -211,6 +212,9 @@ class Transactions with ChangeNotifier {
         )
         .orderBy('date',
             descending: true); // sorts transactions from newest to oldest
+
+    if (count != null) monthlyTransactions = monthlyTransactions.limit(count);
+    return monthlyTransactions;
   }
 
   Stream<QuerySnapshot> getCategoryTransactions(
@@ -264,15 +268,5 @@ class Transactions with ChangeNotifier {
     } catch (e) {
       print(e.toString());
     }
-  }
-
-  Stream<QuerySnapshot> getRecentTransactions(BuildContext context, int count) {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .collection('Transactions')
-        .orderBy("date", descending: true)
-        .limit(count)
-        .snapshots();
   }
 }

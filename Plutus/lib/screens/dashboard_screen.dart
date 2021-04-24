@@ -298,6 +298,84 @@ class TotalSpentCard extends StatelessWidget {
   }
 }
 
+class RecentTransactionsCard extends StatelessWidget {
+  final int tileCount;
+  RecentTransactionsCard(this.tileCount);
+  @override
+  Widget build(BuildContext context) {
+    var transactionDataProvider = Provider.of<Transactions>(context);
+
+    return StreamBuilder<QuerySnapshot>(
+        stream: transactionDataProvider
+            .getMonthlyTransactions(context, DateTime.now(), tileCount)
+            .snapshots(),
+        builder: (context, snapshot) {
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(20),
+                bottom: Radius.circular(20),
+              ),
+            ),
+            child: Container(
+              width: 400,
+              height: 300,
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    width: 400,
+                    child: Center(
+                      child: Text(
+                        'Recent Transactions',
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  if (!snapshot.hasData)
+                    //loading data (shouldn't matter b/c below the fold but just in case)
+                    Container()
+                  else if (snapshot.data.docs.isEmpty)
+                    // no transactions this month
+                    Expanded(
+                      child: Center(
+                        child: ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: 250),
+                            child: Text(
+                              'No transactions have been added this month.',
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor),
+                            )),
+                      ),
+                    )
+                  else // load transactions
+                    Expanded(
+                      child: ListView.builder(
+                          itemCount: snapshot.data.docs.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            // initialize the transaction document into a transaction object
+                            return TransactionListTile(
+                                transactionDataProvider.initializeTransaction(
+                                    snapshot.data.docs[index]));
+                          }),
+                    ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+}
+
 class UpcomingGoalCard extends StatelessWidget {
   final int tileCount;
 
@@ -340,18 +418,33 @@ class UpcomingGoalCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: (!snapshot.hasData || snapshot.data.docs.isEmpty)
-                        ? Container()
-                        : ListView.builder(
-                            itemCount: snapshot.data.docs.length,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              // initialize the transaction document into a transaction object
-                              return GoalsListTile(goalDataProvider
-                                  .initializeGoal(snapshot.data.docs[index]));
-                            }),
-                  ),
+                  if (!snapshot.hasData)
+                    //loading data (shouldn't matter b/c below the fold but just in case)
+                    Container()
+                  else if (snapshot.data.docs.isEmpty)
+                    // no goals
+                    Expanded(
+                      child: Center(
+                        child: ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: 250),
+                            child: Text(
+                              'No goals have been created.',
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor),
+                            )),
+                      ),
+                    )
+                  else // load goals
+                    Expanded(
+                      child: ListView.builder(
+                          itemCount: snapshot.data.docs.length,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            // initialize the transaction document into a transaction object
+                            return GoalsListTile(goalDataProvider
+                                .initializeGoal(snapshot.data.docs[index]));
+                          }),
+                    ),
                 ],
               ),
             ),
