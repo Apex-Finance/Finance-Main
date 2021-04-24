@@ -39,12 +39,9 @@ class PieChartCard extends StatelessWidget {
         return StreamBuilder<QuerySnapshot>(
           stream: categoryDataProvider.streamCategories(context),
           builder: (context, catSnapshot) {
-            if (!tranSnapshot.hasData ||
-                !catSnapshot.hasData ||
-                tranSnapshot.data.docs.isEmpty ||
-                catSnapshot.data.docs.isEmpty) {
+            if (!tranSnapshot.hasData || !catSnapshot.hasData) {
               // card with same dimensions as the one when data is present
-              // prevents screen from shifting
+              // prevents screen from shifting while loading
               return Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(
@@ -66,7 +63,45 @@ class PieChartCard extends StatelessWidget {
                   ]),
                 ),
               );
+            } else if (tranSnapshot.data.docs.isEmpty ||
+                catSnapshot.data.docs.isEmpty) {
+              // if no transactions made this month
+              // or if there are no categories (should not happen)
+              return Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(20),
+                    bottom: Radius.circular(20),
+                  ),
+                ),
+                child: Container(
+                  width: 400,
+                  height: 500,
+                  child: Column(children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        'Dashboard chart',
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: 200),
+                          child: Text(
+                            'No transactions have been made this month.',
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]),
+                ),
+              );
             } else {
+              // load the data
               List<PiePiece> pieData =
                   getPieData(tranSnapshot.data.docs, catSnapshot.data.docs);
               List<charts.Series<PiePiece, String>> pieSeriesData = [];
