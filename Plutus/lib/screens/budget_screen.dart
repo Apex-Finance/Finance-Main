@@ -418,10 +418,12 @@ class NoBudgetYetText extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               ElevatedButton(
-                child: Text('Add Budget'),
+                child: Text(
+                  'Add Budget',
+                  style: TextStyle(color: Theme.of(context).accentColor),
+                ),
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
-                  textStyle: TextStyle(color: Theme.of(context).canvasColor),
                 ),
                 onPressed: () =>
                     enterBudgetHandler(context, new Budget.empty()),

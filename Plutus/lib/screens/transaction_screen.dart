@@ -197,10 +197,12 @@ class NoTransactionsYetText extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             ElevatedButton(
-              child: Text('Add Transaction'),
+              child: Text(
+                'Add Transaction',
+                style: TextStyle(color: Theme.of(context).accentColor),
+              ),
               style: ElevatedButton.styleFrom(
                 primary: Theme.of(context).primaryColor,
-                textStyle: TextStyle(color: Theme.of(context).canvasColor),
               ),
               onPressed: () => enterTransactionsHandler(context),
             ),

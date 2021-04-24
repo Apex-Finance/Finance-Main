@@ -84,7 +84,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     initialIndex = isDark ? 0 : 1; //set toggle to match dark mode
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'Settings',
+          style: TextStyle(color: Theme.of(context).accentColor),
+        ),
+      ),
       body: Card(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
