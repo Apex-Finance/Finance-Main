@@ -183,7 +183,6 @@ class _GoalsListTileState extends State<GoalsListTile> {
                                           widget.goal.getGoalAmount(),
                               alignment: MainAxisAlignment.start,
                               lineHeight: 20,
-                              backgroundColor: Colors.black,
                               progressColor: Theme.of(context).primaryColor,
                             ),
                           );

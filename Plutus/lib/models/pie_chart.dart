@@ -16,7 +16,7 @@ class PiePiece {
   PiePiece(this.category, this.amount, this.colorVal);
 }
 
-class PieChartCard extends StatelessWidget {
+class PieChart extends StatelessWidget {
   // converts a color to format that is readable for our stupid pie chart package
   static String toHexString(Color input) {
     return '#' +

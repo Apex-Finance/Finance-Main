@@ -330,8 +330,7 @@ class BudgetCard extends StatelessWidget {
                                         budget.getAmount()
                                     ? 1
                                     : transactionExpenses / budget.getAmount(),
-                                backgroundColor: Colors.black,
-                                progressColor: Colors.amber,
+                                progressColor: Theme.of(context).primaryColor,
                               ),
                             ],
                           ),

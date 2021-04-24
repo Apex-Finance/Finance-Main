@@ -30,8 +30,8 @@ class ColorProvider with ChangeNotifier {
         'name': "Light Blue",
         'primarySwatch': Colors.blue,
         'primaryColor': Colors.blue[700],
-        'canvasColor': Colors.blue[50],
-        'cardColor': Colors.grey[100],
+        'canvasColor': Colors.white,
+        'cardColor': Colors.blue[50],
       },
       'dark': {
         'name': "Light Blue",
@@ -47,8 +47,8 @@ class ColorProvider with ChangeNotifier {
         'name': "Light Green",
         'primarySwatch': Colors.green,
         'primaryColor': Colors.green,
-        'canvasColor': Colors.green[50],
-        'cardColor': Colors.grey[100],
+        'canvasColor': Colors.white,
+        'cardColor': Colors.green[50],
       },
       'dark': {
         'name': "Light Green",
@@ -64,8 +64,8 @@ class ColorProvider with ChangeNotifier {
         'name': "Pink",
         'primarySwatch': Colors.pink,
         'primaryColor': Colors.pink,
-        'canvasColor': Colors.pink[50],
-        'cardColor': Colors.grey[100],
+        'canvasColor': Colors.white,
+        'cardColor': Colors.pink[50],
       },
       'dark': {
         'name': "Pink",
@@ -81,8 +81,8 @@ class ColorProvider with ChangeNotifier {
         'name': "Purple",
         'primarySwatch': Colors.purple,
         'primaryColor': Colors.purple,
-        'canvasColor': Colors.purple[50],
-        'cardColor': Colors.grey[100],
+        'canvasColor': Colors.white,
+        'cardColor': Colors.purple[50],
       },
       'dark': {
         'name': "Purple",

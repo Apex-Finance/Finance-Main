@@ -119,7 +119,6 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                         ? 1
                                         : transactionExpenses /
                                             widget.category.getAmount(),
-                                backgroundColor: Colors.black,
                                 progressColor: Theme.of(context).primaryColor,
                               ),
                               SizedBox(

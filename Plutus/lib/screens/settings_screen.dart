@@ -24,7 +24,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       int index, Function setColorIndex, BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: Colors.grey[600],
+        primary: Theme.of(context).backgroundColor,
         padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
@@ -84,13 +84,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     initialIndex = isDark ? 0 : 1; //set toggle to match dark mode
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'Settings Screen',
-          style: Theme.of(context).textTheme.bodyText2,
-        ),
-      ),
+      appBar: AppBar(),
       body: Card(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
@@ -101,14 +95,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               child: Container(
-                color: Colors.grey[800],
                 child: Container(
                   margin: EdgeInsets.all(8),
                   child: Column(
                     children: [
                       Text(
                         'Change colors',
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: Theme.of(context).textTheme.headline1,
                       ),
                       SizedBox(
                         height: 15,

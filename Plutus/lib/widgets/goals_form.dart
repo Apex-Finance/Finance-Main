@@ -88,7 +88,7 @@ class _GoalsFormState extends State<GoalsForm> {
       child: Container(
         height: 390, // large enough to accommodate all errors
         child: Card(
-          color: Colors.grey[850],
+          color: Theme.of(context).cardColor,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(
               10,
