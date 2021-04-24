@@ -55,7 +55,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Create a Budget",
           body:
-              "Whether you're planning out next month's expenses or thinking about your next vacation, Plutus helps all your budgeting needs.",
+              "Whether you're planning out next month's expenses or thinking about your next vacation, Plutus helps you with all your budgeting needs.",
           image: _buildImage('Budget 2.jpg'),
           decoration: pageDecoration,
         ),
