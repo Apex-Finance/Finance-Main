@@ -104,7 +104,7 @@ class _TransactionListTileState extends State<TransactionListTile> {
             ),
             subtitle: AutoSizeText(
               '${widget.transaction.getCategoryTitle()} | ${DateFormat.MMMd().format(widget.transaction.getDate())}',
-              style: TextStyle(color: Theme.of(context).primaryColorLight),
+              style: TextStyle(color: Theme.of(context).accentColor),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

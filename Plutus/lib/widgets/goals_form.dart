@@ -167,14 +167,18 @@ class _GoalsFormState extends State<GoalsForm> {
       //0, 20, 275, 0), // Values for Samsung J4; DO NOT CHANGE
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: Theme.of(context).primaryColorLight,
+          primary: Theme.of(context).primaryColor,
         ),
         child: _goal.getDate() == null
-            ? Text('Due Date')
+            ? Text(
+                'Due Date',
+                style: TextStyle(color: Theme.of(context).accentColor),
+              )
             : Text(
                 _goal.getDate().year == DateTime.now().year
                     ? '${DateFormat.MMMd().format(_goal.getDate())}'
                     : '${DateFormat.yMMMd().format(_goal.getDate())}',
+                style: TextStyle(color: Theme.of(context).accentColor),
               ),
         onPressed: () => showDatePicker(
           context: context,
@@ -200,9 +204,12 @@ class _GoalsFormState extends State<GoalsForm> {
           250, 40, 0, 0), // Values for Samsung J4; DO NOT CHANGE
       child: Container(
         child: FloatingActionButton.extended(
-          backgroundColor: Theme.of(context).primaryColorLight,
+          backgroundColor: Theme.of(context).primaryColor,
           onPressed: () => _submitGoalForm(context),
-          label: Text(_goal.getID() == null ? "Add Goal" : "Edit Goal"),
+          label: Text(
+            _goal.getID() == null ? "Add Goal" : "Edit Goal",
+            style: TextStyle(color: Theme.of(context).accentColor),
+          ),
         ),
       ),
     );

@@ -112,8 +112,11 @@ class _AddGoalMoneyFormState extends State<AddGoalMoneyForm> {
                     padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
                     alignment: Alignment.bottomRight,
                     child: FloatingActionButton.extended(
-                      backgroundColor: Theme.of(context).primaryColorLight,
-                      label: Text('Add Money'),
+                      backgroundColor: Theme.of(context).primaryColor,
+                      label: Text(
+                        'Add Money',
+                        style: TextStyle(color: Theme.of(context).accentColor),
+                      ),
                       onPressed: () => _submitAddMoneyForm(context),
                     ),
                   ),

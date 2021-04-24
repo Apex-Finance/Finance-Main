@@ -141,7 +141,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Theme.of(context).primaryColorLight,
+                      color: Theme.of(context).accentColor,
                       fontSize: 12,
                     ),
                   ),

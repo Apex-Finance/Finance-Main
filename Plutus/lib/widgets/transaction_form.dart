@@ -141,7 +141,9 @@ class _TransactionFormState extends State<TransactionForm> {
           _submitTransactionForm(context);
         },
         label: Text(
-            transactionId == null ? 'Add Transaction' : 'Edit Transaction'),
+          transactionId == null ? 'Add Transaction' : 'Edit Transaction',
+          style: TextStyle(color: Theme.of(context).accentColor),
+        ),
       ),
     );
   }
@@ -164,9 +166,12 @@ class _TransactionFormState extends State<TransactionForm> {
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: Theme.of(context).primaryColorLight,
+            primary: Theme.of(context).primaryColor,
           ),
-          child: Text('Pick Date'),
+          child: Text(
+            'Pick Date',
+            style: TextStyle(color: Theme.of(context).accentColor),
+          ),
           onPressed: () => showDatePicker(
             context: context,
             initialDate: _transaction.getDate(),
@@ -297,7 +302,7 @@ class _TransactionFormState extends State<TransactionForm> {
                 ),
           child: Chip(
             avatar: CircleAvatar(
-              backgroundColor: Colors.black,
+              backgroundColor: Theme.of(context).accentColor,
               child: Icon(
                 IconData(
                   _transaction.getCategoryCodePoint(),
@@ -311,11 +316,11 @@ class _TransactionFormState extends State<TransactionForm> {
             ),
             label: Text(
               '${_transaction.getCategoryTitle()}',
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: Theme.of(context).accentColor),
             ),
             backgroundColor: _transaction.getGoalId() != null
                 ? Colors.grey
-                : Theme.of(context).primaryColorLight,
+                : Theme.of(context).primaryColor,
           ),
         ),
       ],
