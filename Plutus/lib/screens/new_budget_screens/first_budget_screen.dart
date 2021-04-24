@@ -327,6 +327,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           if (widget.budget.getRemainingAmountNew() < -0.001)
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
+                                backgroundColor: Theme.of(context).cardColor,
                                 behavior: SnackBarBehavior.floating,
                                 content: Padding(
                                   padding: const EdgeInsets.only(top: 5.0),
@@ -342,6 +343,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                               0.001) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
+                                backgroundColor: Theme.of(context).cardColor,
                                 behavior: SnackBarBehavior.floating,
                                 content: Padding(
                                   padding: const EdgeInsets.only(top: 5.0),

@@ -121,7 +121,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               minWidth: 90.0,
                               cornerRadius: 20.0,
                               activeBgColor: Theme.of(context).primaryColor,
-                              activeFgColor: Colors.black,
+                              activeFgColor: Theme.of(context).accentColor,
                               inactiveBgColor: Colors.grey,
                               inactiveFgColor: Colors.black,
                               labels: ['ON', 'OFF'],

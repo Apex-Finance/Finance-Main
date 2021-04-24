@@ -24,10 +24,10 @@ class ColorProvider with ChangeNotifier {
         'cardColor': Colors.grey[900],
       }
     },
-    // Light Blue
+    // Blue
     {
       'light': {
-        'name': "Light Blue",
+        'name': "Blue",
         'primarySwatch': Colors.blue,
         'primaryColor': Colors.blue[700],
         'canvasColor': Colors.white,
@@ -41,19 +41,19 @@ class ColorProvider with ChangeNotifier {
         'cardColor': Colors.grey[900],
       }
     },
-    // Light Green
+    // Green
     {
       'light': {
-        'name': "Light Green",
+        'name': "Green",
         'primarySwatch': Colors.green,
-        'primaryColor': Colors.green,
+        'primaryColor': Colors.green[700],
         'canvasColor': Colors.white,
         'cardColor': Colors.green[50],
       },
       'dark': {
         'name': "Light Green",
         'primarySwatch': Colors.green,
-        'primaryColor': Colors.green,
+        'primaryColor': Colors.green[700],
         'canvasColor': Colors.black,
         'cardColor': Colors.grey[900],
       }
