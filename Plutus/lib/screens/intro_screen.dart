@@ -67,7 +67,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Set a goal",
+          title: "Set Goals",
           body:
               "Saving up for that shiny new car? Plutus can help you set aside funds for that item and keep track of how close you are to achieving that goal.",
           image: _buildImage('Goal 2.jpg'),
