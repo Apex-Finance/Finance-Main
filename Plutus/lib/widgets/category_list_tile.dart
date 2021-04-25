@@ -46,7 +46,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      tileColor: Colors.grey[850],
+      tileColor: Theme.of(context).backgroundColor,
       // leading: CircleAvatar(child: Icon(IcondData(categoryIcon[widget.category.getCodepoint()]))),
       title: AutoSizeText(
         widget.categoryList[widget.index].getTitle(),
@@ -71,6 +71,7 @@ class _CategoryListTileState extends State<CategoryListTile> {
                           0.00) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
+                            backgroundColor: Theme.of(context).cardColor,
                             behavior: SnackBarBehavior.floating,
                             content: Padding(
                               padding: const EdgeInsets.only(top: 5.0),

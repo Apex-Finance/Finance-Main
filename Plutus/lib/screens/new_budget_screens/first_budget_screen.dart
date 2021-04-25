@@ -117,7 +117,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                   AutoSizeText(
                     "New Monthly Budget",
                     style: TextStyle(
-                      color: Colors.amber,
+                      color: Theme.of(context).primaryColor,
                       fontSize: 30,
                     ),
                   ),
@@ -132,8 +132,9 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           children: [
                             AutoSizeText(
                               'Total Budget:',
-                              style:
-                                  TextStyle(color: Colors.amber, fontSize: 15),
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 15),
                             ),
                             AutoSizeText(
                               '\$${widget.budget.getAmount().toStringAsFixed(2)}',
@@ -150,8 +151,9 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           children: [
                             AutoSizeText(
                               'Remaining Budget:',
-                              style:
-                                  TextStyle(color: Colors.amber, fontSize: 15),
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 15),
                             ),
                             AutoSizeText(
                               '\$${widget.budget.getRemainingAmountNew().toStringAsFixed(2)}',
@@ -327,6 +329,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           if (widget.budget.getRemainingAmountNew() < -0.001)
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
+                                backgroundColor: Theme.of(context).cardColor,
                                 behavior: SnackBarBehavior.floating,
                                 content: Padding(
                                   padding: const EdgeInsets.only(top: 5.0),
@@ -342,6 +345,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                               0.001) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
+                                backgroundColor: Theme.of(context).cardColor,
                                 behavior: SnackBarBehavior.floating,
                                 content: Padding(
                                   padding: const EdgeInsets.only(top: 5.0),

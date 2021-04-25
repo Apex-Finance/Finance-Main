@@ -29,9 +29,9 @@ class _AccountScreenState extends State<AccountScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Account Screen',
+          'Account',
           style: TextStyle(
-            color: Theme.of(context).canvasColor,
+            color: Theme.of(context).accentColor,
           ),
         ),
         actions: [
@@ -127,7 +127,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           child: Text(
                             'Change Password',
                             style: TextStyle(
-                              color: Theme.of(context).canvasColor,
+                              color: Theme.of(context).accentColor,
                             ),
                           ),
                           onPressed: () {

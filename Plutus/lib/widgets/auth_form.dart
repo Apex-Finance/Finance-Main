@@ -131,6 +131,8 @@ class _AuthFormState extends State<AuthForm> {
     final deviceSize = MediaQuery.of(context).size;
 
     return Card(
+      color: Colors
+          .white, // Needs to be white; will be otherwise black if Light mode is on
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),

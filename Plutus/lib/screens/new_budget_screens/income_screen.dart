@@ -60,7 +60,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            backgroundColor: Colors.grey[800],
+            backgroundColor: Theme.of(context).cardColor,
             title: Text(
               delete ? 'Do you want to delete this budget?' : 'Cancel',
               style: Theme.of(context).textTheme.headline1,
@@ -161,7 +161,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                     AutoSizeText(
                       "Monthly Income",
                       style: TextStyle(
-                        color: Colors.amber,
+                        color: Theme.of(context).primaryColor,
                         fontSize: 35,
                       ),
                     ),

@@ -1,107 +1,105 @@
 // Imported Flutter packages
 import 'package:flutter/material.dart';
 
+// Provides all color combinations available
 class ColorProvider with ChangeNotifier {
   var selectedColorIndex;
   var isDark; // Dark mode variable
 
   final colorOptions = [
-    {
-      'light': {
-        'name': "Black",
-        'primarySwatch': Colors.grey,
-        'primaryColor': Colors.black,
-        'canvasColor': Colors.white
-      },
-      'dark': {
-        'name': "Black",
-        'primarySwatch': Colors.grey,
-        'primaryColor': Colors.white,
-        'canvasColor': Colors.black
-      }
-    },
-    {
-      'light': {
-        'name': "Dark Blue",
-        'primarySwatch': Colors.indigo,
-        'primaryColor': Colors.indigo[900],
-        'canvasColor': Colors.indigo[50]
-      },
-      'dark': {
-        'name': "Dark Blue",
-        'primarySwatch': Colors.indigo,
-        'primaryColor': Colors.indigo[800],
-        'canvasColor': Colors.black
-      }
-    },
+    // Amber
     {
       'light': {
         'name': "Amber",
         'primarySwatch': Colors.amber,
         'primaryColor': Colors.amber,
-        'canvasColor': Colors.amber[50]
+        'canvasColor': Colors.white,
+        'cardColor': Colors.amber[50],
+        'backgroundColor': Colors.grey[500],
       },
       'dark': {
         'name': "Amber",
         'primarySwatch': Colors.amber,
         'primaryColor': Colors.amber,
-        'canvasColor': Colors.black
+        'canvasColor': Colors.black,
+        'cardColor': Colors.grey[900],
+        'backgroundColor': Colors.grey[800],
       }
     },
+    // Blue
     {
       'light': {
-        'name': "Light Blue",
+        'name': "Blue",
         'primarySwatch': Colors.blue,
         'primaryColor': Colors.blue[700],
-        'canvasColor': Colors.blue[50]
+        'canvasColor': Colors.white,
+        'cardColor': Colors.blue[50],
+        'backgroundColor': Colors.grey[500],
       },
       'dark': {
         'name': "Light Blue",
         'primarySwatch': Colors.blue,
         'primaryColor': Colors.blue[700],
-        'canvasColor': Colors.black
+        'canvasColor': Colors.black,
+        'cardColor': Colors.grey[900],
+        'backgroundColor': Colors.grey[800],
       }
     },
+    // Green
     {
       'light': {
-        'name': "Light Green",
+        'name': "Green",
         'primarySwatch': Colors.green,
-        'primaryColor': Colors.green,
-        'canvasColor': Colors.green[50]
+        'primaryColor': Colors.green[700],
+        'canvasColor': Colors.white,
+        'cardColor': Colors.green[50],
+        'backgroundColor': Colors.grey[500],
       },
       'dark': {
         'name': "Light Green",
         'primarySwatch': Colors.green,
-        'primaryColor': Colors.green,
-        'canvasColor': Colors.black
+        'primaryColor': Colors.green[700],
+        'canvasColor': Colors.black,
+        'cardColor': Colors.grey[900],
+        'backgroundColor': Colors.grey[800],
       }
     },
+    // Pink
     {
       'light': {
         'name': "Pink",
         'primarySwatch': Colors.pink,
         'primaryColor': Colors.pink,
-        'canvasColor': Colors.pink[50]
+        'canvasColor': Colors.white,
+        'cardColor': Colors.pink[50],
+        'backgroundColor': Colors.grey[500],
       },
       'dark': {
         'name': "Pink",
         'primarySwatch': Colors.pink,
         'primaryColor': Colors.pink,
-        'canvasColor': Colors.black
+        'canvasColor': Colors.black,
+        'cardColor': Colors.grey[900],
+        'backgroundColor': Colors.grey[800],
       }
     },
+    // Purple
     {
       'light': {
         'name': "Purple",
         'primarySwatch': Colors.purple,
         'primaryColor': Colors.purple,
-        'canvasColor': Colors.purple[50]
+        'canvasColor': Colors.white,
+        'cardColor': Colors.purple[50],
+        'backgroundColor': Colors.grey[500],
       },
       'dark': {
         'name': "Purple",
         'primarySwatch': Colors.purple,
         'primaryColor': Colors.purple,
-        'canvasColor': Colors.black
+        'canvasColor': Colors.black,
+        'cardColor': Colors.grey[900],
+        'backgroundColor': Colors.grey[800],
       }
     },
   ];

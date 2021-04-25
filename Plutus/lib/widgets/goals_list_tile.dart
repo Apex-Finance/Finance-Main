@@ -106,7 +106,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
             ListTile(
               onTap: () => _updateGoal(context, widget.goal),
               contentPadding: EdgeInsets.all(4),
-              tileColor: Colors.grey[850],
+              tileColor: Theme.of(context).backgroundColor,
               leading: Container(
                 width: 80,
                 decoration: BoxDecoration(
@@ -141,7 +141,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Theme.of(context).primaryColorLight,
+                      color: Theme.of(context).accentColor,
                       fontSize: 12,
                     ),
                   ),
@@ -183,7 +183,6 @@ class _GoalsListTileState extends State<GoalsListTile> {
                                           widget.goal.getGoalAmount(),
                               alignment: MainAxisAlignment.start,
                               lineHeight: 20,
-                              backgroundColor: Colors.black,
                               progressColor: Theme.of(context).primaryColor,
                             ),
                           );
