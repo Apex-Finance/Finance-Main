@@ -90,7 +90,7 @@ class _TransactionListTileState extends State<TransactionListTile> {
           },
           child: ListTile(
             onTap: () => _updateTransaction(context, widget.transaction),
-            tileColor: Colors.grey[850],
+            tileColor: Theme.of(context).backgroundColor,
             leading: CircleAvatar(
               child:
                   Icon(categoryIcon[widget.transaction.getCategoryCodePoint()]),
@@ -104,7 +104,7 @@ class _TransactionListTileState extends State<TransactionListTile> {
             ),
             subtitle: AutoSizeText(
               '${widget.transaction.getCategoryTitle()} | ${DateFormat.MMMd().format(widget.transaction.getDate())}',
-              style: TextStyle(color: Theme.of(context).primaryColorLight),
+              style: TextStyle(color: Theme.of(context).accentColor),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

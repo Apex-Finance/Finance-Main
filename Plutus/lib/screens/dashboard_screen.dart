@@ -28,7 +28,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: [
         Column(
           children: [
-            PieChartCard(),
+            PieChart(),
             BudgetLinearIndicatorCard(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -130,9 +130,13 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
                                     ? 1
                                     : transactionExpenses / budgetAmount)
                                 : 0,
-                            center: AutoSizeText(budgetAmount > 0
-                                ? '${(transactionExpenses / budgetAmount * 100).toStringAsFixed(1)}%'
-                                : ''),
+                            center: AutoSizeText(
+                              budgetAmount > 0
+                                  ? '${(transactionExpenses / budgetAmount * 100).toStringAsFixed(1)}%'
+                                  : '',
+                              style: TextStyle(
+                                  color: Theme.of(context).accentColor),
+                            ),
                             linearStrokeCap: LinearStrokeCap.roundAll,
                             progressColor: Theme.of(context).primaryColor,
                           );

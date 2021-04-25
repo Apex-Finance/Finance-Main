@@ -86,7 +86,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   child: snapshot.data.docs.isEmpty
                       ? NoTransactionsYetText(_enterTransaction)
                       : Card(
-                          color: Colors.grey[900],
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(
                               top: Radius.circular(20),
@@ -164,10 +163,12 @@ class _TotalExpensesState extends State<TotalExpenses> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      tileColor: Colors.grey[900],
       title: Text(
         'Total Expenses',
-        style: TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
+        style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).primaryColor),
       ),
       trailing: AutoSizeText(
         '\$${widget.monthlyExpenses.toStringAsFixed(2)}',
@@ -196,10 +197,12 @@ class NoTransactionsYetText extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             ElevatedButton(
-              child: Text('Add Transaction'),
+              child: Text(
+                'Add Transaction',
+                style: TextStyle(color: Theme.of(context).accentColor),
+              ),
               style: ElevatedButton.styleFrom(
                 primary: Theme.of(context).primaryColor,
-                textStyle: TextStyle(color: Theme.of(context).canvasColor),
               ),
               onPressed: () => enterTransactionsHandler(context),
             ),

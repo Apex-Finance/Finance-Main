@@ -89,7 +89,7 @@ class _GoalsFormState extends State<GoalsForm> {
         child: Container(
           height: 390, // large enough to accommodate all errors
           child: Card(
-            color: Colors.grey[850],
+            color: Theme.of(context).cardColor,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(
                 10,
@@ -208,9 +208,12 @@ class _GoalsFormState extends State<GoalsForm> {
       child: Container(
         alignment: Alignment.bottomRight,
         child: FloatingActionButton.extended(
-          backgroundColor: Theme.of(context).primaryColorLight,
+          backgroundColor: Theme.of(context).primaryColor,
           onPressed: () => _submitGoalForm(context),
-          label: Text(_goal.getID() == null ? "Add Goal" : "Edit Goal"),
+          label: Text(
+            _goal.getID() == null ? "Add Goal" : "Edit Goal",
+            style: TextStyle(color: Theme.of(context).accentColor),
+          ),
         ),
       ),
     );

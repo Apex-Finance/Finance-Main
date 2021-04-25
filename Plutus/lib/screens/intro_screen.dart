@@ -82,7 +82,10 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Ready to start your journey to financial freedom?",
           bodyWidget: ElevatedButton(
-            child: Text('Sign me up!'),
+            child: Text(
+              'Sign me up!',
+              style: TextStyle(color: Theme.of(context).accentColor),
+            ),
             onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
                 AuthScreen.routeName, (Route<dynamic> route) => false),
             style: ElevatedButton.styleFrom(

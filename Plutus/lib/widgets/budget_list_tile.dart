@@ -65,7 +65,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                               _expanded = !_expanded;
                             });
                           },
-                          tileColor: Colors.grey[850],
+                          tileColor: Theme.of(context).backgroundColor,
                           title: Container(
                             margin: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 0.0),
                             child: Row(
@@ -119,8 +119,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                         ? 1
                                         : transactionExpenses /
                                             widget.category.getAmount(),
-                                backgroundColor: Colors.black,
-                                progressColor: Colors.amber,
+                                progressColor: Theme.of(context).primaryColor,
                               ),
                               SizedBox(
                                 height: 20,
@@ -141,7 +140,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                           Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 15, vertical: 4),
-                              color: Colors.grey[550],
+                              color: Theme.of(context).cardColor,
                               height: snapshot.data.docs.isEmpty
                                   ? 100
                                   : min(snapshot.data.docs.length * 200.0, 250),

@@ -255,7 +255,6 @@ class BudgetCard extends StatelessWidget {
               .getTransactionExpenses(transactionSnapshots.data);
           budget.calculateRemainingAmount(transactionExpenses);
           return Card(
-            color: Colors.grey[900],
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(
               top: Radius.circular(20),
@@ -266,7 +265,7 @@ class BudgetCard extends StatelessWidget {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                   child: ListTile(
                       onTap: () => enterBudgetHandler(context, budget),
-                      tileColor: Colors.grey[850],
+                      tileColor: Theme.of(context).backgroundColor,
                       title: Column(
                         children: [
                           Text(
@@ -331,8 +330,7 @@ class BudgetCard extends StatelessWidget {
                                         budget.getAmount()
                                     ? 1
                                     : transactionExpenses / budget.getAmount(),
-                                backgroundColor: Colors.black,
-                                progressColor: Colors.amber,
+                                progressColor: Theme.of(context).primaryColor,
                               ),
                             ],
                           ),
@@ -420,10 +418,12 @@ class NoBudgetYetText extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               ElevatedButton(
-                child: Text('Add Budget'),
+                child: Text(
+                  'Add Budget',
+                  style: TextStyle(color: Theme.of(context).accentColor),
+                ),
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
-                  textStyle: TextStyle(color: Theme.of(context).canvasColor),
                 ),
                 onPressed: () =>
                     enterBudgetHandler(context, new Budget.empty()),

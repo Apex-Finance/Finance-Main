@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 // Imported Plutus files
 import '../providers/color.dart';
 
+// Screen that changes the color mode and theme.
 class SettingsScreen extends StatefulWidget {
   static const routeName = '/settings';
 
@@ -18,11 +19,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   var isDark;
   var initialIndex;
 
+  // Chooses the color theme and mode. This honestly should be another widget - Juan
   Widget _colorOption(String name, Color foreground, Color background,
       int index, Function setColorIndex, BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: Colors.grey[600],
+        primary: Theme.of(context).backgroundColor,
         padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
@@ -33,6 +35,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       child: Row(
         children: [
+          // Chosen color
           Icon(Icons.circle,
               color: selectedColorIndex ==
                       index // if user selects this color, make the icon the same color
@@ -41,17 +44,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
           SizedBox(
             width: 10,
           ),
+          // Color name
           Expanded(
             child: Text(
               name,
               style: Theme.of(context).textTheme.bodyText1,
             ),
           ),
+          // Primary color
           Container(
             width: 40,
             height: 40,
             color: foreground,
           ),
+          // Secondary color
           Container(
             width: 40,
             height: 40,
@@ -74,20 +80,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
     isDark = colors.isDark ??
         false; // set isDark to user's last preference; if none found (or initial load), default to light mode
     selectedColorIndex = colors.selectedColorIndex ??
-        2; // set active color to user's last preference; if none found (or initial load), default to amber
+        0; // set active color to user's last preference; if none found (or initial load), default to amber
     initialIndex = isDark ? 0 : 1; //set toggle to match dark mode
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Settings Screen',
-          style: Theme.of(context).textTheme.bodyText2,
+          'Settings',
+          style: TextStyle(color: Theme.of(context).accentColor),
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Card(
-          color: Colors.grey[900],
+          color: Theme.of(context).cardColor,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
             top: Radius.circular(20),
@@ -102,7 +109,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     borderRadius: BorderRadius.vertical(
                         top: Radius.circular(20), bottom: Radius.circular(20)),
                     child: Container(
-                      color: Colors.grey[800],
+                      color: Theme.of(context).cardColor,
                       child: Container(
                         margin: EdgeInsets.all(8),
                         child: Column(
@@ -131,7 +138,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     cornerRadius: 20.0,
                                     activeBgColor:
                                         Theme.of(context).primaryColor,
-                                    activeFgColor: Colors.black,
+                                    activeFgColor:
+                                        Theme.of(context).accentColor,
                                     inactiveBgColor: Colors.grey,
                                     inactiveFgColor: Colors.black,
                                     labels: ['ON', 'OFF'],
@@ -190,11 +198,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               child: Text(
                                 'Default',
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: Theme.of(context).accentColor,
                                 ),
                               ),
                               onPressed: () {
-                                colors.setSelectedColorIndex(2);
+                                colors.setSelectedColorIndex(0);
                                 colors.setIsDark(false);
                               },
                             ),

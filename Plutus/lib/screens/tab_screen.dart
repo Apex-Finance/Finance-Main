@@ -107,7 +107,8 @@ class _TabScreenState extends State<TabScreen> {
   BottomNavigationBar buildTabBar(BuildContext context) {
     return BottomNavigationBar(
       onTap: _selectPage,
-      backgroundColor: Colors.grey[900],
+      backgroundColor:
+          Colors.grey[900], // Don't change. Looks good with any theme.
       unselectedItemColor: Colors.white,
       selectedItemColor: Theme.of(context).primaryColor,
       showUnselectedLabels: true,
