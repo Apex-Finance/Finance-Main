@@ -180,7 +180,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                     SingleChildScrollView(
                                       child: snapshot.data.docs.isEmpty
                                           ? Text(
-                                              'No transaction has been added yet',
+                                              'No transaction has been added yet.',
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .primaryColor,
