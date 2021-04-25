@@ -15,6 +15,7 @@ class ColorProvider with ChangeNotifier {
         'primaryColor': Colors.amber,
         'canvasColor': Colors.white,
         'cardColor': Colors.amber[50],
+        'backgroundColor': Colors.grey[500],
       },
       'dark': {
         'name': "Amber",
@@ -22,6 +23,7 @@ class ColorProvider with ChangeNotifier {
         'primaryColor': Colors.amber,
         'canvasColor': Colors.black,
         'cardColor': Colors.grey[900],
+        'backgroundColor': Colors.grey[800],
       }
     },
     // Blue
@@ -32,6 +34,7 @@ class ColorProvider with ChangeNotifier {
         'primaryColor': Colors.blue[700],
         'canvasColor': Colors.white,
         'cardColor': Colors.blue[50],
+        'backgroundColor': Colors.grey[500],
       },
       'dark': {
         'name': "Light Blue",
@@ -39,6 +42,7 @@ class ColorProvider with ChangeNotifier {
         'primaryColor': Colors.blue[700],
         'canvasColor': Colors.black,
         'cardColor': Colors.grey[900],
+        'backgroundColor': Colors.grey[800],
       }
     },
     // Green
@@ -49,6 +53,7 @@ class ColorProvider with ChangeNotifier {
         'primaryColor': Colors.green[700],
         'canvasColor': Colors.white,
         'cardColor': Colors.green[50],
+        'backgroundColor': Colors.grey[500],
       },
       'dark': {
         'name': "Light Green",
@@ -56,6 +61,7 @@ class ColorProvider with ChangeNotifier {
         'primaryColor': Colors.green[700],
         'canvasColor': Colors.black,
         'cardColor': Colors.grey[900],
+        'backgroundColor': Colors.grey[800],
       }
     },
     // Pink
@@ -66,6 +72,7 @@ class ColorProvider with ChangeNotifier {
         'primaryColor': Colors.pink,
         'canvasColor': Colors.white,
         'cardColor': Colors.pink[50],
+        'backgroundColor': Colors.grey[500],
       },
       'dark': {
         'name': "Pink",
@@ -73,6 +80,7 @@ class ColorProvider with ChangeNotifier {
         'primaryColor': Colors.pink,
         'canvasColor': Colors.black,
         'cardColor': Colors.grey[900],
+        'backgroundColor': Colors.grey[800],
       }
     },
     // Purple
@@ -83,6 +91,7 @@ class ColorProvider with ChangeNotifier {
         'primaryColor': Colors.purple,
         'canvasColor': Colors.white,
         'cardColor': Colors.purple[50],
+        'backgroundColor': Colors.grey[500],
       },
       'dark': {
         'name': "Purple",
@@ -90,6 +99,7 @@ class ColorProvider with ChangeNotifier {
         'primaryColor': Colors.purple,
         'canvasColor': Colors.black,
         'cardColor': Colors.grey[900],
+        'backgroundColor': Colors.grey[800],
       }
     },
   ];

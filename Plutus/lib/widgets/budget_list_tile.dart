@@ -140,7 +140,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                           Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 15, vertical: 4),
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).cardColor,
                               height: snapshot.data.docs.isEmpty
                                   ? 100
                                   : min(snapshot.data.docs.length * 200.0, 250),

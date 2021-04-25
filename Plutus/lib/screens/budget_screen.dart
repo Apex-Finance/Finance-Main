@@ -265,7 +265,7 @@ class BudgetCard extends StatelessWidget {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                   child: ListTile(
                       onTap: () => enterBudgetHandler(context, budget),
-                      tileColor: Theme.of(context).cardColor,
+                      tileColor: Theme.of(context).backgroundColor,
                       title: Column(
                         children: [
                           Text(

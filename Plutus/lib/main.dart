@@ -82,13 +82,15 @@ class MyApp extends StatelessWidget {
         colors.colorOptions[selectedColorIndex][colorMode]['canvasColor'];
     var cardColor =
         colors.colorOptions[selectedColorIndex][colorMode]['cardColor'];
+    var backgroundColor =
+        colors.colorOptions[selectedColorIndex][colorMode]['backgroundColor'];
     return Builder(
       builder: (context) => MaterialApp(
         title: 'Plutus',
         theme: ThemeData(
           primarySwatch: primarySwatch, // Colors.amber
           primaryColor: primaryColor,
-          backgroundColor: Colors.grey[500], // ListTile color
+          backgroundColor: backgroundColor, // ListTile color
           primaryColorLight: Colors.amberAccent,
           accentColor: Colors.white,
           canvasColor: canvasColor,
