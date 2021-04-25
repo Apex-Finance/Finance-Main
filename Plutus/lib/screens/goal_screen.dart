@@ -63,7 +63,7 @@ class GoalScreen extends StatelessWidget {
                         child: Text(
                           'Add Goal',
                           style:
-                              TextStyle(color: Theme.of(context).accentColor),
+                              TextStyle(color: Theme.of(context).canvasColor),
                         ),
                         style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).primaryColor,
@@ -85,7 +85,7 @@ class GoalScreen extends StatelessWidget {
                             child: Text(
                               'Add Goal',
                               style: TextStyle(
-                                  color: Theme.of(context).accentColor),
+                                  color: Theme.of(context).canvasColor),
                             ),
                             style: ElevatedButton.styleFrom(
                               primary: Theme.of(context).primaryColor,

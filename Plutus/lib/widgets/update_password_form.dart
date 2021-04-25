@@ -134,7 +134,10 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
                       height: 20,
                     ),
                     ElevatedButton(
-                      child: Text('Change Password'),
+                      child: Text(
+                        'Change Password',
+                        style: TextStyle(color: Theme.of(context).canvasColor),
+                      ),
                       onPressed: _submit,
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(

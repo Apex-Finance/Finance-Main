@@ -27,11 +27,14 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Theme.of(context).canvasColor,
+        ),
         centerTitle: true,
         title: Text(
           'Account',
           style: TextStyle(
-            color: Theme.of(context).accentColor,
+            color: Theme.of(context).canvasColor,
           ),
         ),
         actions: [
@@ -39,7 +42,7 @@ class _AccountScreenState extends State<AccountScreen> {
             icon: Icon(
               Icons.logout,
               size: 25,
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).canvasColor,
             ),
             onPressed: () {
               Provider.of<Auth>(context, listen: false).logout(context);
@@ -127,7 +130,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           child: Text(
                             'Change Password',
                             style: TextStyle(
-                              color: Theme.of(context).accentColor,
+                              color: Theme.of(context).canvasColor,
                             ),
                           ),
                           onPressed: () {

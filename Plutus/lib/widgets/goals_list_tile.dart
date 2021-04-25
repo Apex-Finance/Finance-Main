@@ -116,8 +116,12 @@ class _GoalsListTileState extends State<GoalsListTile> {
                 ),
                 // Goal image preview
                 child: CircleAvatar(
+                  backgroundColor: Theme.of(context).primaryColor,
                   radius: 35,
-                  child: Icon(Icons.star),
+                  child: Icon(
+                    Icons.star,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
                 ),
               ),
               title: Column(
@@ -141,7 +145,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).canvasColor,
                       fontSize: 12,
                     ),
                   ),
@@ -161,17 +165,19 @@ class _GoalsListTileState extends State<GoalsListTile> {
                                       .getAmountSaved(context, snapshot.data);
                           return Expanded(
                             child: new LinearPercentIndicator(
-                              center: amountSaved == widget.goal.getGoalAmount()
+                              center: amountSaved >= widget.goal.getGoalAmount()
                                   ? AutoSizeText(
                                       'Completed!',
                                       style: TextStyle(
-                                        color: Theme.of(context).accentColor,
+                                        color: Theme.of(context).canvasColor,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     )
                                   : AutoSizeText(
                                       '\$ ${amountSaved.toStringAsFixed(2)} of \$ ${widget.goal.getGoalAmount().toStringAsFixed(2)}',
                                       style: TextStyle(
-                                        color: Theme.of(context).accentColor,
+                                        color: Theme.of(context).canvasColor,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
