@@ -8,6 +8,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import '../models/transaction.dart' as Transaction;
 import '../models/category_icon.dart';
 import './transaction_form.dart';
+import '../providers/color.dart';
 
 class TransactionListTile extends StatefulWidget {
   final Transaction.Transaction transaction;
@@ -111,7 +112,10 @@ class _TransactionListTileState extends State<TransactionListTile> {
             ),
             subtitle: AutoSizeText(
               '${widget.transaction.getCategoryTitle()} | ${DateFormat.MMMd().format(widget.transaction.getDate())}',
-              style: TextStyle(color: Theme.of(context).canvasColor),
+              style: TextStyle(
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).canvasColor),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

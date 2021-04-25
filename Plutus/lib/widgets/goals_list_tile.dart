@@ -10,6 +10,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import '../models/goals.dart';
 import '../widgets/goals_form.dart';
 import './add_goal_money_form.dart';
+import '../providers/color.dart';
 import '../models/transaction.dart' as Transaction;
 
 // List Tile that displays each individual goal
@@ -148,9 +149,10 @@ class _GoalsListTileState extends State<GoalsListTile> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Theme.of(context).canvasColor,
-                      fontSize: 12,
-                    ),
+                        fontSize: 12,
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).canvasColor),
                   ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(0, 8, 0, 5),
