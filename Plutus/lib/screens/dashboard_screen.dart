@@ -135,7 +135,8 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
                                   ? '${(transactionExpenses / budgetAmount * 100).toStringAsFixed(1)}%'
                                   : '',
                               style: TextStyle(
-                                  color: Theme.of(context).accentColor),
+                                  color: Theme.of(context).canvasColor,
+                                  fontWeight: FontWeight.bold),
                             ),
                             linearStrokeCap: LinearStrokeCap.roundAll,
                             progressColor: Theme.of(context).primaryColor,
@@ -328,13 +329,11 @@ class RecentTransactionsCard extends StatelessWidget {
                     ),
                     width: 400,
                     child: Center(
-                      child: Text(
-                        'Recent Transactions',
-                        style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
+                      child: Text('Recent Transactions',
+                          style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).canvasColor)),
                     ),
                   ),
                   if (!snapshot.hasData)
@@ -411,7 +410,7 @@ class UpcomingGoalCard extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                            color: Theme.of(context).canvasColor),
                       ),
                     ),
                   ),

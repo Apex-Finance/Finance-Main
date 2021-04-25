@@ -143,9 +143,8 @@ class _TransactionFormState extends State<TransactionForm> {
           _submitTransactionForm(context);
         },
         label: Text(
-          transactionId == null ? 'Add Transaction' : 'Edit Transaction',
-          style: TextStyle(color: Theme.of(context).accentColor),
-        ),
+            transactionId == null ? 'Add Transaction' : 'Edit Transaction',
+            style: TextStyle(color: Theme.of(context).canvasColor)),
       ),
     );
   }
@@ -172,11 +171,17 @@ class _TransactionFormState extends State<TransactionForm> {
           ),
           child: Text(
             'Pick Date',
-            style: TextStyle(color: Theme.of(context).accentColor),
+            style: TextStyle(color: Theme.of(context).canvasColor),
           ),
           onPressed: () => showDatePicker(
             context: context,
-            initialDate: _transaction.getDate(),
+            initialDate: _transaction.getDate().isBefore(DateTime.now()
+                    .subtract(Duration(
+                        days:
+                            730))) // not perfect cuz of leap years but it'll do
+                // people most likely won't be editing a transaction that's two years old and want that much precision
+                ? DateTime.now()
+                : _transaction.getDate(),
             firstDate: DateTime.now().subtract(
               Duration(
                 days: 365,
@@ -222,8 +227,9 @@ class _TransactionFormState extends State<TransactionForm> {
                       'Choose Category',
                       style: TextStyle(
                         fontSize: 25,
-                        fontFamily: 'Anton',
+                        fontFamily: 'Lato',
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context).canvasColor,
                       ),
                     ),
                     children: [
@@ -304,7 +310,7 @@ class _TransactionFormState extends State<TransactionForm> {
                 ),
           child: Chip(
             avatar: CircleAvatar(
-              backgroundColor: Theme.of(context).accentColor,
+              backgroundColor: Theme.of(context).canvasColor,
               child: Icon(
                 IconData(
                   _transaction.getCategoryCodePoint(),
@@ -318,7 +324,7 @@ class _TransactionFormState extends State<TransactionForm> {
             ),
             label: Text(
               '${_transaction.getCategoryTitle()}',
-              style: TextStyle(color: Theme.of(context).accentColor),
+              style: TextStyle(color: Theme.of(context).canvasColor),
             ),
             backgroundColor: _transaction.getGoalId() != null
                 ? Colors.grey

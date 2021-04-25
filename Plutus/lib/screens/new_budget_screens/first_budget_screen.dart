@@ -104,6 +104,10 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Theme.of(context).canvasColor,
+          ),
+          centerTitle: true,
           title: AutoSizeText('First Budget',
               style: Theme.of(context).textTheme.bodyText1),
         ),
@@ -378,8 +382,16 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           }
                         },
                         label: widget.isNewBudget
-                            ? AutoSizeText('Add Budget')
-                            : AutoSizeText('Edit Budget'),
+                            ? AutoSizeText(
+                                'Add Budget',
+                                style: TextStyle(
+                                    color: Theme.of(context).canvasColor),
+                              )
+                            : AutoSizeText(
+                                'Edit Budget',
+                                style: TextStyle(
+                                    color: Theme.of(context).canvasColor),
+                              ),
                       ),
                     ),
                   ),

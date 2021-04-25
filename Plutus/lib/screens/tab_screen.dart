@@ -1,5 +1,4 @@
 // Imported Flutter packages
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
 // Imported Plutus files
@@ -8,11 +7,9 @@ import './transaction_screen.dart';
 import './dashboard_screen.dart';
 import './goal_screen.dart';
 import '../widgets/transaction_form.dart';
-//import '../widgets/tappable_fab_circular_menu.dart';
 import '../providers/tab.dart';
 import 'package:provider/provider.dart';
-
-bool _isOpen = false; // Determines if Fab_Circular_Menu is open
+import '../providers/color.dart';
 
 // Our Main Screen that controls the other screens; necessary to implement this way because of the FAB managing transaction
 class TabScreen extends StatefulWidget {
@@ -22,12 +19,6 @@ class TabScreen extends StatefulWidget {
 }
 
 class _TabScreenState extends State<TabScreen> {
-  //final GlobalKey<TappableFabCircularMenuState> fabKey = GlobalKey();
-  @override
-  void initState() {
-    super.initState();
-  }
-
   List<Widget> _pages = []; // List of screens for the BottomNavigationBar
   int _selectedPageIndex;
 
@@ -40,7 +31,6 @@ class _TabScreenState extends State<TabScreen> {
     setState(() {
       Provider.of<TabProvider>(context, listen: false)
           .setSelectedPageIndex(index);
-      // _selectedPageIndex = index;
     });
   }
 
@@ -74,14 +64,20 @@ class _TabScreenState extends State<TabScreen> {
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.settings),
+            icon: Icon(
+              Icons.settings,
+              color: Theme.of(context).iconTheme.color,
+            ),
             onPressed: () {
               Navigator.of(context).pushNamed('/settings');
             },
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.account_circle),
+              icon: Icon(
+                Icons.account_circle,
+                color: Theme.of(context).iconTheme.color,
+              ),
               onPressed: () {
                 Navigator.of(context).pushNamed('/account');
               },
@@ -93,7 +89,10 @@ class _TabScreenState extends State<TabScreen> {
           scale: 1.2,
           child: FloatingActionButton(
             onPressed: () => _enterTransaction(context),
-            child: Icon(Icons.add),
+            child: Icon(
+              Icons.add,
+              color: Theme.of(context).iconTheme.color,
+            ),
             backgroundColor: Theme.of(context).primaryColor,
           ),
         ),
@@ -109,7 +108,9 @@ class _TabScreenState extends State<TabScreen> {
       onTap: _selectPage,
       backgroundColor:
           Colors.grey[900], // Don't change. Looks good with any theme.
-      unselectedItemColor: Colors.white,
+      unselectedItemColor: Provider.of<ColorProvider>(context).isDark
+          ? Colors.grey
+          : Theme.of(context).canvasColor,
       selectedItemColor: Theme.of(context).primaryColor,
       showUnselectedLabels: true,
       unselectedFontSize: 14.0,
@@ -140,39 +141,6 @@ class _TabScreenState extends State<TabScreen> {
       backgroundColor: Theme.of(context).primaryColor,
       icon: Icon(icon),
       label: label,
-    );
-  }
-}
-
-class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
-  @override
-  final Size preferredSize;
-
-  CustomAppBar({
-    Key key,
-  })  : preferredSize = Size.fromHeight(50.0),
-        super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AbsorbPointer(
-      absorbing: _isOpen == true ? true : false,
-      child: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.settings),
-          onPressed: () {
-            Navigator.of(context).pushNamed('/settings');
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.account_circle),
-            onPressed: () {
-              Navigator.of(context).pushNamed('/account');
-            },
-          ),
-        ],
-      ),
     );
   }
 }

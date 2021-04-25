@@ -85,10 +85,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Theme.of(context).canvasColor,
+        ),
         centerTitle: true,
         title: Text(
           'Settings',
-          style: TextStyle(color: Theme.of(context).accentColor),
+          style: TextStyle(color: Theme.of(context).canvasColor),
         ),
       ),
       body: Padding(
@@ -139,7 +142,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     activeBgColor:
                                         Theme.of(context).primaryColor,
                                     activeFgColor:
-                                        Theme.of(context).accentColor,
+                                        Theme.of(context).canvasColor,
                                     inactiveBgColor: Colors.grey,
                                     inactiveFgColor: Colors.black,
                                     labels: ['ON', 'OFF'],

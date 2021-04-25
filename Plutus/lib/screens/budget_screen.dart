@@ -420,7 +420,7 @@ class NoBudgetYetText extends StatelessWidget {
               ElevatedButton(
                 child: Text(
                   'Add Budget',
-                  style: TextStyle(color: Theme.of(context).accentColor),
+                  style: TextStyle(color: Theme.of(context).canvasColor),
                 ),
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,

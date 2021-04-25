@@ -91,10 +91,10 @@ class MyApp extends StatelessWidget {
           primarySwatch: primarySwatch, // Colors.amber
           primaryColor: primaryColor,
           backgroundColor: backgroundColor, // ListTile color
-          primaryColorLight: Colors.amberAccent,
           accentColor: Colors.white,
           canvasColor: canvasColor,
           cardColor: cardColor, // Background card color
+          iconTheme: IconThemeData(color: canvasColor),
           textTheme: GoogleFonts.latoTextTheme(
             TextTheme(
               bodyText1: TextStyle(color: primaryColor, fontSize: 17),

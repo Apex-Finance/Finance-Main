@@ -115,7 +115,7 @@ class _AddGoalMoneyFormState extends State<AddGoalMoneyForm> {
                       backgroundColor: Theme.of(context).primaryColor,
                       label: Text(
                         'Add Money',
-                        style: TextStyle(color: Theme.of(context).accentColor),
+                        style: TextStyle(color: Theme.of(context).canvasColor),
                       ),
                       onPressed: () => _submitAddMoneyForm(context),
                     ),

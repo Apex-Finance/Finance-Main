@@ -138,11 +138,18 @@ class _IncomeScreenState extends State<IncomeScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Theme.of(context).canvasColor,
+          ),
+          centerTitle: true,
           title: AutoSizeText('New Budget',
               style: Theme.of(context).textTheme.bodyText1),
           actions: [
             IconButton(
-                icon: Icon(Icons.delete),
+                icon: Icon(
+                  Icons.delete,
+                  color: Theme.of(context).iconTheme.color,
+                ),
                 tooltip: 'Delete budget',
                 onPressed: () => _showDiscardBudgetDialog(
                     isNewBudget, uneditedBudget, true)),
