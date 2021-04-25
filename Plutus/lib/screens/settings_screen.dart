@@ -144,7 +144,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     activeFgColor:
                                         Theme.of(context).canvasColor,
                                     inactiveBgColor: Colors.grey,
-                                    inactiveFgColor: Colors.black,
+                                    inactiveFgColor:
+                                        Theme.of(context).canvasColor,
                                     labels: ['ON', 'OFF'],
                                     initialLabelIndex: initialIndex,
                                     icons: [

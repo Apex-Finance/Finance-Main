@@ -68,20 +68,23 @@ class _GoalsListTileState extends State<GoalsListTile> {
             return showDialog(
               context: context,
               builder: (ctx) => AlertDialog(
-                title: Text('Do you want to remove this goal?'),
+                title: Text(
+                  'Do you want to remove this goal?',
+                ),
                 content: Text(
                   'This cannot be undone later.',
-                  style: Theme.of(context).textTheme.bodyText2,
                 ),
                 actions: <Widget>[
                   TextButton(
-                    child: Text('No'),
+                    child: Text('No',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                     onPressed: () {
                       Navigator.of(ctx).pop(false);
                     },
                   ),
                   TextButton(
-                    child: Text('Yes'),
+                    child: Text('Yes',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                     onPressed: () {
                       Navigator.of(ctx).pop(true);
                     },

@@ -55,19 +55,23 @@ class _TransactionListTileState extends State<TransactionListTile> {
             return showDialog(
               context: context,
               builder: (ctx) => AlertDialog(
-                title: Text('Do you want to remove this transaction?'),
+                title: Text(
+                  'Do you want to remove this transaction?',
+                ),
                 content: Text(
                   'This cannot be undone later.',
                 ),
                 actions: <Widget>[
                   TextButton(
-                    child: Text('No'),
+                    child: Text('No',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                     onPressed: () {
                       Navigator.of(ctx).pop(false);
                     },
                   ),
                   TextButton(
-                    child: Text('Yes'),
+                    child: Text('Yes',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                     onPressed: () {
                       Navigator.of(ctx).pop(true);
                     },

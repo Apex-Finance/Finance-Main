@@ -60,10 +60,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            backgroundColor: Theme.of(context).cardColor,
             title: Text(
               delete ? 'Do you want to delete this budget?' : 'Cancel',
-              style: Theme.of(context).textTheme.headline1,
             ),
             content: SingleChildScrollView(
               child: ListBody(
@@ -72,14 +70,18 @@ class _IncomeScreenState extends State<IncomeScreen> {
                     delete
                         ? 'This cannot be undone later.'
                         : 'Would you like to discard these changes?',
-                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
               ),
             ),
             actions: <Widget>[
               TextButton(
-                child: Text('Yes'),
+                  child:
+                      Text('No', style: TextStyle(fontWeight: FontWeight.bold)),
+                  onPressed: () => Navigator.of(context).pop()),
+              TextButton(
+                child:
+                    Text('Yes', style: TextStyle(fontWeight: FontWeight.bold)),
                 onPressed: () async {
                   if (delete) {
                     // delete the new budget
@@ -122,9 +124,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
                       ModalRoute.withName(AuthScreen.routeName));
                 },
               ),
-              TextButton(
-                  child: Text('No'),
-                  onPressed: () => Navigator.of(context).pop()),
             ],
           );
         },
