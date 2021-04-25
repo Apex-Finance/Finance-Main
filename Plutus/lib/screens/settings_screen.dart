@@ -91,116 +91,129 @@ class _SettingsScreenState extends State<SettingsScreen> {
           style: TextStyle(color: Theme.of(context).accentColor),
         ),
       ),
-      body: Card(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        )),
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              child: Container(
-                child: Container(
-                  margin: EdgeInsets.all(8),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Change colors',
-                        style: Theme.of(context).textTheme.headline1,
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          color: Colors.grey[900],
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+            bottom: Radius.circular(20),
+          )),
+          child: SingleChildScrollView(
+            child: Container(
+              height: 500,
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20), bottom: Radius.circular(20)),
+                    child: Container(
+                      color: Colors.grey[800],
+                      child: Container(
+                        margin: EdgeInsets.all(8),
+                        child: Column(
                           children: [
-                            Expanded(
-                              child: Text(
-                                'Dark mode',
-                                style: Theme.of(context).textTheme.bodyText1,
+                            Text(
+                              'Change colors',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'Dark mode',
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    ),
+                                  ),
+                                  ToggleSwitch(
+                                    minWidth: 90.0,
+                                    cornerRadius: 20.0,
+                                    activeBgColor:
+                                        Theme.of(context).primaryColor,
+                                    activeFgColor: Colors.black,
+                                    inactiveBgColor: Colors.grey,
+                                    inactiveFgColor: Colors.black,
+                                    labels: ['ON', 'OFF'],
+                                    initialLabelIndex: initialIndex,
+                                    icons: [
+                                      Icons.check,
+                                      Icons.highlight_off,
+                                    ],
+                                    onToggle: (index) {
+                                      setState(() {
+                                        initialIndex =
+                                            index; // package has a quirk that requires you do this if using setState; see https://github.com/PramodJoshi/toggle_switch/issues/11 for more info
+
+                                        if (index == 0)
+                                          colors.setIsDark(true);
+                                        // isDark = true;
+                                        else
+                                          colors.setIsDark(false);
+                                        //isDark = false;
+                                      });
+                                    },
+                                  ),
+                                ],
                               ),
                             ),
-                            ToggleSwitch(
-                              minWidth: 90.0,
-                              cornerRadius: 20.0,
-                              activeBgColor: Theme.of(context).primaryColor,
-                              activeFgColor: Theme.of(context).accentColor,
-                              inactiveBgColor: Colors.grey,
-                              inactiveFgColor: Colors.black,
-                              labels: ['ON', 'OFF'],
-                              initialLabelIndex: initialIndex,
-                              icons: [
-                                Icons.check,
-                                Icons.highlight_off,
-                              ],
-                              onToggle: (index) {
-                                setState(() {
-                                  initialIndex =
-                                      index; // package has a quirk that requires you do this if using setState; see https://github.com/PramodJoshi/toggle_switch/issues/11 for more info
-
-                                  if (index == 0)
-                                    colors.setIsDark(true);
-                                  // isDark = true;
-                                  else
-                                    colors.setIsDark(false);
-                                  //isDark = false;
-                                });
+                            Container(
+                              height: colors.colorOptions.length * 50.0,
+                              child: ListView.builder(
+                                  itemCount: colors.colorOptions.length,
+                                  itemBuilder: (context, index) {
+                                    return _colorOption(
+                                        colors.colorOptions[index]
+                                            [isDark ? 'dark' : 'light']['name'],
+                                        colors.colorOptions[index]
+                                                [isDark ? 'dark' : 'light']
+                                            ['primaryColor'],
+                                        colors.colorOptions[index]
+                                                [isDark ? 'dark' : 'light']
+                                            ['canvasColor'],
+                                        index,
+                                        () =>
+                                            colors.setSelectedColorIndex(index),
+                                        context);
+                                  }),
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20),
+                                    bottom: Radius.circular(20),
+                                  ),
+                                ),
+                                primary: Colors.amber,
+                              ),
+                              child: Text(
+                                'Default',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              onPressed: () {
+                                colors.setSelectedColorIndex(2);
+                                colors.setIsDark(false);
                               },
                             ),
                           ],
                         ),
                       ),
-                      Container(
-                        height: colors.colorOptions.length * 50.0,
-                        child: ListView.builder(
-                            itemCount: colors.colorOptions.length,
-                            itemBuilder: (context, index) {
-                              return _colorOption(
-                                  colors.colorOptions[index]
-                                      [isDark ? 'dark' : 'light']['name'],
-                                  colors.colorOptions[index]
-                                          [isDark ? 'dark' : 'light']
-                                      ['primaryColor'],
-                                  colors.colorOptions[index]
-                                          [isDark ? 'dark' : 'light']
-                                      ['canvasColor'],
-                                  index,
-                                  () => colors.setSelectedColorIndex(index),
-                                  context);
-                            }),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(20),
-                              bottom: Radius.circular(20),
-                            ),
-                          ),
-                          primary: Colors
-                              .amber, // Default color is amber, hence it is hardcoded
-                        ),
-                        child: Text(
-                          'Default',
-                          style: TextStyle(
-                            color: Theme.of(context).accentColor,
-                          ),
-                        ),
-                        // Default is Amber/Light mode
-                        onPressed: () {
-                          colors.setSelectedColorIndex(0);
-                          colors.setIsDark(false);
-                        },
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

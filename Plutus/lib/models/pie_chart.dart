@@ -160,7 +160,9 @@ class PieChart extends StatelessWidget {
                                   ? 2
                                   : 3, // approx take up same space either way but allows larger fonts with fewer categories
                               cellPadding: EdgeInsets.only(
-                                  right: fewCategories ? 64 : 16, bottom: 6),
+                                  right: (MediaQuery.of(context).size.width /
+                                      (fewCategories ? 6.5 : 34)),
+                                  bottom: 6),
                               entryTextStyle: charts.TextStyleSpec(
                                   color: charts.Color.fromHex(
                                       code: toHexString(
