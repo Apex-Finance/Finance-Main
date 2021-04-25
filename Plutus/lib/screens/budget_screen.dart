@@ -168,7 +168,8 @@ class BudgetCard extends StatelessWidget {
                     onPressed: () {
                       enterBudgetHandler(context, budget);
                     },
-                    child: Text('Fix Budget'))
+                    child: Text('Fix Budget',
+                        style: TextStyle(fontWeight: FontWeight.bold)))
               ],
             ),
           ),

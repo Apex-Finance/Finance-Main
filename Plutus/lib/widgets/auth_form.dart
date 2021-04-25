@@ -35,7 +35,7 @@ class _AuthFormState extends State<AuthForm> {
         content: Text(message),
         actions: <Widget>[
           TextButton(
-            child: Text('Okay'),
+            child: Text('Okay', style: TextStyle(fontWeight: FontWeight.bold)),
             onPressed: () => Navigator.pop(context),
           )
         ],
