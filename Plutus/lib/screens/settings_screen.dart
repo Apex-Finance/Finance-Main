@@ -94,7 +94,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Card(
-          color: Colors.grey[900],
+          color: Theme.of(context).cardColor,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
             top: Radius.circular(20),
@@ -109,7 +109,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     borderRadius: BorderRadius.vertical(
                         top: Radius.circular(20), bottom: Radius.circular(20)),
                     child: Container(
-                      color: Colors.grey[800],
+                      color: Theme.of(context).cardColor,
                       child: Container(
                         margin: EdgeInsets.all(8),
                         child: Column(
@@ -138,7 +138,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     cornerRadius: 20.0,
                                     activeBgColor:
                                         Theme.of(context).primaryColor,
-                                    activeFgColor: Colors.black,
+                                    activeFgColor:
+                                        Theme.of(context).accentColor,
                                     inactiveBgColor: Colors.grey,
                                     inactiveFgColor: Colors.black,
                                     labels: ['ON', 'OFF'],
@@ -197,11 +198,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               child: Text(
                                 'Default',
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: Theme.of(context).accentColor,
                                 ),
                               ),
                               onPressed: () {
-                                colors.setSelectedColorIndex(2);
+                                colors.setSelectedColorIndex(0);
                                 colors.setIsDark(false);
                               },
                             ),
