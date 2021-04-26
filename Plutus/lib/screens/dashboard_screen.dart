@@ -28,7 +28,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: [
         Column(
           children: [
-            PieChart(),
+            //PieChart(),
             BudgetLinearIndicatorCard(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
