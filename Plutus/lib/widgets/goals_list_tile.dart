@@ -168,34 +168,31 @@ class _GoalsListTileState extends State<GoalsListTile> {
                                   ? 0
                                   : widget.goal
                                       .getAmountSaved(context, snapshot.data);
-                          return Expanded(
-                            child: new LinearPercentIndicator(
-                              center: amountSaved >= widget.goal.getGoalAmount()
-                                  ? AutoSizeText(
-                                      'Completed!',
-                                      style: TextStyle(
-                                        color: Theme.of(context).canvasColor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    )
-                                  : AutoSizeText(
-                                      '\$ ${amountSaved.toStringAsFixed(2)} of \$ ${widget.goal.getGoalAmount().toStringAsFixed(2)}',
-                                      style: TextStyle(
-                                        color: Theme.of(context).canvasColor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
+                          return LinearPercentIndicator(
+                            center: amountSaved >= widget.goal.getGoalAmount()
+                                ? AutoSizeText(
+                                    'Completed!',
+                                    style: TextStyle(
+                                      color: Theme.of(context).canvasColor,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                              percent: amountSaved == null
-                                  ? 0.0
-                                  : amountSaved > widget.goal.getGoalAmount()
-                                      ? 1
-                                      : amountSaved /
-                                          widget.goal.getGoalAmount(),
-                              alignment: MainAxisAlignment.start,
-                              lineHeight: 20,
-                              progressColor: Theme.of(context).primaryColor,
-                            ),
+                                  )
+                                : AutoSizeText(
+                                    '\$ ${amountSaved.toStringAsFixed(2)} of \$ ${widget.goal.getGoalAmount().toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                      color: Theme.of(context).canvasColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                            percent: amountSaved == null
+                                ? 0.0
+                                : amountSaved > widget.goal.getGoalAmount()
+                                    ? 1
+                                    : amountSaved / widget.goal.getGoalAmount(),
+                            alignment: MainAxisAlignment.start,
+                            lineHeight: 20,
+                            progressColor: Theme.of(context).primaryColor,
                           );
                         }),
                   ),
