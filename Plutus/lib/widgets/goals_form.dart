@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 // Imported Plutus files
 import '../models/goals.dart';
 import '../models/transaction.dart' as Transaction;
-import '../providers/color.dart';
 
 // Form to add a new goal
 class GoalsForm extends StatefulWidget {
@@ -112,7 +111,6 @@ class _DateChangerState extends State<DateChanger> {
 
   @override
   Widget build(BuildContext context) {
-    var colorProvider = Provider.of<ColorProvider>(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [

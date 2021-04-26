@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 // Provides all color combinations available
 class ColorProvider with ChangeNotifier {
-  var selectedColorIndex;
+  var selectedColorIndex = 0;
   var isDark = false; // Dark mode variable
 
   final colorOptions = [
