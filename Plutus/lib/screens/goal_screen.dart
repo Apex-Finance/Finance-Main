@@ -106,15 +106,13 @@ class GoalScreen extends StatelessWidget {
                               top: Radius.circular(20),
                             ),
                           ),
-                          child: Expanded(
-                            child: ListView.builder(
-                              itemCount: snapshot.data.docs.length,
-                              itemBuilder: (context, index) {
-                                goal = goalDataProvider
-                                    .initializeGoal(snapshot.data.docs[index]);
-                                return GoalsListTile(goal);
-                              },
-                            ),
+                          child: ListView.builder(
+                            itemCount: snapshot.data.docs.length,
+                            itemBuilder: (context, index) {
+                              goal = goalDataProvider
+                                  .initializeGoal(snapshot.data.docs[index]);
+                              return GoalsListTile(goal);
+                            },
                           ),
                         ),
                       ),
