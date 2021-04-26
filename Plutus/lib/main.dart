@@ -96,7 +96,8 @@ class MyApp extends StatelessWidget {
           cardColor: cardColor, // Background card color
           iconTheme: IconThemeData(color: canvasColor),
           dialogTheme: DialogTheme(
-            backgroundColor: cardColor,
+            backgroundColor: colors.colorOptions[selectedColorIndex]['light']
+                ['cardColor'],
             titleTextStyle: TextStyle(color: primaryColor, fontSize: 25),
             contentTextStyle: TextStyle(color: primaryColor, fontSize: 17),
           ),
