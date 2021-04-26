@@ -41,7 +41,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       index // if user selects this color, make the icon the same color
                   ? (foreground == Colors.black ? Colors.white : foreground)
                   : IconTheme.of(context).color),
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
           // Color name
@@ -63,7 +63,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             height: 40,
             color: background,
           ),
-          SizedBox(
+          const SizedBox(
             width: 50,
           ),
         ],
@@ -85,17 +85,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Theme.of(context).canvasColor,
+        ),
         centerTitle: true,
         title: Text(
           'Settings',
-          style: TextStyle(color: Theme.of(context).accentColor),
+          style: TextStyle(color: Theme.of(context).canvasColor),
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Card(
           color: Theme.of(context).cardColor,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
             top: Radius.circular(20),
             bottom: Radius.circular(20),
@@ -106,19 +109,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: Column(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.vertical(
+                    borderRadius: const BorderRadius.vertical(
                         top: Radius.circular(20), bottom: Radius.circular(20)),
                     child: Container(
                       color: Theme.of(context).cardColor,
                       child: Container(
-                        margin: EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(8),
                         child: Column(
                           children: [
                             Text(
                               'Change colors',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 15,
                             ),
                             Padding(
@@ -139,9 +142,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     activeBgColor:
                                         Theme.of(context).primaryColor,
                                     activeFgColor:
-                                        Theme.of(context).accentColor,
+                                        Theme.of(context).canvasColor,
                                     inactiveBgColor: Colors.grey,
-                                    inactiveFgColor: Colors.black,
+                                    inactiveFgColor:
+                                        Theme.of(context).canvasColor,
                                     labels: ['ON', 'OFF'],
                                     initialLabelIndex: initialIndex,
                                     icons: [
@@ -187,7 +191,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
+                                shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.vertical(
                                     top: Radius.circular(20),
                                     bottom: Radius.circular(20),

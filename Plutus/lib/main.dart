@@ -91,10 +91,16 @@ class MyApp extends StatelessWidget {
           primarySwatch: primarySwatch, // Colors.amber
           primaryColor: primaryColor,
           backgroundColor: backgroundColor, // ListTile color
-          primaryColorLight: Colors.amberAccent,
           accentColor: Colors.white,
           canvasColor: canvasColor,
           cardColor: cardColor, // Background card color
+          iconTheme: IconThemeData(color: canvasColor),
+          dialogTheme: DialogTheme(
+            backgroundColor: colors.colorOptions[selectedColorIndex]['light'][
+                'cardColor'], //fix for datepickers; causes alertdialogs to always show light version as well
+            titleTextStyle: TextStyle(color: primaryColor, fontSize: 25),
+            contentTextStyle: TextStyle(color: primaryColor, fontSize: 17),
+          ),
           textTheme: GoogleFonts.latoTextTheme(
             TextTheme(
               bodyText1: TextStyle(color: primaryColor, fontSize: 17),

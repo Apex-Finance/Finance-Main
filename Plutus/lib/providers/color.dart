@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 // Provides all color combinations available
 class ColorProvider with ChangeNotifier {
-  var selectedColorIndex;
-  var isDark; // Dark mode variable
+  var selectedColorIndex = 0;
+  var isDark = false; // Dark mode variable
 
   final colorOptions = [
     // Amber
@@ -37,7 +37,7 @@ class ColorProvider with ChangeNotifier {
         'backgroundColor': Colors.grey[500],
       },
       'dark': {
-        'name': "Light Blue",
+        'name': "Blue",
         'primarySwatch': Colors.blue,
         'primaryColor': Colors.blue[700],
         'canvasColor': Colors.black,
@@ -56,7 +56,7 @@ class ColorProvider with ChangeNotifier {
         'backgroundColor': Colors.grey[500],
       },
       'dark': {
-        'name': "Light Green",
+        'name': "Green",
         'primarySwatch': Colors.green,
         'primaryColor': Colors.green[700],
         'canvasColor': Colors.black,

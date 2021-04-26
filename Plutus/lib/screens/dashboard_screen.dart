@@ -60,7 +60,7 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
     double transactionExpenses = 0.00;
 
     return Card(
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(20),
           bottom: Radius.circular(20),
@@ -76,7 +76,7 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 22, color: Theme.of(context).primaryColor),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Center(
@@ -135,7 +135,8 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
                                   ? '${(transactionExpenses / budgetAmount * 100).toStringAsFixed(1)}%'
                                   : '',
                               style: TextStyle(
-                                  color: Theme.of(context).accentColor),
+                                  color: Theme.of(context).canvasColor,
+                                  fontWeight: FontWeight.bold),
                             ),
                             linearStrokeCap: LinearStrokeCap.roundAll,
                             progressColor: Theme.of(context).primaryColor,
@@ -146,7 +147,7 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
             ],
@@ -168,14 +169,14 @@ class TotalSavedCard extends StatelessWidget {
     var transactionDataProvider = Provider.of<Transactions>(context);
 
     return Card(
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(20),
           bottom: Radius.circular(20),
         ),
       ),
       child: Container(
-        padding: EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(4.0),
         height: 90,
         width: deviceSize.width * 0.4, // 180
         child: Center(
@@ -188,7 +189,7 @@ class TotalSavedCard extends StatelessWidget {
                   style: Theme.of(context).textTheme.headline1,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               StreamBuilder<QuerySnapshot>(
@@ -231,14 +232,14 @@ class TotalSpentCard extends StatelessWidget {
     var deviceSize = MediaQuery.of(context).size;
     var transactionDataProvider = Provider.of<Transactions>(context);
     return Card(
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(20),
           bottom: Radius.circular(20),
         ),
       ),
       child: Container(
-        padding: EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(4.0),
         height: 90,
         width: deviceSize.width * 0.4,
         child: Center(
@@ -251,7 +252,7 @@ class TotalSpentCard extends StatelessWidget {
                   style: Theme.of(context).textTheme.headline1,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               StreamBuilder<QuerySnapshot>(
@@ -308,7 +309,7 @@ class RecentTransactionsCard extends StatelessWidget {
             .snapshots(),
         builder: (context, snapshot) {
           return Card(
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(20),
                 bottom: Radius.circular(20),
@@ -328,13 +329,11 @@ class RecentTransactionsCard extends StatelessWidget {
                     ),
                     width: 400,
                     child: Center(
-                      child: Text(
-                        'Recent Transactions',
-                        style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
+                      child: Text('Recent Transactions',
+                          style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).canvasColor)),
                     ),
                   ),
                   if (!snapshot.hasData)
@@ -386,7 +385,7 @@ class UpcomingGoalCard extends StatelessWidget {
         stream: goalDataProvider.getUpcomingGoals(context, tileCount),
         builder: (context, snapshot) {
           return Card(
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(20),
                 bottom: Radius.circular(20),
@@ -411,7 +410,7 @@ class UpcomingGoalCard extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                            color: Theme.of(context).canvasColor),
                       ),
                     ),
                   ),

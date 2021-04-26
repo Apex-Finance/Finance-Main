@@ -82,11 +82,11 @@ class _TransactionScreenState extends State<TransactionScreen> {
               ),
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.only(top: 25),
+                  margin: const EdgeInsets.only(top: 25),
                   child: snapshot.data.docs.isEmpty
                       ? NoTransactionsYetText(_enterTransaction)
                       : Card(
-                          shape: RoundedRectangleBorder(
+                          shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(
                               top: Radius.circular(20),
                             ),
@@ -125,13 +125,13 @@ class _TransactionsCardState extends State<TransactionsCard> {
     return Column(
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           child: TotalExpenses(
             monthlyExpenses: transactionData
                 .getTransactionExpenses(widget.transactionsSnapshot),
           ),
         ),
-        Divider(height: 10),
+        const Divider(height: 10),
         Expanded(
           child: ListView.builder(
               itemCount: widget.transactionsSnapshot.docs.length,
@@ -187,7 +187,7 @@ class NoTransactionsYetText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: 250),
+        constraints: const BoxConstraints(maxWidth: 250),
         child: Column(
           children: [
             Text(
@@ -199,7 +199,7 @@ class NoTransactionsYetText extends StatelessWidget {
             ElevatedButton(
               child: Text(
                 'Add Transaction',
-                style: TextStyle(color: Theme.of(context).accentColor),
+                style: TextStyle(color: Theme.of(context).canvasColor),
               ),
               style: ElevatedButton.styleFrom(
                 primary: Theme.of(context).primaryColor,

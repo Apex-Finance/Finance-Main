@@ -8,6 +8,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import '../models/transaction.dart' as Transaction;
 import '../models/category_icon.dart';
 import './transaction_form.dart';
+import '../providers/color.dart';
 
 class TransactionListTile extends StatefulWidget {
   final Transaction.Transaction transaction;
@@ -30,10 +31,11 @@ class _TransactionListTileState extends State<TransactionListTile> {
 
   @override
   Widget build(BuildContext context) {
+    var colorProvider = Provider.of<ColorProvider>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
         child: Dismissible(
           key: ValueKey(widget.transaction.getID()),
           background: Container(
@@ -55,19 +57,26 @@ class _TransactionListTileState extends State<TransactionListTile> {
             return showDialog(
               context: context,
               builder: (ctx) => AlertDialog(
-                title: Text('Do you want to remove this transaction?'),
-                content: Text(
+                backgroundColor:
+                    colorProvider.colorOptions[colorProvider.selectedColorIndex]
+                        [colorProvider.isDark ? 'dark' : 'light']['cardColor'],
+                title: const Text(
+                  'Do you want to remove this transaction?',
+                ),
+                content: const Text(
                   'This cannot be undone later.',
                 ),
                 actions: <Widget>[
                   TextButton(
-                    child: Text('No'),
+                    child: const Text('No',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                     onPressed: () {
                       Navigator.of(ctx).pop(false);
                     },
                   ),
                   TextButton(
-                    child: Text('Yes'),
+                    child: const Text('Yes',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                     onPressed: () {
                       Navigator.of(ctx).pop(true);
                     },
@@ -92,8 +101,11 @@ class _TransactionListTileState extends State<TransactionListTile> {
             onTap: () => _updateTransaction(context, widget.transaction),
             tileColor: Theme.of(context).backgroundColor,
             leading: CircleAvatar(
-              child:
-                  Icon(categoryIcon[widget.transaction.getCategoryCodePoint()]),
+              backgroundColor: Theme.of(context).primaryColor,
+              child: Icon(
+                categoryIcon[widget.transaction.getCategoryCodePoint()],
+                color: Theme.of(context).iconTheme.color,
+              ),
             ),
             title: AutoSizeText(
               '${widget.transaction.getTitle()}',
@@ -104,7 +116,10 @@ class _TransactionListTileState extends State<TransactionListTile> {
             ),
             subtitle: AutoSizeText(
               '${widget.transaction.getCategoryTitle()} | ${DateFormat.MMMd().format(widget.transaction.getDate())}',
-              style: TextStyle(color: Theme.of(context).accentColor),
+              style: TextStyle(
+                  color: colorProvider.isDark
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).canvasColor),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

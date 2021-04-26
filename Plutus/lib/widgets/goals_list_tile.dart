@@ -10,6 +10,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import '../models/goals.dart';
 import '../widgets/goals_form.dart';
 import './add_goal_money_form.dart';
+import '../providers/color.dart';
 import '../models/transaction.dart' as Transaction;
 
 // List Tile that displays each individual goal
@@ -41,10 +42,11 @@ class _GoalsListTileState extends State<GoalsListTile> {
 
   @override
   Widget build(BuildContext context) {
+    var colorProvider = Provider.of<ColorProvider>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
         // Deletes a goal if list tile is swiped from right to left
         child: Dismissible(
           key: ValueKey(widget.goal.getID()),
@@ -56,8 +58,8 @@ class _GoalsListTileState extends State<GoalsListTile> {
               size: 40,
             ),
             alignment: Alignment.centerRight,
-            padding: EdgeInsets.only(right: 20),
-            margin: EdgeInsets.symmetric(
+            padding: const EdgeInsets.only(right: 20),
+            margin: const EdgeInsets.symmetric(
               horizontal: 15,
               vertical: 4,
             ),
@@ -68,20 +70,26 @@ class _GoalsListTileState extends State<GoalsListTile> {
             return showDialog(
               context: context,
               builder: (ctx) => AlertDialog(
-                title: Text('Do you want to remove this goal?'),
-                content: Text(
+                backgroundColor:
+                    colorProvider.colorOptions[colorProvider.selectedColorIndex]
+                        [colorProvider.isDark ? 'dark' : 'light']['cardColor'],
+                title: const Text(
+                  'Do you want to remove this goal?',
+                ),
+                content: const Text(
                   'This cannot be undone later.',
-                  style: Theme.of(context).textTheme.bodyText2,
                 ),
                 actions: <Widget>[
                   TextButton(
-                    child: Text('No'),
+                    child: const Text('No',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                     onPressed: () {
                       Navigator.of(ctx).pop(false);
                     },
                   ),
                   TextButton(
-                    child: Text('Yes'),
+                    child: const Text('Yes',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                     onPressed: () {
                       Navigator.of(ctx).pop(true);
                     },
@@ -98,7 +106,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
               ..showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,
-                  content: Text('Goal deleted.'),
+                  content: const Text('Goal deleted.'),
                 ),
               );
           },
@@ -109,15 +117,19 @@ class _GoalsListTileState extends State<GoalsListTile> {
               tileColor: Theme.of(context).backgroundColor,
               leading: Container(
                 width: 80,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   border: Border(
                     right: BorderSide(width: 1.0, color: Colors.white24),
                   ),
                 ),
-                // Goal image preview
+                // Goal icon
                 child: CircleAvatar(
+                  backgroundColor: Theme.of(context).primaryColor,
                   radius: 35,
-                  child: Icon(Icons.star),
+                  child: Icon(
+                    Icons.star,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
                 ),
               ),
               title: Column(
@@ -141,12 +153,13 @@ class _GoalsListTileState extends State<GoalsListTile> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Theme.of(context).accentColor,
-                      fontSize: 12,
-                    ),
+                        fontSize: 12,
+                        color: colorProvider.isDark
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).canvasColor),
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(0, 8, 0, 5),
+                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 5),
                     // Visual bar graph that displays amount currently saved
                     // and the goal amount
                     child: StreamBuilder<QuerySnapshot>(
@@ -159,32 +172,31 @@ class _GoalsListTileState extends State<GoalsListTile> {
                                   ? 0
                                   : widget.goal
                                       .getAmountSaved(context, snapshot.data);
-                          return Expanded(
-                            child: new LinearPercentIndicator(
-                              center: amountSaved == widget.goal.getGoalAmount()
-                                  ? AutoSizeText(
-                                      'Completed!',
-                                      style: TextStyle(
-                                        color: Theme.of(context).accentColor,
-                                      ),
-                                    )
-                                  : AutoSizeText(
-                                      '\$ ${amountSaved.toStringAsFixed(2)} of \$ ${widget.goal.getGoalAmount().toStringAsFixed(2)}',
-                                      style: TextStyle(
-                                        color: Theme.of(context).accentColor,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
+                          return LinearPercentIndicator(
+                            center: amountSaved >= widget.goal.getGoalAmount()
+                                ? AutoSizeText(
+                                    'Completed!',
+                                    style: TextStyle(
+                                      color: Theme.of(context).canvasColor,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                              percent: amountSaved == null
-                                  ? 0.0
-                                  : amountSaved > widget.goal.getGoalAmount()
-                                      ? 1
-                                      : amountSaved /
-                                          widget.goal.getGoalAmount(),
-                              alignment: MainAxisAlignment.start,
-                              lineHeight: 20,
-                              progressColor: Theme.of(context).primaryColor,
-                            ),
+                                  )
+                                : AutoSizeText(
+                                    '\$ ${amountSaved.toStringAsFixed(2)} of \$ ${widget.goal.getGoalAmount().toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                      color: Theme.of(context).canvasColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                            percent: amountSaved == null
+                                ? 0.0
+                                : amountSaved > widget.goal.getGoalAmount()
+                                    ? 1
+                                    : amountSaved / widget.goal.getGoalAmount(),
+                            alignment: MainAxisAlignment.start,
+                            lineHeight: 20,
+                            progressColor: Theme.of(context).primaryColor,
                           );
                         }),
                   ),
@@ -194,7 +206,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
               trailing: Container(
                 // Needed to keep the same size border as CircleAvatar border
                 height: 100,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   border: Border(
                     left: BorderSide(
                       width: 1.0,

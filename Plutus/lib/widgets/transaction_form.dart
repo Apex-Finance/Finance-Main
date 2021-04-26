@@ -25,50 +25,8 @@ class _TransactionFormState extends State<TransactionForm> {
   DateTime _date = DateTime.now();
   Transaction.Transaction _transaction = new Transaction.Transaction.empty();
 
-  // Change the date of the transaction
-  void _setDate(DateTime value) {
-    if (value == null) return; // if user cancels datepicker
-    setState(() {
-      _transaction.setDate(_date = value);
-      // _transaction.date =
-      //     _date = value;
-      // update date if date changes since no onsave property
-    });
-  }
-
-  // Change the category of the transaction
-  void _setCategory(Category category) {
-    if (category.getTitle() == null) return; // if user taps out of popup
-    setState(() {
-      _transaction.setCategoryId(category.getID());
-      _transaction.setCategoryCodePoint(category.getCodepoint());
-      _transaction.setCategoryTitle(category.getTitle());
-    });
-  }
-
-  // If each textformfield passes the validation, save it's value to the transaction, and return the transaction to the previous screen
-  void _submitTransactionForm(BuildContext context) {
-    var transactionDataProvider =
-        Provider.of<Transaction.Transactions>(context, listen: false);
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      if (_transaction.getID() == null) {
-        transactionDataProvider.addTransaction(
-          transaction: _transaction,
-          context: context,
-        );
-      } else {
-        transactionDataProvider.editTransaction(_transaction, context);
-      }
-      Navigator.of(context).pop(
-        _transaction,
-      );
-    }
-  }
-
   @override
   void initState() {
-    // _transaction.setCategory(category);
     if (widget.transaction == null) {
       _transaction.setDate(_date);
       _transaction.setCategoryId(
@@ -76,10 +34,6 @@ class _TransactionFormState extends State<TransactionForm> {
       _transaction.setCategoryTitle("Uncategorized");
       _transaction.setCategoryCodePoint(58947);
     }
-
-    // _transaction.category =
-    //     category; // initialize date and category since no onsave property
-    // _transaction.date = _date;
 
     if (widget.transaction != null) {
       // if editing, store previous values in transaction to display previous values and submit them later
@@ -118,12 +72,15 @@ class _TransactionFormState extends State<TransactionForm> {
                   children: [
                     DescriptionTFF(transaction: _transaction),
                     AmountTFF(transaction: _transaction),
-                    buildCategoryChanger(context),
-                    buildDateChanger(context),
-                    SizedBox(
+                    CategoryChanger(transaction: _transaction),
+                    DateChanger(transaction: _transaction),
+                    const SizedBox(
                       height: 25,
                     ),
-                    buildSubmitButton(context, _transaction.getID()),
+                    SubmitButton(
+                      transaction: _transaction,
+                      formKey: _formKey,
+                    ),
                   ],
                 ),
               ),
@@ -133,33 +90,42 @@ class _TransactionFormState extends State<TransactionForm> {
       ),
     );
   }
+}
 
-  Container buildSubmitButton(BuildContext context, String transactionId) {
-    return Container(
-      alignment: Alignment.bottomRight,
-      child: FloatingActionButton.extended(
-        backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () {
-          _submitTransactionForm(context);
-        },
-        label: Text(
-          transactionId == null ? 'Add Transaction' : 'Edit Transaction',
-          style: TextStyle(color: Theme.of(context).accentColor),
-        ),
-      ),
-    );
+class DateChanger extends StatefulWidget {
+  const DateChanger({
+    Key key,
+    @required Transaction.Transaction transaction,
+  })  : _transaction = transaction,
+        super(key: key);
+
+  final Transaction.Transaction _transaction;
+
+  @override
+  _DateChangerState createState() => _DateChangerState();
+}
+
+class _DateChangerState extends State<DateChanger> {
+  void _setDate(DateTime value) {
+    if (value == null) return; // if user cancels datepicker
+    setState(() {
+      widget._transaction.setDate(value);
+    });
   }
 
-  Row buildDateChanger(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
         Container(
-          width: _transaction.getDate().year == DateTime.now().year ? 125 : 175,
+          width: widget._transaction.getDate().year == DateTime.now().year
+              ? 125
+              : 175,
           child: Text(
-            _transaction.getDate().year == DateTime.now().year
-                ? 'Date: ${DateFormat.MMMd().format(_transaction.getDate())}'
-                : 'Date: ${DateFormat.yMMMd().format(_transaction.getDate())}',
+            widget._transaction.getDate().year == DateTime.now().year
+                ? 'Date: ${DateFormat.MMMd().format(widget._transaction.getDate())}'
+                : 'Date: ${DateFormat.yMMMd().format(widget._transaction.getDate())}',
             style: TextStyle(
               fontSize: 16,
               color: Theme.of(context).primaryColor,
@@ -172,11 +138,17 @@ class _TransactionFormState extends State<TransactionForm> {
           ),
           child: Text(
             'Pick Date',
-            style: TextStyle(color: Theme.of(context).accentColor),
+            style: TextStyle(color: Theme.of(context).canvasColor),
           ),
           onPressed: () => showDatePicker(
             context: context,
-            initialDate: _transaction.getDate(),
+            initialDate: widget._transaction.getDate().isBefore(DateTime.now()
+                    .subtract(Duration(
+                        days:
+                            730))) // not perfect cuz of leap years but it'll do
+                // people most likely won't be editing a transaction that's two years old and want that much precision
+                ? DateTime.now()
+                : widget._transaction.getDate(),
             firstDate: DateTime.now().subtract(
               Duration(
                 days: 365,
@@ -194,11 +166,86 @@ class _TransactionFormState extends State<TransactionForm> {
       ],
     );
   }
+}
 
-  Widget buildCategoryChanger(BuildContext context) {
-    Category category = new Category();
+class SubmitButton extends StatelessWidget {
+  const SubmitButton({Key key, @required transaction, @required formKey})
+      : _transaction = transaction,
+        _formKey = formKey,
+        super(key: key);
+
+  final Transaction.Transaction _transaction;
+  final GlobalKey<FormState> _formKey;
+
+  // If each textformfield passes the validation, save it's value to the transaction, and return the transaction to the previous screen
+  void _submitTransactionForm(BuildContext context) {
+    var transactionDataProvider =
+        Provider.of<Transaction.Transactions>(context, listen: false);
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      if (_transaction.getID() == null) {
+        transactionDataProvider.addTransaction(
+          transaction: _transaction,
+          context: context,
+        );
+      } else {
+        transactionDataProvider.editTransaction(_transaction, context);
+      }
+      Navigator.of(context).pop(
+        _transaction,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.bottomRight,
+      child: FloatingActionButton.extended(
+        backgroundColor: Theme.of(context).primaryColor,
+        onPressed: () {
+          _submitTransactionForm(context);
+        },
+        label: Text(
+            _transaction.getID() == null
+                ? 'Add Transaction'
+                : 'Edit Transaction',
+            style: TextStyle(color: Theme.of(context).canvasColor)),
+      ),
+    );
+  }
+}
+
+class CategoryChanger extends StatefulWidget {
+  const CategoryChanger({
+    Key key,
+    @required Transaction.Transaction transaction,
+  })  : _transaction = transaction,
+        super(key: key);
+
+  final Transaction.Transaction _transaction;
+
+  @override
+  _CategoryChangerState createState() => _CategoryChangerState();
+}
+
+class _CategoryChangerState extends State<CategoryChanger> {
+  Category category = new Category();
+
+  List<Category> categories = [];
+
+  void _setCategory(Category category) {
+    if (category.getTitle() == null) return; // if user taps out of popup
+    setState(() {
+      widget._transaction.setCategoryId(category.getID());
+      widget._transaction.setCategoryCodePoint(category.getCodepoint());
+      widget._transaction.setCategoryTitle(category.getTitle());
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     var categoryDataProvider = Provider.of<CategoryDataProvider>(context);
-    List<Category> categories = [];
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
@@ -206,13 +253,13 @@ class _TransactionFormState extends State<TransactionForm> {
           'Category: ',
           style: TextStyle(
             fontSize: 16,
-            color: _transaction.getGoalId() != null
+            color: widget._transaction.getGoalId() != null
                 ? Colors.grey
                 : Theme.of(context).primaryColor,
           ),
         ),
         GestureDetector(
-          onTap: () => _transaction.getGoalId() != null
+          onTap: () => widget._transaction.getGoalId() != null
               ? null
               : showDialog(
                   context: context,
@@ -222,8 +269,9 @@ class _TransactionFormState extends State<TransactionForm> {
                       'Choose Category',
                       style: TextStyle(
                         fontSize: 25,
-                        fontFamily: 'Anton',
+                        fontFamily: 'Lato',
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context).canvasColor,
                       ),
                     ),
                     children: [
@@ -242,7 +290,10 @@ class _TransactionFormState extends State<TransactionForm> {
                                     case ConnectionState.none:
                                       {
                                         return Text(
-                                            'There was an error loading your categories.');
+                                            'There was an error loading your categories.',
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor));
                                       }
                                     case ConnectionState.waiting:
                                       {
@@ -280,7 +331,7 @@ class _TransactionFormState extends State<TransactionForm> {
                                                   color: Theme.of(context)
                                                       .primaryColor,
                                                   fontSize: 18,
-                                                  fontFamily: 'Anton',
+                                                  fontFamily: 'Lato',
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
@@ -304,23 +355,23 @@ class _TransactionFormState extends State<TransactionForm> {
                 ),
           child: Chip(
             avatar: CircleAvatar(
-              backgroundColor: Theme.of(context).accentColor,
+              backgroundColor: Theme.of(context).canvasColor,
               child: Icon(
                 IconData(
-                  _transaction.getCategoryCodePoint(),
+                  widget._transaction.getCategoryCodePoint(),
                   fontFamily: 'MaterialIcons',
                 ),
                 size: 22,
-                color: _transaction.getGoalId() != null
+                color: widget._transaction.getGoalId() != null
                     ? Colors.grey
                     : Theme.of(context).primaryColor,
               ),
             ),
             label: Text(
-              '${_transaction.getCategoryTitle()}',
-              style: TextStyle(color: Theme.of(context).accentColor),
+              '${widget._transaction.getCategoryTitle()}',
+              style: TextStyle(color: Theme.of(context).canvasColor),
             ),
-            backgroundColor: _transaction.getGoalId() != null
+            backgroundColor: widget._transaction.getGoalId() != null
                 ? Colors.grey
                 : Theme.of(context).primaryColor,
           ),

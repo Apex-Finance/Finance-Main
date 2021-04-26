@@ -32,6 +32,7 @@ class PieChart extends StatelessWidget {
     var categoryDataProvider = Provider.of<CategoryDataProvider>(context);
     var transactionStream =
         transactionDataProvider.getMonthlyTransactions(context, DateTime.now());
+    var deviceSize = MediaQuery.of(context).size;
 
     return StreamBuilder<QuerySnapshot>(
       stream: transactionStream.snapshots(),
@@ -43,7 +44,7 @@ class PieChart extends StatelessWidget {
               // card with same dimensions as the one when data is present
               // prevents screen from shifting while loading
               return Card(
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(20),
                     bottom: Radius.circular(20),
@@ -68,7 +69,7 @@ class PieChart extends StatelessWidget {
               // if no transactions made this month
               // or if there are no categories (should not happen)
               return Card(
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(20),
                     bottom: Radius.circular(20),
@@ -88,7 +89,7 @@ class PieChart extends StatelessWidget {
                     Expanded(
                       child: Center(
                         child: ConstrainedBox(
-                          constraints: BoxConstraints(maxWidth: 200),
+                          constraints: const BoxConstraints(maxWidth: 200),
                           child: Text(
                             'No transactions have been added this month.',
                             style: TextStyle(
@@ -128,7 +129,7 @@ class PieChart extends StatelessWidget {
               );
               bool fewCategories = pieData.length <= 6;
               return Card(
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(20),
                     bottom: Radius.circular(20),
@@ -146,7 +147,7 @@ class PieChart extends StatelessWidget {
                           style: Theme.of(context).textTheme.headline1,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Expanded(
                         child: charts.PieChart(
                           pieSeriesData,
@@ -160,7 +161,7 @@ class PieChart extends StatelessWidget {
                                   ? 2
                                   : 3, // approx take up same space either way but allows larger fonts with fewer categories
                               cellPadding: EdgeInsets.only(
-                                  right: (MediaQuery.of(context).size.width /
+                                  right: (deviceSize.width /
                                       (fewCategories ? 6.5 : 34)),
                                   bottom: 6),
                               entryTextStyle: charts.TextStyleSpec(
@@ -168,7 +169,7 @@ class PieChart extends StatelessWidget {
                                       code: toHexString(
                                           Theme.of(context).primaryColor)),
                                   fontFamily: 'Lato',
-                                  fontSize: (MediaQuery.of(context).size.width /
+                                  fontSize: (deviceSize.width /
                                           (fewCategories ? 24 : 32))
                                       .floor()), // ~17 or 12 on modern phones, will scale up/down to match phone
                               // largest size that works when our 2 or 3 longest categories are in legend in their own columns

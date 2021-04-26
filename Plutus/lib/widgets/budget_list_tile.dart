@@ -40,7 +40,9 @@ class _BudgetListTileState extends State<BudgetListTile> {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
               {
-                return Text("There was an error loading your information");
+                return Text("There was an error loading your information",
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor, fontSize: 15));
               }
             default:
               {
@@ -55,8 +57,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(
-                        20)), //BorderRadius.vertical(top: Radius.circular(20)),
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
                     child: Column(
                       children: [
                         ListTile(
@@ -67,7 +68,8 @@ class _BudgetListTileState extends State<BudgetListTile> {
                           },
                           tileColor: Theme.of(context).backgroundColor,
                           title: Container(
-                            margin: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 0.0),
+                            margin:
+                                const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 0.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -76,7 +78,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                   size: 20,
                                   color: Theme.of(context).primaryColor,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 AutoSizeText(
@@ -104,10 +106,10 @@ class _BudgetListTileState extends State<BudgetListTile> {
                           ),
                           subtitle: Column(
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
-                              new LinearPercentIndicator(
+                              LinearPercentIndicator(
                                 alignment: MainAxisAlignment.center,
                                 width: MediaQuery.of(context).size.width * .8,
                                 lineHeight: 12.0,
@@ -121,11 +123,11 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                             widget.category.getAmount(),
                                 progressColor: Theme.of(context).primaryColor,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               Container(
-                                margin: EdgeInsets.only(bottom: 4.0),
+                                margin: const EdgeInsets.only(bottom: 4.0),
                                 child: AutoSizeText(
                                   '\$${widget.category.getRemainingAmount().abs().toStringAsFixed(2)} $remaining',
                                   style: TextStyle(
@@ -138,7 +140,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                         ),
                         if (_expanded)
                           Container(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   horizontal: 15, vertical: 4),
                               color: Theme.of(context).cardColor,
                               height: snapshot.data.docs.isEmpty
@@ -179,7 +181,7 @@ class _BudgetListTileState extends State<BudgetListTile> {
                                     SingleChildScrollView(
                                       child: snapshot.data.docs.isEmpty
                                           ? Text(
-                                              'No transaction has been added yet',
+                                              'No transaction has been added yet.',
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .primaryColor,

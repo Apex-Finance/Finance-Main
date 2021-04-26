@@ -12,6 +12,7 @@ import '../models/budget.dart';
 import '../models/month_changer.dart';
 import '../widgets/budget_list_tile.dart';
 import '../providers/auth.dart';
+import '../providers/color.dart';
 
 class BudgetScreen extends StatefulWidget {
   static const routeName = '/budget';
@@ -113,6 +114,7 @@ class BudgetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var colorProvider = Provider.of<ColorProvider>(context);
     var budget =
         budgetDataProvider.initializeBudget(budgetSnapshot.data.docs.first);
 
@@ -161,14 +163,18 @@ class BudgetCard extends StatelessWidget {
           builder: (context) => WillPopScope(
             onWillPop: () async => false,
             child: AlertDialog(
-              title: Text('Uh oh.'),
-              content: Text('There was an issue making your budget.'),
+              backgroundColor:
+                  colorProvider.colorOptions[colorProvider.selectedColorIndex]
+                      [colorProvider.isDark ? 'dark' : 'light']['cardColor'],
+              title: const Text('Uh oh.'),
+              content: const Text('There was an issue making your budget.'),
               actions: [
                 TextButton(
                     onPressed: () {
                       enterBudgetHandler(context, budget);
                     },
-                    child: Text('Fix Budget'))
+                    child: const Text('Fix Budget',
+                        style: TextStyle(fontWeight: FontWeight.bold)))
               ],
             ),
           ),
@@ -255,14 +261,15 @@ class BudgetCard extends StatelessWidget {
               .getTransactionExpenses(transactionSnapshots.data);
           budget.calculateRemainingAmount(transactionExpenses);
           return Card(
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(
               top: Radius.circular(20),
             )),
             child: Column(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(20)),
                   child: ListTile(
                       onTap: () => enterBudgetHandler(context, budget),
                       tileColor: Theme.of(context).backgroundColor,
@@ -316,13 +323,13 @@ class BudgetCard extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              new LinearPercentIndicator(
+                              LinearPercentIndicator(
                                 alignment: MainAxisAlignment.center,
                                 width: MediaQuery.of(context).size.width * .8,
                                 lineHeight: 14.0,
@@ -334,7 +341,7 @@ class BudgetCard extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Row(
@@ -352,7 +359,7 @@ class BudgetCard extends StatelessWidget {
                         ],
                       )),
                 ),
-                Divider(height: 10),
+                const Divider(height: 10),
                 Expanded(
                   child: StreamBuilder<QuerySnapshot>(
                       stream: budgetCategories,
@@ -405,7 +412,7 @@ class NoBudgetYetText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 25),
+      margin: const EdgeInsets.only(top: 25),
       child: Center(
         child: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: 250),
@@ -420,7 +427,7 @@ class NoBudgetYetText extends StatelessWidget {
               ElevatedButton(
                 child: Text(
                   'Add Budget',
-                  style: TextStyle(color: Theme.of(context).accentColor),
+                  style: TextStyle(color: Theme.of(context).canvasColor),
                 ),
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,

@@ -104,11 +104,15 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Theme.of(context).canvasColor,
+          ),
+          centerTitle: true,
           title: AutoSizeText('First Budget',
               style: Theme.of(context).textTheme.bodyText1),
         ),
         body: Padding(
-          padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
           child: Container(
             child: Form(
               child: Column(
@@ -122,7 +126,7 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -175,7 +179,10 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                         switch (budgetSnapshot.connectionState) {
                           case ConnectionState.none:
                             {
-                              return AutoSizeText('An issue arose.');
+                              return AutoSizeText('An issue arose.',
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: 15));
                             }
                           default:
                             {
@@ -210,7 +217,11 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                       case ConnectionState.none:
                                         {
                                           return AutoSizeText(
-                                              'There was an issue loading the categories.');
+                                              'There was an issue loading the categories.',
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  fontSize: 15));
                                         }
                                       default:
                                         {
@@ -378,8 +389,16 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                           }
                         },
                         label: widget.isNewBudget
-                            ? AutoSizeText('Add Budget')
-                            : AutoSizeText('Edit Budget'),
+                            ? AutoSizeText(
+                                'Add Budget',
+                                style: TextStyle(
+                                    color: Theme.of(context).canvasColor),
+                              )
+                            : AutoSizeText(
+                                'Edit Budget',
+                                style: TextStyle(
+                                    color: Theme.of(context).canvasColor),
+                              ),
                       ),
                     ),
                   ),

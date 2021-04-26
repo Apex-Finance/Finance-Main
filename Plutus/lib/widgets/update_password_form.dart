@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 // Imported Plutus files
 import '../providers/auth.dart';
+import '../providers/color.dart';
 
 class UpdatePasswordForm extends StatefulWidget {
   @override
@@ -21,14 +22,18 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
   final _passwordController = TextEditingController();
 
   void _showErrorDialog(String message) {
+    var colorProvider = Provider.of<ColorProvider>(context);
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
+        backgroundColor:
+            colorProvider.colorOptions[colorProvider.selectedColorIndex]
+                [colorProvider.isDark ? 'dark' : 'light']['cardColor'],
         title: Text(message),
         content: Text(message),
         actions: <Widget>[
           TextButton(
-            child: Text('Okay'),
+            child: const Text('Okay'),
             onPressed: () => Navigator.pop(context),
           )
         ],
@@ -105,16 +110,16 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
         elevation: 8.0,
         child: Container(
             height: 320,
-            constraints: BoxConstraints(minHeight: 320),
+            constraints: const BoxConstraints(minHeight: 320),
             width: deviceSize.width * 0.75,
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Form(
               key: _formKey,
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
                     TextFormField(
-                      decoration: InputDecoration(labelText: 'Password'),
+                      decoration: const InputDecoration(labelText: 'Password'),
                       onEditingComplete: () => {
                         {FocusScope.of(context).unfocus()}
                       },
@@ -130,11 +135,14 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
                         newPassword = value.trim();
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     ElevatedButton(
-                      child: Text('Change Password'),
+                      child: Text(
+                        'Change Password',
+                        style: TextStyle(color: Theme.of(context).canvasColor),
+                      ),
                       onPressed: _submit,
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
