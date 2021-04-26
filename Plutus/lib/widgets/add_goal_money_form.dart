@@ -109,7 +109,7 @@ class _AddGoalMoneyFormState extends State<AddGoalMoneyForm> {
                   ),
                   // Add Money button
                   Container(
-                    padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                     alignment: Alignment.bottomRight,
                     child: FloatingActionButton.extended(
                       backgroundColor: Theme.of(context).primaryColor,
@@ -145,8 +145,8 @@ class GoalAmountField extends StatelessWidget {
       style: Theme.of(context).textTheme.bodyText1,
       autofocus: true,
       decoration: InputDecoration(
-        labelStyle: new TextStyle(
-            color: Theme.of(context).primaryColor, fontSize: 16.0),
+        labelStyle:
+            TextStyle(color: Theme.of(context).primaryColor, fontSize: 16.0),
       ),
       keyboardType: TextInputType.number,
       onSaved: (val) {

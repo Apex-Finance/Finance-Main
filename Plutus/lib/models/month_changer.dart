@@ -55,7 +55,7 @@ class MonthChanger with ChangeNotifier {
             selectedYear ==
                 DateTime.now().year -
                     1) // keep width constant if looking at earliest available month
-          SizedBox(width: 32.0, height: 32.0),
+          const SizedBox(width: 32.0, height: 32.0),
         Text(
           '${MonthChanger.months[selectedMonth - 1]}' +
               (selectedYear == DateTime.now().year ? '' : ' $selectedYear'),
@@ -76,7 +76,7 @@ class MonthChanger with ChangeNotifier {
             selectedYear ==
                 DateTime.now().year +
                     1) // keep width constant if looking at latest available month
-          SizedBox(width: 32.0, height: 32.0),
+          const SizedBox(width: 32.0, height: 32.0),
       ],
     );
   }

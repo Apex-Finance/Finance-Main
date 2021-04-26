@@ -4,11 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
-//import 'package:image_picker/image_picker.dart';
 
 // Imported Plutus files
 import '../models/goals.dart';
 import '../models/transaction.dart' as Transaction;
+import '../providers/color.dart';
 
 // Form to add a new goal
 class GoalsForm extends StatefulWidget {
@@ -24,49 +24,6 @@ class _GoalsFormState extends State<GoalsForm> {
   DateTime _date;
   Goal _goal = Goal.empty();
   //File _goalImage; // Image selected from the phone gallery
-
-  void _setDate(DateTime value) {
-    if (value == null) return; // if user cancels datepicker
-    setState(() {
-      _goal.setDate(_date =
-          value); // update date if date changes since no onsave property
-    });
-  }
-
-  // Validates each required textfield, saves its value to the goal, and
-  // returns the goal to the previous screen
-  void _submitGoalForm(BuildContext context) {
-    var goalDataProvider =
-        Provider.of<GoalDataProvider>(context, listen: false);
-    var transactionDataProvider =
-        Provider.of<Transaction.Transactions>(context, listen: false);
-
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-
-      // If no date is set, set the date to today's date
-      if (_goal.getDate() == null) _goal.setDate(DateTime.now());
-      if (_goal.getID() == null) {
-        goalDataProvider.addGoal(_goal, context);
-      } else {
-        goalDataProvider.updateGoal(_goal, context);
-        transactionDataProvider.updateGoalTransactions(_goal, context);
-      }
-      Navigator.of(context).pop(_goal);
-    }
-  }
-
-  // NOT USED
-  // Gets the image from the phone gallery and displays it as an image preview
-  // Future getImage() async {
-  //   final pickedFile =
-  //       await ImagePicker().getImage(source: ImageSource.gallery);
-  //   setState(() {
-  //     if (pickedFile != null) {
-  //       _goalImage = File(pickedFile.path);
-  //     }
-  //   });
-  // }
 
   @override
   // If editing, store previous values in goal to display previous values and submit them later
@@ -105,17 +62,20 @@ class _GoalsFormState extends State<GoalsForm> {
                     GoalTitleField(
                       goal: _goal,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     // Goal Amount Text Field
                     GoalAmountField(
                       goal: _goal,
                     ),
-                    //NOT USED
-                    //buildImageSelector(context),
-                    buildDateChanger(context),
-                    buildSubmitButton(context),
+                    DateChanger(
+                      goal: _goal,
+                    ),
+                    SubmitButton(
+                      goal: _goal,
+                      formKey: _formKey,
+                    ),
                   ],
                 ),
               ),
@@ -125,73 +85,61 @@ class _GoalsFormState extends State<GoalsForm> {
       ),
     );
   }
+}
 
-  // NOT USED
-  // Selects an image to add to a goal
-  // Widget buildImageSelector(BuildContext context) {
-  //   return Padding(
-  //     padding: EdgeInsets.only(
-  //       top: 40,
-  //     ),
-  //     child: GestureDetector(
-  //       onTap: () => getImage(),
-  //       child: Container(
-  //         color: Theme.of(context).primaryColorLight,
-  //         width: 85,
-  //         height: 85,
-  //         child: _goalImage == null
-  //             ? Column(
-  //                 mainAxisAlignment: MainAxisAlignment.center,
-  //                 children: [
-  //                   Icon(Icons.camera_alt),
-  //                   Text(
-  //                     "Add a picture",
-  //                     style: TextStyle(
-  //                       // Has to be hardcoded since no textTheme has any fontsize smaller than 17
-  //                       fontSize: 12,
-  //                     ),
-  //                   ),
-  //                 ],
-  //               )
-  //             : FittedBox(
-  //                 fit: BoxFit.cover,
-  //                 child: Image.file(_goalImage),
-  //               ),
-  //       ),
-  //     ),
-  //   );
-  // }
+// Changes the date of the goal
+class DateChanger extends StatefulWidget {
+  const DateChanger({
+    Key key,
+    @required Goal goal,
+  })  : _goal = goal,
+        super(key: key);
 
-  // Changes the date of the goal
-  Widget buildDateChanger(BuildContext context) {
+  final Goal _goal;
+
+  @override
+  _DateChangerState createState() => _DateChangerState();
+}
+
+class _DateChangerState extends State<DateChanger> {
+  void _setDate(DateTime value) {
+    if (value == null) return; // if user cancels datepicker
+    setState(() {
+      widget._goal.setDate(
+          value); // update date if date changes since no onsave property
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var colorProvider = Provider.of<ColorProvider>(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(20, 20, 0, 0),
-          //0, 20, 275, 0), // Values for Samsung J4; DO NOT CHANGE
+          padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               primary: Theme.of(context).primaryColor,
             ),
-            child: _goal.getDate() == null
+            child: widget._goal.getDate() == null
                 ? Text(
                     'Due Date',
                     style: TextStyle(color: Theme.of(context).canvasColor),
                   )
                 : Text(
-                    _goal.getDate().year == DateTime.now().year
-                        ? '${DateFormat.MMMd().format(_goal.getDate())}'
-                        : '${DateFormat.yMMMd().format(_goal.getDate())}',
+                    widget._goal.getDate().year == DateTime.now().year
+                        ? '${DateFormat.MMMd().format(widget._goal.getDate())}'
+                        : '${DateFormat.yMMMd().format(widget._goal.getDate())}',
                     style: TextStyle(color: Theme.of(context).canvasColor),
                   ),
             onPressed: () => showDatePicker(
               context: context,
-              initialDate: _goal.getDate() == null
+              initialDate: widget._goal.getDate() == null
                   ? DateTime.now()
-                  : (_goal.getDate().isBefore(DateTime.now())
+                  : (widget._goal.getDate().isBefore(DateTime.now())
                       ? DateTime.now()
-                      : _goal.getDate()),
+                      : widget._goal.getDate()),
               firstDate: DateTime.now(),
               lastDate: DateTime.now().add(
                 Duration(
@@ -206,12 +154,48 @@ class _GoalsFormState extends State<GoalsForm> {
       ],
     );
   }
+}
+
+class SubmitButton extends StatelessWidget {
+  const SubmitButton({
+    Key key,
+    @required Goal goal,
+    @required GlobalKey<FormState> formKey,
+  })  : _goal = goal,
+        _formKey = formKey,
+        super(key: key);
+
+  final Goal _goal;
+  final GlobalKey<FormState> _formKey;
+
+  // Validates each required textfield, saves its value to the goal, and
+  // returns the goal to the previous screen
+  void _submitGoalForm(BuildContext context) {
+    var goalDataProvider =
+        Provider.of<GoalDataProvider>(context, listen: false);
+    var transactionDataProvider =
+        Provider.of<Transaction.Transactions>(context, listen: false);
+
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+
+      // If no date is set, set the date to today's date
+      if (_goal.getDate() == null) _goal.setDate(DateTime.now());
+      if (_goal.getID() == null) {
+        goalDataProvider.addGoal(_goal, context);
+      } else {
+        goalDataProvider.updateGoal(_goal, context);
+        transactionDataProvider.updateGoalTransactions(_goal, context);
+      }
+      Navigator.of(context).pop(_goal);
+    }
+  }
 
   // Validates required fields and sends goal data to DB
-  Widget buildSubmitButton(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(
-          0, 40, 0, 0), // Values for Samsung J4; DO NOT CHANGE
+      padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
       child: Container(
         alignment: Alignment.bottomRight,
         child: FloatingActionButton.extended(
@@ -242,8 +226,8 @@ class GoalTitleField extends StatelessWidget {
     return TextFormField(
       initialValue: _goal.title ?? '',
       decoration: InputDecoration(
-        labelStyle: new TextStyle(
-            color: Theme.of(context).primaryColor, fontSize: 16.0),
+        labelStyle:
+            TextStyle(color: Theme.of(context).primaryColor, fontSize: 16.0),
         labelText: "Goal Title",
       ),
       autofocus: true,
@@ -280,8 +264,8 @@ class GoalAmountField extends StatelessWidget {
     return TextFormField(
       initialValue: _goal.goalAmount == null ? '' : _goal.goalAmount.toString(),
       decoration: InputDecoration(
-        labelStyle: new TextStyle(
-            color: Theme.of(context).primaryColor, fontSize: 16.0),
+        labelStyle:
+            TextStyle(color: Theme.of(context).primaryColor, fontSize: 16.0),
         labelText: "Target Amount",
       ),
       style: TextStyle(fontSize: 20.0, color: Theme.of(context).primaryColor),
@@ -290,7 +274,7 @@ class GoalAmountField extends StatelessWidget {
       onSaved: (val) => _goal.goalAmount = double.parse(val),
       validator: (val) {
         if (val.isEmpty) return 'Please enter an amount.';
-        if (val.contains(new RegExp(r'^\d*(\.\d*)?$'))) {
+        if (val.contains(RegExp(r'^\d*(\.\d*)?$'))) {
           // only accept any number of digits followed by 0 or 1 decimals followed by any number of digits
           if (double.parse(double.parse(val).toStringAsFixed(2)) <=
               0.00) // seems inefficient but take string price, convert to double so can convert to string and round, convert to double for comparison--prevents transactions of .00499999... or less which would show up as 0.00

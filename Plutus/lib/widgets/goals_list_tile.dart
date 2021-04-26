@@ -42,10 +42,11 @@ class _GoalsListTileState extends State<GoalsListTile> {
 
   @override
   Widget build(BuildContext context) {
+    var colorProvider = Provider.of<ColorProvider>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
         // Deletes a goal if list tile is swiped from right to left
         child: Dismissible(
           key: ValueKey(widget.goal.getID()),
@@ -57,8 +58,8 @@ class _GoalsListTileState extends State<GoalsListTile> {
               size: 40,
             ),
             alignment: Alignment.centerRight,
-            padding: EdgeInsets.only(right: 20),
-            margin: EdgeInsets.symmetric(
+            padding: const EdgeInsets.only(right: 20),
+            margin: const EdgeInsets.symmetric(
               horizontal: 15,
               vertical: 4,
             ),
@@ -69,22 +70,25 @@ class _GoalsListTileState extends State<GoalsListTile> {
             return showDialog(
               context: context,
               builder: (ctx) => AlertDialog(
-                title: Text(
+                backgroundColor:
+                    colorProvider.colorOptions[colorProvider.selectedColorIndex]
+                        [colorProvider.isDark ? 'dark' : 'light']['cardColor'],
+                title: const Text(
                   'Do you want to remove this goal?',
                 ),
-                content: Text(
+                content: const Text(
                   'This cannot be undone later.',
                 ),
                 actions: <Widget>[
                   TextButton(
-                    child: Text('No',
+                    child: const Text('No',
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     onPressed: () {
                       Navigator.of(ctx).pop(false);
                     },
                   ),
                   TextButton(
-                    child: Text('Yes',
+                    child: const Text('Yes',
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     onPressed: () {
                       Navigator.of(ctx).pop(true);
@@ -102,7 +106,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
               ..showSnackBar(
                 SnackBar(
                   behavior: SnackBarBehavior.floating,
-                  content: Text('Goal deleted.'),
+                  content: const Text('Goal deleted.'),
                 ),
               );
           },
@@ -113,12 +117,12 @@ class _GoalsListTileState extends State<GoalsListTile> {
               tileColor: Theme.of(context).backgroundColor,
               leading: Container(
                 width: 80,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   border: Border(
                     right: BorderSide(width: 1.0, color: Colors.white24),
                   ),
                 ),
-                // Goal image preview
+                // Goal icon
                 child: CircleAvatar(
                   backgroundColor: Theme.of(context).primaryColor,
                   radius: 35,
@@ -150,12 +154,12 @@ class _GoalsListTileState extends State<GoalsListTile> {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                         fontSize: 12,
-                        color: Provider.of<ColorProvider>(context).isDark
+                        color: colorProvider.isDark
                             ? Theme.of(context).primaryColor
                             : Theme.of(context).canvasColor),
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(0, 8, 0, 5),
+                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 5),
                     // Visual bar graph that displays amount currently saved
                     // and the goal amount
                     child: StreamBuilder<QuerySnapshot>(
@@ -202,7 +206,7 @@ class _GoalsListTileState extends State<GoalsListTile> {
               trailing: Container(
                 // Needed to keep the same size border as CircleAvatar border
                 height: 100,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   border: Border(
                     left: BorderSide(
                       width: 1.0,

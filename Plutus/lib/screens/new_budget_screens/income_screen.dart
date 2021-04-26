@@ -12,6 +12,7 @@ import '../tab_screen.dart';
 import '../../models/budget.dart';
 import '../../models/month_changer.dart';
 import '../../models/category.dart';
+import '../../providers/color.dart';
 
 // Screen that asks for the monthly income and creates a budget on that amount
 class IncomeScreen extends StatefulWidget {
@@ -49,6 +50,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var colorProvider = Provider.of<ColorProvider>(context);
     final Budget budget = ModalRoute.of(context).settings.arguments;
     var monthData = Provider.of<MonthChanger>(context);
     // Creates an AlertDialog Box that notifies the user of discard changes
@@ -60,6 +62,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
+            backgroundColor:
+                colorProvider.colorOptions[colorProvider.selectedColorIndex]
+                    [colorProvider.isDark ? 'dark' : 'light']['cardColor'],
             title: Text(
               delete ? 'Do you want to delete this budget?' : 'Cancel',
             ),
@@ -76,12 +81,12 @@ class _IncomeScreenState extends State<IncomeScreen> {
             ),
             actions: <Widget>[
               TextButton(
-                  child:
-                      Text('No', style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: const Text('No',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   onPressed: () => Navigator.of(context).pop()),
               TextButton(
-                child:
-                    Text('Yes', style: TextStyle(fontWeight: FontWeight.bold)),
+                child: const Text('Yes',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
                 onPressed: () async {
                   if (delete) {
                     // delete the new budget
@@ -155,7 +160,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
           ],
         ),
         body: Padding(
-          padding: EdgeInsets.fromLTRB(20, 50, 20, 0),
+          padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
           child: KeyboardAvoider(
             child: Container(
               height: 400,
@@ -171,7 +176,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                         fontSize: 35,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 50,
                     ),
                     Row(

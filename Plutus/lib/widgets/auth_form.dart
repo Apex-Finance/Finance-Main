@@ -145,7 +145,7 @@ class _AuthFormState extends State<AuthForm> {
               : (_authMode == AuthMode.Signup ? 365 : 300),
 
           width: deviceSize.width * 0.75,
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -156,7 +156,7 @@ class _AuthFormState extends State<AuthForm> {
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
                     fontSize: 25,
-                    fontFamily: 'Anton',
+                    fontFamily: 'Lato',
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -188,7 +188,7 @@ class _AuthFormState extends State<AuthForm> {
                 ),
                 // Password
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Password'),
+                  decoration: const InputDecoration(labelText: 'Password'),
                   onEditingComplete: () => {
                     if (_authMode == AuthMode.Signup)
                       {FocusScope.of(context).nextFocus()}
@@ -213,7 +213,8 @@ class _AuthFormState extends State<AuthForm> {
                   // Confirm Password
                   TextFormField(
                     enabled: _authMode == AuthMode.Signup,
-                    decoration: InputDecoration(labelText: 'Confirm Password'),
+                    decoration:
+                        const InputDecoration(labelText: 'Confirm Password'),
                     onEditingComplete: () => FocusScope.of(context).unfocus(),
                     obscureText: true,
                     validator: _authMode == AuthMode.Signup
@@ -226,7 +227,7 @@ class _AuthFormState extends State<AuthForm> {
                         : null,
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 if (_isLoading)
@@ -249,7 +250,7 @@ class _AuthFormState extends State<AuthForm> {
                                 .primaryTextTheme
                                 .button
                                 .color),
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                             horizontal: 30.0, vertical: 8.0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),

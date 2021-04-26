@@ -51,17 +51,6 @@ class _AccountScreenState extends State<AccountScreen> {
         ],
         // ),
       ),
-      // extra back button if wanted in future
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     Navigator.of(context).pushNamed('/dashboard');
-      //   },
-      //   child: Icon(
-      //     Icons.arrow_back_ios,
-      //     size: 30,
-      //     color: Theme.of(context).primaryColor,
-      //   ),
-      // ),
       body: Center(
         child: StreamBuilder<DocumentSnapshot>(
             stream: getUserInfo(context),
@@ -85,7 +74,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Row(
@@ -96,20 +85,6 @@ class _AccountScreenState extends State<AccountScreen> {
                               '$email',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
-                            // commented out because no longer editing emails
-                            // SizedBox(
-                            //   width: 10,
-                            // ),
-                            // IconButton(
-                            //   icon: Icon(
-                            //     Icons.create_sharp,
-                            //     size: 25,
-                            //     color: Theme.of(context).primaryColor,
-                            //   ),
-                            //   onPressed: () {
-                            //     pullChangeEmailForm(context);
-                            //   },
-                            // ),
                           ],
                         ),
                         Icon(
@@ -119,7 +94,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
+                            shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(
                                 top: Radius.circular(20),
                                 bottom: Radius.circular(20),
@@ -147,13 +122,6 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 }
-// this function no longer used
-// Future<Widget> pullChangeEmailForm(BuildContext context) async {
-//   return showModalBottomSheet(
-//       isScrollControlled: true,
-//       context: context,
-//       builder: (_) => UpdateEmailForm());
-// }
 
 Future<Widget> pullChangePasswordForm(BuildContext context) async {
   return showModalBottomSheet(

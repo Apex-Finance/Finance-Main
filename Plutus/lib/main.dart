@@ -96,8 +96,8 @@ class MyApp extends StatelessWidget {
           cardColor: cardColor, // Background card color
           iconTheme: IconThemeData(color: canvasColor),
           dialogTheme: DialogTheme(
-            backgroundColor: colors.colorOptions[selectedColorIndex]['light']
-                ['cardColor'],
+            backgroundColor: colors.colorOptions[selectedColorIndex]['light'][
+                'cardColor'], //fix for datepickers; causes alertdialogs to always show light version as well
             titleTextStyle: TextStyle(color: primaryColor, fontSize: 25),
             contentTextStyle: TextStyle(color: primaryColor, fontSize: 17),
           ),

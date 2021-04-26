@@ -31,10 +31,11 @@ class _TransactionListTileState extends State<TransactionListTile> {
 
   @override
   Widget build(BuildContext context) {
+    var colorProvider = Provider.of<ColorProvider>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
         child: Dismissible(
           key: ValueKey(widget.transaction.getID()),
           background: Container(
@@ -56,22 +57,25 @@ class _TransactionListTileState extends State<TransactionListTile> {
             return showDialog(
               context: context,
               builder: (ctx) => AlertDialog(
-                title: Text(
+                backgroundColor:
+                    colorProvider.colorOptions[colorProvider.selectedColorIndex]
+                        [colorProvider.isDark ? 'dark' : 'light']['cardColor'],
+                title: const Text(
                   'Do you want to remove this transaction?',
                 ),
-                content: Text(
+                content: const Text(
                   'This cannot be undone later.',
                 ),
                 actions: <Widget>[
                   TextButton(
-                    child: Text('No',
+                    child: const Text('No',
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     onPressed: () {
                       Navigator.of(ctx).pop(false);
                     },
                   ),
                   TextButton(
-                    child: Text('Yes',
+                    child: const Text('Yes',
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     onPressed: () {
                       Navigator.of(ctx).pop(true);
@@ -113,7 +117,7 @@ class _TransactionListTileState extends State<TransactionListTile> {
             subtitle: AutoSizeText(
               '${widget.transaction.getCategoryTitle()} | ${DateFormat.MMMd().format(widget.transaction.getDate())}',
               style: TextStyle(
-                  color: Provider.of<ColorProvider>(context).isDark
+                  color: colorProvider.isDark
                       ? Theme.of(context).primaryColor
                       : Theme.of(context).canvasColor),
               maxLines: 1,
