@@ -18,13 +18,14 @@ enum AuthMode { Signup, Login }
 
 class _AuthFormState extends State<AuthForm> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  AuthMode _authMode = AuthMode.Login;
+  AuthMode _authMode = AuthMode.Signup;
   final _auth = FirebaseAuth.instance;
   String email;
   String password;
   var _isLoading = false;
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   var _iserror = false;
 
   // Displays a popup informing the user that an issue occurred
@@ -141,8 +142,8 @@ class _AuthFormState extends State<AuthForm> {
         child: Container(
           // Signup card is bigger due to extra textfield
           height: _iserror
-              ? (_authMode == AuthMode.Signup ? 435 : 350)
-              : (_authMode == AuthMode.Signup ? 365 : 300),
+              ? (_authMode == AuthMode.Signup ? 460 : 375)
+              : (_authMode == AuthMode.Signup ? 390 : 325),
 
           width: deviceSize.width * 0.75,
           padding: const EdgeInsets.all(16.0),
@@ -162,9 +163,19 @@ class _AuthFormState extends State<AuthForm> {
                 ),
                 // E-mail
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'E-Mail'),
+                  decoration: InputDecoration(
+                      labelText: 'E-Mail',
+                      // if user is signing up, show an icon indicating whether their email is valid
+                      suffixIcon: Icon(_emailController.text.isEmpty ||
+                              _authMode == AuthMode.Login
+                          ? null
+                          : (_emailController.text.trim().contains(RegExp(
+                                  r'^[a-zA-Z0-9]+([.]?[a-zA-Z0-9]+){0,2}@[a-zA-Z0-9]+([.][a-zA-Z0-9]{2,}){1,2}$'))
+                              ? Icons.check
+                              : Icons.error))),
                   keyboardType: TextInputType.emailAddress,
                   onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                  onChanged: (val) => setState(() {}),
                   controller: _emailController,
                   validator: (value) {
                     if (value.isEmpty) return 'Please enter an email address.';
@@ -188,13 +199,25 @@ class _AuthFormState extends State<AuthForm> {
                 ),
                 // Password
                 TextFormField(
-                  decoration: const InputDecoration(labelText: 'Password'),
+                  decoration: InputDecoration(
+                      // if user is signing up, show an icon indicating whether their password is long enough
+                      suffixIcon: Icon(_passwordController.text.isEmpty ||
+                              _authMode == AuthMode.Login
+                          ? null
+                          : (_passwordController.text.trim().length < 6
+                              ? Icons.error
+                              : Icons.check)),
+                      labelText: 'Password',
+                      helperText: _authMode == AuthMode.Signup
+                          ? 'At least 6 characters'
+                          : ''),
                   onEditingComplete: () => {
                     if (_authMode == AuthMode.Signup)
                       {FocusScope.of(context).nextFocus()}
                     else
                       {FocusScope.of(context).unfocus()}
                   },
+                  onChanged: (val) => setState(() {}), //update the suffix icon
                   obscureText: true,
                   controller: _passwordController,
                   // ignore: missing_return
@@ -213,10 +236,18 @@ class _AuthFormState extends State<AuthForm> {
                   // Confirm Password
                   TextFormField(
                     enabled: _authMode == AuthMode.Signup,
-                    decoration:
-                        const InputDecoration(labelText: 'Confirm Password'),
+                    decoration: InputDecoration(
+                        labelText: 'Confirm Password',
+                        suffixIcon: Icon(_confirmPasswordController.text.isEmpty
+                            ? null
+                            : (_confirmPasswordController.text.trim() ==
+                                    _passwordController.text.trim()
+                                ? Icons.check
+                                : Icons.error))),
                     onEditingComplete: () => FocusScope.of(context).unfocus(),
                     obscureText: true,
+                    onChanged: (val) => setState(() {}),
+                    controller: _confirmPasswordController,
                     validator: _authMode == AuthMode.Signup
                         // ignore: missing_return
                         ? (value) {
