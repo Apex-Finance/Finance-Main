@@ -63,19 +63,22 @@ class _AuthFormState extends State<AuthForm> {
       _isLoading = true;
     });
     try {
+      var hashPass =
+          Provider.of<Auth>(context, listen: false).hashPassword(password);
+      print(hashPass);
       if (_authMode == AuthMode.Login) {
         // Log user in
         credentialResult = await _auth.signInWithEmailAndPassword(
-            email: email, password: password);
+            email: email, password: hashPass);
       } else {
         credentialResult = await _auth.createUserWithEmailAndPassword(
-            email: email, password: password);
+            email: email, password: hashPass);
         await FirebaseFirestore.instance
             .collection('users')
             .doc(credentialResult.user.uid)
             .set({
           'email': email,
-          'password': password,
+          'password': hashPass,
         });
       }
       Provider.of<Auth>(context, listen: false).setEmail(email);
