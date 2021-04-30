@@ -182,14 +182,18 @@ class _IncomeScreenState extends State<IncomeScreen> {
                     Row(
                       children: [
                         // Textfield where monthly income is entered
-                        AutoSizeText('\$',
-                            style: Theme.of(context).textTheme.bodyText1),
+                        Padding(
+                          // make the $ align with the number...not sure why it works on FBS automatically
+                          padding: const EdgeInsets.only(bottom: 24),
+                          child: Text('\$',
+                              style: Theme.of(context).textTheme.headline1),
+                        ),
                         Expanded(
                           child: TextFormField(
                             initialValue: budget.getAmount() != null
                                 ? budget.getAmount().toStringAsFixed(2)
                                 : '',
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: Theme.of(context).textTheme.headline1,
                             autofocus: true,
                             keyboardType: TextInputType.numberWithOptions(
                                 decimal: true, signed: false),
