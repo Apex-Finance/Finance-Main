@@ -42,11 +42,13 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
   }
 
   updatePassword() async {
-    authInfo.updatePassword(newPassword);
+    var authProvider = Provider.of<Auth>(context, listen: false);
+    var hashPass = authProvider.hashPassword(newPassword);
+    authInfo.updatePassword(hashPass);
     userInfo
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
-        .set({'password': newPassword}, SetOptions(merge: true)).catchError(
+        .set({'password': hashPass}, SetOptions(merge: true)).catchError(
             (error) {});
     Provider.of<Auth>(context, listen: false).setPassword(newPassword);
   }
@@ -56,12 +58,13 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
       // Invalid!
       return;
     }
+    var authProvider = Provider.of<Auth>(context, listen: false);
     _formKey.currentState.save();
     try {
       await authInfo.reauthenticateWithCredential(
         EmailAuthProvider.credential(
           email: authInfo.email,
-          password: Provider.of<Auth>(context, listen: false).getPassword(),
+          password: authProvider.hashPassword(authProvider.getPassword()),
         ),
       );
       updatePassword();
