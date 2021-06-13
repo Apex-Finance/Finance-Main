@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 // Imported Plutus files
 import '../providers/auth.dart';
@@ -20,6 +22,7 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
   final FirebaseFirestore userInfo = FirebaseFirestore.instance;
   String newPassword;
   final _passwordController = TextEditingController();
+  var _isLoading = false;
 
   void _showErrorDialog(String message) {
     var colorProvider = Provider.of<ColorProvider>(context);
@@ -42,13 +45,26 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
   }
 
   updatePassword() async {
-    authInfo.updatePassword(newPassword);
-    userInfo
+    setState(() {
+      _isLoading = true;
+    });
+    await authInfo.updatePassword(newPassword);
+    await userInfo
         .collection('users')
         .doc(Provider.of<Auth>(context, listen: false).getUserId())
         .set({'password': newPassword}, SetOptions(merge: true)).catchError(
             (error) {});
-    Provider.of<Auth>(context, listen: false).setPassword(newPassword);
+    await Provider.of<Auth>(context, listen: false).setPassword(newPassword);
+    var prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('userData') != null) {
+      var userData = jsonDecode(prefs.getString('userData'));
+      userData = {
+        'email': userData['email'],
+        'userId': userData['userId'],
+        'password': newPassword,
+      };
+      await prefs.setString('userData', jsonEncode(userData));
+    }
   }
 
   void _submit() async {
@@ -64,7 +80,7 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
           password: Provider.of<Auth>(context, listen: false).getPassword(),
         ),
       );
-      updatePassword();
+      await updatePassword();
     } on FirebaseAuthException catch (error) {
       var errorMessage = 'Authentication failed.';
       if (error.code == 'user-mismatch') {
@@ -87,6 +103,9 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
       _showErrorDialog(errorMessage);
     }
     if (_formKey.currentState.validate()) {
+      setState(() {
+        _isLoading = false;
+      });
       _formKey.currentState.save();
       Navigator.of(context).pop();
       return;
@@ -138,25 +157,28 @@ class _UpdatePasswordFormState extends State<UpdatePasswordForm> {
                     const SizedBox(
                       height: 20,
                     ),
-                    ElevatedButton(
-                      child: Text(
-                        'Change Password',
-                        style: TextStyle(color: Theme.of(context).canvasColor),
-                      ),
-                      onPressed: _submit,
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                    if (_isLoading) CircularProgressIndicator(),
+                    if (!_isLoading)
+                      ElevatedButton(
+                        child: Text(
+                          'Change Password',
+                          style:
+                              TextStyle(color: Theme.of(context).canvasColor),
                         ),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 30.0, vertical: 8.0),
-                        primary: Theme.of(context).primaryColor,
-                        textStyle: TextStyle(
-                          color:
-                              Theme.of(context).primaryTextTheme.button.color,
+                        onPressed: _submit,
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 30.0, vertical: 8.0),
+                          primary: Theme.of(context).primaryColor,
+                          textStyle: TextStyle(
+                            color:
+                                Theme.of(context).primaryTextTheme.button.color,
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
               ),

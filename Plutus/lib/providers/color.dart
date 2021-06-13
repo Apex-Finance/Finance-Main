@@ -1,5 +1,8 @@
 // Imported Flutter packages
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Provides all color combinations available
 class ColorProvider with ChangeNotifier {
@@ -104,13 +107,30 @@ class ColorProvider with ChangeNotifier {
     },
   ];
 
-  void setSelectedColorIndex(int index) {
+  Future<void> setSelectedColorIndex(int index) async {
     selectedColorIndex = index;
+    var prefs = await SharedPreferences.getInstance();
+    var colorData = {'selectedColorIndex': index, 'colorMode': getIsDark()};
+    prefs.setString('colorData', jsonEncode(colorData));
     notifyListeners();
   }
 
-  void setIsDark(bool colorMode) {
+  Future<void> setIsDark(bool colorMode) async {
     isDark = colorMode;
+    var prefs = await SharedPreferences.getInstance();
+    var colorData = {
+      'selectedColorIndex': getSelectedColorIndex(),
+      'colorMode': colorMode
+    };
+    prefs.setString('colorData', jsonEncode(colorData));
     notifyListeners();
+  }
+
+  bool getIsDark() {
+    return isDark;
+  }
+
+  int getSelectedColorIndex() {
+    return selectedColorIndex;
   }
 }

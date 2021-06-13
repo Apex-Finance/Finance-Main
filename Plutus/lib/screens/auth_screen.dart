@@ -12,6 +12,8 @@ class AuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Adjusts based on the size of the device
     final deviceSize = MediaQuery.of(context).size;
+    final authMode =
+        ModalRoute.of(context).settings.arguments ?? AuthMode.Login;
 
     return Scaffold(
       body: Stack(
@@ -40,7 +42,7 @@ class AuthScreen extends StatelessWidget {
               children: <Widget>[
                 Flexible(
                   flex: deviceSize.height > 600 ? 3 : 2,
-                  child: AuthForm(),
+                  child: AuthForm(authMode),
                 ),
               ],
             ),
