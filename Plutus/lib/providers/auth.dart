@@ -61,6 +61,8 @@ class Auth with ChangeNotifier {
 
   Future<void> logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('userData');
     Navigator.of(context).pushNamedAndRemoveUntil(
         AuthScreen.routeName,
         (Route<dynamic> route) =>

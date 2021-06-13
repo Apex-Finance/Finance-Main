@@ -1,6 +1,8 @@
 // Imported Flutter packages
+import 'package:Plutus/widgets/auth_form.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Imported Plutus files
 import './auth_screen.dart';
@@ -25,6 +27,14 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       ),
       alignment: Alignment.bottomCenter,
     );
+  }
+
+  void setSharedPrefAndStartSignUp() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isFirstTime', false);
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        AuthScreen.routeName, (Route<dynamic> route) => false,
+        arguments: AuthMode.Signup);
   }
 
   @override
@@ -86,8 +96,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               'Sign me up!',
               style: TextStyle(color: Theme.of(context).accentColor),
             ),
-            onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
-                AuthScreen.routeName, (Route<dynamic> route) => false),
+            onPressed: setSharedPrefAndStartSignUp,
             style: ElevatedButton.styleFrom(
               primary: Colors.amber,
               textStyle: TextStyle(color: Theme.of(context).canvasColor),
@@ -97,8 +106,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           decoration: pageDecoration,
         ),
       ],
-      onDone: () => Navigator.of(context).pushNamedAndRemoveUntil(
-          AuthScreen.routeName, (Route<dynamic> route) => false),
+      onDone: setSharedPrefAndStartSignUp,
       onSkip: () => introKey.currentState
           ?.animateScroll(5), // You can override onSkip callback
       showSkipButton: true,
