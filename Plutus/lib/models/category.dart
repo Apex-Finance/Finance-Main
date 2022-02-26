@@ -70,14 +70,14 @@ class CategoryDataProvider with ChangeNotifier {
     Category category = Category();
 
     category.setID(doc.id);
-    if (doc.data()['amount'].toDouble() == null) {
+    if (doc.get('amount').toDouble() == null) {
       category.setAmount(0.00);
     } else {
-      category.setAmount(doc.data()['amount'].toDouble());
+      category.setAmount(doc.get('amount').toDouble());
     }
 
-    category.setTitle(doc.data()['title']);
-    category.setCodepoint(doc.data()['codepoint'].toInt());
+    category.setTitle(doc.get('title'));
+    category.setCodepoint(doc.get('codepoint').toInt());
 
     return category;
   }

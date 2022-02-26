@@ -118,13 +118,13 @@ class Transactions with ChangeNotifier {
     // Initialize a transaction with document data
     return new Transaction(
       id: doc.id,
-      title: doc.data()['title'],
-      date: doc.data()['date'].toDate(),
-      categoryId: doc.data()['categoryID'],
-      categoryTitle: doc.data()['categoryTitle'],
-      categoryCodepoint: doc.data()['categoryCodepoint'],
-      amount: doc.data()['amount'],
-      goalId: doc.data()['goalID'],
+      title: doc.get('title'),
+      date: doc.get('date').toDate(),
+      categoryId: doc.get('categoryID'),
+      categoryTitle: doc.get('categoryTitle'),
+      categoryCodepoint: doc.get('categoryCodepoint'),
+      amount: doc.get('amount'),
+      goalId: doc.get('goalID'),
     );
   }
 
@@ -171,10 +171,10 @@ class Transactions with ChangeNotifier {
     double totalExpenses = 0;
 
     snapshot.docs.forEach((doc) {
-      if (doc.data()['amount'] == null)
+      if (doc.get('amount') == null)
         totalExpenses += 0;
       else
-        totalExpenses += doc.data()['amount'];
+        totalExpenses += doc.get('amount');
     });
 
     return totalExpenses;

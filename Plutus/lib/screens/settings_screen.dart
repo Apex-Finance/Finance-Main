@@ -139,8 +139,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ToggleSwitch(
                                     minWidth: 90.0,
                                     cornerRadius: 20.0,
-                                    activeBgColor:
-                                        Theme.of(context).primaryColor,
+                                    activeBgColor: [
+                                      Theme.of(context).primaryColor
+                                    ],
                                     activeFgColor:
                                         Theme.of(context).canvasColor,
                                     inactiveBgColor: Colors.grey,
@@ -148,6 +149,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         Theme.of(context).canvasColor,
                                     labels: ['ON', 'OFF'],
                                     initialLabelIndex: initialIndex,
+                                    totalSwitches: 2, // Dark and Light
                                     icons: [
                                       Icons.check,
                                       Icons.highlight_off,

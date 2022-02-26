@@ -47,7 +47,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       titleTextStyle: TextStyle(
           fontSize: 28.0, fontWeight: FontWeight.w700, color: Colors.amber),
       bodyTextStyle: bodyStyle,
-      descriptionPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+      bodyPadding: EdgeInsets.fromLTRB(
+          16.0, 0.0, 16.0, 16.0), // TODO verify if this is right attribute
       // Default app theme is white, hence white background in intro screen
       pageColor: Colors.white,
       imagePadding: EdgeInsets.zero,
@@ -110,7 +111,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       onSkip: () => introKey.currentState
           ?.animateScroll(5), // You can override onSkip callback
       showSkipButton: true,
-      skipFlex: 1,
+      skipOrBackFlex: 1,
       nextFlex: 1,
       skip: const Text(
         'Skip',

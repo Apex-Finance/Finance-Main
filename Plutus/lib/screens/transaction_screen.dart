@@ -31,7 +31,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
 
   var user = FirebaseAuth.instance.currentUser;
 
-  CollectionReference getDbRef(
+  Query getDbRef(
       {category, // add other parameters to filter by or orderBy
       filterByCategory = false,
       orderByPrice = false}) {
@@ -39,6 +39,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
         .collection('users')
         .doc(user.uid)
         .collection('Transactions');
+    // TODO Currently not doing where or orderby clause; implement some form of sorting/filtering*
     dbRef = filterByCategory
         ? dbRef.where('categoryId', isEqualTo: category)
         : dbRef;

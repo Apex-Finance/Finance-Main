@@ -87,9 +87,9 @@ class BudgetDataProvider with ChangeNotifier {
     var budget = new Budget.empty();
 
     budget.setID(doc.id);
-    budget.setTitle(doc.data()['title']);
-    budget.setAmount(doc.data()['amount']);
-    budget.setDate(doc.data()['date'].toDate());
+    budget.setTitle(doc.get('title'));
+    budget.setAmount(doc.get('amount'));
+    budget.setDate(doc.get('date').toDate());
 
     return budget;
   }

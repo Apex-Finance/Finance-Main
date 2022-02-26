@@ -51,7 +51,7 @@ class Goal {
   double getAmountSaved(BuildContext context, QuerySnapshot snapshot) {
     amountSaved = 0;
     for (var doc in snapshot.docs) {
-      amountSaved += doc.data()['amount'];
+      amountSaved += doc.get('amount');
     }
     return amountSaved;
   }
@@ -73,9 +73,9 @@ class GoalDataProvider with ChangeNotifier {
     Goal goal = Goal();
 
     goal.setID(doc.id);
-    goal.setTitle(doc.data()['title']);
-    goal.setGoalAmount(doc.data()['goalAmount']);
-    goal.setDate(doc.data()['dateOfGoal'].toDate());
+    goal.setTitle(doc.get('title'));
+    goal.setGoalAmount(doc.get('goalAmount'));
+    goal.setDate(doc.get('dateOfGoal').toDate());
 
     return goal;
   }

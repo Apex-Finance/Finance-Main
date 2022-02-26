@@ -232,9 +232,8 @@ class _FirstBudgetScreenState extends State<FirstBudgetScreen> {
                                                 if (doc.id ==
                                                     category.getID()) {
                                                   var amount =
-                                                      doc.data()['amount'] !=
-                                                              null
-                                                          ? doc.data()['amount']
+                                                      doc.get('amount') != null
+                                                          ? doc.get('amount')
                                                           : 0;
                                                   category.setAmount(amount);
                                                 }
