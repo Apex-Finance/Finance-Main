@@ -204,7 +204,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               child: Text(
                                 'Default',
                                 style: TextStyle(
-                                  color: Theme.of(context).accentColor,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
                               ),
                               onPressed: () {

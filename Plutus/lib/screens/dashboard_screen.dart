@@ -100,7 +100,8 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
                             animationDuration: 2500,
                             percent: 0,
                             center: Text(''),
-                            linearStrokeCap: LinearStrokeCap.roundAll,
+                            //linearStrokeCap: LinearStrokeCap.roundAll,
+                            barRadius: const Radius.circular(16),
                             progressColor: Theme.of(context).primaryColor,
                           );
                         } else if (budgetSnapshot.data.docs.isEmpty) {
@@ -138,7 +139,7 @@ class BudgetLinearIndicatorCard extends StatelessWidget {
                                   color: Theme.of(context).canvasColor,
                                   fontWeight: FontWeight.bold),
                             ),
-                            linearStrokeCap: LinearStrokeCap.roundAll,
+                            barRadius: const Radius.circular(16),
                             progressColor: Theme.of(context).primaryColor,
                           );
                         }

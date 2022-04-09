@@ -95,7 +95,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           bodyWidget: ElevatedButton(
             child: Text(
               'Sign me up!',
-              style: TextStyle(color: Theme.of(context).accentColor),
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             onPressed: setSharedPrefAndStartSignUp,
             style: ElevatedButton.styleFrom(

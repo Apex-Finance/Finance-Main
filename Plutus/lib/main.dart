@@ -182,10 +182,8 @@ class _MyAppState extends State<MyApp> {
       return MaterialApp(
         title: 'Plutus',
         theme: ThemeData(
-          primarySwatch: primarySwatch, // Colors.amber
           primaryColor: primaryColor,
-          backgroundColor: backgroundColor, // ListTile color
-          accentColor: Colors.white,
+          backgroundColor: backgroundColor,
           canvasColor: canvasColor,
           cardColor: cardColor, // Background card color
           iconTheme: IconThemeData(color: canvasColor),
@@ -204,6 +202,8 @@ class _MyAppState extends State<MyApp> {
               headline1: TextStyle(color: primaryColor, fontSize: 25),
             ),
           ),
+          colorScheme: ColorScheme.fromSwatch(primarySwatch: primarySwatch)
+              .copyWith(secondary: Colors.white),
         ),
         home: getHomeScreen(),
         navigatorObservers: [
