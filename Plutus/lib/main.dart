@@ -2,7 +2,6 @@
 import 'dart:convert';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
-// TODO remove import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
